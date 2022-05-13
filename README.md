@@ -1,5 +1,11 @@
 ﻿# usb-regulus
-A GUI tool for USB scan, view and test.
+A GUI tool for USB viewing, reading and writing.
+
+## Clone with submodules
+
+```bash
+git clone --recurse-submodules https://github.com/NichtsHsu/usb-regulus.git
+```
 
 ## Build
 
@@ -15,7 +21,19 @@ A GUI tool for USB scan, view and test.
 
 4. Open Qt Creator, and select this project, then build.
 
+### MacOS
+
+I have never used MacOS, but it should not be much different from Linux.
+
+### Windows
+
+**Not Support Yet**
+
+Because `libusb` doesn't seem to work well on Windows, especially it does not support hotplug. I'm looking for the possibility to use WinUsb instead of libusb, but the work will not be started until the basic functions on Linux are done.
+
 ## Reference
 
-1. Some implementation refers to [QtUsb](https://github.com/fpoussin/QtUsb).
-2. Some source files from [usbutils](https://github.com/gregkh/usbutils).
+1. [Qt](https://www.qt.io/).
+2. [QtUsb](https://github.com/fpoussin/QtUsb).
+3. [usbutils](https://github.com/gregkh/usbutils).
+4. [QHexEdit](https://github.com/Simsys/qhexedit2).

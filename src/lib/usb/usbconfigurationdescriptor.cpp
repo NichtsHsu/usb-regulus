@@ -81,4 +81,24 @@ namespace usb {
     {
         return _device;
     }
+
+    QString UsbConfigurationDescriptor::bmAttributesInfo()
+    {
+        return parseConfigDescBmAttributes(_bmAttributes);
+    }
+
+    QString parseConfigDescBmAttributes(uint8_t bmAttributes)
+    {
+        const static uint8_t self_powered = 0b1000000;
+        const static uint8_t remote_wakeup = 0b100000;
+        if ((bmAttributes & self_powered) && (bmAttributes & remote_wakeup))
+            return UsbConfigurationDescriptor::tr("Self Powered, Remote Wakeup");
+        else if (bmAttributes & self_powered)
+            return UsbConfigurationDescriptor::tr("Self Powered");
+        else if (bmAttributes & remote_wakeup)
+            return UsbConfigurationDescriptor::tr("Bus Powered, Remote Wakeup");
+        else
+            return UsbConfigurationDescriptor::tr("Bus Powered");
+    }
+
 }

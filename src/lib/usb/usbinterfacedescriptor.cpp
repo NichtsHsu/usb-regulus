@@ -8,6 +8,21 @@ namespace usb {
         _bInterfaceProtocol(desc->bInterfaceProtocol), _iInterface(desc->iInterface), _extra(desc->extra), _extra_length(desc->extra_length),
         _interface(parent)
     {
+#ifdef Q_OS_UNIX
+        char strClass[128], strSubClass[128], strProtocol[128];
+        memset(strClass, '\0', sizeof(strClass));
+        memset(strSubClass, '\0', sizeof(strSubClass));
+        memset(strProtocol, '\0', sizeof(strProtocol));
+        get_class_string(strClass, sizeof(strClass), _bInterfaceClass);
+        get_subclass_string(strSubClass, sizeof(strSubClass), _bInterfaceClass, _bInterfaceSubClass);
+        get_protocol_string(strProtocol, sizeof(strProtocol), _bInterfaceClass,
+                            _bInterfaceSubClass,
+                            _bInterfaceProtocol);
+        _interfaceClass = strClass;
+        _interfaceSubClass = strSubClass;
+        _interfaceProtocol = strProtocol;
+#endif
+
         _endpoint.reserve(_bNumEndpoints);
         for (int i = 0; i < _bNumEndpoints; ++i)
             _endpoint.append(new UsbEndpointDescriptor(&desc->endpoint[i], this));
@@ -86,5 +101,20 @@ namespace usb {
     UsbInterface *UsbInterfaceDescriptor::interface() const
     {
         return _interface;
+    }
+
+    const QString &UsbInterfaceDescriptor::interfaceClass() const
+    {
+        return _interfaceClass;
+    }
+
+    const QString &UsbInterfaceDescriptor::interfaceSubClass() const
+    {
+        return _interfaceSubClass;
+    }
+
+    const QString &UsbInterfaceDescriptor::interfaceProtocol() const
+    {
+        return _interfaceProtocol;
     }
 }

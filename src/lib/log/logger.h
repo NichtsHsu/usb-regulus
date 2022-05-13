@@ -1,4 +1,22 @@
-﻿#ifndef LOGGER_H
+﻿/*! A simple logger system which is derived from QTextBrowser
+
+ * Copyright (C) 2022 Nichts Hsu
+
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef LOGGER_H
 #define LOGGER_H
 
 #include <QTextBrowser>
@@ -8,6 +26,7 @@
 #include <QList>
 #include <QTextStream>
 #include <QtGlobal>
+#include <QMutex>
 
 /**
   * Simplified interfaces for any QObject
@@ -101,6 +120,8 @@ private:
     friend Logger &log();
     explicit Logger(QWidget *parent = nullptr);
 
+    QString __strLogLevel();
+
     Level _logLevel;
 
     struct BackupBlock {
@@ -111,6 +132,7 @@ private:
     };
 
     QList<BackupBlock> _backup;
+    QMutex _writeMutex;
 };
 
 /**

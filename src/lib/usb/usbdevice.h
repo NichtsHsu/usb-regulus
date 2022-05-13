@@ -1,4 +1,22 @@
-﻿#ifndef USBDEVICE_H
+﻿/*! C++ class wrapper of libusb_device
+
+ * Copyright (C) 2022 Nichts Hsu
+
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef USBDEVICE_H
 #define USBDEVICE_H
 
 #include <libusb.h>
@@ -19,6 +37,36 @@ namespace usb {
 #endif
 
 namespace usb {
+    /**
+     * @brief The UsbSpeed enum
+     * Low Speed: 1.5 Mbps
+     * Full Speed: 12 Mbps
+     * High Speed: 480 Mbps
+     * Super Speed: 5 Gbps
+     * Super Speed Plus: 10 Gbps
+     * @note
+     * USB 3.2 Gen 1x2 and USB 3.2 Gen 2x2 use dual channel for data transferring,
+     * therefore their speed is doubled
+     * @todo
+     * How can we check dual channel?
+     */
+    enum UsbSpeed {
+        UNKNOWN_SPEED = LIBUSB_SPEED_UNKNOWN,
+        LOW_SPEED = LIBUSB_SPEED_LOW,
+        FULL_SPEED = LIBUSB_SPEED_FULL,
+        HIGH_SPEED = LIBUSB_SPEED_HIGH,
+        SUPER_SPEED = LIBUSB_SPEED_SUPER,
+        SUPER_SPEED_PLUS = LIBUSB_SPEED_SUPER_PLUS,
+    };
+
+    /**
+     * @brief usbSpeedToString
+     * @param speed
+     * USB connect speed
+     * @return the string-form connection speed
+     */
+    QString usbSpeedToString(UsbSpeed speed);
+
     /**
      * @brief The UsbDevice class
      * C++ class wrapper of libusb_device
@@ -94,11 +142,19 @@ namespace usb {
         QString getStringDescriptor(size_t index) const;
 
         /**
+         * @brief infomationToHtml
+         * @return HTML form device informations
+         */
+        QString infomationToHtml() const;
+
+        /**
          * @brief operator ==
          * @return if idVendor, idProduct, bus and port are equal.
          */
         bool operator==(const UsbDevice &) const;
         bool operator==(libusb_device *);
+
+        UsbSpeed speed() const;
 
     signals:
 
@@ -107,7 +163,8 @@ namespace usb {
         UsbDeviceDescriptor *_deviceDescriptor;
         UsbConfigurationDescriptor *_configurationDescriptor;
         libusb_device_handle *_handle;
-        uint8_t _bus, _port;
+        uint8_t _bus, _port, _address;
+        UsbSpeed _speed;
         QString _displayName;
 
         bool _valid, _open;

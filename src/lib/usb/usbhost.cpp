@@ -42,7 +42,9 @@ namespace usb {
 
                 libusb_hotplug_deregister_callback(_context, _hotplugCbHandle);
             }
+#ifdef Q_OS_UNIX
             names_exit();
+#endif
             libusb_exit(_context);
         }
     }
@@ -58,7 +60,7 @@ namespace usb {
         libusb_device **dev_list;
         if ((ret = libusb_get_device_list(_context, &dev_list)) < LIBUSB_SUCCESS)
         {
-            LOGE(tr("Failed to get device list (&1).").arg(libusb_error_name(ret)));
+            LOGE(tr("Failed to get device list (%1).").arg(libusb_error_name(ret)));
             return;
         }
 
@@ -74,7 +76,7 @@ namespace usb {
             if (usbDevice->valid())
             {
                 _usbDevices.append(usbDevice);
-                LOGI(tr("New USB device \"%1\" detected.").arg(usbDevice->displayName()));
+                LOGI(tr("New USB device \"%1\" attached.").arg(usbDevice->displayName()));
             }
             else
                 delete usbDevice;
@@ -112,7 +114,7 @@ namespace usb {
         }
         else
         {
-            // register the hotplug callback function
+            /* register the hotplug callback function */
             ret = libusb_hotplug_register_callback(_context,
                                                    libusb_hotplug_event(LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED |
                                                                         LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT),
@@ -125,7 +127,7 @@ namespace usb {
                                                    &_hotplugCbHandle);
             if (ret == LIBUSB_SUCCESS)
             {
-                // Create a thread to periodically trigger the hotplug event handle of libusb
+                /* Create a thread to periodically trigger the hotplug event handle of libusb */
                 _hotplugCbTimer = new QTimer;
                 _hotplugCbThread = new QThread;
                 _hotplugCbTimer->moveToThread(_hotplugCbThread);
@@ -143,8 +145,10 @@ namespace usb {
             }
         }
 
+#ifdef Q_OS_UNIX
         if (names_init() < 0)
-            LOGW(tr("Unable to initialize usb spec, you may get UNKNOWN as the device name."));
+            LOGW(tr("Unable to initialize USB name database, you may get UNKNOWN as the device name."));
+#endif
 
         _initialized = true;
         _hasHotplug = true;
@@ -212,10 +216,11 @@ namespace usb {
             return;
         }
 
+        /* Emit the signal before delete, to avoid wild pointer used in other module */
+        emit deviceDetached(index);
         LOGI(tr("USB device \"%1\" detached.").arg(_usbDevices[index]->displayName()));
         delete _usbDevices[index];
         _usbDevices.remove(index);
-        emit deviceDetached(index);
     }
 
     bool UsbHost::initialized() const

@@ -1,10 +1,112 @@
-﻿#ifndef USBENDPOINTDESCRIPTOR_H
+﻿/*! C++ class wrapper of libusb_endpoint_descriptor
+
+ * Copyright (C) 2022 Nichts Hsu
+
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef USBENDPOINTDESCRIPTOR_H
 #define USBENDPOINTDESCRIPTOR_H
 
 #include <libusb.h>
 #include <QObject>
 
 namespace usb {
+    class UsbInterfaceDescriptor;
+}
+#ifndef USBINTERFACEDESCRIPTOR_H
+#include "usbinterfacedescriptor.h"
+#endif
+
+#include <log/logger.h>
+namespace usb {
+    /**
+     * @brief The Direction enum
+     * @see UsbEndpointDescriptor::direction()
+     */
+    enum EndpointDirection {
+        EP_OUT = LIBUSB_ENDPOINT_OUT,
+        EP_IN = LIBUSB_ENDPOINT_IN,
+    };
+
+    /**
+     * @brief The TransferType enum
+     * @see UsbEndpointDescriptor::transferType()
+     */
+    enum EndpointTransferType {
+        EP_CONTROL = LIBUSB_TRANSFER_TYPE_CONTROL,
+        EP_ISOCHRONOUS = LIBUSB_TRANSFER_TYPE_ISOCHRONOUS,
+        EP_BULK = LIBUSB_TRANSFER_TYPE_BULK,
+        EP_INTERRUPT = LIBUSB_TRANSFER_TYPE_INTERRUPT,
+    };
+
+    /**
+     * @brief The SyncType enum
+     * @see UsbEndpointDescriptor::syncType()
+     */
+    enum EndpointSyncType {
+        EP_NONE = LIBUSB_ISO_SYNC_TYPE_NONE,
+        EP_ASYNC = LIBUSB_ISO_SYNC_TYPE_ASYNC,
+        EP_ADAPTIVE = LIBUSB_ISO_SYNC_TYPE_ADAPTIVE,
+        EP_SYNC = LIBUSB_ISO_SYNC_TYPE_SYNC,
+    };
+
+    /**
+     * @brief The UsageType enum
+     * @see UsbEndpointDescriptor::usageType()
+     */
+    enum EndpointUsageType {
+        EP_DATA = LIBUSB_ISO_USAGE_TYPE_DATA,
+        EP_FEEDBACK = LIBUSB_ISO_USAGE_TYPE_FEEDBACK,
+        EP_IMPLICIT = LIBUSB_ISO_USAGE_TYPE_IMPLICIT,
+    };
+
+    /**
+     * @brief strEndpointDirection
+     * @return string description of EndpointDirection
+     */
+    QString strEndpointDirection(EndpointDirection direction);
+
+    /**
+     * @brief strEndpointTransferType
+     * @param string description of EndpointTransferType
+     */
+    QString strEndpointTransferType(EndpointTransferType type);
+
+    /**
+     * @brief strEndpointSyncType
+     * @param string description of strEndpointSyncType
+     */
+    QString strEndpointSyncType(EndpointSyncType type);
+
+    /**
+     * @brief EndpointUsageType
+     * @param string description of EndpointUsageType
+     */
+    QString strEndpointUsageType(EndpointUsageType type);
+
+    /**
+     * @brief parseEndpointDescBmAttributes
+     * Parse bmAttributes of endpoint descriptor to string
+     * @param bmAttributes
+     * @return the string description of bmAttributes
+     * @note
+     * D1..0    Transfer Type
+     * D3..2    Synchronization Type (For isochronous transfer only)
+     * D5..4    Usage Type (For isochronous transfer only)
+     */
+    QString parseEndpointDescBmAttributes(uint8_t bmAttributes);
 
     /**
      * @brief The UsbEndpointDescriptor class
@@ -14,48 +116,7 @@ namespace usb {
     {
         Q_OBJECT
     public:
-        explicit UsbEndpointDescriptor(const libusb_endpoint_descriptor *desc, QObject *parent = nullptr);
-
-        /**
-         * @brief The Direction enum
-         * @see UsbEndpointDescriptor::direction()
-         */
-        enum Direction {
-            OUT = LIBUSB_ENDPOINT_OUT,
-            IN = LIBUSB_ENDPOINT_IN,
-        };
-
-        /**
-         * @brief The TransferType enum
-         * @see UsbEndpointDescriptor::transferType()
-         */
-        enum TransferType {
-            CONTROL = LIBUSB_TRANSFER_TYPE_CONTROL,
-            ISOCHRONOUS = LIBUSB_TRANSFER_TYPE_ISOCHRONOUS,
-            BULK = LIBUSB_TRANSFER_TYPE_BULK,
-            INTERRUPT = LIBUSB_TRANSFER_TYPE_INTERRUPT,
-        };
-
-        /**
-         * @brief The SyncType enum
-         * @see UsbEndpointDescriptor::syncType()
-         */
-        enum SyncType {
-            NONE = LIBUSB_ISO_SYNC_TYPE_NONE,
-            ASYNC = LIBUSB_ISO_SYNC_TYPE_ASYNC,
-            ADAPTIVE = LIBUSB_ISO_SYNC_TYPE_ADAPTIVE,
-            SYNC = LIBUSB_ISO_SYNC_TYPE_SYNC,
-        };
-
-        /**
-         * @brief The UsageType enum
-         * @see UsbEndpointDescriptor::usageType()
-         */
-        enum UsageType {
-            DATA = LIBUSB_ISO_USAGE_TYPE_DATA,
-            FEEDBACK = LIBUSB_ISO_USAGE_TYPE_FEEDBACK,
-            IMPLICIT = LIBUSB_ISO_USAGE_TYPE_IMPLICIT,
-        };
+        explicit UsbEndpointDescriptor(const libusb_endpoint_descriptor *desc, UsbInterfaceDescriptor *parent = nullptr);
 
         /**
          * @brief bLength
@@ -104,6 +165,12 @@ namespace usb {
         uint8_t bSynchAddress() const;
 
         /**
+         * @brief wMaxPacketSize
+         * @return maximum packet size this endpoint
+         */
+        uint16_t wMaxPacketSize() const;
+
+        /**
          * @brief extra
          * @return extra descriptors
          */
@@ -119,34 +186,57 @@ namespace usb {
          * @brief direction
          * @return the endpoint direction IN (device to host) or OUT (host to device)
          */
-        Direction direction() const;
+        EndpointDirection direction() const;
 
         /**
          * @brief transferType
          * @return the endpoint transfer type
          */
-        TransferType transferType() const;
+        EndpointTransferType transferType() const;
 
         /**
          * @brief syncType
          * @return the endpoint sync type
          * @note only used for isochronous transfer type
          */
-        SyncType syncType() const;
+        EndpointSyncType syncType() const;
 
         /**
          * @brief usageType
          * @return the endpoint usage type
          * @note only used for isochronous transfer type
          */
-        UsageType usageType() const;
+        EndpointUsageType usageType() const;
+
+        /**
+         * @brief bmAttributesInfo
+         * Wrapper of parseEndpointDescBmAttributes()
+         * @see parseEndpointDescBmAttributes
+         */
+        QString bmAttributesInfo();
+
+        /**
+         * @brief endpointAddressInfo
+         * @return string description of endpoint address
+         */
+        QString endpointAddressInfo();
+
+        /**
+         * @brief interfaceDescriptor
+         * @return the interface descriptor which current endpoint descriptor is belong to
+         */
+        UsbInterfaceDescriptor *interfaceDescriptor() const;
+
+        int transfer(unsigned char *buffer, int &realSize, unsigned int timeout);
 
     signals:
 
     private:
         uint8_t _bLength, _bDescriptorType, _bEndpointAddress, _bmAttributes, _bInterval, _bRefresh, _bSynchAddress;
+        uint16_t _wMaxPacketSize;
         const unsigned char *_extra;
         int _extra_length;
+        UsbInterfaceDescriptor *_interfaceDescriptor;
     };
 }
 #endif // USBENDPOINTDESCRIPTOR_H

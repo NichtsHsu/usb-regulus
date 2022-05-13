@@ -1,4 +1,23 @@
-﻿#ifndef MAINWINDOW_H
+﻿/*! The main window of usb-regulus
+
+ * Copyright (C) 2022 Nichts Hsu
+
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+
+#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -7,6 +26,7 @@
 #include <QLayout>
 #include <QTextBrowser>
 #include <QSplitter>
+#include <QTranslator>
 
 #include <log/logger.h>
 #include <usb/usbhost.h>
@@ -45,10 +65,28 @@ private slots:
      */
     void __removeDevice(int index);
 
+    /**
+     * @brief __updateTextBrowser
+     * This slot is connected with UsbDeviceTreeView::clicked(),
+     * to display the information of USB devices or interfaces.
+     * @param index
+     * Index of the clicked item
+     */
+    void __updateTextBrowser(const QModelIndex &index);
+
+    void changeEvent(QEvent *event) override;
+
 private:
+    void __setLoggerLevel(Logger::Level level);
+
+    void __loadTranslation(const QString &lang);
+
     Ui::MainWindow *ui;
 
     QTextBrowser *ui_mainBrowser;
     QSplitter *ui_widgetRightSplitter;
+    QTranslator *_translator;
+
+    static const QString _textBroswerCss;
 };
 #endif // MAINWINDOW_H

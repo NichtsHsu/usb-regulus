@@ -9,25 +9,7 @@ namespace usb {
         for (int i = 0; i < _num_altsetting; ++i)
             _altsetting.append(new UsbInterfaceDescriptor(&interface->altsetting[i], this));
 
-        QString strInterface = _configDescriptor->device()->getStringDescriptor(interface->altsetting[0].iInterface);
-        if (!strInterface.isEmpty())
-        {
-            _displayName = strInterface;
-        }
-        else
-        {
-            char strClass[128], strSubclass[128], strProtocol[128];
-            get_class_string(strClass, 128, interface->altsetting[0].bInterfaceClass);
-            get_subclass_string(strSubclass, 128, interface->altsetting[0].bInterfaceClass,
-                    interface->altsetting[0].bInterfaceSubClass);
-            get_protocol_string(strProtocol, 128, interface->altsetting[0].bInterfaceClass,
-                    interface->altsetting[0].bInterfaceSubClass,
-                    interface->altsetting[0].bInterfaceProtocol);
-            if(strlen(strProtocol))
-                _displayName = strProtocol;
-            else
-                _displayName = QString(strClass) + " " + QString(strSubclass);
-        }
+        _currentAltsetting = 0;
     }
 
     int UsbInterface::num_altsetting() const
@@ -50,13 +32,127 @@ namespace usb {
         return _altsetting[index];
     }
 
-    const QString &UsbInterface::displayName() const
+    const QString &UsbInterface::displayName()
     {
+        /* It may not be good to cost the construct time, we generate it at first call */
+        if (_displayName.isEmpty())
+        {
+            QString iInterface = _configDescriptor->device()->getStringDescriptor(currentInterfaceDescriptor()->iInterface());
+            if (!iInterface.isEmpty())
+            {
+                _displayName = iInterface;
+            }
+            else
+            {
+#ifdef Q_OS_UNIX
+                if(!currentInterfaceDescriptor()->interfaceProtocol().isEmpty())
+                    _displayName = currentInterfaceDescriptor()->interfaceProtocol();
+                else
+                    _displayName = QString(currentInterfaceDescriptor()->interfaceClass()) + " "
+                            + QString(currentInterfaceDescriptor()->interfaceSubClass());
+#endif
+            }
+        }
+
         return _displayName;
     }
 
     UsbConfigurationDescriptor *UsbInterface::configDescriptor() const
     {
         return _configDescriptor;
+    }
+
+    UsbInterfaceDescriptor *UsbInterface::currentInterfaceDescriptor() const
+    {
+        return altsetting(_currentAltsetting);
+    }
+
+    QString UsbInterface::infomationToHtml() const
+    {
+#define INTERFACE do { html += QString("<h1 align='center'>%1</h1>").arg(_displayName); } while(0)
+#define START(_title) do { html += QString("<h2 align='center'>%1</h2><table width=\"100%\">").arg(tr(_title)); } while (0)
+#define ATTR(_name, _hex, _width, _text) do { \
+    html += QString("<tr><td width=\"30%\">%1</td><td width=\"10%\">0x%2</td><td>%3</td></tr>").arg(tr(_name)).arg(_hex, _width, 16, QChar('0')).arg(_text); \
+    } while(0)
+#define ATTRTEXT(_name, _text) do {\
+    html += QString("<tr><td width=\"30%\">%1</td><td width=\"10%\"></td><td>%3</td></tr>").arg(tr(_name)).arg(_text);\
+    } while(0)
+#define ATTRSTRDESC(_name, _strDescInd) do { \
+    html += QString("<tr><td width=\"30%\">%1</td><td width=\"10%\">0x%2</td><td>%3</td></tr>") \
+    .arg(tr(_name)) \
+    .arg(_strDescInd, 2, 16, QChar('0')) \
+    .arg(_configDescriptor->device()->getStringDescriptor(_strDescInd)); \
+    } while(0)
+#define END do { html += QString("</table>"); } while(0)
+
+        QString html;
+        /* Regenerate it for language support. */
+        INTERFACE;
+        START("Interface Descriptor");
+        ATTR("bLength", currentInterfaceDescriptor()->bLength(), 2, currentInterfaceDescriptor()->bLength());
+        ATTR("bInterfaceNumber", currentInterfaceDescriptor()->bInterfaceNumber(), 2, currentInterfaceDescriptor()->bInterfaceNumber());
+        ATTR("bAlternateSetting", currentInterfaceDescriptor()->bAlternateSetting(), 2, currentInterfaceDescriptor()->bAlternateSetting());
+        ATTR("bNumEndpoints", currentInterfaceDescriptor()->bNumEndpoints(), 2, currentInterfaceDescriptor()->bNumEndpoints());
+        ATTR("bInterfaceClass", currentInterfaceDescriptor()->bInterfaceClass(), 2, currentInterfaceDescriptor()->interfaceClass());
+        ATTR("bInterfaceSubClass", currentInterfaceDescriptor()->bInterfaceSubClass(), 2, currentInterfaceDescriptor()->interfaceSubClass());
+        ATTR("bInterfaceProtocol", currentInterfaceDescriptor()->bInterfaceProtocol(), 2, currentInterfaceDescriptor()->interfaceProtocol());
+        ATTRSTRDESC("iInterface", currentInterfaceDescriptor()->iInterface());
+        END;
+        for (int i = 0; i < currentInterfaceDescriptor()->bNumEndpoints(); ++i)
+        {
+            UsbEndpointDescriptor *ep = currentInterfaceDescriptor()->endpoint(i);
+            START("Endpoint Descriptor");
+            ATTR("bLength", ep->bLength(), 2, ep->bLength());
+            ATTR("bEndpointAddress", ep->bEndpointAddress(), 2, ep->endpointAddressInfo());
+            ATTR("bmAttributes", ep->bmAttributes(), 2, ep->bmAttributesInfo());
+            ATTR("wMaxPacketSize", ep->wMaxPacketSize(), 4, ep->wMaxPacketSize());
+            ATTR("bInterval", ep->bInterval(), 2, ep->bInterval());
+            ATTR("bRefresh", ep->bRefresh(), 2, ep->bRefresh());
+            ATTR("bSynchAddress", ep->bSynchAddress(), 2, ep->bSynchAddress());
+            END;
+        }
+        return html;
+    }
+
+    int UsbInterface::currentAltsetting() const
+    {
+        return _currentAltsetting;
+    }
+
+    int UsbInterface::claim()
+    {
+        UsbDevice *device = _configDescriptor->device();
+        int ret  = libusb_claim_interface(device->handle(),  currentInterfaceDescriptor()->bInterfaceNumber());
+        if (ret == LIBUSB_SUCCESS)
+            LOGD(tr("Successfully claim the interface."));
+        else
+            LOGE(tr("Failed to claim interface \"%1\" of device \"%2\" (%3).")
+                 .arg(_displayName)
+                 .arg(device->displayName())
+                 .arg(libusb_error_name(ret)));
+        return ret;
+    }
+
+    void UsbInterface::release()
+    {
+        UsbDevice *device = _configDescriptor->device();
+        int ret = libusb_release_interface(device->handle(), currentInterfaceDescriptor()->bInterfaceNumber());
+        if (ret == LIBUSB_SUCCESS)
+        {
+            LOGD(tr("Successfully release the interface."));
+        }
+        if (ret == LIBUSB_ERROR_NOT_FOUND || ret == LIBUSB_ERROR_NO_DEVICE)
+        {
+            /* No need to handle the error to these cases */
+            LOGD(tr("No need to release the interface."));
+        }
+        else if (ret < LIBUSB_SUCCESS)
+        {
+            /* Just warning */
+            LOGW(tr("Failed to release interface \"%1\" of device \"%2\" (%3), it will be considered already released.")
+                 .arg(_displayName)
+                 .arg(device->displayName())
+                 .arg(libusb_error_name(ret)));
+        }
     }
 }

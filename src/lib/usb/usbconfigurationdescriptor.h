@@ -1,4 +1,22 @@
-﻿#ifndef USBCONFIGURATIONDESCRIPTOR_H
+﻿/*! C++ class wrapper of libusb_config_descriptor
+
+ * Copyright (C) 2022 Nichts Hsu
+
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef USBCONFIGURATIONDESCRIPTOR_H
 #define USBCONFIGURATIONDESCRIPTOR_H
 
 #include <libusb.h>
@@ -17,6 +35,18 @@ namespace usb {
 #endif
 
 namespace usb {
+    /**
+     * @brief parseConfigDescBmAttributes
+     * Parse bmAttributes of configuration descriptor to string
+     * @param bmAttributes
+     * @return the string description of bmAttributes
+     * @note
+     * D7       Reserved, set to 1. (USB 1.0 Bus Powered)
+     * D6       Self Powered
+     * D5       Remote Wakeup
+     * D4..0    Reserved, set to 0.
+     */
+    QString parseConfigDescBmAttributes(uint8_t bmAttributes);
 
     /**
      * @brief The UsbConfigurationDescriptor class
@@ -104,6 +134,13 @@ namespace usb {
          * @return the device which current configuration descirptor belongs to
          */
         UsbDevice *device() const;
+
+        /**
+         * @brief bmAttributesInfo
+         * Wrapper of parseConfigDescBmAttributes()
+         * @see parseConfigDescBmAttributes
+         */
+        QString bmAttributesInfo();
 
     signals:
 

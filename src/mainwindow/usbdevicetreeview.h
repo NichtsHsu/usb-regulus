@@ -1,4 +1,22 @@
-﻿#ifndef USBDEVICETREEVIEW_H
+﻿/*! The tree view on the left side of the main window to show USB devices.
+
+ * Copyright (C) 2022 Nichts Hsu
+
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef USBDEVICETREEVIEW_H
 #define USBDEVICETREEVIEW_H
 
 #include "log/logger.h"
@@ -8,7 +26,10 @@
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QVector>
+#include <QTimer>
 #include <QHeaderView>
+#include <QMenu>
+#include <datatransferwindow/datatransferwindow.h>
 
 /**
  * @brief The UsbDeviceItem class
@@ -39,6 +60,8 @@ public:
      * @return the asscociated USB device
      */
     usb::UsbDevice *device() const;
+
+    void updateTranslation();
 
 private:
     usb::UsbDevice *_device;
@@ -108,12 +131,24 @@ public:
      * @param index
      */
     void remove(int index);
+
+    void changeEvent(QEvent *event) override;
+
 signals:
 
 public slots:
 
+private slots:
+    void __customMenu(const QPoint &point);
+    void __openDataTransferWindow();
+
 private:
+    inline void __updateTranslations();
+
     QStandardItemModel *_model;
+    QMenu *_menu;
+    QAction *_actionDataTransfer;
+    QMap<usb::UsbInterface *, DataTransferWindow *> _dataTransferWindows;
 };
 
 #endif // USBDEVICETREEVIEW_H

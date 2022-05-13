@@ -6,6 +6,27 @@ Logger::Logger(QWidget *parent):
     document()->setMaximumBlockCount(500);
 }
 
+QString Logger::__strLogLevel()
+{
+    switch (_logLevel)
+    {
+        case Logger::Level::Debug:
+            return tr("Debug");
+        break;
+        case Logger::Level::Info:
+            return tr("Info");
+        break;
+        case Logger::Level::Warning:
+            return tr("Warning");
+        break;
+        case Logger::Level::Error:
+            return tr("Error");
+        break;
+        default:
+            return QString::number(int(_logLevel));
+    }
+}
+
 Logger::Level Logger::logLevel() const
 {
     return _logLevel;
@@ -13,6 +34,7 @@ Logger::Level Logger::logLevel() const
 
 void Logger::record(Logger::Level type, const QString &module, const QString &message)
 {
+    _writeMutex.lock();
     QString time = QTime::currentTime().toString();
 
     if (_logLevel <= type) {
@@ -44,6 +66,7 @@ void Logger::record(Logger::Level type, const QString &module, const QString &me
     }
 
     _backup.append(Logger::BackupBlock{type, module, message, time});
+    _writeMutex.unlock();
 }
 
 void Logger::d(const QString &module, const QString &message)
@@ -69,10 +92,12 @@ void Logger::e(const QString &module, const QString &message)
 void Logger::setLogLevel(Logger::Level logLevel)
 {
     _logLevel = logLevel;
+    LOGI(tr("Set log level %1.").arg(__strLogLevel()));
 }
 
 void Logger::toFile(const QString &filePath, Logger::Level logLevel)
 {
+    _writeMutex.lock();
     QFile file(filePath);
     if(!file.open(QIODevice::Text | QIODevice::WriteOnly | QIODevice::Truncate))
         record(Level::Error, "Logger", tr("Failed to export log because cannot open file \"%1\" to write.").arg(filePath));
@@ -101,12 +126,13 @@ void Logger::toFile(const QString &filePath, Logger::Level logLevel)
             }
 
             message += block.module + " :" + block.message;
-            qts << message << endl;
+            qts << message << Qt::endl;
         }
     file.flush();
     file.close();
 
     record(Level::Info, "Logger", tr("Log exported to file \"%1\".").arg(filePath));
+    _writeMutex.unlock();
 }
 
 void Logger::clear()

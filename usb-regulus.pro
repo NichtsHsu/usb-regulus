@@ -16,21 +16,30 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH += \
-    src/lib/ \
-    reference/ \
+    $$PWD/src/ \
+    $$PWD/src/lib/ \
+    $$PWD/reference/ \
 
 FORMS += \
+    src/datatransferwindow/datatransferwindow.ui \
+    src/datatransferwindow/endpointinwidget.ui \
+    src/datatransferwindow/endpointoutwidget.ui \
     ui/mainwindow/mainwindow.ui
 
 HEADERS += \
-    reference/usbutils/names.h \
-    reference/usbutils/usb-spec.h \
-    reference/usbutils/sysfs.h \
+    reference/qhexedit2/src/chunks.h \
+    reference/qhexedit2/src/commands.h \
+    reference/qhexedit2/src/qhexedit.h \
+    src/datatransferwindow/datatransferwindow.h \
+    src/datatransferwindow/endpointinwidget.h \
+    src/datatransferwindow/endpointoutwidget.h \
     src/lib/log/logger.h \
     src/lib/usb/usbconfigurationdescriptor.h \
     src/lib/usb/usbdevice.h \
     src/lib/usb/usbdevicedescriptor.h \
     src/lib/usb/usbendpointdescriptor.h \
+    src/lib/usb/usbendpointreader.h \
+    src/lib/usb/usbendpointwriter.h \
     src/lib/usb/usbhost.h \
     src/lib/usb/usbinterface.h \
     src/lib/usb/usbinterfacedescriptor.h \
@@ -38,13 +47,19 @@ HEADERS += \
     src/mainwindow/usbdevicetreeview.h
 
 SOURCES += \
-    reference/usbutils/names.c \
-    reference/usbutils/sysfs.c \
+    reference/qhexedit2/src/chunks.cpp \
+    reference/qhexedit2/src/commands.cpp \
+    reference/qhexedit2/src/qhexedit.cpp \
+    src/datatransferwindow/datatransferwindow.cpp \
+    src/datatransferwindow/endpointinwidget.cpp \
+    src/datatransferwindow/endpointoutwidget.cpp \
     src/lib/log/logger.cpp \
     src/lib/usb/usbconfigurationdescriptor.cpp \
     src/lib/usb/usbdevice.cpp \
     src/lib/usb/usbdevicedescriptor.cpp \
     src/lib/usb/usbendpointdescriptor.cpp \
+    src/lib/usb/usbendpointreader.cpp \
+    src/lib/usb/usbendpointwriter.cpp \
     src/lib/usb/usbhost.cpp \
     src/lib/usb/usbinterface.cpp \
     src/lib/usb/usbinterfacedescriptor.cpp \
@@ -53,7 +68,8 @@ SOURCES += \
     src/mainwindow/usbdevicetreeview.cpp
 
 TRANSLATIONS += \
-    usb-regulus_zh_CN.ts
+    translations/usb-regulus.en_US.ts \
+    translations/usb-regulus.zh_CN.ts
 
 unix {
     !packagesExist(libusb-1.0):error("Could not find libusb-1.0 using pkg-config, please install libusb-1.0")
@@ -61,6 +77,15 @@ unix {
     PKGCONFIG += libusb-1.0
     PKGCONFIG += libudev
     CONFIG += link_pkgconfig
+
+    HEADERS += \
+        reference/usbutils/names.h \
+        reference/usbutils/usb-spec.h \
+        reference/usbutils/sysfs.h
+
+    SOURCES += \
+        reference/usbutils/names.c \
+        reference/usbutils/sysfs.c
 }
 
 # Default rules for deployment.
@@ -71,3 +96,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     LICENSE \
     README.md
+
+RESOURCES += \
+    translations/translations.qrc

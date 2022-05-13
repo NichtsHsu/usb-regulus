@@ -1,8 +1,31 @@
-﻿#ifndef USBDEVICEDESCRIPTOR_H
+﻿/*! C++ class wrapper of libusb_device_descriptor
+
+ * Copyright (C) 2022 Nichts Hsu
+
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef USBDEVICEDESCRIPTOR_H
 #define USBDEVICEDESCRIPTOR_H
 
 #include <libusb.h>
 #include <QObject>
+
+#ifdef Q_OS_UNIX
+#include <usbutils/names.h>
+#include <usbutils/sysfs.h>
+#endif
 
 namespace usb{
     class UsbDevice;
@@ -12,6 +35,19 @@ namespace usb{
 #endif
 
 namespace usb{
+    /**
+     * @brief parseBcdUSB
+     * Parse bcdUSB's value to string.
+     * @param bcdUSB
+     * @return string description of bcdUSB
+     * @note
+     * The bcdUSB only indicates which version of the USB specification
+     * the device implements, not the actual connection speed
+     * @see UsbDevice::speed() to get the real connection speed
+     * @see usbSpeedToString()
+     */
+    QString parseBcdUSB(uint16_t bcdUSB);
+
     /**
      * @brief The UsbDeviceDescriptor class
      * C++ class wrapper of libusb_device_descriptor
@@ -39,7 +75,7 @@ namespace usb{
          * @brief bcdUSB
          * @return USB specification release number in binary-coded decimal
          */
-        uint8_t bcdUSB() const;
+        uint16_t bcdUSB() const;
 
         /**
          * @brief bDeviceClass
@@ -128,14 +164,45 @@ namespace usb{
          */
         const QString &productName() const;
 
+        /**
+         * @brief description
+         * @return a device description similar to what the `lsusb` tool shows.
+         */
+        const QString &description() const;
+
+        /**
+         * @brief bcdUSBInfo
+         * Wrapper of parseBcdUSB()
+         * @see parseBcdUSB()
+         */
+        const QString bcdUSBInfo() const;
+
+        /**
+         * @brief deviceClass
+         * @return the USB-IF defined class description
+         */
+        const QString &deviceClass() const;
+
+        /**
+         * @brief deviceSubClass
+         * @return the USB-IF defined sub-class description
+         */
+        const QString &deviceSubClass() const;
+
+        /**
+         * @brief deviceProtocol
+         * @return the USB-IF defined protocol description
+         */
+        const QString &deviceProtocol() const;
+
     signals:
 
     private:
-        uint8_t _bLength, _bDescriptorType, _bcdUSB, _bDeviceClass, _bDeviceSubClass, _bDeviceProtocol,
+        uint8_t _bLength, _bDescriptorType, _bDeviceClass, _bDeviceSubClass, _bDeviceProtocol,
         _bMaxPacketSize0, _iManufacturer, _iProduct, _iSerialNumber, _bNumConfigurations;
-        uint16_t _idVendor, _idProduct, _bcdDevice;
+        uint16_t _bcdUSB, _idVendor, _idProduct, _bcdDevice;
         UsbDevice *_device;
-        QString _vendorName, _productName;
+        QString _vendorName, _productName, _deviceClass, _deviceSubClass, _deviceProtocol, _description;
     };
 }
 

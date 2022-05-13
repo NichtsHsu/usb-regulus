@@ -1,4 +1,22 @@
-﻿#ifndef USBINTERFACEDESCRIPTOR_H
+﻿/*! C++ class wrapper of libusb_interface_descriptor
+
+ * Copyright (C) 2022 Nichts Hsu
+
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef USBINTERFACEDESCRIPTOR_H
 #define USBINTERFACEDESCRIPTOR_H
 
 #include <libusb.h>
@@ -111,6 +129,24 @@ namespace usb {
          */
         UsbInterface *interface() const;
 
+        /**
+         * @brief interfaceClass
+         * @return USB-IF defined class code description
+         */
+        const QString &interfaceClass() const;
+
+        /**
+         * @brief interfaceSubClass
+         * @return USB-IF defined sub-class code description
+         */
+        const QString &interfaceSubClass() const;
+
+        /**
+         * @brief interfaceProtocol
+         * @return USB-IF defined protocol code description
+         */
+        const QString &interfaceProtocol() const;
+
     signals:
 
     private:
@@ -120,6 +156,7 @@ namespace usb {
         const unsigned char *_extra;
         int _extra_length;
         UsbInterface *_interface;
+        QString _interfaceClass, _interfaceSubClass, _interfaceProtocol;
     };
 }
 

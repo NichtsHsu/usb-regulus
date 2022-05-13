@@ -1,0 +1,6 @@
+[submodule "reference/usbutils"]
+	path = reference/usbutils
+	url = git@github.com:NichtsHsu/usbutils.git
+[submodule "reference/qhexedit2"]
+	path = reference/qhexedit2
+	url = git@github.com:NichtsHsu/qhexedit2.git
