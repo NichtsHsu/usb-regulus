@@ -91,7 +91,7 @@ namespace usb {
         return _interfaceDescriptor;
     }
 
-    int UsbEndpointDescriptor::transfer(unsigned char *buffer, int &realSize, unsigned int timeout)
+    int UsbEndpointDescriptor::transfer(QByteArray &buffer, int &realSize, unsigned int timeout)
     {
         int ret;
         UsbDevice *device = _interfaceDescriptor->interface()->configDescriptor()->device();
@@ -111,11 +111,10 @@ namespace usb {
             }
             case EndpointTransferType::EP_INTERRUPT:
             {
-                qDebug() << (char *)buffer;
                 ret = libusb_interrupt_transfer(device->handle(),
                                                 _bEndpointAddress,
-                                                buffer,
-                                                _wMaxPacketSize,
+                                                reinterpret_cast<unsigned char *>(buffer.data()),
+                                                buffer.size(),
                                                 &realSize,
                                                 timeout);
                 break;
@@ -124,8 +123,8 @@ namespace usb {
             {
                 ret = libusb_bulk_transfer(device->handle(),
                                            _bEndpointAddress,
-                                           buffer,
-                                           _wMaxPacketSize,
+                                           reinterpret_cast<unsigned char *>(buffer.data()),
+                                           buffer.size(),
                                            &realSize,
                                            timeout);
                 break;

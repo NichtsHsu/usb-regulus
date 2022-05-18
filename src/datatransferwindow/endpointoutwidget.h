@@ -22,6 +22,7 @@
 #include <functional>
 #include <QWidget>
 #include <QCloseEvent>
+#include <QMessageBox>
 #include <usb/usbendpointdescriptor.h>
 #include <usb/usbendpointwriter.h>
 #include <qhexedit2/src/qhexedit.h>
@@ -49,7 +50,10 @@ signals:
 private slots:
     void __buttonWriteOnceReleased();
     void __buttonKeepWriteReleased();
+    void __buttonClearCounterReleased();
+    void __buttonResetDataReleased();
     void __resetButton();
+    void __setOverwriteMode(bool overwrite);
 
 private:
     Ui::EndpointOutWidget *ui;

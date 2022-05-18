@@ -43,8 +43,7 @@ namespace usb{
             }
             _stopFlagMutex.unlock();
 
-            ret = _endpointDescriptor->transfer(reinterpret_cast<unsigned char *>(_data.data()),
-                                                realWriteSize, _internalTimeout);
+            ret = _endpointDescriptor->transfer(_data, realWriteSize, _internalTimeout);
             if (ret >= LIBUSB_SUCCESS)
             {
                 ++_wroteTimes;
@@ -57,7 +56,7 @@ namespace usb{
             }
             else
             {
-                LOGE(tr("Data read failed (%1).").arg(libusb_error_name(ret)));
+                LOGE(tr("Data write failed (%1).").arg(libusb_error_name(ret)));
                 emit writeFailed(ret);
                 break;
             }
@@ -87,12 +86,13 @@ namespace usb{
             }
             _stopFlagMutex.unlock();
 
-            ret = _endpointDescriptor->transfer(reinterpret_cast<unsigned char *>(_data.data()),
-                                                realWriteSize, _internalTimeout);
+            ret = _endpointDescriptor->transfer(_data, realWriteSize, _internalTimeout);
             if (ret >= LIBUSB_SUCCESS)
             {
+                _wroteTimesMutex.lock();
                 ++_wroteTimes;
                 emit writeSucceed(_wroteTimes);
+                _wroteTimesMutex.unlock();
             }
             else if (ret == LIBUSB_ERROR_TIMEOUT)
             {
@@ -100,7 +100,7 @@ namespace usb{
             }
             else
             {
-                LOGE(tr("Data read failed (%1).").arg(libusb_error_name(ret)));
+                LOGE(tr("Data write failed (%1).").arg(libusb_error_name(ret)));
                 emit writeFailed(ret);
                 break;
             }
@@ -118,27 +118,18 @@ namespace usb{
 
     void UsbEndpointWriter::clearWroteTimes()
     {
+        _wroteTimesMutex.lock();
         _wroteTimes = 0;
+        _wroteTimesMutex.unlock();
+    }
+
+    size_t UsbEndpointWriter::wroteTimes() const
+    {
+        return _wroteTimes;
     }
 
     void UsbEndpointWriter::setData(const QByteArray &data)
     {
         _data = data;
-        if (_data.length() < _endpointDescriptor->wMaxPacketSize())
-        {
-            LOGW(tr("The length of data(%1) written to a OUT endpoint is less than its max packet size(%2)."
-                    "Fill '\0' to the end of data.")
-                 .arg(_data.length())
-                 .arg(_endpointDescriptor->wMaxPacketSize()));
-            _data.append(_endpointDescriptor->wMaxPacketSize() - _data.length(), '\0');
-        }
-        else if(_data.length() > _endpointDescriptor->wMaxPacketSize())
-        {
-            LOGW(tr("The length of data(%1) written to a OUT endpoint is greater than its max packet size(%2)."
-                    "Truncatethe overflow part of data.")
-                 .arg(_data.length())
-                 .arg(_endpointDescriptor->wMaxPacketSize()));
-            _data.resize(_endpointDescriptor->wMaxPacketSize());
-        }
     }
 }

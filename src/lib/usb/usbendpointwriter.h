@@ -37,6 +37,8 @@ namespace usb  {
 
         void setData(const QByteArray &data);
 
+        size_t wroteTimes() const;
+
     signals:
         /**
          * @brief writeSucceed
@@ -96,6 +98,7 @@ namespace usb  {
         QMutex _stopFlagMutex;
 
         size_t _wroteTimes;
+        QMutex _wroteTimesMutex;
 
         /**
          * @brief _internalTimeout

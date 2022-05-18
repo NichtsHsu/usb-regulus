@@ -13,14 +13,28 @@ EndpointOutWidget::EndpointOutWidget(QWidget *parent) :
     _hexEdit = new QHexEdit;
     layout()->replaceWidget(ui->hexEditPlaceHolder, _hexEdit);
     ui->hexEditPlaceHolder = nullptr;
+    __setOverwriteMode(_hexEdit->overwriteMode());
     _writer = new usb::UsbEndpointWriter;
     _writer->moveToThread(&_workerThread);
     _workerThread.start();
+
+    connect(_hexEdit, &QHexEdit::overwriteModeChanged, this, &EndpointOutWidget::__setOverwriteMode);
+    connect(_writer, &usb::UsbEndpointWriter::writeSucceed, this, [this] (size_t count) {
+        ui->labelWriteCount->setText(tr("Write Count: %1").arg(count));
+    });
+    connect(_writer, &usb::UsbEndpointWriter::writeFailed, this, [] (int ret) {
+        QMessageBox::critical(nullptr,
+                              tr("Error"),
+                              tr("Failed to write data, libusb reports error: %1.")
+                              .arg(libusb_error_name(ret)));
+    });
     connect(_writer, &usb::UsbEndpointWriter::safelyStopped, this, &EndpointOutWidget::__resetButton);
     connect(this, &EndpointOutWidget::__writeOnceTriggered, _writer, &usb::UsbEndpointWriter::writeOnce);
     connect(this, &EndpointOutWidget::__keepWriteTriggered, _writer, &usb::UsbEndpointWriter::keepWrite);
     connect(ui->pushButtonWriteOnce, &QPushButton::released, this, &EndpointOutWidget::__buttonWriteOnceReleased);
     connect(ui->pushButtonKeepWrite, &QPushButton::released, this, &EndpointOutWidget::__buttonKeepWriteReleased);
+    connect(ui->pushButtonClearCount, &QPushButton::released, this, &EndpointOutWidget::__buttonClearCounterReleased);
+    connect(ui->pushButtonResetData, &QPushButton::released, this, &EndpointOutWidget::__buttonResetDataReleased);
 }
 
 EndpointOutWidget::~EndpointOutWidget()
@@ -53,7 +67,11 @@ void EndpointOutWidget::closeEvent(QCloseEvent *event)
 void EndpointOutWidget::changeEvent(QEvent *event)
 {
     if(event->type() == QEvent::LanguageChange)
+    {
         ui->retranslateUi(this);
+        __setOverwriteMode(_hexEdit->overwriteMode());
+        ui->labelWriteCount->setText(tr("Write Count: %1").arg(_writer->wroteTimes()));
+    }
     event->accept();
 }
 
@@ -107,9 +125,31 @@ void EndpointOutWidget::__buttonKeepWriteReleased()
     }
 }
 
+void EndpointOutWidget::__buttonClearCounterReleased()
+{
+    _writer->clearWroteTimes();
+    ui->labelWriteCount->setText(tr("Write Count: %1").arg(0));
+}
+
+void EndpointOutWidget::__buttonResetDataReleased()
+{
+    QByteArray data;
+    data.fill('\0', _endpointDescriptor->wMaxPacketSize());
+    _buffer.setData(data);
+    _hexEdit->setData(_buffer);
+}
+
 void EndpointOutWidget::__resetButton()
 {
     if (_resetButtonAfterSafelyStop)
         _resetButtonAfterSafelyStop();
     _resetButtonAfterSafelyStop = nullptr;
+}
+
+void EndpointOutWidget::__setOverwriteMode(bool overwrite)
+{
+    if (overwrite)
+        ui->labelInsertOverwrite->setText(tr("Mode: Overwrite"));
+    else
+        ui->labelInsertOverwrite->setText(tr("Mode: Insert"));
 }

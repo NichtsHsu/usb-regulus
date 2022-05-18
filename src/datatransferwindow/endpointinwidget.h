@@ -24,6 +24,7 @@
 #include <QThread>
 #include <QBuffer>
 #include <QCloseEvent>
+#include <QMessageBox>
 #include <usb/usbendpointdescriptor.h>
 #include <usb/usbendpointreader.h>
 #include <qhexedit2/src/qhexedit.h>

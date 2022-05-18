@@ -20,6 +20,12 @@ EndpointInWidget::EndpointInWidget(QWidget *parent) :
      */
     connect(_reader, &usb::UsbEndpointReader::dataRead, this, &EndpointInWidget::__setDataReady);
     connect(_reader, &usb::UsbEndpointReader::safelyStopped, this, &EndpointInWidget::__resetButton);
+    connect(_reader, &usb::UsbEndpointReader::readFailed, this, [] (int ret) {
+        QMessageBox::critical(nullptr,
+                              tr("Error"),
+                              tr("Failed to read data, libusb reports error: %1.")
+                              .arg(libusb_error_name(ret)));
+    });
     connect(this, &EndpointInWidget::__readOnceTriggered, _reader, &usb::UsbEndpointReader::readOnce);
     connect(this, &EndpointInWidget::__keepReadTriggered, _reader, &usb::UsbEndpointReader::keepRead);
     /* Initialize a QTimer without setting interval,

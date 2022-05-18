@@ -29,35 +29,45 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/datatransferwindow/endpointinwidget.ui" line="33"/>
+        <location filename="../src/datatransferwindow/endpointinwidget.ui" line="58"/>
         <source>EP UNKOWN</source>
         <translation>未知端点</translation>
     </message>
     <message>
-        <location filename="../src/datatransferwindow/endpointinwidget.ui" line="40"/>
+        <location filename="../src/datatransferwindow/endpointinwidget.ui" line="65"/>
         <source>DUMMY1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/datatransferwindow/endpointinwidget.ui" line="47"/>
+        <location filename="../src/datatransferwindow/endpointinwidget.ui" line="72"/>
         <source>DUMMY2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/datatransferwindow/endpointinwidget.ui" line="71"/>
-        <location filename="../src/datatransferwindow/endpointinwidget.cpp" line="77"/>
-        <location filename="../src/datatransferwindow/endpointinwidget.cpp" line="102"/>
+        <location filename="../src/datatransferwindow/endpointinwidget.ui" line="96"/>
+        <location filename="../src/datatransferwindow/endpointinwidget.cpp" line="84"/>
+        <location filename="../src/datatransferwindow/endpointinwidget.cpp" line="108"/>
         <source>Read Once</source>
         <translation>读取一次</translation>
     </message>
     <message>
-        <location filename="../src/datatransferwindow/endpointinwidget.ui" line="78"/>
+        <location filename="../src/datatransferwindow/endpointinwidget.ui" line="103"/>
         <source>Keep Read</source>
         <translation>保持读取</translation>
     </message>
     <message>
-        <location filename="../src/datatransferwindow/endpointinwidget.cpp" line="71"/>
-        <location filename="../src/datatransferwindow/endpointinwidget.cpp" line="96"/>
+        <location filename="../src/datatransferwindow/endpointinwidget.cpp" line="25"/>
+        <source>Error</source>
+        <translation>错误</translation>
+    </message>
+    <message>
+        <location filename="../src/datatransferwindow/endpointinwidget.cpp" line="26"/>
+        <source>Failed to read data, libusb reports error: %1.</source>
+        <translation>读取数据失败，libusb 报告错误：%1。</translation>
+    </message>
+    <message>
+        <location filename="../src/datatransferwindow/endpointinwidget.cpp" line="79"/>
+        <location filename="../src/datatransferwindow/endpointinwidget.cpp" line="103"/>
         <source>Stop Read</source>
         <translation>停止读取</translation>
     </message>
@@ -70,29 +80,83 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="33"/>
+        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="48"/>
+        <location filename="../src/datatransferwindow/endpointoutwidget.cpp" line="152"/>
+        <source>Mode: Overwrite</source>
+        <translation>覆盖模式</translation>
+    </message>
+    <message>
+        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="74"/>
+        <source>Write count: 0</source>
+        <translation>写入次数: 0</translation>
+    </message>
+    <message>
+        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="117"/>
         <source>EP UNKNOWN</source>
         <translation>未知端点</translation>
     </message>
     <message>
-        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="40"/>
+        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="124"/>
         <source>DUMMY1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="47"/>
-        <source>DUMMY2</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="148"/>
+        <source>Reset Data</source>
+        <translation>重置数据</translation>
     </message>
     <message>
-        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="71"/>
+        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="162"/>
+        <location filename="../src/datatransferwindow/endpointoutwidget.cpp" line="91"/>
+        <source>Write Once</source>
+        <translation>写入一次</translation>
+    </message>
+    <message>
+        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="169"/>
+        <location filename="../src/datatransferwindow/endpointoutwidget.cpp" line="116"/>
+        <source>Keep Write</source>
+        <translation>保持写入</translation>
+    </message>
+    <message>
+        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="155"/>
+        <source>Clear Counter</source>
+        <translation>清除计数</translation>
+    </message>
+    <message>
         <source>Read Once</source>
-        <translation type="unfinished">读取一次</translation>
+        <translation type="obsolete">读取一次</translation>
     </message>
     <message>
-        <location filename="../src/datatransferwindow/endpointoutwidget.ui" line="78"/>
         <source>Keep Read</source>
-        <translation type="unfinished">保持读取</translation>
+        <translation type="obsolete">保持读取</translation>
+    </message>
+    <message>
+        <location filename="../src/datatransferwindow/endpointoutwidget.cpp" line="23"/>
+        <location filename="../src/datatransferwindow/endpointoutwidget.cpp" line="73"/>
+        <location filename="../src/datatransferwindow/endpointoutwidget.cpp" line="131"/>
+        <source>Write Count: %1</source>
+        <translation>写入次数: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/datatransferwindow/endpointoutwidget.cpp" line="27"/>
+        <source>Error</source>
+        <translation>错误</translation>
+    </message>
+    <message>
+        <location filename="../src/datatransferwindow/endpointoutwidget.cpp" line="28"/>
+        <source>Failed to write data, libusb reports error: %1.</source>
+        <translation>写入数据失败，libusb 报告错误：%1。</translation>
+    </message>
+    <message>
+        <location filename="../src/datatransferwindow/endpointoutwidget.cpp" line="84"/>
+        <location filename="../src/datatransferwindow/endpointoutwidget.cpp" line="109"/>
+        <source>Stop Write</source>
+        <translation>停止写入</translation>
+    </message>
+    <message>
+        <location filename="../src/datatransferwindow/endpointoutwidget.cpp" line="154"/>
+        <source>Mode: Insert</source>
+        <translation>插入模式</translation>
     </message>
 </context>
 <context>
@@ -214,12 +278,12 @@
         <translation>重新扫描设备。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow/mainwindow.cpp" line="147"/>
+        <location filename="../src/mainwindow/mainwindow.cpp" line="149"/>
         <source>Set language to %1.</source>
         <translation>设置语言为 %1。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow/mainwindow.cpp" line="153"/>
+        <location filename="../src/mainwindow/mainwindow.cpp" line="155"/>
         <source>Failed to load translation of language %1.</source>
         <translation>无法加载对应语言 %1 的翻译文件。</translation>
     </message>
@@ -246,7 +310,7 @@
     <name>UsbDeviceTreeView</name>
     <message>
         <location filename="../src/mainwindow/usbdevicetreeview.cpp" line="7"/>
-        <location filename="../src/mainwindow/usbdevicetreeview.cpp" line="93"/>
+        <location filename="../src/mainwindow/usbdevicetreeview.cpp" line="92"/>
         <source>Data Trasfer</source>
         <translation>数据传输</translation>
     </message>
@@ -303,7 +367,7 @@
     </message>
     <message>
         <location filename="../src/lib/usb/usbdevice.cpp" line="25"/>
-        <location filename="../src/lib/usb/usbdevice.cpp" line="177"/>
+        <location filename="../src/lib/usb/usbdevice.cpp" line="176"/>
         <source>Failed to get device descriptor (%1).</source>
         <translation>获取设备描述符失败(%1)。</translation>
     </message>
@@ -334,75 +398,75 @@
         <translation>端点 %1 %2</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="148"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="146"/>
         <source>IN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="150"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="148"/>
         <source>OUT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="152"/>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="170"/>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="188"/>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="204"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="150"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="168"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="186"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="202"/>
         <source>No such item (value: %1) in enumeration.</source>
         <translation>枚举不包含值 %1。</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="162"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="160"/>
         <source>Bulk Transfer</source>
         <translation>批量传输</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="164"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="162"/>
         <source>Control Transfer</source>
         <translation>控制传输</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="166"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="164"/>
         <source>Interrupt Transfer</source>
         <translation>中断传输</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="168"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="166"/>
         <source>Isochronous Transfer</source>
         <translation>同步传输</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="180"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="178"/>
         <source>Adaptive</source>
         <translation>自适应</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="182"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="180"/>
         <source>Asynchronous</source>
         <translation>异步</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="184"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="182"/>
         <source>Synchronous</source>
         <translation>同步</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="186"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="184"/>
         <source>No Synchronization</source>
         <translation>无同步</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="198"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="196"/>
         <source>Data Usage</source>
         <translation>数据用途</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="200"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="198"/>
         <source>Feedback Usage</source>
         <translation>反馈用途</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="202"/>
+        <location filename="../src/lib/usb/usbendpointdescriptor.cpp" line="200"/>
         <source>Implicit Feedback Usage</source>
         <translation>隐式反馈用途</translation>
     </message>
@@ -415,10 +479,36 @@
         <translation>仅接受 IN 端点！</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbendpointreader.cpp" line="64"/>
-        <location filename="../src/lib/usb/usbendpointreader.cpp" line="107"/>
+        <location filename="../src/lib/usb/usbendpointreader.cpp" line="63"/>
+        <location filename="../src/lib/usb/usbendpointreader.cpp" line="105"/>
         <source>Data read failed (%1).</source>
         <translation>读取数据失败(%1)。</translation>
+    </message>
+</context>
+<context>
+    <name>usb::UsbEndpointWriter</name>
+    <message>
+        <location filename="../src/lib/usb/usbendpointwriter.cpp" line="18"/>
+        <source>Can only accept OUT endpoint!</source>
+        <translation>仅接受 OUT 端点！</translation>
+    </message>
+    <message>
+        <source>The length of data(%1) written to a OUT endpoint is less than its max packet size(%2).Fill &apos;&apos; to the end of data.</source>
+        <translation type="obsolete">写入 OUT 端点的数据长度(%1)小于该端点的最大数据包大小(%2)。将在数据尾部填充。</translation>
+    </message>
+    <message>
+        <source>Data read failed (%1).</source>
+        <translation type="obsolete">读取数据失败(%1)。</translation>
+    </message>
+    <message>
+        <location filename="../src/lib/usb/usbendpointwriter.cpp" line="59"/>
+        <location filename="../src/lib/usb/usbendpointwriter.cpp" line="103"/>
+        <source>Data write failed (%1).</source>
+        <translation>写入数据失败(%1)。</translation>
+    </message>
+    <message>
+        <source>The length of data(%1) written to a OUT endpoint is greater than its max packet size(%2).Truncatethe overflow part of data.</source>
+        <translation type="vanished">写入 OUT 端点的数据长度(%1)大于该端点的最大数据包大小(%2)。溢出的数据将被截断。</translation>
     </message>
 </context>
 <context>
@@ -498,27 +588,27 @@
         <translation>索引必须在 0~%1 之间，但是收到 %2。</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbinterface.cpp" line="129"/>
+        <location filename="../src/lib/usb/usbinterface.cpp" line="127"/>
         <source>Successfully claim the interface.</source>
         <translation>成功独占接口。</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbinterface.cpp" line="131"/>
+        <location filename="../src/lib/usb/usbinterface.cpp" line="129"/>
         <source>Failed to claim interface &quot;%1&quot; of device &quot;%2&quot; (%3).</source>
         <translation>独占设备 &quot;%2&quot; 的接口 &quot;%1&quot; 失败(%3)。</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbinterface.cpp" line="144"/>
+        <location filename="../src/lib/usb/usbinterface.cpp" line="142"/>
         <source>Successfully release the interface.</source>
         <translation>成功释放接口。</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbinterface.cpp" line="149"/>
+        <location filename="../src/lib/usb/usbinterface.cpp" line="147"/>
         <source>No need to release the interface.</source>
         <translation>无需释放接口。</translation>
     </message>
     <message>
-        <location filename="../src/lib/usb/usbinterface.cpp" line="154"/>
+        <location filename="../src/lib/usb/usbinterface.cpp" line="152"/>
         <source>Failed to release interface &quot;%1&quot; of device &quot;%2&quot; (%3), it will be considered already released.</source>
         <translation>释放设备 &quot;%2&quot; 的接口 &quot;%1&quot; 失败(%3)，将其视为已经释放。</translation>
     </message>

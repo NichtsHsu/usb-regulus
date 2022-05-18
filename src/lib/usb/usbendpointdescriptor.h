@@ -227,7 +227,20 @@ namespace usb {
          */
         UsbInterfaceDescriptor *interfaceDescriptor() const;
 
-        int transfer(unsigned char *buffer, int &realSize, unsigned int timeout);
+        /**
+         * @brief transfer
+         * Read data to buffer or write data from buffer.
+         * @param buffer
+         * The buffer that carries data.
+         * @note
+         * Buffers must be pre-allocated because its raw pointers will be used in transfers.
+         * @param realSize
+         * Real read/write size.
+         * @param timeout
+         * Timeout to wait.
+         * @return
+         */
+        int transfer(QByteArray &buffer, int &realSize, unsigned int timeout);
 
     signals:
 

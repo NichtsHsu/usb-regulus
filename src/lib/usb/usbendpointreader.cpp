@@ -48,8 +48,7 @@ namespace usb {
             }
             _stopFlagMutex.unlock();
 
-            ret = _endpointDescriptor->transfer(reinterpret_cast<unsigned char *>(_data.data()),
-                                                realReadSize, _internalTimeout);
+            ret = _endpointDescriptor->transfer(_data, realReadSize, _internalTimeout);
             if (ret >= LIBUSB_SUCCESS)
             {
                 emit dataRead();
@@ -92,8 +91,7 @@ namespace usb {
             }
             _stopFlagMutex.unlock();
 
-            ret = _endpointDescriptor->transfer(reinterpret_cast<unsigned char *>(_data.data()),
-                                                realReadSize, _internalTimeout);
+            ret = _endpointDescriptor->transfer(_data, realReadSize, _internalTimeout);
             if (ret >= LIBUSB_SUCCESS)
             {
                 emit dataRead();
