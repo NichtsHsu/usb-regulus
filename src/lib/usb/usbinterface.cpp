@@ -71,15 +71,16 @@ namespace usb {
     {
 #define INTERFACE do { html += QString("<h1 align='center'>%1</h1>").arg(_displayName); } while(0)
 #define START(_title) do { html += QString("<h2 align='center'>%1</h2><table width=\"100%\">").arg(tr(_title)); } while (0)
-#define ATTR(_name, _hex, _width, _text) do { \
-    html += QString("<tr><td width=\"30%\">%1</td><td width=\"10%\">0x%2</td><td>%3</td></tr>").arg(tr(_name)).arg(_hex, _width, 16, QChar('0')).arg(_text); \
+#define ATTR(_name, _hex, _text) do { \
+    html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\">0x%2</td><td>%3</td></tr>") \
+    .arg(_name).arg(_hex, sizeof(_hex) * 2, 16, QChar('0')).arg(_text); \
     } while(0)
 #define ATTRTEXT(_name, _text) do {\
-    html += QString("<tr><td width=\"30%\">%1</td><td width=\"10%\"></td><td>%3</td></tr>").arg(tr(_name)).arg(_text);\
+    html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\"></td><td>%2</td></tr>").arg(_name).arg(_text);\
     } while(0)
 #define ATTRSTRDESC(_name, _strDescInd) do { \
-    html += QString("<tr><td width=\"30%\">%1</td><td width=\"10%\">0x%2</td><td>%3</td></tr>") \
-    .arg(tr(_name)) \
+    html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\">0x%2</td><td>%3</td></tr>") \
+    .arg(_name) \
     .arg(_strDescInd, 2, 16, QChar('0')) \
     .arg(_configDescriptor->device()->getStringDescriptor(_strDescInd)); \
     } while(0)
@@ -89,26 +90,26 @@ namespace usb {
         /* Regenerate it for language support. */
         INTERFACE;
         START("Interface Descriptor");
-        ATTR("bLength", currentInterfaceDescriptor()->bLength(), 2, currentInterfaceDescriptor()->bLength());
-        ATTR("bInterfaceNumber", currentInterfaceDescriptor()->bInterfaceNumber(), 2, currentInterfaceDescriptor()->bInterfaceNumber());
-        ATTR("bAlternateSetting", currentInterfaceDescriptor()->bAlternateSetting(), 2, currentInterfaceDescriptor()->bAlternateSetting());
-        ATTR("bNumEndpoints", currentInterfaceDescriptor()->bNumEndpoints(), 2, currentInterfaceDescriptor()->bNumEndpoints());
-        ATTR("bInterfaceClass", currentInterfaceDescriptor()->bInterfaceClass(), 2, currentInterfaceDescriptor()->interfaceClass());
-        ATTR("bInterfaceSubClass", currentInterfaceDescriptor()->bInterfaceSubClass(), 2, currentInterfaceDescriptor()->interfaceSubClass());
-        ATTR("bInterfaceProtocol", currentInterfaceDescriptor()->bInterfaceProtocol(), 2, currentInterfaceDescriptor()->interfaceProtocol());
+        ATTR("bLength", currentInterfaceDescriptor()->bLength(), currentInterfaceDescriptor()->bLength());
+        ATTR("bInterfaceNumber", currentInterfaceDescriptor()->bInterfaceNumber(), currentInterfaceDescriptor()->bInterfaceNumber());
+        ATTR("bAlternateSetting", currentInterfaceDescriptor()->bAlternateSetting(), currentInterfaceDescriptor()->bAlternateSetting());
+        ATTR("bNumEndpoints", currentInterfaceDescriptor()->bNumEndpoints(), currentInterfaceDescriptor()->bNumEndpoints());
+        ATTR("bInterfaceClass", currentInterfaceDescriptor()->bInterfaceClass(), currentInterfaceDescriptor()->interfaceClass());
+        ATTR("bInterfaceSubClass", currentInterfaceDescriptor()->bInterfaceSubClass(), currentInterfaceDescriptor()->interfaceSubClass());
+        ATTR("bInterfaceProtocol", currentInterfaceDescriptor()->bInterfaceProtocol(), currentInterfaceDescriptor()->interfaceProtocol());
         ATTRSTRDESC("iInterface", currentInterfaceDescriptor()->iInterface());
         END;
         for (int i = 0; i < currentInterfaceDescriptor()->bNumEndpoints(); ++i)
         {
             UsbEndpointDescriptor *ep = currentInterfaceDescriptor()->endpoint(i);
             START("Endpoint Descriptor");
-            ATTR("bLength", ep->bLength(), 2, ep->bLength());
-            ATTR("bEndpointAddress", ep->bEndpointAddress(), 2, ep->endpointAddressInfo());
-            ATTR("bmAttributes", ep->bmAttributes(), 2, ep->bmAttributesInfo());
-            ATTR("wMaxPacketSize", ep->wMaxPacketSize(), 4, ep->wMaxPacketSize());
-            ATTR("bInterval", ep->bInterval(), 2, ep->bInterval());
-            ATTR("bRefresh", ep->bRefresh(), 2, ep->bRefresh());
-            ATTR("bSynchAddress", ep->bSynchAddress(), 2, ep->bSynchAddress());
+            ATTR("bLength", ep->bLength(), ep->bLength());
+            ATTR("bEndpointAddress", ep->bEndpointAddress(), ep->endpointAddressInfo());
+            ATTR("bmAttributes", ep->bmAttributes(), ep->bmAttributesInfo());
+            ATTR("wMaxPacketSize", ep->wMaxPacketSize(), ep->wMaxPacketSize());
+            ATTR("bInterval", ep->bInterval(), ep->bInterval());
+            ATTR("bRefresh", ep->bRefresh(), ep->bRefresh());
+            ATTR("bSynchAddress", ep->bSynchAddress(), ep->bSynchAddress());
             END;
         }
         return html;

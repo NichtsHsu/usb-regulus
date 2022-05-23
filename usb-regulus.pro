@@ -34,8 +34,10 @@ HEADERS += \
     src/datatransferwindow/endpointinwidget.h \
     src/datatransferwindow/endpointoutwidget.h \
     src/lib/log/logger.h \
+    src/lib/usb/usbbosdescriptor.h \
     src/lib/usb/usbconfigurationdescriptor.h \
     src/lib/usb/usbdevice.h \
+    src/lib/usb/usbdevicecapabilitydescriptor.h \
     src/lib/usb/usbdevicedescriptor.h \
     src/lib/usb/usbendpointdescriptor.h \
     src/lib/usb/usbendpointreader.h \
@@ -54,8 +56,10 @@ SOURCES += \
     src/datatransferwindow/endpointinwidget.cpp \
     src/datatransferwindow/endpointoutwidget.cpp \
     src/lib/log/logger.cpp \
+    src/lib/usb/usbbosdescriptor.cpp \
     src/lib/usb/usbconfigurationdescriptor.cpp \
     src/lib/usb/usbdevice.cpp \
+    src/lib/usb/usbdevicecapabilitydescriptor.cpp \
     src/lib/usb/usbdevicedescriptor.cpp \
     src/lib/usb/usbendpointdescriptor.cpp \
     src/lib/usb/usbendpointreader.cpp \

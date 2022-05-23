@@ -57,16 +57,16 @@ void EndpointInWidget::setEndpoint(usb::UsbEndpointDescriptor *epDesc)
     _reader->init(_endpointDescriptor);
 }
 
-void EndpointInWidget::closeEvent(QCloseEvent *event)
-{
-    _reader->stopRead();
-    event->accept();
-}
-
 void EndpointInWidget::changeEvent(QEvent *event)
 {
     if(event->type() == QEvent::LanguageChange)
         ui->retranslateUi(this);
+    event->accept();
+}
+
+void EndpointInWidget::hideEvent(QHideEvent *event)
+{
+    _reader->stopRead();
     event->accept();
 }
 
@@ -105,7 +105,7 @@ void EndpointInWidget::__buttonKeepReadReleased()
         _resetButtonAfterSafelyStop = [this] () {
             _keepRead = false;
             ui->pushButtonReadOnce->setEnabled(true);
-            ui->pushButtonKeepRead->setText(tr("Read Once"));
+            ui->pushButtonKeepRead->setText(tr("Keep Read"));
         };
         emit __keepReadTriggered();
     }
@@ -128,6 +128,11 @@ void EndpointInWidget::__resetButton()
     if (_resetButtonAfterSafelyStop)
         _resetButtonAfterSafelyStop();
     _resetButtonAfterSafelyStop = nullptr;
+}
+
+void EndpointInWidget::__stopRead()
+{
+    _reader->stopRead();
 }
 
 void EndpointInWidget::__updateData()

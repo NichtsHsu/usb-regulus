@@ -179,6 +179,11 @@ namespace usb {
         return -1;
     }
 
+    libusb_context *UsbHost::context() const
+    {
+        return _context;
+    }
+
     bool UsbHost::hasHotplug() const
     {
         return _hasHotplug;

@@ -13,7 +13,7 @@ namespace usb {
     void UsbEndpointReader::init(UsbEndpointDescriptor *epDesc)
     {
         _endpointDescriptor = epDesc;
-        if (_endpointDescriptor->direction() != EndpointDirection::EP_IN)
+        if (_endpointDescriptor->direction() != EndpointDirection::IN)
         {
             LOGE(tr("Can only accept IN endpoint!"));
             _endpointDescriptor = nullptr;
@@ -39,6 +39,8 @@ namespace usb {
         int ret;
         for(;;)
         {
+            ret = _endpointDescriptor->transfer(_data, realReadSize, _internalTimeout);
+
             _stopFlagMutex.lock();
             if(_stopFlag)
             {
@@ -48,7 +50,6 @@ namespace usb {
             }
             _stopFlagMutex.unlock();
 
-            ret = _endpointDescriptor->transfer(_data, realReadSize, _internalTimeout);
             if (ret >= LIBUSB_SUCCESS)
             {
                 emit dataRead();
@@ -82,6 +83,8 @@ namespace usb {
         int ret;
         for(;;)
         {
+            ret = _endpointDescriptor->transfer(_data, realReadSize, _internalTimeout);
+
             _stopFlagMutex.lock();
             if(_stopFlag)
             {
@@ -91,7 +94,6 @@ namespace usb {
             }
             _stopFlagMutex.unlock();
 
-            ret = _endpointDescriptor->transfer(_data, realReadSize, _internalTimeout);
             if (ret >= LIBUSB_SUCCESS)
             {
                 emit dataRead();

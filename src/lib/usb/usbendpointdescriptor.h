@@ -32,44 +32,44 @@ namespace usb {
 #include <log/logger.h>
 namespace usb {
     /**
-     * @brief The Direction enum
+     * @brief The EndpointDirection enum
      * @see UsbEndpointDescriptor::direction()
      */
-    enum EndpointDirection {
-        EP_OUT = LIBUSB_ENDPOINT_OUT,
-        EP_IN = LIBUSB_ENDPOINT_IN,
+    enum class EndpointDirection {
+        OUT = LIBUSB_ENDPOINT_OUT,
+        IN = LIBUSB_ENDPOINT_IN,
     };
 
     /**
-     * @brief The TransferType enum
+     * @brief The EndpointTransferType enum
      * @see UsbEndpointDescriptor::transferType()
      */
-    enum EndpointTransferType {
-        EP_CONTROL = LIBUSB_TRANSFER_TYPE_CONTROL,
-        EP_ISOCHRONOUS = LIBUSB_TRANSFER_TYPE_ISOCHRONOUS,
-        EP_BULK = LIBUSB_TRANSFER_TYPE_BULK,
-        EP_INTERRUPT = LIBUSB_TRANSFER_TYPE_INTERRUPT,
+    enum class EndpointTransferType {
+        CONTROL = LIBUSB_TRANSFER_TYPE_CONTROL,
+        ISOCHRONOUS = LIBUSB_TRANSFER_TYPE_ISOCHRONOUS,
+        BULK = LIBUSB_TRANSFER_TYPE_BULK,
+        INTERRUPT = LIBUSB_TRANSFER_TYPE_INTERRUPT,
     };
 
     /**
-     * @brief The SyncType enum
+     * @brief The EndpointSyncType enum
      * @see UsbEndpointDescriptor::syncType()
      */
-    enum EndpointSyncType {
-        EP_NONE = LIBUSB_ISO_SYNC_TYPE_NONE,
-        EP_ASYNC = LIBUSB_ISO_SYNC_TYPE_ASYNC,
-        EP_ADAPTIVE = LIBUSB_ISO_SYNC_TYPE_ADAPTIVE,
-        EP_SYNC = LIBUSB_ISO_SYNC_TYPE_SYNC,
+    enum class EndpointSyncType {
+        NONE = LIBUSB_ISO_SYNC_TYPE_NONE,
+        ASYNCHRONOUS = LIBUSB_ISO_SYNC_TYPE_ASYNC,
+        ADAPTIVE = LIBUSB_ISO_SYNC_TYPE_ADAPTIVE,
+        SYNCHRONOUS = LIBUSB_ISO_SYNC_TYPE_SYNC,
     };
 
     /**
-     * @brief The UsageType enum
+     * @brief The EndpointUsageType enum
      * @see UsbEndpointDescriptor::usageType()
      */
-    enum EndpointUsageType {
-        EP_DATA = LIBUSB_ISO_USAGE_TYPE_DATA,
-        EP_FEEDBACK = LIBUSB_ISO_USAGE_TYPE_FEEDBACK,
-        EP_IMPLICIT = LIBUSB_ISO_USAGE_TYPE_IMPLICIT,
+    enum class EndpointUsageType {
+        DATA = LIBUSB_ISO_USAGE_TYPE_DATA,
+        FEEDBACK = LIBUSB_ISO_USAGE_TYPE_FEEDBACK,
+        IMPLICIT = LIBUSB_ISO_USAGE_TYPE_IMPLICIT,
     };
 
     /**

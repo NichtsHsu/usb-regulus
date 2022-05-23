@@ -28,12 +28,16 @@
 namespace usb {
     class UsbDeviceDescriptor;
     class UsbConfigurationDescriptor;
+    class UsbBosDescriptor;
 }
 #ifndef USBDEVICEDESCRIPTOR_H
 #include "usbdevicedescriptor.h"
 #endif
 #ifndef USBCONFIGURATIONDESCRIPTOR_H
 #include "usbconfigurationdescriptor.h"
+#endif
+#ifndef USBBOSDESCRIPTOR_H
+#include "usbbosdescriptor.h"
 #endif
 
 namespace usb {
@@ -50,13 +54,13 @@ namespace usb {
      * @todo
      * How can we check dual channel?
      */
-    enum UsbSpeed {
-        UNKNOWN_SPEED = LIBUSB_SPEED_UNKNOWN,
-        LOW_SPEED = LIBUSB_SPEED_LOW,
-        FULL_SPEED = LIBUSB_SPEED_FULL,
-        HIGH_SPEED = LIBUSB_SPEED_HIGH,
-        SUPER_SPEED = LIBUSB_SPEED_SUPER,
-        SUPER_SPEED_PLUS = LIBUSB_SPEED_SUPER_PLUS,
+    enum class UsbSpeed {
+        UNKNOWN = LIBUSB_SPEED_UNKNOWN,
+        LOW = LIBUSB_SPEED_LOW,
+        FULL = LIBUSB_SPEED_FULL,
+        HIGH = LIBUSB_SPEED_HIGH,
+        SUPER = LIBUSB_SPEED_SUPER,
+        SUPER_PLUS = LIBUSB_SPEED_SUPER_PLUS,
     };
 
     /**
@@ -105,6 +109,12 @@ namespace usb {
         libusb_device *device() const;
 
         /**
+         * @brief bosDescriptor
+         * @return the BOS descriptor
+         */
+        UsbBosDescriptor *bosDescriptor() const;
+
+        /**
          * @brief bus
          * @return bus number of this USB device
          * @note
@@ -119,6 +129,12 @@ namespace usb {
          * @see UsbDevice::bus()
          */
         uint8_t port() const;
+
+        /**
+         * @brief speed
+         * @return currently connection speed
+         */
+        UsbSpeed speed() const;
 
         /**
          * @brief valid
@@ -148,13 +164,21 @@ namespace usb {
         QString infomationToHtml() const;
 
         /**
+         * @brief reset
+         * Reset a device may cause this device disconnect and reconnect,
+         * then the UsbDevice will be deallocated.
+         * For safety, we declare the reset function as a static function,
+         * instead of a member function of UsbDevice.
+         */
+        static void reset(const UsbDevice &device);
+        static void reset(const UsbDevice *device);
+
+        /**
          * @brief operator ==
          * @return if idVendor, idProduct, bus and port are equal.
          */
         bool operator==(const UsbDevice &) const;
         bool operator==(libusb_device *);
-
-        UsbSpeed speed() const;
 
     signals:
 
@@ -162,6 +186,7 @@ namespace usb {
         libusb_device *_device;
         UsbDeviceDescriptor *_deviceDescriptor;
         UsbConfigurationDescriptor *_configurationDescriptor;
+        UsbBosDescriptor *_bosDescriptor;
         libusb_device_handle *_handle;
         uint8_t _bus, _port, _address;
         UsbSpeed _speed;

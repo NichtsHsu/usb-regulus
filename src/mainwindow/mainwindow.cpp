@@ -155,4 +155,3 @@ void MainWindow::__loadTranslation(const QString &lang)
         LOGE(tr("Failed to load translation of language %1.").arg(lang));
     }
 }
-

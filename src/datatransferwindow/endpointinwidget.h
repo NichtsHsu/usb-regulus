@@ -23,7 +23,7 @@
 #include <QWidget>
 #include <QThread>
 #include <QBuffer>
-#include <QCloseEvent>
+#include <QHideEvent>
 #include <QMessageBox>
 #include <usb/usbendpointdescriptor.h>
 #include <usb/usbendpointreader.h>
@@ -42,8 +42,8 @@ public:
     ~EndpointInWidget();
 
     void setEndpoint(usb::UsbEndpointDescriptor *epDesc);
-    void closeEvent(QCloseEvent *event) override;
     void changeEvent(QEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
 signals:
     void __readOnceTriggered();
@@ -54,6 +54,7 @@ private slots:
     void __buttonKeepReadReleased();
     void __setDataReady();
     void __resetButton();
+    void __stopRead();
 
 private:
     void __updateData();

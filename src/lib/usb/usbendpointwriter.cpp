@@ -13,7 +13,7 @@ namespace usb{
     void UsbEndpointWriter::init(UsbEndpointDescriptor *epDesc)
     {
         _endpointDescriptor = epDesc;
-        if (_endpointDescriptor->direction() != EndpointDirection::EP_OUT)
+        if (_endpointDescriptor->direction() != EndpointDirection::OUT)
         {
             LOGE(tr("Can only accept OUT endpoint!"));
             _endpointDescriptor = nullptr;
@@ -34,6 +34,8 @@ namespace usb{
         int ret;
         for(;;)
         {
+            ret = _endpointDescriptor->transfer(_data, realWriteSize, _internalTimeout);
+
             _stopFlagMutex.lock();
             if(_stopFlag)
             {
@@ -43,7 +45,6 @@ namespace usb{
             }
             _stopFlagMutex.unlock();
 
-            ret = _endpointDescriptor->transfer(_data, realWriteSize, _internalTimeout);
             if (ret >= LIBUSB_SUCCESS)
             {
                 ++_wroteTimes;
@@ -77,6 +78,8 @@ namespace usb{
         int ret;
         for(;;)
         {
+            ret = _endpointDescriptor->transfer(_data, realWriteSize, _internalTimeout);
+
             _stopFlagMutex.lock();
             if(_stopFlag)
             {
@@ -86,7 +89,6 @@ namespace usb{
             }
             _stopFlagMutex.unlock();
 
-            ret = _endpointDescriptor->transfer(_data, realWriteSize, _internalTimeout);
             if (ret >= LIBUSB_SUCCESS)
             {
                 _wroteTimesMutex.lock();

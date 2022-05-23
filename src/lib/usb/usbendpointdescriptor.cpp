@@ -58,7 +58,7 @@ namespace usb {
 
     EndpointDirection UsbEndpointDescriptor::direction() const
     {
-        return EndpointDirection(_bEndpointAddress & EP_IN);
+        return EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN));
     }
 
     EndpointTransferType UsbEndpointDescriptor::transferType() const
@@ -97,19 +97,19 @@ namespace usb {
         UsbDevice *device = _interfaceDescriptor->interface()->configDescriptor()->device();
         switch (transferType())
         {
-            case EndpointTransferType::EP_CONTROL:
+            case EndpointTransferType::CONTROL:
             {
                 LOGE("Control transfer currently is not supported.");
                 ret = LIBUSB_ERROR_NOT_SUPPORTED;
                 break;
             }
-            case EndpointTransferType::EP_ISOCHRONOUS:
+            case EndpointTransferType::ISOCHRONOUS:
             {
                 LOGE("Isochrnous transfer currently is not supported.");
                 ret =  LIBUSB_ERROR_NOT_SUPPORTED;
                 break;
             }
-            case EndpointTransferType::EP_INTERRUPT:
+            case EndpointTransferType::INTERRUPT:
             {
                 ret = libusb_interrupt_transfer(device->handle(),
                                                 _bEndpointAddress,
@@ -119,7 +119,7 @@ namespace usb {
                                                 timeout);
                 break;
             }
-            case EndpointTransferType::EP_BULK:
+            case EndpointTransferType::BULK:
             {
                 ret = libusb_bulk_transfer(device->handle(),
                                            _bEndpointAddress,
@@ -142,9 +142,9 @@ namespace usb {
     {
         switch(direction)
         {
-            case EndpointDirection::EP_IN:
+            case EndpointDirection::IN:
             return QString(UsbEndpointDescriptor::tr("IN"));
-            case EndpointDirection::EP_OUT:
+            case EndpointDirection::OUT:
             return QString(UsbEndpointDescriptor::tr("OUT"));
             default:
                 log().e("EndpointDirection", UsbEndpointDescriptor::tr("No such item (value: %1) in enumeration.").arg(int(direction)));
@@ -156,13 +156,13 @@ namespace usb {
     {
         switch(type)
         {
-            case EndpointTransferType::EP_BULK:
+            case EndpointTransferType::BULK:
             return QString(UsbEndpointDescriptor::tr("Bulk Transfer"));
-            case EndpointTransferType::EP_CONTROL:
+            case EndpointTransferType::CONTROL:
             return QString(UsbEndpointDescriptor::tr("Control Transfer"));
-            case EndpointTransferType::EP_INTERRUPT:
+            case EndpointTransferType::INTERRUPT:
             return QString(UsbEndpointDescriptor::tr("Interrupt Transfer"));
-            case EndpointTransferType::EP_ISOCHRONOUS:
+            case EndpointTransferType::ISOCHRONOUS:
             return QString(UsbEndpointDescriptor::tr("Isochronous Transfer"));
             default:
                 log().e("EndpointTransferType", UsbEndpointDescriptor::tr("No such item (value: %1) in enumeration.").arg(int(type)));
@@ -174,13 +174,13 @@ namespace usb {
     {
         switch(type)
         {
-            case EndpointSyncType::EP_ADAPTIVE:
+            case EndpointSyncType::ADAPTIVE:
             return QString(UsbEndpointDescriptor::tr("Adaptive"));
-            case EndpointSyncType::EP_ASYNC:
+            case EndpointSyncType::ASYNCHRONOUS:
             return QString(UsbEndpointDescriptor::tr("Asynchronous"));
-            case EndpointSyncType::EP_SYNC:
+            case EndpointSyncType::SYNCHRONOUS:
             return QString(UsbEndpointDescriptor::tr("Synchronous"));
-            case EndpointSyncType::EP_NONE:
+            case EndpointSyncType::NONE:
             return QString(UsbEndpointDescriptor::tr("No Synchronization"));
             default:
                 log().e("EndpointSyncType", UsbEndpointDescriptor::tr("No such item (value: %1) in enumeration.").arg(int(type)));
@@ -192,11 +192,11 @@ namespace usb {
     {
         switch(type)
         {
-            case EndpointUsageType::EP_DATA:
+            case EndpointUsageType::DATA:
             return QString(UsbEndpointDescriptor::tr("Data Usage"));
-            case EndpointUsageType::EP_FEEDBACK:
+            case EndpointUsageType::FEEDBACK:
             return QString(UsbEndpointDescriptor::tr("Feedback Usage"));
-            case EndpointUsageType::EP_IMPLICIT:
+            case EndpointUsageType::IMPLICIT:
             return QString(UsbEndpointDescriptor::tr("Implicit Feedback Usage"));
             default:
                 log().e("EndpointUsageType", UsbEndpointDescriptor::tr("No such item (value: %1) in enumeration.").arg(int(type)));
@@ -207,7 +207,7 @@ namespace usb {
     QString parseEndpointDescBmAttributes(uint8_t bmAttributes)
     {
         EndpointTransferType trasferType = EndpointTransferType(bmAttributes & 0b11);
-        if (trasferType == EndpointTransferType::EP_ISOCHRONOUS)
+        if (trasferType == EndpointTransferType::ISOCHRONOUS)
         {
             QString info = strEndpointTransferType(trasferType);
             info += ",";

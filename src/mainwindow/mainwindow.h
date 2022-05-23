@@ -78,7 +78,6 @@ private slots:
 
 private:
     void __setLoggerLevel(Logger::Level level);
-
     void __loadTranslation(const QString &lang);
 
     Ui::MainWindow *ui;

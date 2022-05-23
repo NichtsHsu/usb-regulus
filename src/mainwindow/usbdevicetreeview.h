@@ -116,6 +116,7 @@ public:
      * USB device list to show
      */
     void refresh(const QVector<usb::UsbDevice *> &devices);
+
     /**
      * @brief insert
      * Insert a USB device at specified index
@@ -125,6 +126,7 @@ public:
      * The device to be insert
      */
     void insert(int index, usb::UsbDevice *device);
+
     /**
      * @brief remove
      * Remove a USB device with specified index
@@ -141,12 +143,15 @@ public slots:
 private slots:
     void __customMenu(const QPoint &point);
     void __openDataTransferWindow();
+    void __resetDevice();
 
 private:
     inline void __updateTranslations();
 
     QStandardItemModel *_model;
-    QMenu *_menu;
+    QMenu *_menuDevice;
+    QAction *_actionReset;
+    QMenu *_menuInterface;
     QAction *_actionDataTransfer;
     QMap<usb::UsbInterface *, DataTransferWindow *> _dataTransferWindows;
 };

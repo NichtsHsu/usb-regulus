@@ -3,10 +3,14 @@
 UsbDeviceTreeView::UsbDeviceTreeView(QWidget *parent)
     : QTreeView(parent)
 {
-    _menu = new QMenu(this);
+    _menuDevice = new QMenu(this);
+    _actionReset = new QAction(tr("Reset"));
+    connect(_actionReset, &QAction::triggered, this, &UsbDeviceTreeView::__resetDevice);
+    _menuDevice->addAction(_actionReset);
+    _menuInterface = new QMenu(this);
     _actionDataTransfer = new QAction(tr("Data Trasfer"));
     connect(_actionDataTransfer, &QAction::triggered, this, &UsbDeviceTreeView::__openDataTransferWindow);
-    _menu->addAction(_actionDataTransfer);
+    _menuInterface->addAction(_actionDataTransfer);
 
     _model = new QStandardItemModel(this);
     setModel(_model);
@@ -29,7 +33,7 @@ void UsbDeviceTreeView::refresh(const QVector<usb::UsbDevice *> &devices)
 
 void UsbDeviceTreeView::insert(int index, usb::UsbDevice *device)
 {
-    _menu->hide();
+    _menuInterface->hide();
     UsbDeviceItem *item  = new UsbDeviceItem;
     _model->insertRow(index, item);
     item->setUsbDevice(device);
@@ -37,7 +41,7 @@ void UsbDeviceTreeView::insert(int index, usb::UsbDevice *device)
 
 void UsbDeviceTreeView::remove(int index)
 {
-    _menu->hide();
+    _menuInterface->hide();
     UsbDeviceItem *deviceItem = dynamic_cast<UsbDeviceItem *>(_model->item(index, 0));
     for (int i = 0; i < deviceItem->rowCount(); ++i)
     {
@@ -63,10 +67,13 @@ void UsbDeviceTreeView::changeEvent(QEvent *event)
 void UsbDeviceTreeView::__customMenu(const QPoint &point)
 {
     QModelIndex index = indexAt(point);
-    /* For interfaces */
-    if (index.parent() != QModelIndex())
+    if (index.parent() == QModelIndex())
     {
-        _menu->exec(viewport()->mapToGlobal(point));
+        _menuDevice->exec(viewport()->mapToGlobal(point));
+    }
+    else
+    {
+        _menuInterface->exec(viewport()->mapToGlobal(point));
     }
 }
 
@@ -85,6 +92,24 @@ void UsbDeviceTreeView::__openDataTransferWindow()
         _dataTransferWindows.insert(item->interface(), window);
         window->show();
     }
+}
+
+void UsbDeviceTreeView::__resetDevice()
+{
+    UsbDeviceItem *deviceItem = dynamic_cast<UsbDeviceItem *>(
+                _model->itemFromIndex(currentIndex()));
+    for (int i = 0; i < deviceItem->rowCount(); ++i)
+    {
+        UsbInterfaceItem *interfaceItem = dynamic_cast<UsbInterfaceItem *>(
+                    deviceItem->child(i));
+        if (_dataTransferWindows.contains(interfaceItem->interface()))
+        {
+            _dataTransferWindows[interfaceItem->interface()]->hide();
+            delete _dataTransferWindows[interfaceItem->interface()];
+            _dataTransferWindows.remove(interfaceItem->interface());
+        }
+    }
+    usb::UsbDevice::reset(deviceItem->device());
 }
 
 void UsbDeviceTreeView::__updateTranslations()

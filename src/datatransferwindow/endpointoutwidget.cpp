@@ -58,7 +58,7 @@ void EndpointOutWidget::setEndpoint(usb::UsbEndpointDescriptor *epDesc)
     _writer->init(_endpointDescriptor);
 }
 
-void EndpointOutWidget::closeEvent(QCloseEvent *event)
+void EndpointOutWidget::hideEvent(QHideEvent *event)
 {
     _writer->stopWrite();
     event->accept();

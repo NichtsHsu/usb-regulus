@@ -42,7 +42,7 @@ void DataTransferWindow::setInterface(usb::UsbInterface *interface)
         usb::UsbEndpointDescriptor *epDesc = _interface->currentInterfaceDescriptor()->endpoint(i);
         switch (epDesc->direction())
         {
-            case usb::EndpointDirection::EP_IN:
+            case usb::EndpointDirection::IN:
             {
                 EndpointInWidget *widget = new EndpointInWidget;
                 ui->scrollAreaWidgetContents->layout()->addWidget(widget);
@@ -59,7 +59,7 @@ void DataTransferWindow::setInterface(usb::UsbInterface *interface)
         usb::UsbEndpointDescriptor *epDesc = _interface->currentInterfaceDescriptor()->endpoint(i);
         switch (epDesc->direction())
         {
-            case usb::EndpointDirection::EP_OUT:
+            case usb::EndpointDirection::OUT:
             {
                 EndpointOutWidget *widget = new EndpointOutWidget;
                 ui->scrollAreaWidgetContents->layout()->addWidget(widget);
@@ -94,8 +94,11 @@ void DataTransferWindow::showEvent(QShowEvent *event)
 
 void DataTransferWindow::closeEvent(QCloseEvent *event)
 {
-    if (_interface)
-        _interface->release();
+    /* Wait for read/write stop */
+    QTimer::singleShot(500, this, [this] () {
+        if (_interface)
+            _interface->release();
+    });
     event->accept();
 }
 

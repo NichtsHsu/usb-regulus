@@ -81,6 +81,12 @@ namespace usb {
         bool hasHotplug() const;
 
         /**
+         * @brief context
+         * @return libusb context
+         */
+        libusb_context *context() const;
+
+        /**
          * @brief __addDevice
          * the wrapper of hotplug callback function
          * @warning DO NOT use this function

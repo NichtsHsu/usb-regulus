@@ -21,7 +21,7 @@
 
 #include <functional>
 #include <QWidget>
-#include <QCloseEvent>
+#include <QHideEvent>
 #include <QMessageBox>
 #include <usb/usbendpointdescriptor.h>
 #include <usb/usbendpointwriter.h>
@@ -40,7 +40,7 @@ public:
     ~EndpointOutWidget();
 
     void setEndpoint(usb::UsbEndpointDescriptor *epDesc);
-    void closeEvent(QCloseEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
     void changeEvent(QEvent *event) override;
 
 signals:
