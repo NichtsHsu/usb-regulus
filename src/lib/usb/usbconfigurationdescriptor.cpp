@@ -1,4 +1,5 @@
 ﻿#include "usbconfigurationdescriptor.h"
+#include "__usbmacro.h"
 
 namespace usb {
     UsbConfigurationDescriptor::UsbConfigurationDescriptor(const libusb_config_descriptor *desc, UsbDevice *parent):
@@ -89,13 +90,13 @@ namespace usb {
 
     QString parseConfigDescBmAttributes(uint8_t bmAttributes)
     {
-        const static uint8_t self_powered = 0b1000000;
-        const static uint8_t remote_wakeup = 0b100000;
-        if ((bmAttributes & self_powered) && (bmAttributes & remote_wakeup))
+        uint8_t self_powered = BIT(bmAttributes, 6);
+        uint8_t remote_wakeup = BIT(bmAttributes, 5);
+        if (self_powered && remote_wakeup)
             return UsbConfigurationDescriptor::tr("Self Powered, Remote Wakeup");
-        else if (bmAttributes & self_powered)
+        else if (self_powered)
             return UsbConfigurationDescriptor::tr("Self Powered");
-        else if (bmAttributes & remote_wakeup)
+        else if (remote_wakeup)
             return UsbConfigurationDescriptor::tr("Bus Powered, Remote Wakeup");
         else
             return UsbConfigurationDescriptor::tr("Bus Powered");

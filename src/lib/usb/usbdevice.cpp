@@ -1,4 +1,5 @@
 ﻿#include "usbdevice.h"
+#include "__usbmacro.h"
 
 namespace usb {
     UsbDevice::UsbDevice(libusb_device *device, QObject *parent) :
@@ -101,24 +102,6 @@ namespace usb {
 
     QString UsbDevice::infomationToHtml() const
     {
-#define DEVICE do { html += QString("<h1 align='center'>%1</h1>").arg(_deviceDescriptor->description()); } while(0)
-#define START(_title) do { html += QString("<h2 align='center'>%1</h2><table width=\"100%\">").arg(tr(_title)); } while (0)
-#define ATTR(_name, _hex, _text) do { \
-    html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\">0x%2</td><td>%3</td></tr>") \
-    .arg(_name).arg(_hex, sizeof(_hex) * 2, 16, QChar('0')).arg(_text); \
-    } while(0)
-#define ATTRTEXT(_name, _text) do {\
-    html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\"></td><td>%2</td></tr>").arg(_name).arg(_text);\
-    } while(0)
-#define ATTRSTRDESC(_name, _strDescInd) do { \
-    html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\">0x%2</td><td>%3</td></tr>") \
-    .arg(_name) \
-    .arg(_strDescInd, 2, 16, QChar('0')) \
-    .arg(getStringDescriptor(_strDescInd)); \
-    } while(0)
-#define APPEND(_sub) do { html += _sub->infomationToHtml(); } while(0)
-#define END do { html += QString("</table>"); } while(0)
-
         QString html;
         /* Regenerate it for language support. */
         DEVICE;
@@ -139,9 +122,9 @@ namespace usb {
         ATTR("bDeviceProtocol", _deviceDescriptor->bDeviceProtocol(), _deviceDescriptor->deviceProtocol());
         ATTR("idVendor", _deviceDescriptor->idVendor(), _deviceDescriptor->vendorName());
         ATTR("idProduct", _deviceDescriptor->idProduct(), _deviceDescriptor->productName());
-        ATTRSTRDESC("iManufacturer", _deviceDescriptor->iManufacturer());
-        ATTRSTRDESC("iProduct", _deviceDescriptor->iProduct());
-        ATTRSTRDESC("iSerialNumber", _deviceDescriptor->iSerialNumber());
+        ATTRSTRDESC("iManufacturer", _deviceDescriptor->iManufacturer(), this);
+        ATTRSTRDESC("iProduct", _deviceDescriptor->iProduct(), this);
+        ATTRSTRDESC("iSerialNumber", _deviceDescriptor->iSerialNumber(), this);
         ATTR("bMaxPacketSize0", _deviceDescriptor->bMaxPacketSize0(), _deviceDescriptor->bMaxPacketSize0());
         ATTR("bNumConfigurations", _deviceDescriptor->bNumConfigurations(), _deviceDescriptor->bNumConfigurations());
         END;
@@ -150,7 +133,7 @@ namespace usb {
         ATTR("wTotalLength", _configurationDescriptor->wTotalLength(), _configurationDescriptor->wTotalLength());
         ATTR("bNumInterfaces", _configurationDescriptor->bNumInterfaces(), _configurationDescriptor->bNumInterfaces());
         ATTR("bConfigurationValue", _configurationDescriptor->bConfigurationValue(), _configurationDescriptor->bConfigurationValue());
-        ATTRSTRDESC("iConfiguration", _configurationDescriptor->iConfiguration());
+        ATTRSTRDESC("iConfiguration", _configurationDescriptor->iConfiguration(), this);
         ATTR("bmAttributes", _configurationDescriptor->bmAttributes(), _configurationDescriptor->bmAttributesInfo());
         ATTR("MaxPower", _configurationDescriptor->MaxPower(), _configurationDescriptor->MaxPower());
         END;

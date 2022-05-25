@@ -34,6 +34,7 @@ HEADERS += \
     src/datatransferwindow/endpointinwidget.h \
     src/datatransferwindow/endpointoutwidget.h \
     src/lib/log/logger.h \
+    src/lib/usb/__usbmacro.h \
     src/lib/usb/usbbosdescriptor.h \
     src/lib/usb/usbconfigurationdescriptor.h \
     src/lib/usb/usbdevice.h \

@@ -1,4 +1,5 @@
 ﻿#include "usbendpointdescriptor.h"
+#include "__usbmacro.h"
 
 namespace usb {
     UsbEndpointDescriptor::UsbEndpointDescriptor(const libusb_endpoint_descriptor *desc, UsbInterfaceDescriptor *parent) :
@@ -63,17 +64,22 @@ namespace usb {
 
     EndpointTransferType UsbEndpointDescriptor::transferType() const
     {
-        return EndpointTransferType(_bmAttributes & 0b11);
+        return EndpointTransferType(CUT(_bmAttributes, 0, 1));
     }
 
     EndpointSyncType UsbEndpointDescriptor::syncType() const
     {
-        return EndpointSyncType((_bmAttributes & 0b1100) >> 2);
+        return EndpointSyncType(CUT(_bmAttributes, 2, 3));
     }
 
-    EndpointUsageType UsbEndpointDescriptor::usageType() const
+    EndpointIsochronousUsageType UsbEndpointDescriptor::isochronousUsageType() const
     {
-        return EndpointUsageType((_bmAttributes & 0b110000) >> 4);
+        return EndpointIsochronousUsageType(CUT(_bmAttributes, 4, 5));
+    }
+
+    EndpointInterruptUsageType UsbEndpointDescriptor::interruptUsageType() const
+    {
+        return EndpointInterruptUsageType(CUT(_bmAttributes, 4, 5));
     }
 
     QString UsbEndpointDescriptor::bmAttributesInfo()
@@ -188,36 +194,57 @@ namespace usb {
         }
     }
 
-    QString strEndpointUsageType(EndpointUsageType type)
+    QString strEndpointIsochronousUsageType(EndpointIsochronousUsageType type)
     {
         switch(type)
         {
-            case EndpointUsageType::DATA:
+            case EndpointIsochronousUsageType::DATA:
             return QString(UsbEndpointDescriptor::tr("Data Usage"));
-            case EndpointUsageType::FEEDBACK:
+            case EndpointIsochronousUsageType::FEEDBACK:
             return QString(UsbEndpointDescriptor::tr("Feedback Usage"));
-            case EndpointUsageType::IMPLICIT:
+            case EndpointIsochronousUsageType::IMPLICIT:
             return QString(UsbEndpointDescriptor::tr("Implicit Feedback Usage"));
             default:
-                log().e("EndpointUsageType", UsbEndpointDescriptor::tr("No such item (value: %1) in enumeration.").arg(int(type)));
+                log().e("EndpointIsochronousUsageType", UsbEndpointDescriptor::tr("No such item (value: %1) in enumeration.").arg(int(type)));
             return QString();
         }
     }
 
     QString parseEndpointDescBmAttributes(uint8_t bmAttributes)
     {
-        EndpointTransferType trasferType = EndpointTransferType(bmAttributes & 0b11);
+        EndpointTransferType trasferType = EndpointTransferType(CUT(bmAttributes, 0, 1));
         if (trasferType == EndpointTransferType::ISOCHRONOUS)
         {
             QString info = strEndpointTransferType(trasferType);
             info += ",";
-            info += strEndpointSyncType(EndpointSyncType((bmAttributes & 0b1100) >> 2));
+            info += strEndpointSyncType(EndpointSyncType(CUT(bmAttributes, 2, 3)));
             info += ",";
-            info += strEndpointUsageType(EndpointUsageType((bmAttributes & 0b110000) >> 4));
+            info += strEndpointIsochronousUsageType(EndpointIsochronousUsageType(CUT(bmAttributes, 4, 5)));
+            return info;
+        }
+        else if (trasferType == EndpointTransferType::INTERRUPT)
+        {
+            QString info = strEndpointTransferType(trasferType);
+            info += ",";
+            info += strEndpointInterruptUsageType(EndpointInterruptUsageType(CUT(bmAttributes, 4, 5)));
             return info;
         }
         else
             return strEndpointTransferType(trasferType);
+    }
+
+    QString strEndpointInterruptUsageType(EndpointInterruptUsageType type)
+    {
+        switch(type)
+        {
+            case EndpointInterruptUsageType::PERIODIC:
+            return QString(UsbEndpointDescriptor::tr("Periodic Usage"));
+            case EndpointInterruptUsageType::NOTIFICATION:
+            return QString(UsbEndpointDescriptor::tr("Notification Usage"));
+            default:
+                log().e("EndpointInterruptUsageType", UsbEndpointDescriptor::tr("No such item (value: %1) in enumeration.").arg(int(type)));
+            return QString();
+        }
     }
 
 }

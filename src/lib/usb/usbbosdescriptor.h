@@ -13,7 +13,15 @@ namespace usb {
     class Usb20ExtensionDescriptor;
     class UsbSuperSpeedDeviceCapabilityDescriptor;
     class UsbContainerIdDescriptor;
+    class UsbPlatformDescriptor;
+    class UsbPowerDeliveryCapabilityDescriptor;
+    class UsbBatteryInfoCapabilityDescriptor;
+    class UsbPowerDeliveryConsumerPortCapabilityDescriptor;
+    class UsbPowerDeliveryProviderPortCapabilityDescriptor;
     class UsbSuperSpeedPlusDeviceCapabilityDescriptor;
+    class UsbPrecisionTimeMeasurementCapabilityDescriptor;
+    class UsbExtendedWirelessDeviceCapabilityDescriptor;
+    class UsbConfigurationSummaryDescriptor;
     enum class DeviceCapabilityType;
 }
 #ifndef USBDEVICE_H

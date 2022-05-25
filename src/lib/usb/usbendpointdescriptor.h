@@ -63,13 +63,22 @@ namespace usb {
     };
 
     /**
-     * @brief The EndpointUsageType enum
-     * @see UsbEndpointDescriptor::usageType()
+     * @brief The EndpointIsocUsageType enum
+     * @see UsbEndpointDescriptor::isochronousUsageType()
      */
-    enum class EndpointUsageType {
+    enum class EndpointIsochronousUsageType {
         DATA = LIBUSB_ISO_USAGE_TYPE_DATA,
         FEEDBACK = LIBUSB_ISO_USAGE_TYPE_FEEDBACK,
         IMPLICIT = LIBUSB_ISO_USAGE_TYPE_IMPLICIT,
+    };
+
+    /**
+     * @brief The EndpointInterruptUsageType enum
+     * @see UsbEndpointDescriptor::interruptUsageType()
+     */
+    enum class EndpointInterruptUsageType {
+        PERIODIC = 0,
+        NOTIFICATION = 1,
     };
 
     /**
@@ -91,10 +100,16 @@ namespace usb {
     QString strEndpointSyncType(EndpointSyncType type);
 
     /**
-     * @brief EndpointUsageType
-     * @param string description of EndpointUsageType
+     * @brief strEndpointIsochronousUsageType
+     * @param string description of EndpointIsochronousUsageType
      */
-    QString strEndpointUsageType(EndpointUsageType type);
+    QString strEndpointIsochronousUsageType(EndpointIsochronousUsageType type);
+
+    /**
+     * @brief strEndpointInterruptUsageType
+     * @param string description of EndpointInterruptUsageType
+     */
+    QString strEndpointInterruptUsageType(EndpointInterruptUsageType type);
 
     /**
      * @brief parseEndpointDescBmAttributes
@@ -104,7 +119,7 @@ namespace usb {
      * @note
      * D1..0    Transfer Type
      * D3..2    Synchronization Type (For isochronous transfer only)
-     * D5..4    Usage Type (For isochronous transfer only)
+     * D5..4    Usage Type (For interrupt/isochronous transfer only)
      */
     QString parseEndpointDescBmAttributes(uint8_t bmAttributes);
 
@@ -202,11 +217,18 @@ namespace usb {
         EndpointSyncType syncType() const;
 
         /**
-         * @brief usageType
+         * @brief isochronousUsageType
          * @return the endpoint usage type
          * @note only used for isochronous transfer type
          */
-        EndpointUsageType usageType() const;
+        EndpointIsochronousUsageType isochronousUsageType() const;
+
+        /**
+         * @brief interruptUsageType
+         * @return the endpoint usage type
+         * @note only used for interrupt transfer type
+         */
+        EndpointInterruptUsageType interruptUsageType() const;
 
         /**
          * @brief bmAttributesInfo
@@ -241,8 +263,6 @@ namespace usb {
          * @return
          */
         int transfer(QByteArray &buffer, int &realSize, unsigned int timeout);
-
-    signals:
 
     private:
         uint8_t _bLength, _bDescriptorType, _bEndpointAddress, _bmAttributes, _bInterval, _bRefresh, _bSynchAddress;

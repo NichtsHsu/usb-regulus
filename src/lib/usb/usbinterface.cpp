@@ -1,4 +1,5 @@
 ﻿#include "usbinterface.h"
+#include "__usbmacro.h"
 
 namespace usb {
     UsbInterface::UsbInterface(const libusb_interface *interface, UsbConfigurationDescriptor *parent) : QObject(parent),
@@ -69,23 +70,6 @@ namespace usb {
 
     QString UsbInterface::infomationToHtml() const
     {
-#define INTERFACE do { html += QString("<h1 align='center'>%1</h1>").arg(_displayName); } while(0)
-#define START(_title) do { html += QString("<h2 align='center'>%1</h2><table width=\"100%\">").arg(tr(_title)); } while (0)
-#define ATTR(_name, _hex, _text) do { \
-    html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\">0x%2</td><td>%3</td></tr>") \
-    .arg(_name).arg(_hex, sizeof(_hex) * 2, 16, QChar('0')).arg(_text); \
-    } while(0)
-#define ATTRTEXT(_name, _text) do {\
-    html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\"></td><td>%2</td></tr>").arg(_name).arg(_text);\
-    } while(0)
-#define ATTRSTRDESC(_name, _strDescInd) do { \
-    html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\">0x%2</td><td>%3</td></tr>") \
-    .arg(_name) \
-    .arg(_strDescInd, 2, 16, QChar('0')) \
-    .arg(_configDescriptor->device()->getStringDescriptor(_strDescInd)); \
-    } while(0)
-#define END do { html += QString("</table>"); } while(0)
-
         QString html;
         /* Regenerate it for language support. */
         INTERFACE;
@@ -97,7 +81,7 @@ namespace usb {
         ATTR("bInterfaceClass", currentInterfaceDescriptor()->bInterfaceClass(), currentInterfaceDescriptor()->interfaceClass());
         ATTR("bInterfaceSubClass", currentInterfaceDescriptor()->bInterfaceSubClass(), currentInterfaceDescriptor()->interfaceSubClass());
         ATTR("bInterfaceProtocol", currentInterfaceDescriptor()->bInterfaceProtocol(), currentInterfaceDescriptor()->interfaceProtocol());
-        ATTRSTRDESC("iInterface", currentInterfaceDescriptor()->iInterface());
+        ATTRSTRDESC("iInterface", currentInterfaceDescriptor()->iInterface(), _configDescriptor->device());
         END;
         for (int i = 0; i < currentInterfaceDescriptor()->bNumEndpoints(); ++i)
         {
