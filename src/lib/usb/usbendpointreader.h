@@ -33,6 +33,10 @@ namespace usb {
      * For an example:
      *      UsbEndpointReader *reader = new UsbEndpointReader;
      *      reader->moveToThread(&theWorkThread);
+     * @note
+     * It will be better to set a timeout for read/write, so we can break any
+     * read/write by QThread::requestInterruption(). However, we don't regard this
+     * timeout as a fault, just read again after timeout, as if nothing happened.
      */
     class UsbEndpointReader : public QObject
     {
@@ -97,14 +101,6 @@ namespace usb {
         QByteArray _data;
         bool _stopFlag;
         QMutex _stopFlagMutex;
-
-        /**
-         * @brief _internalTimeout
-         * It will be better to set a timeout for read/write, so we can break any
-         * read/write by QThread::requestInterruption(). However, we don't regard this
-         * timeout as a fault, just read again after timeout, as if nothing happened.
-         */
-        static const unsigned int _internalTimeout;
     };
 }
 #endif // USBENDPOINTREADER_H

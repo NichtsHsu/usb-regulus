@@ -73,29 +73,7 @@ namespace usb {
         QString html;
         /* Regenerate it for language support. */
         INTERFACE;
-        START("Interface Descriptor");
-        ATTR("bLength", currentInterfaceDescriptor()->bLength(), currentInterfaceDescriptor()->bLength());
-        ATTR("bInterfaceNumber", currentInterfaceDescriptor()->bInterfaceNumber(), currentInterfaceDescriptor()->bInterfaceNumber());
-        ATTR("bAlternateSetting", currentInterfaceDescriptor()->bAlternateSetting(), currentInterfaceDescriptor()->bAlternateSetting());
-        ATTR("bNumEndpoints", currentInterfaceDescriptor()->bNumEndpoints(), currentInterfaceDescriptor()->bNumEndpoints());
-        ATTR("bInterfaceClass", currentInterfaceDescriptor()->bInterfaceClass(), currentInterfaceDescriptor()->interfaceClass());
-        ATTR("bInterfaceSubClass", currentInterfaceDescriptor()->bInterfaceSubClass(), currentInterfaceDescriptor()->interfaceSubClass());
-        ATTR("bInterfaceProtocol", currentInterfaceDescriptor()->bInterfaceProtocol(), currentInterfaceDescriptor()->interfaceProtocol());
-        ATTRSTRDESC("iInterface", currentInterfaceDescriptor()->iInterface(), _configDescriptor->device());
-        END;
-        for (int i = 0; i < currentInterfaceDescriptor()->bNumEndpoints(); ++i)
-        {
-            UsbEndpointDescriptor *ep = currentInterfaceDescriptor()->endpoint(i);
-            START("Endpoint Descriptor");
-            ATTR("bLength", ep->bLength(), ep->bLength());
-            ATTR("bEndpointAddress", ep->bEndpointAddress(), ep->endpointAddressInfo());
-            ATTR("bmAttributes", ep->bmAttributes(), ep->bmAttributesInfo());
-            ATTR("wMaxPacketSize", ep->wMaxPacketSize(), ep->wMaxPacketSize());
-            ATTR("bInterval", ep->bInterval(), ep->bInterval());
-            ATTR("bRefresh", ep->bRefresh(), ep->bRefresh());
-            ATTR("bSynchAddress", ep->bSynchAddress(), ep->bSynchAddress());
-            END;
-        }
+        APPEND(currentInterfaceDescriptor());
         return html;
     }
 

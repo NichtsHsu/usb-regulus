@@ -43,6 +43,7 @@ HEADERS += \
     src/lib/usb/usbendpointdescriptor.h \
     src/lib/usb/usbendpointreader.h \
     src/lib/usb/usbendpointwriter.h \
+    src/lib/usb/usbhiddescriptor.h \
     src/lib/usb/usbhost.h \
     src/lib/usb/usbinterface.h \
     src/lib/usb/usbinterfacedescriptor.h \
@@ -65,6 +66,7 @@ SOURCES += \
     src/lib/usb/usbendpointdescriptor.cpp \
     src/lib/usb/usbendpointreader.cpp \
     src/lib/usb/usbendpointwriter.cpp \
+    src/lib/usb/usbhiddescriptor.cpp \
     src/lib/usb/usbhost.cpp \
     src/lib/usb/usbinterface.cpp \
     src/lib/usb/usbinterfacedescriptor.cpp \

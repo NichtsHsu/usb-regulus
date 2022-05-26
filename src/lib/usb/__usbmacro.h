@@ -4,6 +4,8 @@
 /*! This file is suggested to be included in *.cpp files but not in *.h files.
  */
 
+#define TRANSFER_TIMEOUT 250
+
 #define BIT(v, n) (v & (1 << n))
 #define CUT(v, b, e) ((v & (((1ull << (e - b + 1)) - 1) << b)) >> b)
 

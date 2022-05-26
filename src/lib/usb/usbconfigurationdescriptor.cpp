@@ -83,9 +83,25 @@ namespace usb {
         return _device;
     }
 
-    QString UsbConfigurationDescriptor::bmAttributesInfo()
+    QString UsbConfigurationDescriptor::bmAttributesInfo() const
     {
         return parseConfigDescBmAttributes(_bmAttributes);
+    }
+
+    QString UsbConfigurationDescriptor::infomationToHtml() const
+    {
+        QString html;
+
+        START("Configuration Descriptor");
+        ATTR("bLength", _bLength, _bLength);
+        ATTR("wTotalLength", _wTotalLength, _wTotalLength);
+        ATTR("bNumInterfaces", _bNumInterfaces, _bNumInterfaces);
+        ATTR("bConfigurationValue", _bConfigurationValue, _bConfigurationValue);
+        ATTRSTRDESC("iConfiguration", _iConfiguration, _device);
+        ATTR("bmAttributes", _bmAttributes, bmAttributesInfo());
+        ATTR("MaxPower", _MaxPower, _MaxPower);
+        END;
+        return html;
     }
 
     QString parseConfigDescBmAttributes(uint8_t bmAttributes)

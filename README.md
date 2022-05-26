@@ -7,6 +7,14 @@ A GUI tool for USB viewing, reading and writing.
 git clone --recurse-submodules https://github.com/NichtsHsu/usb-regulus.git
 ```
 
+## Note
+
+You are suggested to install an udev rule file for unprivileged users to be able to access USB device.
+
+See: [libusb calls without sudo using udev-rules](https://stackoverflow.com/questions/40597515/libusb-calls-without-sudo-using-udev-rules).
+
+Alternatively, simply run this application with root privileges.
+
 ## Build
 
 ### Linux
@@ -36,4 +44,5 @@ Because `libusb` doesn't seem to work well on Windows, especially it does not su
 1. [Qt](https://www.qt.io/).
 2. [QtUsb](https://github.com/fpoussin/QtUsb).
 3. [usbutils](https://github.com/gregkh/usbutils).
-4. [QHexEdit](https://github.com/Simsys/qhexedit2).
+4. [usbhid-dump](https://github.com/DIGImend/usbhid-dump).
+5. [QHexEdit](https://github.com/Simsys/qhexedit2).

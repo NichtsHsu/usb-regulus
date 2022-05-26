@@ -1,4 +1,5 @@
 ﻿#include "usbdevicedescriptor.h"
+#include "__usbmacro.h"
 
 namespace usb {
     UsbDeviceDescriptor::UsbDeviceDescriptor(const libusb_device_descriptor *desc, UsbDevice *parent) : QObject(parent), _device(parent)
@@ -166,6 +167,28 @@ namespace usb {
     const QString &UsbDeviceDescriptor::deviceProtocol() const
     {
         return _deviceProtocol;
+    }
+
+    QString UsbDeviceDescriptor::infomationToHtml() const
+    {
+        QString html;
+        START("Device Descriptor");
+        ATTR("bLength", _bLength, _bLength);
+        ATTR("bcdUSB", _bcdUSB, bcdUSBInfo());
+        ATTR("bcdDevice", _bcdDevice, "");
+        ATTR("bDeviceClass", _bDeviceClass, _deviceClass);
+        ATTR("bDeviceSubClass", _bDeviceSubClass, _deviceSubClass);
+        ATTR("bDeviceProtocol", _bDeviceProtocol, _deviceProtocol);
+        ATTR("idVendor", _idVendor, _vendorName);
+        ATTR("idProduct", _idProduct, _productName);
+        ATTRSTRDESC("iManufacturer", _iManufacturer, _device);
+        ATTRSTRDESC("iProduct", _iProduct, _device);
+        ATTRSTRDESC("iSerialNumber", _iSerialNumber, _device);
+        ATTR("bMaxPacketSize0", _bMaxPacketSize0, _bMaxPacketSize0);
+        ATTR("bNumConfigurations", _bNumConfigurations, _bNumConfigurations);
+        END;
+
+        return html;
     }
 
     QString parseBcdUSB(uint16_t bcdUSB)

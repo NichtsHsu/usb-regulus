@@ -25,12 +25,16 @@
 namespace usb {
     class UsbInterface;
     class UsbEndpointDescriptor;
+    class UsbHidDescriptor;
 }
 #ifndef USBENDPOINTDESCRIPTOR_H
 #include "usbendpointdescriptor.h"
 #endif
 #ifndef USBINTERFACE_H
 #include "usbinterface.h"
+#endif
+#ifndef USBHIDDESCRIPTOR_H
+#include "usbhiddescriptor.h"
 #endif
 #include "log/logger.h"
 
@@ -113,7 +117,7 @@ namespace usb {
          * @brief extra_length
          * @return length of the extra descriptors, in bytes
          */
-        int extra_length() const;
+        int extraLength() const;
 
         /**
          * @brief endpoint
@@ -147,15 +151,31 @@ namespace usb {
          */
         const QString &interfaceProtocol() const;
 
-    signals:
+        /**
+         * @brief hidDescriptor
+         * @return the HID descriptor
+         * @note
+         * Only used for HID interface. Otherwise return nullptr.
+         */
+        UsbHidDescriptor *hidDescriptor() const;
+
+        /**
+         * @brief infomationToHtml
+         * @return HTML form device informations
+         */
+        QString infomationToHtml() const;
+
+    private slots:
+        void __requestHidDescriptor();
 
     private:
         uint8_t _bLength, _bDescriptorType, _bInterfaceNumber, _bAlternateSetting, _bNumEndpoints, _bInterfaceClass,
         _bInterfaceSubClass, _bInterfaceProtocol, _iInterface;
         QVector<UsbEndpointDescriptor *> _endpoint;
         const unsigned char *_extra;
-        int _extra_length;
+        int _extraLength;
         UsbInterface *_interface;
+        UsbHidDescriptor *_hidDescriptor;
         QString _interfaceClass, _interfaceSubClass, _interfaceProtocol;
     };
 }

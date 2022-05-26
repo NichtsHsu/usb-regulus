@@ -235,13 +235,13 @@ namespace usb {
          * Wrapper of parseEndpointDescBmAttributes()
          * @see parseEndpointDescBmAttributes
          */
-        QString bmAttributesInfo();
+        QString bmAttributesInfo() const;
 
         /**
          * @brief endpointAddressInfo
          * @return string description of endpoint address
          */
-        QString endpointAddressInfo();
+        QString endpointAddressInfo() const;
 
         /**
          * @brief interfaceDescriptor
@@ -253,16 +253,25 @@ namespace usb {
          * @brief transfer
          * Read data to buffer or write data from buffer.
          * @param buffer
-         * The buffer that carries data.
+         * The buffer who carries data.
          * @note
          * Buffers must be pre-allocated because its raw pointers will be used in transfers.
          * @param realSize
          * Real read/write size.
          * @param timeout
          * Timeout to wait.
-         * @return
+         * @return libusb error code
+         * @note
+         * Control transfer should not be happening here
+         * @see UsbDevice::controlTransfer()
          */
         int transfer(QByteArray &buffer, int &realSize, unsigned int timeout);
+
+        /**
+         * @brief infomationToHtml
+         * @return HTML form device informations
+         */
+        QString infomationToHtml() const;
 
     private:
         uint8_t _bLength, _bDescriptorType, _bEndpointAddress, _bmAttributes, _bInterval, _bRefresh, _bSynchAddress;

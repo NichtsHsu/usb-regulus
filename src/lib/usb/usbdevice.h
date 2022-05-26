@@ -164,6 +164,49 @@ namespace usb {
         QString infomationToHtml() const;
 
         /**
+         * @brief controlTransfer
+         * Send a request and get data via control transfer
+         * @param bmRequestType
+         * Bitmap shows characteristics of request
+         * @note
+         * D4..0    Recipient
+         *          0 = Device
+         *          1 = Interface
+         *          2 = Endpoint
+         *          3 = Other
+         *          4..30 = Reserved
+         *          31 = Vendor Specific
+         * D6..5    Type
+         *          0 = Standard
+         *          1 = Class
+         *          2 = Vendor
+         *          3 = Reserved
+         * D7       Data transfer direction
+         *          0 = Host-to-device
+         *          1 = Device-to-host
+         * @param bRequest
+         * Specific request, please refer to USB 3.2 Spec chapter 9.4.
+         * @param wValue
+         * Word-sized field that varies according to request.
+         * @param wIndex
+         * Word-sized field that varies according to request,
+         * typically used to pass an index or offset
+         * @param buffer
+         * The buffer who carries data.
+         * @note
+         * Buffers must be pre-allocated because its raw pointers will be used in transfers.
+         * @param timeout
+         * Timeout to wait.
+         * @return
+         */
+        int controlTransfer(uint8_t bmRequestType,
+                            uint8_t bRequest,
+                            uint16_t wValue,
+                            uint16_t wIndex,
+                            QByteArray &buffer,
+                            unsigned int timeout);
+
+        /**
          * @brief reset
          * Reset a device may cause this device disconnect and reconnect,
          * then the UsbDevice will be deallocated.

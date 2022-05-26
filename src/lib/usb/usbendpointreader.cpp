@@ -1,8 +1,7 @@
 ﻿#include "usbendpointreader.h"
+#include "__usbmacro.h"
 
 namespace usb {
-    const unsigned int UsbEndpointReader::_internalTimeout = 250;
-
     UsbEndpointReader::UsbEndpointReader(QObject *parent)
         : QObject{parent}, _device(nullptr), _endpointDescriptor(nullptr),
           _stopFlag(false)
@@ -39,7 +38,7 @@ namespace usb {
         int ret;
         for(;;)
         {
-            ret = _endpointDescriptor->transfer(_data, realReadSize, _internalTimeout);
+            ret = _endpointDescriptor->transfer(_data, realReadSize, TRANSFER_TIMEOUT);
 
             _stopFlagMutex.lock();
             if(_stopFlag)
@@ -83,7 +82,7 @@ namespace usb {
         int ret;
         for(;;)
         {
-            ret = _endpointDescriptor->transfer(_data, realReadSize, _internalTimeout);
+            ret = _endpointDescriptor->transfer(_data, realReadSize, TRANSFER_TIMEOUT);
 
             _stopFlagMutex.lock();
             if(_stopFlag)

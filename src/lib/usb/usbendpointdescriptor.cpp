@@ -82,12 +82,12 @@ namespace usb {
         return EndpointInterruptUsageType(CUT(_bmAttributes, 4, 5));
     }
 
-    QString UsbEndpointDescriptor::bmAttributesInfo()
+    QString UsbEndpointDescriptor::bmAttributesInfo() const
     {
         return parseEndpointDescBmAttributes(_bmAttributes);
     }
 
-    QString UsbEndpointDescriptor::endpointAddressInfo()
+    QString UsbEndpointDescriptor::endpointAddressInfo() const
     {
         return QString(tr("Endpoint %1 %2").arg(_bEndpointAddress & 0x0F).arg(strEndpointDirection(direction())));
     }
@@ -105,7 +105,7 @@ namespace usb {
         {
             case EndpointTransferType::CONTROL:
             {
-                LOGE("Control transfer currently is not supported.");
+                LOGE("Control transfer should not be happening here.");
                 ret = LIBUSB_ERROR_NOT_SUPPORTED;
                 break;
             }
@@ -137,6 +137,22 @@ namespace usb {
             }
         }
         return ret;
+    }
+
+    QString UsbEndpointDescriptor::infomationToHtml() const
+    {
+        QString html;
+        START("Endpoint Descriptor");
+        ATTR("bLength", _bLength, _bLength);
+        ATTR("bEndpointAddress", _bEndpointAddress, endpointAddressInfo());
+        ATTR("bmAttributes", _bmAttributes, bmAttributesInfo());
+        ATTR("wMaxPacketSize", _wMaxPacketSize, _wMaxPacketSize);
+        ATTR("bInterval", _bInterval, _bInterval);
+        ATTR("bRefresh", _bRefresh, _bRefresh);
+        ATTR("bSynchAddress", _bSynchAddress, _bSynchAddress);
+        END;
+
+        return html;
     }
 
     uint16_t UsbEndpointDescriptor::wMaxPacketSize() const

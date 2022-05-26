@@ -195,7 +195,11 @@ namespace usb{
          */
         const QString &deviceProtocol() const;
 
-    signals:
+        /**
+         * @brief infomationToHtml
+         * @return HTML form device informations
+         */
+        QString infomationToHtml() const;
 
     private:
         uint8_t _bLength, _bDescriptorType, _bDeviceClass, _bDeviceSubClass, _bDeviceProtocol,

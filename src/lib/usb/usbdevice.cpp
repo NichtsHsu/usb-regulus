@@ -113,30 +113,8 @@ namespace usb {
         ATTRTEXT("Connection Speed", usbSpeedToString(_speed));
         ATTR("Address", _address, _address);
         END;
-        START("Device Descriptor");
-        ATTR("bLength", _deviceDescriptor->bLength(), _deviceDescriptor->bLength());
-        ATTR("bcdUSB", _deviceDescriptor->bcdUSB(), _deviceDescriptor->bcdUSBInfo());
-        ATTR("bcdDevice", _deviceDescriptor->bcdDevice(), "");
-        ATTR("bDeviceClass", _deviceDescriptor->bDeviceClass(), _deviceDescriptor->deviceClass());
-        ATTR("bDeviceSubClass", _deviceDescriptor->bDeviceSubClass(), _deviceDescriptor->deviceSubClass());
-        ATTR("bDeviceProtocol", _deviceDescriptor->bDeviceProtocol(), _deviceDescriptor->deviceProtocol());
-        ATTR("idVendor", _deviceDescriptor->idVendor(), _deviceDescriptor->vendorName());
-        ATTR("idProduct", _deviceDescriptor->idProduct(), _deviceDescriptor->productName());
-        ATTRSTRDESC("iManufacturer", _deviceDescriptor->iManufacturer(), this);
-        ATTRSTRDESC("iProduct", _deviceDescriptor->iProduct(), this);
-        ATTRSTRDESC("iSerialNumber", _deviceDescriptor->iSerialNumber(), this);
-        ATTR("bMaxPacketSize0", _deviceDescriptor->bMaxPacketSize0(), _deviceDescriptor->bMaxPacketSize0());
-        ATTR("bNumConfigurations", _deviceDescriptor->bNumConfigurations(), _deviceDescriptor->bNumConfigurations());
-        END;
-        START("Configuration Descriptor");
-        ATTR("bLength", _configurationDescriptor->bLength(), _configurationDescriptor->bLength());
-        ATTR("wTotalLength", _configurationDescriptor->wTotalLength(), _configurationDescriptor->wTotalLength());
-        ATTR("bNumInterfaces", _configurationDescriptor->bNumInterfaces(), _configurationDescriptor->bNumInterfaces());
-        ATTR("bConfigurationValue", _configurationDescriptor->bConfigurationValue(), _configurationDescriptor->bConfigurationValue());
-        ATTRSTRDESC("iConfiguration", _configurationDescriptor->iConfiguration(), this);
-        ATTR("bmAttributes", _configurationDescriptor->bmAttributes(), _configurationDescriptor->bmAttributesInfo());
-        ATTR("MaxPower", _configurationDescriptor->MaxPower(), _configurationDescriptor->MaxPower());
-        END;
+        APPEND(_deviceDescriptor);
+        APPEND(_configurationDescriptor);
         if (_bosDescriptor)
         {
             foreach (const auto &devCapDesc, _bosDescriptor->usbDeviceCapabilityDescriptorList())
@@ -144,6 +122,24 @@ namespace usb {
         }
 
         return html;
+    }
+
+    int UsbDevice::controlTransfer(uint8_t bmRequestType,
+                                   uint8_t bRequest,
+                                   uint16_t wValue,
+                                   uint16_t wIndex,
+                                   QByteArray &buffer,
+                                   unsigned int timeout)
+    {
+        return libusb_control_transfer(_handle,
+                                       bmRequestType,
+                                       bRequest,
+                                       wValue,
+                                       wIndex,
+                                       reinterpret_cast<unsigned char *>(buffer.data()),
+                                       buffer.size(),
+                                       timeout);
+
     }
 
     void UsbDevice::reset(const UsbDevice &device)

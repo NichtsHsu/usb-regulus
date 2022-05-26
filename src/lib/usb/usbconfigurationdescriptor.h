@@ -140,9 +140,13 @@ namespace usb {
          * Wrapper of parseConfigDescBmAttributes()
          * @see parseConfigDescBmAttributes
          */
-        QString bmAttributesInfo();
+        QString bmAttributesInfo() const;
 
-    signals:
+        /**
+         * @brief infomationToHtml
+         * @return HTML form device informations
+         */
+        QString infomationToHtml() const;
 
     private:
         uint8_t _bLength, _bDescriptorType, _bNumInterfaces, _bConfigurationValue, _iConfiguration, _bmAttributes, _MaxPower;
