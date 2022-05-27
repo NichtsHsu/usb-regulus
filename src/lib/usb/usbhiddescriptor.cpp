@@ -1,5 +1,6 @@
 ﻿#include "usbhiddescriptor.h"
 #include "__usbmacro.h"
+#include "hidrd/src/hidrd_convert.h"
 
 namespace usb {
     constexpr const char *const UsbHidDescriptor::_countryCodeMap[36] = {
@@ -60,7 +61,7 @@ namespace usb {
         interfaceDescriptor->interface()->claim();
 
         UsbDevice *device = _interfaceDescriptor->interface()->configDescriptor()->device();
-        QByteArray buffer('\0', _hidReportDescriptor->_wDescriptorLength);
+        QByteArray buffer(_hidReportDescriptor->_wDescriptorLength, '\0');
         int ret = device->controlTransfer(0x81,
                                 LIBUSB_REQUEST_GET_DESCRIPTOR,
                                 LIBUSB_DT_REPORT << 8,
@@ -136,6 +137,7 @@ namespace usb {
         ATTR("bCountryCode", _bCountryCode, country());
         ATTR("bNumDescriptors", _bNumDescriptors, _bNumDescriptors);
         END;
+        APPEND(_hidReportDescriptor);
 
         return html;
     }
@@ -164,5 +166,43 @@ namespace usb {
     const QByteArray &UsbHidReportDescriptor::rawDescriptor() const
     {
         return _rawDescriptor;
+    }
+
+    QString UsbHidReportDescriptor::humanReadableDescriptor() const
+    {
+        char *output;
+        size_t len;
+        QString desc;
+        hidrd_error ret = hidrd_convert(_rawDescriptor.data(), _wDescriptorLength, &output, &len);
+        if (ret == HIDRD_SUCCESS)
+            desc = QString::fromLatin1(output, len);
+        else
+            LOGE(tr("Failed to parse HID report descriptor (%1).").arg(ret));
+        return desc;
+    }
+
+    QString UsbHidReportDescriptor::infomationToHtml() const
+    {
+        QString html;
+        html += QString("<h2 align='center'>%1</h2>").arg(tr("HID Report Descriptor"));
+        html += QString("<p><b>%1</b></p>").arg(tr("Raw dump data"));
+        html += QString("<p>");
+        for (size_t i = 0; i < _wDescriptorLength; ++i)
+        {
+            html += QString("%1").arg(uint8_t(_rawDescriptor[i]), 2, 16, QChar('0'));
+            if (i == size_t(_wDescriptorLength - 1))
+                break;
+            else if (i % 16 == 15)
+                html += QString("<br />");
+            else
+                html += QString(" ");
+        }
+        html += QString("</p>");
+        html += QString("<p><b>%1</b></p>").arg(tr("Human readable format"));
+        html += QString("<p>%1</p>").arg(humanReadableDescriptor()
+                                         .replace(" ", "&nbsp;")
+                                         .replace("\n", "<br />"));
+
+        return html;
     }
 }

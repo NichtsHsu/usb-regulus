@@ -133,6 +133,18 @@ namespace usb {
          */
         const QByteArray &rawDescriptor() const;
 
+        /**
+         * @brief humanReadableDescriptor
+         * @return human readable descriptor as specification defined
+         */
+        QString humanReadableDescriptor() const;
+
+        /**
+         * @brief infomationToHtml
+         * @return HTML form device informations
+         */
+        QString infomationToHtml() const;
+
     private:
         uint8_t _bDescriptorType;
         uint16_t _wDescriptorLength;

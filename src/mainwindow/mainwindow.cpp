@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent):
     ui->splitterMain->setStretchFactor(1, 3);
 
     ui_mainBrowser->document()->setDefaultStyleSheet(_textBroswerCss);
+    ui_mainBrowser->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     connect(qGuiApp, &QGuiApplication::lastWindowClosed, qApp, &QApplication::quit, Qt::QueuedConnection);
     connect(ui->actionExit, &QAction::triggered, qApp, &QApplication::quit, Qt::QueuedConnection);

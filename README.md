@@ -45,4 +45,5 @@ Because `libusb` doesn't seem to work well on Windows, especially it does not su
 2. [QtUsb](https://github.com/fpoussin/QtUsb).
 3. [usbutils](https://github.com/gregkh/usbutils).
 4. [usbhid-dump](https://github.com/DIGImend/usbhid-dump).
-5. [QHexEdit](https://github.com/Simsys/qhexedit2).
+5. [hidrd](https://github.com/DIGImend/hidrd).
+6. [QHexEdit](https://github.com/Simsys/qhexedit2).

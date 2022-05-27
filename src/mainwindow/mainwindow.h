@@ -27,6 +27,7 @@
 #include <QTextBrowser>
 #include <QSplitter>
 #include <QTranslator>
+#include <QFontDatabase>
 
 #include <log/logger.h>
 #include <usb/usbhost.h>
