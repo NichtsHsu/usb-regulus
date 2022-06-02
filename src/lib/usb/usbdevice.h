@@ -207,6 +207,25 @@ namespace usb {
                             unsigned int timeout);
 
         /**
+         * @brief claimInterface
+         * A wrapper function of UsbInterface::claim,
+         * but using bInterfaceNumber.
+         * @param bInterfaceNumber
+         * The number of interface need to be claimed
+         * @return error code
+         */
+        int claimInterface(uint8_t bInterfaceNumber);
+
+        /**
+         * @brief releaseInterface
+         * A wrapper function of UsbInterface::release,
+         * but using bInterfaceNumber.
+         * @param bInterfaceNumber
+         * The number of interface need to be released
+         */
+        void releaseInterface(uint8_t bInterfaceNumber);
+
+        /**
          * @brief reset
          * Reset a device may cause this device disconnect and reconnect,
          * then the UsbDevice will be deallocated.

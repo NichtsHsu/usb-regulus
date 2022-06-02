@@ -12,6 +12,7 @@ namespace usb {
     void UsbEndpointReader::init(UsbEndpointDescriptor *epDesc)
     {
         _endpointDescriptor = epDesc;
+        _readBufferSize = _endpointDescriptor->wMaxPacketSize();
         if (_endpointDescriptor->direction() != EndpointDirection::IN)
         {
             LOGE(tr("Can only accept IN endpoint!"));
@@ -33,7 +34,7 @@ namespace usb {
         _stopFlag = false;
         _stopFlagMutex.unlock();
 
-        _data.fill('\0', _endpointDescriptor->wMaxPacketSize());
+        _data.fill('\0', _readBufferSize);
         int realReadSize = 0;
         int ret;
         for(;;)
@@ -60,7 +61,7 @@ namespace usb {
             }
             else
             {
-                LOGE(tr("Data read failed (%1).").arg(libusb_error_name(ret)));
+                LOGE(tr("Data read failed (%1).").arg(usb_error_name(ret)));
                 emit readFailed(ret);
                 break;
             }
@@ -77,7 +78,7 @@ namespace usb {
         _stopFlag = false;
         _stopFlagMutex.unlock();
 
-        _data.fill('\0', _endpointDescriptor->wMaxPacketSize());
+        _data.fill('\0', _readBufferSize);
         int realReadSize = 0;
         int ret;
         for(;;)
@@ -103,7 +104,7 @@ namespace usb {
             }
             else
             {
-                LOGE(tr("Data read failed (%1).").arg(libusb_error_name(ret)));
+                LOGE(tr("Data read failed (%1).").arg(usb_error_name(ret)));
                 emit readFailed(ret);
                 break;
             }
@@ -117,5 +118,15 @@ namespace usb {
         _stopFlagMutex.lock();
         _stopFlag = true;
         _stopFlagMutex.unlock();
+    }
+
+    int UsbEndpointReader::readBufferSize() const
+    {
+        return _readBufferSize;
+    }
+
+    void UsbEndpointReader::setReadBufferSize(int readBufferSize)
+    {
+        _readBufferSize = readBufferSize;
     }
 }

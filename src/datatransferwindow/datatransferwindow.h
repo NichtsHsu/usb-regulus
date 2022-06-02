@@ -20,14 +20,16 @@
 #define DATATRANSFERWINDOW_H
 
 #include <QWidget>
+#include <QShowEvent>
+#include <QCloseEvent>
 #include <usb/usbdevice.h>
 #include <usb/usbinterface.h>
 #include <usb/usbendpointwriter.h>
-#include <QShowEvent>
-#include <QCloseEvent>
+#include <global/tools.h>
 
 #include "endpointinwidget.h"
 #include "endpointoutwidget.h"
+#include "controltransferwidget.h"
 
 namespace Ui {
     class DataTransferWindow;
@@ -42,6 +44,7 @@ public:
     ~DataTransferWindow();
 
     void setInterface(usb::UsbInterface *interface);
+    void setDevice(usb::UsbDevice *device);
 
     void showEvent(QShowEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
@@ -52,6 +55,7 @@ private:
 
     usb::UsbDevice *_device;
     usb::UsbInterface *_interface;
+    bool _isControlTransfer;
 };
 
 #endif // DATATRANSFERWINDOW_H

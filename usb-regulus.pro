@@ -21,9 +21,10 @@ INCLUDEPATH += \
     $$PWD/reference/ \
 
 FORMS += \
-    src/datatransferwindow/datatransferwindow.ui \
-    src/datatransferwindow/endpointinwidget.ui \
-    src/datatransferwindow/endpointoutwidget.ui \
+    ui/datatransferwindow/controltransferwidget.ui \
+    ui/datatransferwindow/datatransferwindow.ui \
+    ui/datatransferwindow/endpointinwidget.ui \
+    ui/datatransferwindow/endpointoutwidget.ui \
     ui/mainwindow/mainwindow.ui
 
 HEADERS += \
@@ -31,13 +32,18 @@ HEADERS += \
     reference/qhexedit2/src/chunks.h \
     reference/qhexedit2/src/commands.h \
     reference/qhexedit2/src/qhexedit.h \
+    src/datatransferwindow/controltransferwidget.h \
     src/datatransferwindow/datatransferwindow.h \
     src/datatransferwindow/endpointinwidget.h \
     src/datatransferwindow/endpointoutwidget.h \
+    src/global/settings.h \
+    src/global/tools.h \
     src/lib/log/logger.h \
+    src/lib/misc/option.hpp \
     src/lib/usb/__usbmacro.h \
     src/lib/usb/usbbosdescriptor.h \
     src/lib/usb/usbconfigurationdescriptor.h \
+    src/lib/usb/usbcontroltransferhandler.h \
     src/lib/usb/usbdevice.h \
     src/lib/usb/usbdevicecapabilitydescriptor.h \
     src/lib/usb/usbdevicedescriptor.h \
@@ -55,12 +61,17 @@ SOURCES += \
     reference/qhexedit2/src/chunks.cpp \
     reference/qhexedit2/src/commands.cpp \
     reference/qhexedit2/src/qhexedit.cpp \
+    src/datatransferwindow/controltransferwidget.cpp \
     src/datatransferwindow/datatransferwindow.cpp \
     src/datatransferwindow/endpointinwidget.cpp \
     src/datatransferwindow/endpointoutwidget.cpp \
+    src/global/settings.cpp \
+    src/global/tools.cpp \
     src/lib/log/logger.cpp \
+    src/lib/usb/__usbmacro.cpp \
     src/lib/usb/usbbosdescriptor.cpp \
     src/lib/usb/usbconfigurationdescriptor.cpp \
+    src/lib/usb/usbcontroltransferhandler.cpp \
     src/lib/usb/usbdevice.cpp \
     src/lib/usb/usbdevicecapabilitydescriptor.cpp \
     src/lib/usb/usbdevicedescriptor.cpp \
@@ -76,8 +87,8 @@ SOURCES += \
     src/mainwindow/usbdevicetreeview.cpp
 
 TRANSLATIONS += \
-    translations/usb-regulus.en_US.ts \
-    translations/usb-regulus.zh_CN.ts
+    assets/translations/usb-regulus.en_US.ts \
+    assets/translations/usb-regulus.zh_CN.ts
 
 unix {
     !packagesExist(libusb-1.0):error("Could not find libusb-1.0 using pkg-config, please install libusb-1.0")
@@ -170,4 +181,5 @@ DISTFILES += \
     README.md
 
 RESOURCES += \
-    translations/translations.qrc
+    assets/qss/qss.qrc \
+    assets/translations/translations.qrc

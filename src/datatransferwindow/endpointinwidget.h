@@ -25,6 +25,7 @@
 #include <QBuffer>
 #include <QHideEvent>
 #include <QMessageBox>
+#include <QInputDialog>
 #include <usb/usbendpointdescriptor.h>
 #include <usb/usbendpointreader.h>
 #include <qhexedit2/src/qhexedit.h>
@@ -52,8 +53,9 @@ signals:
 private slots:
     void __buttonReadOnceReleased();
     void __buttonKeepReadReleased();
+    void __buttonSetBufferSizeReleased();
     void __setDataReady();
-    void __resetButton();
+    void __resetButtons();
     void __stopRead();
 
 private:

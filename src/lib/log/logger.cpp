@@ -27,12 +27,7 @@ QString Logger::__strLogLevel()
     }
 }
 
-Logger::Level Logger::logLevel() const
-{
-    return _logLevel;
-}
-
-void Logger::record(Logger::Level type, const QString &module, const QString &message)
+void Logger::__record(Level type, const QString &module, const QString &message)
 {
     _writeMutex.lock();
     QString time = QTime::currentTime().toString();
@@ -67,6 +62,32 @@ void Logger::record(Logger::Level type, const QString &module, const QString &me
 
     _backup.append(Logger::BackupBlock{type, module, message, time});
     _writeMutex.unlock();
+}
+
+std::atomic<Logger *> Logger::_instance{nullptr};
+static std::mutex __mutW;
+
+Logger *Logger::instance()
+{
+    if (Logger::_instance == nullptr)
+    {
+        std::lock_guard<std::mutex> lock{ __mutW };
+        if (Logger::_instance == nullptr)
+            Logger::_instance = new Logger;
+    }
+    return Logger::_instance;
+}
+
+Logger::Level Logger::logLevel() const
+{
+    return _logLevel;
+}
+
+void Logger::record(Logger::Level type, const QString &module, const QString &message)
+{
+    QTimer::singleShot(0, this, [this, type, module, message] () {
+        __record(type, module, message);
+    });
 }
 
 void Logger::d(const QString &module, const QString &message)
@@ -143,6 +164,5 @@ void Logger::clear()
 
 Logger &log()
 {
-    static Logger *logger = new Logger;
-    return *logger;
+    return *Logger::instance();
 }

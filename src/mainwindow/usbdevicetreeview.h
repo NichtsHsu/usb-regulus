@@ -139,10 +139,12 @@ public:
 signals:
 
 public slots:
+    void closeAllDataTransferWindow();
 
 private slots:
     void __customMenu(const QPoint &point);
     void __openDataTransferWindow();
+    void __openControlTransferWindow();
     void __resetDevice();
 
 private:
@@ -151,9 +153,10 @@ private:
     QStandardItemModel *_model;
     QMenu *_menuDevice;
     QAction *_actionReset;
+    QAction *_actionControlTransfer;
     QMenu *_menuInterface;
     QAction *_actionDataTransfer;
-    QMap<usb::UsbInterface *, DataTransferWindow *> _dataTransferWindows;
+    QMap<QObject *, DataTransferWindow *> _dataTransferWindows;
 };
 
 #endif // USBDEVICETREEVIEW_H

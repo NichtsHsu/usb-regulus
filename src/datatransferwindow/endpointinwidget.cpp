@@ -1,5 +1,6 @@
 ﻿#include "endpointinwidget.h"
 #include "ui_endpointinwidget.h"
+#include "usb/__usbmacro.h"
 
 EndpointInWidget::EndpointInWidget(QWidget *parent) :
     QWidget(parent),
@@ -18,25 +19,35 @@ EndpointInWidget::EndpointInWidget(QWidget *parent) :
     /* We only set a flag here, to avoid blocking
      * the main thread because of high frequency data
      */
-    connect(_reader, &usb::UsbEndpointReader::dataRead, this, &EndpointInWidget::__setDataReady);
-    connect(_reader, &usb::UsbEndpointReader::safelyStopped, this, &EndpointInWidget::__resetButton);
-    connect(_reader, &usb::UsbEndpointReader::readFailed, this, [] (int ret) {
+    connect(_reader, &usb::UsbEndpointReader::dataRead,
+            this, &EndpointInWidget::__setDataReady);
+    connect(_reader, &usb::UsbEndpointReader::safelyStopped,
+            this, &EndpointInWidget::__resetButtons);
+    connect(_reader, &usb::UsbEndpointReader::readFailed,
+            this, [] (int ret) {
         QMessageBox::critical(nullptr,
                               tr("Error"),
-                              tr("Failed to read data, libusb reports error: %1.")
-                              .arg(libusb_error_name(ret)));
+                              tr("Failed to read data, error: %1.")
+                              .arg(usb_error_name(ret)));
     });
-    connect(this, &EndpointInWidget::__readOnceTriggered, _reader, &usb::UsbEndpointReader::readOnce);
-    connect(this, &EndpointInWidget::__keepReadTriggered, _reader, &usb::UsbEndpointReader::keepRead);
+    connect(this, &EndpointInWidget::__readOnceTriggered,
+            _reader, &usb::UsbEndpointReader::readOnce);
+    connect(this, &EndpointInWidget::__keepReadTriggered,
+            _reader, &usb::UsbEndpointReader::keepRead);
     /* Initialize a QTimer without setting interval,
      * so that the timeout signal will be emitted
      * every event loop.
      */
     _eventLoopTimer = new QTimer(this);
-    connect(_eventLoopTimer, &QTimer::timeout, this, &EndpointInWidget::__updateData);
+    connect(_eventLoopTimer, &QTimer::timeout,
+            this, &EndpointInWidget::__updateData);
 
-    connect(ui->pushButtonReadOnce, &QPushButton::released, this, &EndpointInWidget::__buttonReadOnceReleased);
-    connect(ui->pushButtonKeepRead, &QPushButton::released, this, &EndpointInWidget::__buttonKeepReadReleased);
+    connect(ui->pushButtonReadOnce, &QPushButton::released,
+            this, &EndpointInWidget::__buttonReadOnceReleased);
+    connect(ui->pushButtonKeepRead, &QPushButton::released,
+            this, &EndpointInWidget::__buttonKeepReadReleased);
+    connect(ui->pushButtonSetBufferSize, &QPushButton::released,
+            this, &EndpointInWidget::__buttonSetBufferSizeReleased);
 }
 
 EndpointInWidget::~EndpointInWidget()
@@ -75,12 +86,12 @@ void EndpointInWidget::__buttonReadOnceReleased()
     if (!_readOnce && !_keepRead)
     {
         _readOnce = true;
+        ui->pushButtonSetBufferSize->setEnabled(false);
         ui->pushButtonKeepRead->setEnabled(false);
         ui->pushButtonReadOnce->setText(tr("Stop Read"));
         _eventLoopTimer->start();
         _resetButtonAfterSafelyStop = [this] () {
             _readOnce = false;
-            ui->pushButtonKeepRead->setEnabled(true);
             ui->pushButtonReadOnce->setText(tr("Read Once"));
         };
         emit __readOnceTriggered();
@@ -99,12 +110,12 @@ void EndpointInWidget::__buttonKeepReadReleased()
     if (!_readOnce && !_keepRead)
     {
         _keepRead = true;
+        ui->pushButtonSetBufferSize->setEnabled(false);
         ui->pushButtonReadOnce->setEnabled(false);
         ui->pushButtonKeepRead->setText(tr("Stop Read"));
         _eventLoopTimer->start();
         _resetButtonAfterSafelyStop = [this] () {
             _keepRead = false;
-            ui->pushButtonReadOnce->setEnabled(true);
             ui->pushButtonKeepRead->setText(tr("Keep Read"));
         };
         emit __keepReadTriggered();
@@ -118,13 +129,31 @@ void EndpointInWidget::__buttonKeepReadReleased()
     }
 }
 
+void EndpointInWidget::__buttonSetBufferSizeReleased()
+{
+    bool ok;
+    int value = QInputDialog::getInt(this,
+                                     tr("Set Read Buffer Size"),
+                                     tr("Set read buffer size to:"),
+                                     _reader->readBufferSize(),
+                                     0,
+                                     0xFFFF,
+                                     1,
+                                     &ok);
+    if (ok)
+        _reader->setReadBufferSize(value);
+}
+
 void EndpointInWidget::__setDataReady()
 {
     _dataReady = true;
 }
 
-void EndpointInWidget::__resetButton()
+void EndpointInWidget::__resetButtons()
 {
+    ui->pushButtonSetBufferSize->setEnabled(true);
+    ui->pushButtonReadOnce->setEnabled(true);
+    ui->pushButtonKeepRead->setEnabled(true);
     if (_resetButtonAfterSafelyStop)
         _resetButtonAfterSafelyStop();
     _resetButtonAfterSafelyStop = nullptr;

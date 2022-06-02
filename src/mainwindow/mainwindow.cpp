@@ -1,5 +1,6 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "datatransferwindow/controltransferwidget.h"
 
 const QString MainWindow::_textBroswerCss;
 
@@ -8,13 +9,15 @@ MainWindow::MainWindow(QWidget *parent):
     ui(new Ui::MainWindow),
     _translator(nullptr)
 {
+    settings().loadFromIni(qApp->applicationDirPath() + QString("/config.ini"));
+
     ui->setupUi(this);
 
     ui_mainBrowser = new QTextBrowser;
     ui_widgetRightSplitter = new QSplitter(Qt::Vertical);
     ui->widgetRight->layout()->addWidget(ui_widgetRightSplitter);
     ui_widgetRightSplitter->addWidget(ui_mainBrowser);
-    ui_widgetRightSplitter->addWidget(&log());
+    ui_widgetRightSplitter->addWidget(Logger::instance());
     ui_widgetRightSplitter->setStretchFactor(0, 4);
     ui_widgetRightSplitter->setStretchFactor(1, 1);
     ui->splitterMain->setStretchFactor(0, 1);
@@ -22,6 +25,16 @@ MainWindow::MainWindow(QWidget *parent):
 
     ui_mainBrowser->document()->setDefaultStyleSheet(_textBroswerCss);
     ui_mainBrowser->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+
+    _logLevelActionMap = {
+        { Logger::Level::Debug, ui->actionDebug },
+        { Logger::Level::Info, ui->actionInfo },
+        { Logger::Level::Warning, ui->actionWarning },
+        { Logger::Level::Error, ui->actionError },
+    };
+
+    __initWithSettings();
+
 
     connect(qGuiApp, &QGuiApplication::lastWindowClosed, qApp, &QApplication::quit, Qt::QueuedConnection);
     connect(ui->actionExit, &QAction::triggered, qApp, &QApplication::quit, Qt::QueuedConnection);
@@ -34,25 +47,27 @@ MainWindow::MainWindow(QWidget *parent):
     connect(usb::UsbHost::instance(), &usb::UsbHost::deviceDetached, this, &MainWindow::__removeDevice);
     connect(ui->usbDeviceTreeView, &UsbDeviceTreeView::clicked, this, &MainWindow::__updateTextBrowser);
     connect(ui->actionDebug, &QAction::triggered, this, [this] () {
-        this->__setLoggerLevel(Logger::Level::Debug);
+        __setLoggerLevel(Logger::Level::Debug);
     });
     connect(ui->actionInfo, &QAction::triggered, this, [this] () {
-        this->__setLoggerLevel(Logger::Level::Info);
+        __setLoggerLevel(Logger::Level::Info);
     });
     connect(ui->actionWarning, &QAction::triggered, this, [this] () {
-        this->__setLoggerLevel(Logger::Level::Warning);
+        __setLoggerLevel(Logger::Level::Warning);
     });
     connect(ui->actionError, &QAction::triggered, this, [this] () {
-        this->__setLoggerLevel(Logger::Level::Error);
+        __setLoggerLevel(Logger::Level::Error);
     });
     connect(ui->actionLangEnUS, &QAction::triggered, this, [this] () {
-        this->__loadTranslation("en_US");
+        __loadTranslation("en_US");
     });
     connect(ui->actionLangZhCN, &QAction::triggered, this, [this] () {
-        this->__loadTranslation("zh_CN");
+        __loadTranslation("zh_CN");
+    });
+    connect(ui->actionCenterTheWindow, &QAction::triggered, this, [this] () {
+        move(frameGeometry().topLeft() + screen()->geometry().center() - frameGeometry().center());
     });
 
-    __setLoggerLevel(Logger::Level::Info);
     usb::UsbHost::instance()->rescan();
 }
 
@@ -105,9 +120,51 @@ void MainWindow::__updateTextBrowser(const QModelIndex &index)
 
 void MainWindow::changeEvent(QEvent *event)
 {
-    if(event->type() == QEvent::LanguageChange)
-        ui->retranslateUi(this);
+    switch (event->type())
+    {
+        case QEvent::LanguageChange:
+            ui->retranslateUi(this);
+        break;
+        case QEvent::WindowStateChange:
+            settings().mainwindowProperties().state = windowState();
+        break;
+
+        default:
+        break;
+    }
     event->accept();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    ui->usbDeviceTreeView->closeAllDataTransferWindow();
+    settings().saveToIni(qApp->applicationDirPath() + QString("/config.ini"));
+    event->accept();
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    settings().mainwindowProperties().size = event->size();
+    event->accept();
+}
+
+void MainWindow::moveEvent(QMoveEvent *event)
+{
+    settings().mainwindowProperties().position = event->pos();
+    event->accept();
+}
+
+void MainWindow::__initWithSettings()
+{
+    if (settings().mainwindowProperties().state)
+        setWindowState(settings().mainwindowProperties().state.get());
+    if (settings().mainwindowProperties().size)
+        resize(settings().mainwindowProperties().size.get());
+    if (settings().mainwindowProperties().position)
+        move(settings().mainwindowProperties().position.get());
+
+    __loadTranslation(settings().language());
+    __setLoggerLevel(settings().logLevel());
 }
 
 void MainWindow::__setLoggerLevel(Logger::Level level)
@@ -117,25 +174,13 @@ void MainWindow::__setLoggerLevel(Logger::Level level)
     ui->actionInfo->setChecked(false);
     ui->actionWarning->setChecked(false);
     ui->actionError->setChecked(false);
-    switch (level)
-    {
-        case Logger::Level::Debug:
-            ui->actionDebug->setChecked(true);
-        break;
-        case Logger::Level::Info:
-            ui->actionInfo->setChecked(true);
-        break;
-        case Logger::Level::Warning:
-            ui->actionWarning->setChecked(true);
-        break;
-        case Logger::Level::Error:
-            ui->actionError->setChecked(true);
-        break;
-    }
+    _logLevelActionMap[level]->setChecked(true);
+    settings().logLevel() = level;
 }
 
 void MainWindow::__loadTranslation(const QString &lang)
 {
+    /* If failed to load translation file, fallback to old translation */
     QTranslator *oldTranslator = nullptr;
     if (_translator)
         oldTranslator = _translator;
@@ -148,6 +193,7 @@ void MainWindow::__loadTranslation(const QString &lang)
         qApp->installTranslator(_translator);
         delete oldTranslator;
         LOGI(tr("Set language to %1.").arg(lang));
+        settings().language() = lang;
     }
     else
     {

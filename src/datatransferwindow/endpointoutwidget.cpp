@@ -1,5 +1,6 @@
 ﻿#include "endpointoutwidget.h"
 #include "ui_endpointoutwidget.h"
+#include "usb/__usbmacro.h"
 
 EndpointOutWidget::EndpointOutWidget(QWidget *parent) :
     QWidget(parent),
@@ -18,23 +19,33 @@ EndpointOutWidget::EndpointOutWidget(QWidget *parent) :
     _writer->moveToThread(&_workerThread);
     _workerThread.start();
 
-    connect(_hexEdit, &QHexEdit::overwriteModeChanged, this, &EndpointOutWidget::__setOverwriteMode);
-    connect(_writer, &usb::UsbEndpointWriter::writeSucceed, this, [this] (size_t count) {
+    connect(_hexEdit, &QHexEdit::overwriteModeChanged,
+            this, &EndpointOutWidget::__setOverwriteMode);
+    connect(_writer, &usb::UsbEndpointWriter::writeSucceed,
+            this, [this] (size_t count) {
         ui->labelWriteCount->setText(tr("Write Count: %1").arg(count));
     });
-    connect(_writer, &usb::UsbEndpointWriter::writeFailed, this, [] (int ret) {
+    connect(_writer, &usb::UsbEndpointWriter::writeFailed,
+            this, [] (int ret) {
         QMessageBox::critical(nullptr,
                               tr("Error"),
-                              tr("Failed to write data, libusb reports error: %1.")
-                              .arg(libusb_error_name(ret)));
+                              tr("Failed to write data, error: %1.")
+                              .arg(usb_error_name(ret)));
     });
-    connect(_writer, &usb::UsbEndpointWriter::safelyStopped, this, &EndpointOutWidget::__resetButton);
-    connect(this, &EndpointOutWidget::__writeOnceTriggered, _writer, &usb::UsbEndpointWriter::writeOnce);
-    connect(this, &EndpointOutWidget::__keepWriteTriggered, _writer, &usb::UsbEndpointWriter::keepWrite);
-    connect(ui->pushButtonWriteOnce, &QPushButton::released, this, &EndpointOutWidget::__buttonWriteOnceReleased);
-    connect(ui->pushButtonKeepWrite, &QPushButton::released, this, &EndpointOutWidget::__buttonKeepWriteReleased);
-    connect(ui->pushButtonClearCount, &QPushButton::released, this, &EndpointOutWidget::__buttonClearCounterReleased);
-    connect(ui->pushButtonResetData, &QPushButton::released, this, &EndpointOutWidget::__buttonResetDataReleased);
+    connect(_writer, &usb::UsbEndpointWriter::safelyStopped,
+            this, &EndpointOutWidget::__resetButton);
+    connect(this, &EndpointOutWidget::__writeOnceTriggered,
+            _writer, &usb::UsbEndpointWriter::writeOnce);
+    connect(this, &EndpointOutWidget::__keepWriteTriggered,
+            _writer, &usb::UsbEndpointWriter::keepWrite);
+    connect(ui->pushButtonWriteOnce, &QPushButton::released,
+            this, &EndpointOutWidget::__buttonWriteOnceReleased);
+    connect(ui->pushButtonKeepWrite, &QPushButton::released,
+            this, &EndpointOutWidget::__buttonKeepWriteReleased);
+    connect(ui->pushButtonClearCount, &QPushButton::released,
+            this, &EndpointOutWidget::__buttonClearCounterReleased);
+    connect(ui->pushButtonResetData, &QPushButton::released,
+            this, &EndpointOutWidget::__buttonResetDataReleased);
 }
 
 EndpointOutWidget::~EndpointOutWidget()
@@ -82,14 +93,12 @@ void EndpointOutWidget::__buttonWriteOnceReleased()
         _writeOnce = true;
         ui->pushButtonKeepWrite->setEnabled(false);
         ui->pushButtonWriteOnce->setText(tr("Stop Write"));
+        ui->pushButtonResetData->setEnabled(false);
         _hexEdit->setReadOnly(true);
         _writer->setData(_hexEdit->data());
         _resetButtonAfterSafelyStop = [this] () {
             _writeOnce = false;
-            ui->pushButtonKeepWrite->setEnabled(true);
-            ui->pushButtonWriteOnce->setEnabled(true);
             ui->pushButtonWriteOnce->setText(tr("Write Once"));
-            _hexEdit->setReadOnly(false);
         };
         emit __writeOnceTriggered();
     }
@@ -107,14 +116,12 @@ void EndpointOutWidget::__buttonKeepWriteReleased()
         _keepWrite = true;
         ui->pushButtonWriteOnce->setEnabled(false);
         ui->pushButtonKeepWrite->setText(tr("Stop Write"));
+        ui->pushButtonResetData->setEnabled(false);
         _hexEdit->setReadOnly(true);
         _writer->setData(_hexEdit->data());
         _resetButtonAfterSafelyStop = [this] () {
             _keepWrite = false;
-            ui->pushButtonWriteOnce->setEnabled(true);
-            ui->pushButtonKeepWrite->setEnabled(true);
             ui->pushButtonKeepWrite->setText(tr("Keep Write"));
-            _hexEdit->setReadOnly(false);
         };
         emit __keepWriteTriggered();
     }
@@ -141,6 +148,10 @@ void EndpointOutWidget::__buttonResetDataReleased()
 
 void EndpointOutWidget::__resetButton()
 {
+    ui->pushButtonWriteOnce->setEnabled(true);
+    ui->pushButtonKeepWrite->setEnabled(true);
+    ui->pushButtonResetData->setEnabled(true);
+    _hexEdit->setReadOnly(false);
     if (_resetButtonAfterSafelyStop)
         _resetButtonAfterSafelyStop();
     _resetButtonAfterSafelyStop = nullptr;

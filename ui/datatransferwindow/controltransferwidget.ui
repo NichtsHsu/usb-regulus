@@ -1,0 +1,628 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ControlTransferWidget</class>
+ <widget class="QWidget" name="ControlTransferWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>497</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,2">
+   <property name="leftMargin">
+    <number>4</number>
+   </property>
+   <property name="topMargin">
+    <number>4</number>
+   </property>
+   <property name="rightMargin">
+    <number>4</number>
+   </property>
+   <property name="bottomMargin">
+    <number>4</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="labelTitle">
+       <property name="text">
+        <string>Send A Request</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="labelBmRequest">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>bmRequest</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout" columnstretch="2,3">
+         <property name="horizontalSpacing">
+          <number>4</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>2</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="labelDirection">
+           <property name="text">
+            <string>DIrection</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="comboBoxDirection">
+           <item>
+            <property name="text">
+             <string>Host to device</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Device to host</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="labelType">
+           <property name="text">
+            <string>Type</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="comboBoxType">
+           <item>
+            <property name="text">
+             <string>Standard</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Class</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Vendor</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="labelRecipient">
+           <property name="text">
+            <string>Recipient</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="comboBoxRecipient">
+           <item>
+            <property name="text">
+             <string>Device</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Interface</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Endpoint</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Other</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QCheckBox" name="checkBoxBmRequestRawHex">
+           <property name="text">
+            <string>Raw hex</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayoutBmRequest">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="labelBmRequest0x">
+             <property name="text">
+              <string>0x</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEditBmRequestRawHex">
+             <property name="text">
+              <string>00</string>
+             </property>
+             <property name="maxLength">
+              <number>2</number>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="labelBRequest">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>bRequest</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <item>
+          <widget class="QComboBox" name="comboBoxBRequest">
+           <item>
+            <property name="text">
+             <string notr="true">GET_STATUS</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">CLEAR_FEATURE</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_FEATURE</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_ADDRESS</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">GET_DESCRIPTOR</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_DESCRIPTOR</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">GET_CONFIGURATION</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_CONFIGURATION</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">GET_INTERFACE</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_INTERFACE</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SYNCH_FRAME</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_ENCRYPTION</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">GET_ENCRYPTION</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_HANDSHAKE</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">GET_HANDSHAKE</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_CONNECTION</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_SECURITY_DATA</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">GET_SECURITY_DATA</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_WUSB_DATA</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">LOOPBACK_DATA_WRITE</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">LOOPBACK_DATA_READ</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_INTERFACE_DS</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_SEL</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">SET_ISOCH_DELAY</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,3">
+           <property name="spacing">
+            <number>4</number>
+           </property>
+           <item>
+            <widget class="QCheckBox" name="checkBoxBRequestRawHex">
+             <property name="text">
+              <string>Raw hex</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayoutBRequest">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="labelBRequest0x">
+               <property name="text">
+                <string>0x</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEditBRequestRawHex">
+               <property name="text">
+                <string>00</string>
+               </property>
+               <property name="maxLength">
+                <number>2</number>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="Line" name="line_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,3">
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="labelWValve">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>wValue</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayoutWValue">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="labelWValue0x">
+           <property name="text">
+            <string>0x</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditWValueRawHex">
+           <property name="text">
+            <string>0000</string>
+           </property>
+           <property name="maxLength">
+            <number>4</number>
+           </property>
+           <property name="readOnly">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="Line" name="line_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,3">
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="labelWIndex">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>wIndex</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayoutWIndex">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="labelWIndex0x">
+           <property name="text">
+            <string>0x</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditWIndexRawHex">
+           <property name="text">
+            <string>0000</string>
+           </property>
+           <property name="maxLength">
+            <number>4</number>
+           </property>
+           <property name="readOnly">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="Line" name="line_5">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonSetBufferSize">
+       <property name="text">
+        <string>Set Receive Buffer Size</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <property name="spacing">
+        <number>4</number>
+       </property>
+       <item>
+        <widget class="QPushButton" name="pushButtonSend">
+         <property name="text">
+          <string>Send</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonClearAll">
+         <property name="text">
+          <string>Clear All</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_7">
+     <property name="spacing">
+      <number>4</number>
+     </property>
+     <property name="rightMargin">
+      <number>4</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayoutSend">
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="labelDataSend">
+         <property name="text">
+          <string>Data to send</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="hexEditPlaceHolderSend" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="labelInsertOverwrite">
+         <property name="text">
+          <string>Mode: Insert</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="Line" name="line_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayoutReceive">
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Data Received</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="hexEditPlaceHolderReceive" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

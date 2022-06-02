@@ -1,4 +1,5 @@
 ﻿#include "usbhost.h"
+#include "__usbmacro.h"
 
 namespace usb {
     namespace __private {
@@ -23,7 +24,7 @@ namespace usb {
     }
 
     UsbHost::UsbHost(QObject *parent):
-        QObject{parent}, _context(nullptr)
+        QObject{parent}, _context(nullptr), _protectMouse(true), _protectKeyboard(true)
     {
         __init();
     }
@@ -60,7 +61,7 @@ namespace usb {
         libusb_device **dev_list;
         if ((ret = libusb_get_device_list(_context, &dev_list)) < LIBUSB_SUCCESS)
         {
-            LOGE(tr("Failed to get device list (%1).").arg(libusb_error_name(ret)));
+            LOGE(tr("Failed to get device list (%1).").arg(usb_error_name(ret)));
             return;
         }
 
@@ -101,7 +102,7 @@ namespace usb {
         int ret;
         if ((ret = libusb_init(&_context)) < LIBUSB_SUCCESS)
         {
-            LOGE(tr("Failed to initialize libusb (%1).").arg(libusb_error_name(ret)));
+            LOGE(tr("Failed to initialize libusb (%1).").arg(usb_error_name(ret)));
             _initialized = false;
             _hasHotplug = false;
             return;
@@ -177,6 +178,26 @@ namespace usb {
             if (_usbDevices[i]->operator==(device))
                 return i;
         return -1;
+    }
+
+    bool UsbHost::protectKeyboard() const
+    {
+        return _protectKeyboard;
+    }
+
+    void UsbHost::setProtectKeyboard(bool protect)
+    {
+        _protectKeyboard = protect;
+    }
+
+    bool UsbHost::protectMouse() const
+    {
+        return _protectMouse;
+    }
+
+    void UsbHost::setProtectMouse(bool protect)
+    {
+        _protectMouse = protect;
     }
 
     libusb_context *UsbHost::context() const

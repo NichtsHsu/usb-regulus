@@ -1,8 +1,7 @@
 ﻿#include "usbendpointwriter.h"
+#include "__usbmacro.h"
 
 namespace usb{
-    const unsigned int UsbEndpointWriter::_internalTimeout = 250;
-
     UsbEndpointWriter::UsbEndpointWriter(QObject *parent)
         : QObject{parent}, _device(nullptr), _endpointDescriptor(nullptr),
           _stopFlag(false), _wroteTimes(0)
@@ -34,7 +33,7 @@ namespace usb{
         int ret;
         for(;;)
         {
-            ret = _endpointDescriptor->transfer(_data, realWriteSize, _internalTimeout);
+            ret = _endpointDescriptor->transfer(_data, realWriteSize, TRANSFER_TIMEOUT);
 
             _stopFlagMutex.lock();
             if(_stopFlag)
@@ -57,7 +56,7 @@ namespace usb{
             }
             else
             {
-                LOGE(tr("Data write failed (%1).").arg(libusb_error_name(ret)));
+                LOGE(tr("Data write failed (%1).").arg(usb_error_name(ret)));
                 emit writeFailed(ret);
                 break;
             }
@@ -78,7 +77,7 @@ namespace usb{
         int ret;
         for(;;)
         {
-            ret = _endpointDescriptor->transfer(_data, realWriteSize, _internalTimeout);
+            ret = _endpointDescriptor->transfer(_data, realWriteSize, TRANSFER_TIMEOUT);
 
             _stopFlagMutex.lock();
             if(_stopFlag)
@@ -102,7 +101,7 @@ namespace usb{
             }
             else
             {
-                LOGE(tr("Data write failed (%1).").arg(libusb_error_name(ret)));
+                LOGE(tr("Data write failed (%1).").arg(usb_error_name(ret)));
                 emit writeFailed(ret);
                 break;
             }

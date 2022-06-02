@@ -28,9 +28,14 @@
 #include <QSplitter>
 #include <QTranslator>
 #include <QFontDatabase>
+#include <QCloseEvent>
+#include <QMoveEvent>
+#include <QResizeEvent>
+#include <QMap>
 
 #include <log/logger.h>
 #include <usb/usbhost.h>
+#include <global/settings.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -76,8 +81,12 @@ private slots:
     void __updateTextBrowser(const QModelIndex &index);
 
     void changeEvent(QEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void moveEvent(QMoveEvent *event) override;
 
 private:
+    void __initWithSettings();
     void __setLoggerLevel(Logger::Level level);
     void __loadTranslation(const QString &lang);
 
@@ -86,6 +95,7 @@ private:
     QTextBrowser *ui_mainBrowser;
     QSplitter *ui_widgetRightSplitter;
     QTranslator *_translator;
+    QMap<Logger::Level, QAction *> _logLevelActionMap;
 
     static const QString _textBroswerCss;
 };

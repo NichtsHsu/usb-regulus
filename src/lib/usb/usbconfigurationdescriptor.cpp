@@ -63,13 +63,8 @@ namespace usb {
         return _extra_length;
     }
 
-    UsbInterface *UsbConfigurationDescriptor::interface(int index) const
+    UsbInterface *UsbConfigurationDescriptor::interface(uint8_t index) const
     {
-        if (index < 0)
-        {
-            LOGE(tr("Index must be non-negative, but got %1.").arg(index));
-            return nullptr;
-        }
         if (index >= _bNumInterfaces)
         {
             LOGE(tr("Index should be 0~%1, but got %2.").arg(_bNumInterfaces).arg(index));

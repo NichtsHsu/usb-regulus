@@ -43,7 +43,7 @@ namespace usb {
     };
 
     UsbHidDescriptor::UsbHidDescriptor(UsbInterfaceDescriptor *interfaceDescriptor):
-        QObject(interfaceDescriptor)
+        QObject(interfaceDescriptor), _mouseProtected(false), _keyboardProtected(false)
     {
         const unsigned char *extra = interfaceDescriptor->extra();
 
@@ -58,26 +58,34 @@ namespace usb {
         _hidReportDescriptor->_bDescriptorType = *(extra + 6);
         _hidReportDescriptor->_wDescriptorLength = *reinterpret_cast<const uint16_t *>(extra + 7);
 
-        interfaceDescriptor->interface()->claim();
+        if (_interfaceDescriptor->isMouse() && UsbHost::instance()->protectMouse())
+            _mouseProtected = true;
+        if (_interfaceDescriptor->isKeyboard() && UsbHost::instance()->protectKeyboard())
+            _keyboardProtected = true;
 
-        UsbDevice *device = _interfaceDescriptor->interface()->configDescriptor()->device();
-        QByteArray buffer(_hidReportDescriptor->_wDescriptorLength, '\0');
-        int ret = device->controlTransfer(0x81,
-                                LIBUSB_REQUEST_GET_DESCRIPTOR,
-                                LIBUSB_DT_REPORT << 8,
-                                interfaceDescriptor->bInterfaceNumber(),
-                                buffer,
-                                TRANSFER_TIMEOUT);
-        interfaceDescriptor->interface()->release();
-        if (ret < LIBUSB_SUCCESS)
+        if (!_mouseProtected && !_keyboardProtected)
         {
-            delete _hidReportDescriptor;
-            _hidReportDescriptor = nullptr;
-            LOGE(tr("Failed to request HID report descriptor, libusb reports: %1.").arg(libusb_error_name(ret)));
-            return;
-        }
+            interfaceDescriptor->interface()->claim();
 
-        _hidReportDescriptor->_rawDescriptor = buffer;
+            UsbDevice *device = _interfaceDescriptor->interface()->configDescriptor()->device();
+            QByteArray buffer(_hidReportDescriptor->_wDescriptorLength, '\0');
+            int ret = device->controlTransfer(0x81,
+                                              LIBUSB_REQUEST_GET_DESCRIPTOR,
+                                              LIBUSB_DT_REPORT << 8,
+                                              interfaceDescriptor->bInterfaceNumber(),
+                                              buffer,
+                                              TRANSFER_TIMEOUT);
+            interfaceDescriptor->interface()->release();
+            if (ret < LIBUSB_SUCCESS)
+            {
+                delete _hidReportDescriptor;
+                _hidReportDescriptor = nullptr;
+                LOGE(tr("Failed to request HID report descriptor, error: %1.").arg(usb_error_name(ret)));
+                return;
+            }
+
+            _hidReportDescriptor->_rawDescriptor = buffer;
+        }
     }
 
     uint8_t UsbHidDescriptor::bLength() const
@@ -137,7 +145,20 @@ namespace usb {
         ATTR("bCountryCode", _bCountryCode, country());
         ATTR("bNumDescriptors", _bNumDescriptors, _bNumDescriptors);
         END;
-        APPEND(_hidReportDescriptor);
+        if (_mouseProtected)
+            html += QString("<p><i>%1</i></p>")
+                    .arg(tr("Note: The 'Protect Mouse' option is checked, "
+                            "therefore usb-regulus cannot read the HID report descriptor of current interface. "
+                            "If you want to get the HID report descriptor, "
+                            "please uncheck the 'Protect Mouse' option in the menu 'Device'."));
+        else if (_keyboardProtected)
+            html += QString("<p><i>%1</i></p>")
+                    .arg(tr("Note: The 'Protect Keyboard' option is checked, "
+                            "therefore usb-regulus cannot read the HID report descriptor of current interface. "
+                            "If you want to get the HID report descriptor, "
+                            "please uncheck the 'Protect Keyboard' option in the menu 'Device'."));
+        else
+            APPEND(_hidReportDescriptor);
 
         return html;
     }

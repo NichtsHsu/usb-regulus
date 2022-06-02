@@ -91,6 +91,13 @@
       <item>
        <layout class="QVBoxLayout" name="layoutButtons">
         <item>
+         <widget class="QPushButton" name="pushButtonSetBufferSize">
+          <property name="text">
+           <string>Set Buffer Size</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="pushButtonReadOnce">
           <property name="text">
            <string>Read Once</string>

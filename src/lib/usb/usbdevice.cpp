@@ -10,7 +10,7 @@ namespace usb {
         ret = libusb_open(_device, &_handle);
         if (ret < LIBUSB_SUCCESS)
         {
-            LOGE(tr("Failed to open device (%1).").arg(libusb_error_name(ret)));
+            LOGE(tr("Failed to open device (%1).").arg(usb_error_name(ret)));
             _open = false;
             return;
         }
@@ -24,7 +24,7 @@ namespace usb {
         ret = libusb_get_device_descriptor(_device, &devDesc);
         if (ret < LIBUSB_SUCCESS)
         {
-            LOGE(tr("Failed to get device descriptor (%1).").arg(libusb_error_name(ret)));
+            LOGE(tr("Failed to get device descriptor (%1).").arg(usb_error_name(ret)));
             return;
         }
         _deviceDescriptor = new UsbDeviceDescriptor(&devDesc, this);
@@ -33,7 +33,7 @@ namespace usb {
         ret = libusb_get_configuration(_handle, &config);
         if (ret < LIBUSB_SUCCESS)
         {
-            LOGE(tr("Failed to get configuration (%1).").arg(libusb_error_name(ret)));
+            LOGE(tr("Failed to get configuration (%1).").arg(usb_error_name(ret)));
             return;
         }
 
@@ -41,7 +41,7 @@ namespace usb {
         ret = libusb_get_config_descriptor(_device, 0, &configDesc);
         if (ret < LIBUSB_SUCCESS)
         {
-            LOGE(tr("Failed to get config descriptor (%1).").arg(libusb_error_name(ret)));
+            LOGE(tr("Failed to get config descriptor (%1).").arg(usb_error_name(ret)));
             return;
         }
         _configurationDescriptor = new UsbConfigurationDescriptor(configDesc, this);
@@ -142,13 +142,23 @@ namespace usb {
 
     }
 
+    int UsbDevice::claimInterface(uint8_t bInterfaceNumber)
+    {
+        return _configurationDescriptor->interface(bInterfaceNumber)->claim();
+    }
+
+    void UsbDevice::releaseInterface(uint8_t bInterfaceNumber)
+    {
+        return _configurationDescriptor->interface(bInterfaceNumber)->release();
+    }
+
     void UsbDevice::reset(const UsbDevice &device)
     {
         int ret = libusb_reset_device(device.handle());
         if (ret == LIBUSB_ERROR_NOT_FOUND)
             log().w("UsbDevice", tr("Re-enumeration is required, or the device has been disconnected."));
         else if (ret != LIBUSB_SUCCESS)
-            log().e("UsbDevice", tr("Unhandled libusb error: %1.").arg(libusb_error_name(ret)));
+            log().e("UsbDevice", tr("Unhandled error: %1.").arg(usb_error_name(ret)));
     }
 
     void UsbDevice::reset(const UsbDevice *device)
@@ -184,7 +194,7 @@ namespace usb {
         int ret = libusb_get_device_descriptor(device, &devDesc);
         if (ret < LIBUSB_SUCCESS)
         {
-            LOGE(tr("Failed to get device descriptor (%1).").arg(libusb_error_name(ret)));
+            LOGE(tr("Failed to get device descriptor (%1).").arg(usb_error_name(ret)));
             return false;
         }
         int bus = libusb_get_bus_number(device);

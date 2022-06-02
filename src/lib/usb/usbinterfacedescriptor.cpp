@@ -154,4 +154,14 @@ namespace usb {
     {
         _hidDescriptor = new UsbHidDescriptor(this);
     }
+
+    bool UsbInterfaceDescriptor::isKeyboard() const
+    {
+        return _bInterfaceClass == 0x03 && _bInterfaceProtocol == 0x01;
+    }
+
+    bool UsbInterfaceDescriptor::isMouse() const
+    {
+        return _bInterfaceClass == 0x03 && _bInterfaceProtocol == 0x02;
+    }
 }

@@ -20,6 +20,8 @@
 #define USBINTERFACE_H
 
 #include <libusb.h>
+#include <atomic>
+#include <mutex>
 #include <QObject>
 #include <QVector>
 
@@ -123,6 +125,7 @@ namespace usb {
 
         int _currentAltsetting;
         QString _displayName;
+        std::atomic<size_t> _claimCount;
     };
 }
 #endif // USBINTERFACE_H

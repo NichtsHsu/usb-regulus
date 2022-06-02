@@ -100,6 +100,22 @@ namespace usb {
          */
         void __removeDevice(libusb_device *device);
 
+        /**
+         * @brief protectMouse & setProtectMouse
+         * If an interface is a mouse HID interface,
+         * it will be refused to be claimed if protectMouse is true.
+         */
+        bool protectMouse() const;
+        void setProtectMouse(bool protect);
+
+        /**
+         * @brief protectKeyboard &setProtectKeyboard
+         * If an interface is a keyboard HID interface,
+         * it will be refused to be claimed if protectKeyboard is true.
+         */
+        bool protectKeyboard() const;
+        void setProtectKeyboard(bool protect);
+
     signals:
         /**
          * @brief deviceListRefreshed
@@ -146,6 +162,8 @@ namespace usb {
 
     private:
         explicit UsbHost(QObject *parent = nullptr);
+        explicit UsbHost(const UsbHost &) = delete;
+        UsbHost &operator=(const UsbHost &) = delete;
         ~UsbHost();
 
         /**
@@ -168,12 +186,13 @@ namespace usb {
         __inline int __indexOfDevice(const UsbDevice &device) const;
         __inline int __indexOfDevice(libusb_device *device);
 
-        static std::atomic<UsbHost *>_instance;
+        static std::atomic<UsbHost *> _instance;
 
         QVector<UsbDevice *> _usbDevices;
         libusb_context *_context;
         libusb_hotplug_callback_handle _hotplugCbHandle;
         bool _initialized, _hasHotplug;
+        bool _protectMouse, _protectKeyboard;
         QTimer *_hotplugCbTimer;
         QThread *_hotplugCbThread;
     };

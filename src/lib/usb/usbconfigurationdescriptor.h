@@ -127,7 +127,7 @@ namespace usb {
          * the index of interface, must less than bNumInterfaces.
          * @return the specified interface
          */
-        UsbInterface *interface(int index) const;
+        UsbInterface *interface(uint8_t index) const;
 
         /**
          * @brief device

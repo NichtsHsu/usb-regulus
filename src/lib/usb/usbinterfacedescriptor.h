@@ -165,6 +165,18 @@ namespace usb {
          */
         QString infomationToHtml() const;
 
+        /**
+         * @brief isMouse
+         * @return if is a mouse HID interface
+         */
+        bool isMouse() const;
+
+        /**
+         * @brief isKeyboard
+         * @return if is a keyboard HID interface
+         */
+        bool isKeyboard() const;
+
     private slots:
         void __requestHidDescriptor();
 

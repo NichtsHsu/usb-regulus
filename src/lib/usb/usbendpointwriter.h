@@ -27,6 +27,17 @@
 #include "usbdevice.h"
 
 namespace usb  {
+    /**
+     * @brief The UsbEndpointWriter class
+     * The writer plays the worker role in Qt's thread model.
+     * For an example:
+     *      UsbEndpointWriter *writer = new UsbEndpointWriter;
+     *      writer->moveToThread(&theWorkThread);
+     * @note
+     * It will be better to set a timeout for write, so we can break any
+     * write by set a stop flag. However, we don't regard this
+     * timeout as a fault, just write again after timeout, as if nothing happened.
+     */
     class UsbEndpointWriter : public QObject
     {
         Q_OBJECT
@@ -35,8 +46,16 @@ namespace usb  {
 
         void init(UsbEndpointDescriptor *epDesc);
 
+        /**
+         * @brief setData
+         * Set the data to write
+         */
         void setData(const QByteArray &data);
 
+        /**
+         * @brief wroteTimes
+         * @return the total successful write times
+         */
         size_t wroteTimes() const;
 
     signals:
@@ -99,14 +118,6 @@ namespace usb  {
 
         size_t _wroteTimes;
         QMutex _wroteTimesMutex;
-
-        /**
-         * @brief _internalTimeout
-         * It will be better to set a timeout for read/write, so we can break any
-         * read/write by QThread::requestInterruption(). However, we don't regard this
-         * timeout as a fault, just read again after timeout, as if nothing happened.
-         */
-        static const unsigned int _internalTimeout;
     };
 }
 

@@ -26,7 +26,14 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QWidget" name="hexEditPlaceHolder" native="true"/>
+      <widget class="QWidget" name="hexEditPlaceHolder" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">

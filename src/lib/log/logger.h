@@ -27,6 +27,8 @@
 #include <QTextStream>
 #include <QtGlobal>
 #include <QMutex>
+#include <QTimer>
+#include <mutex>
 
 /**
   * Simplified interfaces for any QObject
@@ -60,12 +62,22 @@ public:
      */
     Level logLevel() const;
 
+    /**
+     * @brief instance
+     * @return the global single instance
+     * @see log()
+     */
+    static Logger *instance();
+
 signals:
 
 public slots:
     /**
      * @brief record
      * Put a message to logger.
+     * @note
+     * For thread safety, the function that actually works is __record().
+     * @see Logger::__record()
      */
     void record(Logger::Level type, const QString &module, const QString &message);
 
@@ -117,10 +129,18 @@ public slots:
     void clear();
 
 private:
-    friend Logger &log();
     explicit Logger(QWidget *parent = nullptr);
-
+    explicit Logger(const Logger &) = delete;
+    Logger &operator=(const Logger &) = delete;
     QString __strLogLevel();
+
+    /**
+     * @brief record
+     * Put a message to logger.
+     */
+    void __record(Logger::Level type, const QString &module, const QString &message);
+
+    static std::atomic<Logger *> _instance;
 
     Level _logLevel;
 
@@ -137,7 +157,7 @@ private:
 
 /**
  * @brief logger
- * Get the unique Logger instance.
+ * @return the unique instance of Logger
  */
 Logger &log();
 

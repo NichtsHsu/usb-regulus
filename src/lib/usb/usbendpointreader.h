@@ -34,8 +34,8 @@ namespace usb {
      *      UsbEndpointReader *reader = new UsbEndpointReader;
      *      reader->moveToThread(&theWorkThread);
      * @note
-     * It will be better to set a timeout for read/write, so we can break any
-     * read/write by QThread::requestInterruption(). However, we don't regard this
+     * It will be better to set a timeout for read, so we can break any
+     * read by set a stop flag. However, we don't regard this
      * timeout as a fault, just read again after timeout, as if nothing happened.
      */
     class UsbEndpointReader : public QObject
@@ -46,7 +46,23 @@ namespace usb {
 
         void init(UsbEndpointDescriptor *epDesc);
 
+        /**
+         * @brief data
+         * @return the read data
+         */
         const QByteArray &data() const;
+
+        /**
+         * @brief readBufferSize
+         * @return the read buffer size, defaultly max packet size
+         */
+        int readBufferSize() const;
+
+        /**
+         * @brief setReadBufferSize
+         * Set the read buffer size
+         */
+        void setReadBufferSize(int readBufferSize);
 
     signals:
         /**
@@ -99,6 +115,7 @@ namespace usb {
         UsbEndpointDescriptor *_endpointDescriptor;
 
         QByteArray _data;
+        int _readBufferSize;
         bool _stopFlag;
         QMutex _stopFlagMutex;
     };

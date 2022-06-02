@@ -1,0 +1,6 @@
+﻿QLineEdit {
+    color: #000000
+}
+QLineEdit:read-only {
+    color: #BEBEBE
+}

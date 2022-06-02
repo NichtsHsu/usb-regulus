@@ -95,6 +95,7 @@ namespace usb {
         uint16_t _bcdHID;
         UsbInterfaceDescriptor *_interfaceDescriptor;
         UsbHidReportDescriptor *_hidReportDescriptor;
+        bool _mouseProtected, _keyboardProtected;
 
         static const char *const _countryCodeMap[36];
     };
