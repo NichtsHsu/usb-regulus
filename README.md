@@ -15,11 +15,15 @@ See: [libusb calls without sudo using udev-rules](https://stackoverflow.com/ques
 
 Alternatively, simply run this application with root privileges.
 
+## Download
+
+The [release page](https://github.com/NichtsHsu/usb-regulus/releases) provides the lastest AppImage files.
+
 ## Build
 
 ### Linux
 
-1. Install [Qt6](https://www.qt.io/download).
+1. Install [Qt6](https://www.qt.io/download) and select GCC x64 toolkit.
 2. Install necessary C++ compiling enviroment, such as `build-essential`, `g++`, `make`, `cmake`, `ninja-build` and so on.
 3. Install `libusb-1.0` and `libudev`. For an example, on Ubuntu:
 
@@ -27,7 +31,15 @@ Alternatively, simply run this application with root privileges.
     sudo apt install libusb-1.0-0-dev libudev-dev
     ```
 
-4. Open Qt Creator, and select this project, then build.
+4. Open Qt Creator, and select this project, then build. Or, if you would to build with terminal:
+
+    ```bash
+    cd usb-regulus
+    mkdir build
+    cd build
+    {Your Qt Install Path}/gcc_64/bin/qmake ..
+    make
+    ```
 
 ### MacOS
 
