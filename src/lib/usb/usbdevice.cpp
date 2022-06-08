@@ -159,6 +159,7 @@ namespace usb {
             log().w("UsbDevice", tr("Re-enumeration is required, or the device has been disconnected."));
         else if (ret != LIBUSB_SUCCESS)
             log().e("UsbDevice", tr("Unhandled error: %1.").arg(usb_error_name(ret)));
+        log().i("UsbDevice", tr("The device \"%1\" has been reset.").arg(device.displayName()));
     }
 
     void UsbDevice::reset(const UsbDevice *device)

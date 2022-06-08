@@ -128,13 +128,19 @@ void UsbDeviceTreeView::__resetDevice()
 {
     UsbDeviceItem *deviceItem = dynamic_cast<UsbDeviceItem *>(
                 _model->itemFromIndex(currentIndex()));
+    if (_dataTransferWindows.contains(deviceItem->device()))
+    {
+        _dataTransferWindows[deviceItem->device()]->close();
+        delete _dataTransferWindows[deviceItem->device()];
+        _dataTransferWindows.remove(deviceItem->device());
+    }
     for (int i = 0; i < deviceItem->rowCount(); ++i)
     {
         UsbInterfaceItem *interfaceItem = dynamic_cast<UsbInterfaceItem *>(
                     deviceItem->child(i));
         if (_dataTransferWindows.contains(interfaceItem->interface()))
         {
-            _dataTransferWindows[interfaceItem->interface()]->hide();
+            _dataTransferWindows[interfaceItem->interface()]->close();
             delete _dataTransferWindows[interfaceItem->interface()];
             _dataTransferWindows.remove(interfaceItem->interface());
         }

@@ -99,7 +99,7 @@ namespace usb {
 
     int UsbEndpointDescriptor::transfer(QByteArray &buffer, int &realSize, unsigned int timeout)
     {
-        int ret;
+        int ret = 0;
         UsbDevice *device = _interfaceDescriptor->interface()->configDescriptor()->device();
         switch (transferType())
         {
