@@ -90,12 +90,18 @@ namespace usb {
          */
         QString infomationToHtml() const;
 
+        /**
+         * @brief tryGetHidReportDescriptor
+         * Try to get HID report Descriptor
+         * @return error code
+         */
+        int tryGetHidReportDescriptor();
+
     private:
         uint8_t _bLength, _bDescriptorType, _bCountryCode, _bNumDescriptors;
         uint16_t _bcdHID;
         UsbInterfaceDescriptor *_interfaceDescriptor;
         UsbHidReportDescriptor *_hidReportDescriptor;
-        bool _mouseProtected, _keyboardProtected;
 
         static const char *const _countryCodeMap[36];
     };
@@ -146,10 +152,17 @@ namespace usb {
          */
         QString infomationToHtml() const;
 
+        /**
+         * @brief hidDescriptor
+         * @return the HID Descriptor which current HID Report Descriptor belongs to
+         */
+        UsbHidDescriptor *hidDescriptor() const;
+
     private:
         uint8_t _bDescriptorType;
         uint16_t _wDescriptorLength;
         QByteArray _rawDescriptor;
+        UsbHidDescriptor *_hidDescriptor;
     };
 
 }

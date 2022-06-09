@@ -82,9 +82,9 @@
     <addaction name="actionRefresh"/>
     <addaction name="separator"/>
     <addaction name="actionProtectMouse"/>
+    <addaction name="actionProtectKeyboard"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
-    <addaction name="actionProtect_Keyboard"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -204,7 +204,7 @@
     <string>Do not claim the Mouse HID interface</string>
    </property>
   </action>
-  <action name="actionProtect_Keyboard">
+  <action name="actionProtectKeyboard">
    <property name="checkable">
     <bool>true</bool>
    </property>

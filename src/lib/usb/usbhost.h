@@ -101,20 +101,19 @@ namespace usb {
         void __removeDevice(libusb_device *device);
 
         /**
-         * @brief protectMouse & setProtectMouse
+         * @brief protectMouse
          * If an interface is a mouse HID interface,
          * it will be refused to be claimed if protectMouse is true.
          */
         bool protectMouse() const;
-        void setProtectMouse(bool protect);
 
         /**
-         * @brief protectKeyboard &setProtectKeyboard
+         * @brief protectKeyboard
          * If an interface is a keyboard HID interface,
          * it will be refused to be claimed if protectKeyboard is true.
          */
         bool protectKeyboard() const;
-        void setProtectKeyboard(bool protect);
+
 
     signals:
         /**
@@ -151,6 +150,18 @@ namespace usb {
          */
         void rescan();
 
+        /**
+         * @brief setProtectMouse
+         * @see protectMouse
+         */
+        void setProtectMouse(bool protect);
+
+        /**
+         * @brief setProtectKeyboard
+         * @see protectKeyboard
+         */
+        void setProtectKeyboard(bool protect);
+
     private slots:
         /**
          * @brief __refreshHotplutEvent
@@ -176,15 +187,15 @@ namespace usb {
          * @brief __sortDeviceList
          * Sort the device list by bus number and port number
          */
-        __inline void __sortDeviceList();
+        inline void __sortDeviceList();
 
         /**
          * @brief __indexOfDevice
          * @param device
          * @return the index of device in device list
          */
-        __inline int __indexOfDevice(const UsbDevice &device) const;
-        __inline int __indexOfDevice(libusb_device *device);
+        inline int __indexOfDevice(const UsbDevice &device) const;
+        inline int __indexOfDevice(libusb_device *device);
 
         static std::atomic<UsbHost *> _instance;
 

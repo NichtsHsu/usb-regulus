@@ -188,6 +188,24 @@ namespace usb {
     void UsbHost::setProtectKeyboard(bool protect)
     {
         _protectKeyboard = protect;
+
+        if (!_protectKeyboard)
+            for (qsizetype i = 0; i < _usbDevices.length(); ++i)
+            {
+                UsbDevice *device = _usbDevices[i];
+                for (uint8_t j = 0; j < device->configurationDescriptor()->bNumInterfaces(); ++j)
+                {
+                    UsbInterfaceDescriptor *interfaceDesc = device->configurationDescriptor()->interface(j)->currentInterfaceDescriptor();
+                    if (interfaceDesc->isKeyboard() && interfaceDesc->hidDescriptor() != nullptr)
+                    {
+                        int ret = interfaceDesc->hidDescriptor()->tryGetHidReportDescriptor();
+                        if (ret < LIBUSB_SUCCESS)
+                            LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\"")
+                                 .arg(interfaceDesc->interface()->displayName())
+                                 .arg(device->displayName()));
+                    }
+                }
+            }
     }
 
     bool UsbHost::protectMouse() const
@@ -198,6 +216,24 @@ namespace usb {
     void UsbHost::setProtectMouse(bool protect)
     {
         _protectMouse = protect;
+
+        if (!_protectMouse)
+            for (qsizetype i = 0; i < _usbDevices.length(); ++i)
+            {
+                UsbDevice *device = _usbDevices[i];
+                for (uint8_t j = 0; j < device->configurationDescriptor()->bNumInterfaces(); ++j)
+                {
+                    UsbInterfaceDescriptor *interfaceDesc = device->configurationDescriptor()->interface(j)->currentInterfaceDescriptor();
+                    if (interfaceDesc->isMouse() && interfaceDesc->hidDescriptor() != nullptr)
+                    {
+                        int ret = interfaceDesc->hidDescriptor()->tryGetHidReportDescriptor();
+                        if (ret < LIBUSB_SUCCESS)
+                            LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\"")
+                                 .arg(interfaceDesc->interface()->displayName())
+                                 .arg(device->displayName()));
+                    }
+                }
+            }
     }
 
     libusb_context *UsbHost::context() const

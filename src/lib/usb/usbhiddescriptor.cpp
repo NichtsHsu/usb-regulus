@@ -43,7 +43,7 @@ namespace usb {
     };
 
     UsbHidDescriptor::UsbHidDescriptor(UsbInterfaceDescriptor *interfaceDescriptor):
-        QObject(interfaceDescriptor), _mouseProtected(false), _keyboardProtected(false)
+        QObject(interfaceDescriptor)
     {
         const unsigned char *extra = interfaceDescriptor->extra();
 
@@ -58,33 +58,17 @@ namespace usb {
         _hidReportDescriptor->_bDescriptorType = *(extra + 6);
         _hidReportDescriptor->_wDescriptorLength = *reinterpret_cast<const uint16_t *>(extra + 7);
 
+        bool mouseProtected = false, keyboardProtected = false;
         if (_interfaceDescriptor->isMouse() && UsbHost::instance()->protectMouse())
-            _mouseProtected = true;
+            mouseProtected = true;
         if (_interfaceDescriptor->isKeyboard() && UsbHost::instance()->protectKeyboard())
-            _keyboardProtected = true;
+            keyboardProtected = true;
 
-        if (!_mouseProtected && !_keyboardProtected)
+        if (!mouseProtected && !keyboardProtected)
         {
-            interfaceDescriptor->interface()->claim();
-
-            UsbDevice *device = _interfaceDescriptor->interface()->configDescriptor()->device();
-            QByteArray buffer(_hidReportDescriptor->_wDescriptorLength, '\0');
-            int ret = device->controlTransfer(0x81,
-                                              LIBUSB_REQUEST_GET_DESCRIPTOR,
-                                              LIBUSB_DT_REPORT << 8,
-                                              interfaceDescriptor->bInterfaceNumber(),
-                                              buffer,
-                                              TRANSFER_TIMEOUT);
-            interfaceDescriptor->interface()->release();
+            int ret = tryGetHidReportDescriptor();
             if (ret < LIBUSB_SUCCESS)
-            {
-                delete _hidReportDescriptor;
-                _hidReportDescriptor = nullptr;
                 LOGE(tr("Failed to request HID report descriptor, error: %1.").arg(usb_error_name(ret)));
-                return;
-            }
-
-            _hidReportDescriptor->_rawDescriptor = buffer;
         }
     }
 
@@ -145,22 +129,49 @@ namespace usb {
         ATTR("bCountryCode", _bCountryCode, country());
         ATTR("bNumDescriptors", _bNumDescriptors, _bNumDescriptors);
         END;
-        if (_mouseProtected)
+        if (_hidReportDescriptor->_rawDescriptor.length() == _hidReportDescriptor->_wDescriptorLength)
+            APPEND(_hidReportDescriptor);
+        else if (_interfaceDescriptor->isMouse() && UsbHost::instance()->protectMouse())
             html += QString("<p><i>%1</i></p>")
                     .arg(tr("Note: The 'Protect Mouse' option is checked, "
                             "therefore usb-regulus cannot read the HID report descriptor of current interface. "
                             "If you want to get the HID report descriptor, "
                             "please uncheck the 'Protect Mouse' option in the menu 'Device'."));
-        else if (_keyboardProtected)
+        else if (_interfaceDescriptor->isKeyboard() && UsbHost::instance()->protectKeyboard())
             html += QString("<p><i>%1</i></p>")
                     .arg(tr("Note: The 'Protect Keyboard' option is checked, "
                             "therefore usb-regulus cannot read the HID report descriptor of current interface. "
                             "If you want to get the HID report descriptor, "
                             "please uncheck the 'Protect Keyboard' option in the menu 'Device'."));
         else
-            APPEND(_hidReportDescriptor);
+            html += QString("<p><i>%1</i></p>")
+                    .arg(tr("Note: HID Report Descriptor is invalid because of unhandled reason."));
 
         return html;
+    }
+
+    int UsbHidDescriptor::tryGetHidReportDescriptor()
+    {
+        if (_hidReportDescriptor->_rawDescriptor.length() == _hidReportDescriptor->_wDescriptorLength)
+            return LIBUSB_SUCCESS;
+        int ret = _interfaceDescriptor->interface()->claim();
+        if (ret < LIBUSB_SUCCESS)
+            return ret;
+
+        UsbDevice *device = _interfaceDescriptor->interface()->configDescriptor()->device();
+        QByteArray buffer(_hidReportDescriptor->_wDescriptorLength, '\0');
+        ret = device->controlTransfer(0x81,
+                                      LIBUSB_REQUEST_GET_DESCRIPTOR,
+                                      LIBUSB_DT_REPORT << 8,
+                                      _interfaceDescriptor->bInterfaceNumber(),
+                                      buffer,
+                                      TRANSFER_TIMEOUT);
+        _interfaceDescriptor->interface()->release();
+        if (ret < LIBUSB_SUCCESS)
+            return ret;
+
+        _hidReportDescriptor->_rawDescriptor = buffer;
+        return LIBUSB_SUCCESS;
     }
 
     UsbInterfaceDescriptor *UsbHidDescriptor::interfaceDescriptor() const
@@ -169,7 +180,7 @@ namespace usb {
     }
 
     UsbHidReportDescriptor::UsbHidReportDescriptor(UsbHidDescriptor *parent):
-        QObject(parent)
+        QObject(parent), _hidDescriptor(parent)
     {
 
     }
@@ -225,5 +236,10 @@ namespace usb {
                                          .replace("\n", "<br />"));
 
         return html;
+    }
+
+    UsbHidDescriptor *UsbHidReportDescriptor::hidDescriptor() const
+    {
+        return _hidDescriptor;
     }
 }

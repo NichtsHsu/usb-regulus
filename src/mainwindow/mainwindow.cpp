@@ -34,7 +34,6 @@ MainWindow::MainWindow(QWidget *parent):
 
     __initWithSettings();
 
-
     connect(qGuiApp, &QGuiApplication::lastWindowClosed, qApp, &QApplication::quit, Qt::QueuedConnection);
     connect(ui->actionExit, &QAction::triggered, qApp, &QApplication::quit, Qt::QueuedConnection);
     connect(ui->actionRefresh, &QAction::triggered, this, [this]() {
@@ -45,6 +44,10 @@ MainWindow::MainWindow(QWidget *parent):
     connect(usb::UsbHost::instance(), &usb::UsbHost::deviceAttached, this, &MainWindow::__insertDevice);
     connect(usb::UsbHost::instance(), &usb::UsbHost::deviceDetached, this, &MainWindow::__removeDevice);
     connect(ui->usbDeviceTreeView, &UsbDeviceTreeView::clicked, this, &MainWindow::__updateTextBrowser);
+    connect(ui->actionProtectMouse, &QAction::triggered,
+            usb::UsbHost::instance(), &usb::UsbHost::setProtectMouse);
+    connect(ui->actionProtectKeyboard, &QAction::triggered,
+            usb::UsbHost::instance(), &usb::UsbHost::setProtectKeyboard);
     connect(ui->actionDebug, &QAction::triggered, this, [this] () {
         __setLoggerLevel(Logger::Level::Debug);
     });
@@ -137,6 +140,8 @@ void MainWindow::changeEvent(QEvent *event)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     ui->usbDeviceTreeView->closeAllDataTransferWindow();
+    settings().protectMouse() = ui->actionProtectMouse->isChecked();
+    settings().protectKeyboard() = ui->actionProtectKeyboard->isChecked();
     settings().saveToIni(Tools::getConfigFilePath());
     event->accept();
 }
@@ -161,6 +166,10 @@ void MainWindow::__initWithSettings()
         resize(settings().mainwindowProperties().size.get());
     if (settings().mainwindowProperties().position)
         move(settings().mainwindowProperties().position.get());
+    ui->actionProtectMouse->setChecked(settings().protectMouse());
+    usb::UsbHost::instance()->setProtectMouse(settings().protectMouse());
+    ui->actionProtectKeyboard->setChecked(settings().protectKeyboard());
+    usb::UsbHost::instance()->setProtectKeyboard(settings().protectKeyboard());
 
     __loadTranslation(settings().language());
     __setLoggerLevel(settings().logLevel());
