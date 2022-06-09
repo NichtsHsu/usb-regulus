@@ -1,6 +1,5 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "datatransferwindow/controltransferwidget.h"
 
 const QString MainWindow::_textBroswerCss;
 
@@ -9,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent):
     ui(new Ui::MainWindow),
     _translator(nullptr)
 {
-    settings().loadFromIni(qApp->applicationDirPath() + QString("/config.ini"));
+    settings().loadFromIni(Tools::getConfigFilePath());
 
     ui->setupUi(this);
 
@@ -138,7 +137,7 @@ void MainWindow::changeEvent(QEvent *event)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     ui->usbDeviceTreeView->closeAllDataTransferWindow();
-    settings().saveToIni(qApp->applicationDirPath() + QString("/config.ini"));
+    settings().saveToIni(Tools::getConfigFilePath());
     event->accept();
 }
 

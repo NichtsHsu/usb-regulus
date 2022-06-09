@@ -36,6 +36,7 @@
 #include <log/logger.h>
 #include <usb/usbhost.h>
 #include <global/settings.h>
+#include <global/tools.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

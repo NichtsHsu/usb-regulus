@@ -4,6 +4,7 @@
 #include <QString>
 #include <QFile>
 #include <QTextStream>
+#include <QApplication>
 #include <log/logger.h>
 
 class Tools
@@ -17,6 +18,16 @@ public:
      * @return Qt's Style Sheet
      */
     static QString getQStyleSheet(const QString &name = QString());
+
+    /**
+     * @brief getConfigFilePath
+     * @note
+     * Unix: $HOME/.config/usb-regulus/config.ini
+     *      The directory path will be create if not exist
+     * Others: $PWD/config.ini
+     * @return the config.ini file path
+     */
+    static QString getConfigFilePath();
 
 private:
     Tools() = delete;

@@ -1,4 +1,10 @@
 ﻿#include "tools.h"
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <QDir>
+#endif
 
 QString Tools::getQStyleSheet(const QString &name)
 {
@@ -33,4 +39,29 @@ QString Tools::getQStyleSheet(const QString &name)
     }
 
     return finalQss;
+}
+
+QString Tools::getConfigFilePath()
+{
+#ifdef Q_OS_UNIX
+    const char *homedir;
+
+    if ((homedir = getenv("HOME")) == NULL) {
+        homedir = getpwuid(getuid())->pw_dir;
+    }
+
+    QDir configDir(QString(homedir) + "/.config/usb-regulus");
+    if (!configDir.exists())
+        if (!configDir.mkpath("."))
+        {
+            log().w("Tools", QObject::tr("Failed to create config directory \"%1\", fallback to \"%2\".")
+                    .arg(QString(homedir) + "/.config/usb-regulus")
+                    .arg(QString(qApp->applicationDirPath() + QString("/config.ini"))));
+            return QString(qApp->applicationDirPath() + QString("/config.ini"));
+        }
+
+    return QString(homedir) + "/.config/usb-regulus/config.ini";
+#else
+    return QString(qApp->applicationDirPath() + QString("/config.ini"));
+#endif
 }
