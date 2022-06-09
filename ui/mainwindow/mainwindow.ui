@@ -82,9 +82,9 @@
     <addaction name="actionRefresh"/>
     <addaction name="separator"/>
     <addaction name="actionProtectMouse"/>
+    <addaction name="actionProtect_Keyboard"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
-    <addaction name="actionProtect_Keyboard"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
