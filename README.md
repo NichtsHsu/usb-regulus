@@ -1,11 +1,6 @@
 ﻿# usb-regulus
+
 A GUI tool for USB viewing, reading and writing.
-
-## Clone with submodules
-
-```bash
-git clone --recurse-submodules https://github.com/NichtsHsu/usb-regulus.git
-```
 
 ## Note
 
@@ -20,6 +15,12 @@ Alternatively, simply run this application with root privileges.
 The [release page](https://github.com/NichtsHsu/usb-regulus/releases) provides the lastest AppImage files.
 
 ## Build
+
+## Clone with submodules
+
+```bash
+git clone --recurse-submodules https://github.com/NichtsHsu/usb-regulus.git
+```
 
 ### Linux
 
