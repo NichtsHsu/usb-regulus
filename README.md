@@ -32,7 +32,7 @@ git clone --recurse-submodules https://github.com/NichtsHsu/usb-regulus.git
     sudo apt install libusb-1.0-0-dev libudev-dev
     ```
 
-4. Open Qt Creator, and select this project, then build. Or, if you would to build with terminal:
+4. Open Qt Creator, and select this project, then build. Or, if you would like to build with terminal:
 
     ```bash
     cd usb-regulus
