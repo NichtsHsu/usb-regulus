@@ -24,15 +24,6 @@ namespace usb {
     class UsbConfigurationSummaryDescriptor;
     enum class DeviceCapabilityType;
 }
-#ifndef USBDEVICE_H
-#include "usbdevice.h"
-#endif
-#ifndef USBDEVICECAPABILITYDESCRIPTOR_H
-#include "usbdevicecapabilitydescriptor.h"
-#endif
-#ifndef USBHOST_H
-#include "usbhost.h"
-#endif
 
 namespace usb {
     /**
@@ -44,7 +35,7 @@ namespace usb {
     {
         Q_OBJECT
     public:
-        explicit UsbBosDescriptor(const libusb_bos_descriptor *desc, UsbDevice *usbDevice = nullptr);
+        explicit UsbBosDescriptor(const libusb_bos_descriptor *desc, UsbDevice *usbDevice);
 
         /**
          * @brief bLength
@@ -90,5 +81,15 @@ namespace usb {
         QList<UsbDeviceCapabilityDescriptor *> _usbDeviceCapabilityDescriptorList;
     };
 }
+
+#ifndef USBDEVICE_H
+#include "usbdevice.h"
+#endif
+#ifndef USBDEVICECAPABILITYDESCRIPTOR_H
+#include "usbdevicecapabilitydescriptor.h"
+#endif
+#ifndef USBHOST_H
+#include "usbhost.h"
+#endif
 
 #endif // USBBOSDESCRIPTOR_H

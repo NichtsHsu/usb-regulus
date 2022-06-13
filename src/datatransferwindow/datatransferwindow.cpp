@@ -25,7 +25,7 @@ void DataTransferWindow::setInterface(usb::UsbInterface *interface)
         _interface->release();
     qDeleteAll(ui->scrollAreaWidgetContents->findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly));
     _interface = interface;
-    _device = interface->configDescriptor()->device();
+    _device = interface->configurationDescriptor()->device();
 
     // Make sure all IN endpoints are above OUT endpoints
     for (uint8_t i = 0; i < _interface->currentInterfaceDescriptor()->bNumEndpoints(); ++i)
@@ -92,7 +92,7 @@ void DataTransferWindow::showEvent(QShowEvent *event)
 
         LOGD(tr("claim the interface \"%1\" of device \"%2\".")
              .arg(_interface->displayName())
-             .arg(_interface->configDescriptor()->device()->displayName()));
+             .arg(_interface->configurationDescriptor()->device()->displayName()));
     }
 
     event->accept();

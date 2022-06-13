@@ -3,7 +3,7 @@
 
 namespace usb {
     UsbInterface::UsbInterface(const libusb_interface *interface, UsbConfigurationDescriptor *parent) : QObject(parent),
-        _configDescriptor(parent), _claimCount(0)
+        _configurationDescriptor(parent), _claimCount(0)
     {
         _num_altsetting = interface->num_altsetting;
         _altsetting.reserve(_num_altsetting);
@@ -38,7 +38,7 @@ namespace usb {
         /* It may not be good to cost the construct time, we generate it at first call */
         if (_displayName.isEmpty())
         {
-            QString iInterface = _configDescriptor->device()->getStringDescriptor(currentInterfaceDescriptor()->iInterface());
+            QString iInterface = _configurationDescriptor->device()->getStringDescriptor(currentInterfaceDescriptor()->iInterface());
             if (!iInterface.isEmpty())
             {
                 _displayName = iInterface;
@@ -58,9 +58,9 @@ namespace usb {
         return _displayName;
     }
 
-    UsbConfigurationDescriptor *UsbInterface::configDescriptor() const
+    UsbConfigurationDescriptor *UsbInterface::configurationDescriptor() const
     {
-        return _configDescriptor;
+        return _configurationDescriptor;
     }
 
     UsbInterfaceDescriptor *UsbInterface::currentInterfaceDescriptor() const
@@ -107,7 +107,7 @@ namespace usb {
             return ERROR_PROTECT_KEYBOARD;
         }
         int ret = 0;
-        UsbDevice *device = _configDescriptor->device();
+        UsbDevice *device = _configurationDescriptor->device();
         std::lock_guard<std::mutex> lock{ __mutW };
         if (_claimCount == 0)
         {
@@ -132,7 +132,7 @@ namespace usb {
     void UsbInterface::release()
     {
         int ret = 0;
-        UsbDevice *device = _configDescriptor->device();
+        UsbDevice *device = _configurationDescriptor->device();
         std::lock_guard<std::mutex> lock{ __mutW };
         if (!_claimCount)
         {

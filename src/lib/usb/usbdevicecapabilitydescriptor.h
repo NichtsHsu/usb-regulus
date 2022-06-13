@@ -9,10 +9,6 @@ namespace usb {
     class UsbBosDescriptor;
 };
 
-#ifndef USBBOSDESCRIPTOR_H
-#include "usbbosdescriptor.h"
-#endif
-
 namespace usb {
     enum class DeviceCapabilityType {
         WIRELESS = 0x01,
@@ -51,7 +47,7 @@ namespace usb {
     public:
         explicit UsbDeviceCapabilityDescriptor(
                 const libusb_bos_dev_capability_descriptor *desc,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         virtual ~UsbDeviceCapabilityDescriptor() = default;
 
@@ -107,7 +103,7 @@ namespace usb {
     public:
         explicit UsbWirelessDeviceCapabilityDescriptor(
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief bmAttributes
@@ -195,7 +191,7 @@ namespace usb {
         explicit Usb20ExtensionDescriptor(
                 const libusb_usb_2_0_extension_descriptor *desc,
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief bLength
@@ -241,7 +237,7 @@ namespace usb {
         explicit UsbSuperSpeedDeviceCapabilityDescriptor(
                 const libusb_ss_usb_device_capability_descriptor *desc,
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief bLength
@@ -321,7 +317,7 @@ namespace usb {
         explicit UsbContainerIdDescriptor(
                 const libusb_container_id_descriptor *desc,
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief bLength
@@ -358,7 +354,7 @@ namespace usb {
     public:
         explicit UsbPlatformDescriptor(
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief platformCapabilityUUID
@@ -397,7 +393,7 @@ namespace usb {
     public:
         explicit UsbPowerDeliveryCapabilityDescriptor(
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief bmAttributes
@@ -473,7 +469,7 @@ namespace usb {
     public:
         explicit UsbBatteryInfoCapabilityDescriptor(
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief iBattery
@@ -547,7 +543,7 @@ namespace usb {
     public:
         explicit UsbPowerDeliveryConsumerPortCapabilityDescriptor(
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief bmCapabilities
@@ -618,7 +614,7 @@ namespace usb {
     public:
         explicit UsbPowerDeliveryProviderPortCapabilityDescriptor(
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief bmCapabilities
@@ -676,7 +672,7 @@ namespace usb {
     public:
         explicit UsbSuperSpeedPlusDeviceCapabilityDescriptor(
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief bmAttributes
@@ -744,7 +740,7 @@ namespace usb {
     public:
         explicit UsbPrecisionTimeMeasurementCapabilityDescriptor(
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief infomationToHtml
@@ -765,7 +761,7 @@ namespace usb {
     public:
         explicit UsbExtendedWirelessDeviceCapabilityDescriptor(
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief wIdleTimeout
@@ -815,7 +811,7 @@ namespace usb {
     public:
         explicit UsbConfigurationSummaryDescriptor(
                 const libusb_bos_dev_capability_descriptor *base,
-                UsbBosDescriptor *parent = nullptr);
+                UsbBosDescriptor *parent);
 
         /**
          * @brief bcdVersion
@@ -867,5 +863,9 @@ namespace usb {
         const uint8_t *_bConfigurationIndex;
     };
 }
+
+#ifndef USBBOSDESCRIPTOR_H
+#include "usbbosdescriptor.h"
+#endif
 
 #endif // USBDEVICECAPABILITYDESCRIPTOR_H

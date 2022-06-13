@@ -30,15 +30,6 @@ namespace usb {
     class UsbConfigurationDescriptor;
     class UsbBosDescriptor;
 }
-#ifndef USBDEVICEDESCRIPTOR_H
-#include "usbdevicedescriptor.h"
-#endif
-#ifndef USBCONFIGURATIONDESCRIPTOR_H
-#include "usbconfigurationdescriptor.h"
-#endif
-#ifndef USBBOSDESCRIPTOR_H
-#include "usbbosdescriptor.h"
-#endif
 
 namespace usb {
     /**
@@ -46,8 +37,8 @@ namespace usb {
      * Low Speed: 1.5 Mbps
      * Full Speed: 12 Mbps
      * High Speed: 480 Mbps
-     * Super Speed: 5 Gbps
-     * Super Speed Plus: 10 Gbps
+     * SuperSpeed: 5 Gbps
+     * SuperSpeed Plus: 10 Gbps
      * @note
      * USB 3.2 Gen 1x2 and USB 3.2 Gen 2x2 use dual channel for data transferring,
      * therefore their speed is doubled
@@ -257,5 +248,15 @@ namespace usb {
         bool _valid, _open;
     };
 }
+
+#ifndef USBDEVICEDESCRIPTOR_H
+#include "usbdevicedescriptor.h"
+#endif
+#ifndef USBCONFIGURATIONDESCRIPTOR_H
+#include "usbconfigurationdescriptor.h"
+#endif
+#ifndef USBBOSDESCRIPTOR_H
+#include "usbbosdescriptor.h"
+#endif
 
 #endif // USBDEVICE_H

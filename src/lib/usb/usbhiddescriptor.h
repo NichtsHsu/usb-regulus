@@ -1,10 +1,11 @@
 ﻿#ifndef USBHIDDESCRIPTOR_H
 #define USBHIDDESCRIPTOR_H
 
-#include <QObject>
+#include <libusb.h>
 #include <QByteArray>
 #include <QString>
 #include <log/logger.h>
+#include "usbinterfaceextradescriptor.h"
 
 namespace usb {
     class UsbInterfaceDescriptor;
@@ -12,40 +13,36 @@ namespace usb {
     class UsbHidReportDescriptor;
 }
 
-#ifndef USBINTERFACE_H
-#include "usbinterfacedescriptor.h"
-#endif
-
 namespace usb {
     /**
      * @brief The UsbHidDescriptor class
-     * USB HID Descriptor C++ class.
-     * Parse it from the extra_data of UsbInterfaceDescriptor
+     * USB HID (Human Interface Device) Descriptor C++ class.
      */
-    class UsbHidDescriptor : public QObject
+    class UsbHidDescriptor : public UsbInterfaceExtraDescriptor
     {
         Q_OBJECT
     public:
-        explicit UsbHidDescriptor(UsbInterfaceDescriptor *interfaceDescriptor = nullptr);
-
-        /**
-         * @brief interfaceDescriptor
-         * @return the Interface Desciptor which current HID Descriptor belongs to
-         */
-        UsbInterfaceDescriptor *interfaceDescriptor() const;
+        explicit UsbHidDescriptor(UsbInterfaceDescriptor *interfaceDescriptor,
+                                  uint8_t descPos);
 
         /**
          * @brief bLength
          * @return the total size of the HID descriptor
          */
-        uint8_t bLength() const;
+        uint8_t bLength() const override;
 
         /**
          * @brief bDescriptorType
          * @return descriptor type
          * libusb_descriptor_type::LIBUSB_DT_HID in this context
          */
-        uint8_t bDescriptorType() const;
+        uint8_t bDescriptorType() const override;
+
+        /**
+         * @brief type
+         * @return InterfaceExtraDescriptorType::HID
+         */
+        InterfaceExtraDescriptorType type() const override;
 
         /**
          * @brief bcdHID
@@ -88,7 +85,7 @@ namespace usb {
          * @brief infomationToHtml
          * @return HTML form device informations
          */
-        QString infomationToHtml() const;
+        QString infomationToHtml() const override;
 
         /**
          * @brief tryGetHidReportDescriptor
@@ -100,7 +97,6 @@ namespace usb {
     private:
         uint8_t _bLength, _bDescriptorType, _bCountryCode, _bNumDescriptors;
         uint16_t _bcdHID;
-        UsbInterfaceDescriptor *_interfaceDescriptor;
         UsbHidReportDescriptor *_hidReportDescriptor;
 
         static const char *const _countryCodeMap[36];
@@ -164,6 +160,9 @@ namespace usb {
         QByteArray _rawDescriptor;
         UsbHidDescriptor *_hidDescriptor;
     };
-
 }
+
+#ifndef USBINTERFACE_H
+#include "usbinterfacedescriptor.h"
+#endif
 #endif // USBHIDDESCRIPTOR_H

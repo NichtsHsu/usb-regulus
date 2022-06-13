@@ -128,7 +128,7 @@ namespace usb {
         if (_wSpeedSupported & LIBUSB_HIGH_SPEED_OPERATION)
             speeds.append("High Speed");
         if (_wSpeedSupported & LIBUSB_SUPER_SPEED_OPERATION)
-            speeds.append("Super Speed");
+            speeds.append("SuperSpeed");
 
         return speeds;
     }

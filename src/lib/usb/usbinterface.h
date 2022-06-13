@@ -33,12 +33,7 @@ namespace usb {
     class UsbInterfaceDescriptor;
     class UsbConfigurationDescriptor;
 }
-#ifndef USBCONFIGURATIONDESCRIPTOR_H
-#include "usbconfigurationdescriptor.h"
-#endif
-#ifndef USBINTERFACEDESCRIPTOR_H
-#include "usbinterfacedescriptor.h"
-#endif
+
 #include "log/logger.h"
 
 namespace usb {
@@ -51,7 +46,7 @@ namespace usb {
     {
         Q_OBJECT
     public:
-        explicit UsbInterface(const libusb_interface *interface, UsbConfigurationDescriptor *parent = nullptr);
+        explicit UsbInterface(const libusb_interface *interface, UsbConfigurationDescriptor *parent);
 
         /**
          * @brief num_altsetting
@@ -78,10 +73,10 @@ namespace usb {
         const QString &displayName();
 
         /**
-         * @brief configDescriptor
-         * @return get the config descriptor which this interface is belong to
+         * @brief configurationDescriptor
+         * @return get the configuration descriptor which this interface is belong to
          */
-        UsbConfigurationDescriptor *configDescriptor() const;
+        UsbConfigurationDescriptor *configurationDescriptor() const;
 
         /**
          * @brief currentInterfaceDescriptor
@@ -121,11 +116,19 @@ namespace usb {
     private:
         QVector<UsbInterfaceDescriptor *> _altsetting;
         int _num_altsetting;
-        UsbConfigurationDescriptor *_configDescriptor;
+        UsbConfigurationDescriptor *_configurationDescriptor;
 
         int _currentAltsetting;
         QString _displayName;
         std::atomic<size_t> _claimCount;
     };
 }
+
+#ifndef USBCONFIGURATIONDESCRIPTOR_H
+#include "usbconfigurationdescriptor.h"
+#endif
+#ifndef USBINTERFACEDESCRIPTOR_H
+#include "usbinterfacedescriptor.h"
+#endif
+
 #endif // USBINTERFACE_H

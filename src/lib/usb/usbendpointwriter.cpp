@@ -17,7 +17,7 @@ namespace usb{
             LOGE(tr("Can only accept OUT endpoint!"));
             _endpointDescriptor = nullptr;
         }
-        _device = _endpointDescriptor->interfaceDescriptor()->interface()->configDescriptor()->device();
+        _device = _endpointDescriptor->interfaceDescriptor()->interface()->configurationDescriptor()->device();
         _data.fill('\0', _endpointDescriptor->wMaxPacketSize());
     }
 

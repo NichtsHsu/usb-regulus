@@ -1,13 +1,18 @@
 ﻿#include "usbinterfacedescriptor.h"
+#include "usbhiddescriptor.h"
+#include "usbdfudescriptor.h"
+#include "usbinterfaceassociationdescriptor.h"
 #include "__usbmacro.h"
 
 namespace usb {
     UsbInterfaceDescriptor::UsbInterfaceDescriptor(const libusb_interface_descriptor *desc, UsbInterface *parent) :
         QObject(parent),
         _bLength(desc->bLength), _bDescriptorType(desc->bDescriptorType), _bInterfaceNumber(desc->bInterfaceNumber),
-        _bAlternateSetting(desc->bAlternateSetting), _bNumEndpoints(desc->bNumEndpoints), _bInterfaceClass(desc->bInterfaceClass),
-        _bInterfaceProtocol(desc->bInterfaceProtocol), _iInterface(desc->iInterface), _extra(desc->extra), _extraLength(desc->extra_length),
-        _interface(parent), _hidDescriptor(nullptr)
+        _bAlternateSetting(desc->bAlternateSetting), _bNumEndpoints(desc->bNumEndpoints),
+        _bInterfaceClass(desc->bInterfaceClass), _bInterfaceSubClass(desc->bInterfaceSubClass),
+        _bInterfaceProtocol(desc->bInterfaceProtocol),
+        _iInterface(desc->iInterface), _extra(desc->extra), _extraLength(desc->extra_length),
+        _interface(parent), _extraDescriptor(nullptr), _associationDescriptor(nullptr)
     {
 #ifdef Q_OS_UNIX
         char strClass[128], strSubClass[128], strProtocol[128];
@@ -28,10 +33,12 @@ namespace usb {
         for (int i = 0; i < _bNumEndpoints; ++i)
             _endpoint.append(new UsbEndpointDescriptor(&desc->endpoint[i], this));
 
-        /* HID interface */
-        if (_bInterfaceClass == 3 && _extraLength > 0)
-            /* Wait for ready */
-            QTimer::singleShot(200, this, &UsbInterfaceDescriptor::__requestHidDescriptor);
+        /* Extra interface descriptor */
+        if (_extraLength > 0)
+            /** Wait for ready, so that we can send a GET_DESCRIPTOR request for HID report descriptor.
+             * Also, wait for all interface descriptor ready to set association descriptor.
+             */
+            QTimer::singleShot(200, this, &UsbInterfaceDescriptor::__requestExtraDescriptor);
     }
 
     uint8_t UsbInterfaceDescriptor::bLength() const
@@ -124,9 +131,9 @@ namespace usb {
         return _interfaceProtocol;
     }
 
-    UsbHidDescriptor *UsbInterfaceDescriptor::hidDescriptor() const
+    UsbInterfaceExtraDescriptor *UsbInterfaceDescriptor::extraDescriptor() const
     {
-        return _hidDescriptor;
+        return _extraDescriptor;
     }
 
     QString UsbInterfaceDescriptor::infomationToHtml() const
@@ -140,19 +147,57 @@ namespace usb {
         ATTR("bInterfaceClass", _bInterfaceClass, _interfaceClass);
         ATTR("bInterfaceSubClass", _bInterfaceSubClass, _interfaceSubClass);
         ATTR("bInterfaceProtocol", _bInterfaceProtocol, _interfaceProtocol);
-        ATTRSTRDESC("iInterface", _iInterface, _interface->configDescriptor()->device());
+        ATTRSTRDESC("iInterface", _iInterface, _interface->configurationDescriptor()->device());
         END;
+        if (_associationDescriptor)
+            APPEND(_associationDescriptor);
         for (int i = 0; i < _bNumEndpoints; ++i)
             APPEND(endpoint(i));
-        if (_hidDescriptor)
-            APPEND(_hidDescriptor);
+        if (_extraDescriptor)
+            APPEND(_extraDescriptor);
 
         return html;
     }
 
-    void UsbInterfaceDescriptor::__requestHidDescriptor()
+    void UsbInterfaceDescriptor::__requestExtraDescriptor()
     {
-        _hidDescriptor = new UsbHidDescriptor(this);
+        int len = _extraLength;
+        int pos = 0;
+        while (len > 1)
+        {
+            if (_extra[pos] > len)
+                break;
+            // Human Interface Device Descriptor
+            if (_bInterfaceClass == 3 && _extra[pos + 1] == 0x21)
+                _extraDescriptor = new UsbHidDescriptor(this, pos);
+            // Device Firmware Upgrade Descriptor
+            else if (_bInterfaceClass == 0xFE && _bInterfaceSubClass == 0x01 && _extra[pos + 1] == 0x21)
+                _extraDescriptor = new UsbDfuDescriptor(this, pos);
+            // Interface Association Descriptor or OTG Decriptor
+            else if (_extra[pos + 1] == uint8_t(ConfigurationExtraDescriptorType::ASSOCIATION) ||
+                     _extra[pos + 1] == uint8_t(ConfigurationExtraDescriptorType::OTG))
+            {
+                UsbConfigurationExtraDescriptor *configExtraDesc =
+                        UsbConfigurationExtraDescriptor::fromInterfaceExtra(this, pos);
+                UsbConfigurationDescriptor *configDesc = _interface->configurationDescriptor();
+                configDesc->addConfigurationExtraDescriptor(configExtraDesc);
+            }
+            len -= _extra[pos];
+            pos += _extra[pos];
+        }
+    }
+
+    void UsbInterfaceDescriptor::setAssociationDescriptor(UsbInterfaceAssociationDescriptor *associationDescriptor)
+    {
+        if ((_bInterfaceNumber >= associationDescriptor->bFirstInterface()) &&
+                (_bInterfaceNumber <
+                 (associationDescriptor->bFirstInterface() + associationDescriptor->bInterfaceCount())))
+            _associationDescriptor = associationDescriptor;
+    }
+
+    UsbInterfaceAssociationDescriptor *UsbInterfaceDescriptor::associationDescriptor() const
+    {
+        return _associationDescriptor;
     }
 
     bool UsbInterfaceDescriptor::isKeyboard() const

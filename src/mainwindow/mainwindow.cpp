@@ -22,8 +22,17 @@ MainWindow::MainWindow(QWidget *parent):
     ui->splitterMain->setStretchFactor(0, 1);
     ui->splitterMain->setStretchFactor(1, 3);
 
+    ui_mainBrowser->setContextMenuPolicy(Qt::CustomContextMenu);
     ui_mainBrowser->document()->setDefaultStyleSheet(_textBroswerCss);
     ui_mainBrowser->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+
+    _mainBrowserMenu = new QMenu(ui_mainBrowser);
+    _actionCopyAll = new QAction(tr("Copy All"));
+    _mainBrowserMenu->addAction(_actionCopyAll);
+    _actionCopyAllHtml = new QAction(tr("Copy All (HTML)"));
+    _mainBrowserMenu->addAction(_actionCopyAllHtml);
+    _actionCopyAllMarkdown = new QAction(tr("Copy All (Markdown)"));
+    _mainBrowserMenu->addAction(_actionCopyAllMarkdown);
 
     _logLevelActionMap = {
         { Logger::Level::Debug, ui->actionDebug },
@@ -69,6 +78,17 @@ MainWindow::MainWindow(QWidget *parent):
     connect(ui->actionCenterTheWindow, &QAction::triggered, this, [this] () {
         move(frameGeometry().topLeft() + screen()->geometry().center() - frameGeometry().center());
     });
+    connect(_actionCopyAll, &QAction::triggered, this, [this] () {
+        qGuiApp->clipboard()->setText(ui_mainBrowser->toPlainText());
+    });
+    connect(_actionCopyAllHtml, &QAction::triggered, this, [this] () {
+        qGuiApp->clipboard()->setText(ui_mainBrowser->toHtml());
+    });
+    connect(_actionCopyAllMarkdown, &QAction::triggered, this, [this] () {
+        qGuiApp->clipboard()->setText(ui_mainBrowser->toMarkdown());
+    });
+    connect(ui_mainBrowser, &QTextBrowser::customContextMenuRequested,
+            this, &MainWindow::__mainBrowserMenuShow);
 
     usb::UsbHost::instance()->rescan();
 }
@@ -94,11 +114,33 @@ void MainWindow::__insertDevice(int index)
 void MainWindow::__removeDevice(int index)
 {
     ui->usbDeviceTreeView->remove(index);
+    usb::UsbDevice *device = usb::UsbHost::instance()->usbDevices()[index];
+    if (_currentDisplayedDeviceItem)
+    {
+        if (_currentDisplayedDeviceItem.get()->device() == device)
+        {
+            ui_mainBrowser->clear();
+            _currentDisplayedDeviceItem.setNone();
+        }
+    }
+    else if (_currentDisplayedInterfaceItem)
+    {
+        for (uint8_t i = 0; i < device->configurationDescriptor()->bNumInterfaces(); ++i)
+            if (_currentDisplayedInterfaceItem.get()->interface() ==
+                    device->configurationDescriptor()->interface(i))
+            {
+                ui_mainBrowser->clear();
+                _currentDisplayedInterfaceItem.setNone();
+                break;
+            }
+    }
 }
 
 void MainWindow::__updateTextBrowser(const QModelIndex &index)
 {
     QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->usbDeviceTreeView->model());
+    _currentDisplayedDeviceItem.setNone();
+    _currentDisplayedInterfaceItem.setNone();
     /* No parent, it is a UsbDeviceItem.
      * Otherwise, it is a UsbInterfaceItem.
      */
@@ -109,6 +151,7 @@ void MainWindow::__updateTextBrowser(const QModelIndex &index)
          */
         UsbDeviceItem *item = dynamic_cast<UsbDeviceItem *>(model->itemFromIndex(index));
         ui_mainBrowser->setHtml(item->device()->infomationToHtml());
+        _currentDisplayedDeviceItem.set(item);
     }
     else
     {
@@ -117,7 +160,13 @@ void MainWindow::__updateTextBrowser(const QModelIndex &index)
          */
         UsbInterfaceItem *item = dynamic_cast<UsbInterfaceItem *>(model->itemFromIndex(index));
         ui_mainBrowser->setHtml(item->interface()->infomationToHtml());
+        _currentDisplayedInterfaceItem.set(item);
     }
+}
+
+void MainWindow::__mainBrowserMenuShow(const QPoint &point)
+{
+    _mainBrowserMenu->exec(ui_mainBrowser->viewport()->mapToGlobal(point));
 }
 
 void MainWindow::changeEvent(QEvent *event)
@@ -126,6 +175,9 @@ void MainWindow::changeEvent(QEvent *event)
     {
         case QEvent::LanguageChange:
             ui->retranslateUi(this);
+            _actionCopyAll->setText(tr("Copy All"));
+            _actionCopyAllHtml->setText(tr("Copy All (HTML)"));
+            _actionCopyAllMarkdown->setText(tr("Copy All (Markdown)"));
         break;
         case QEvent::WindowStateChange:
             settings().mainwindowProperties().state = windowState();

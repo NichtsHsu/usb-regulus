@@ -21,13 +21,11 @@
 
 #include <libusb.h>
 #include <QObject>
+#include <QTimer>
 
 namespace usb {
     class UsbInterfaceDescriptor;
 }
-#ifndef USBINTERFACEDESCRIPTOR_H
-#include "usbinterfacedescriptor.h"
-#endif
 
 #include <log/logger.h>
 namespace usb {
@@ -273,12 +271,20 @@ namespace usb {
          */
         QString infomationToHtml() const;
 
+    private slots:
+        void __requestExtraDescriptor();
+
     private:
         uint8_t _bLength, _bDescriptorType, _bEndpointAddress, _bmAttributes, _bInterval, _bRefresh, _bSynchAddress;
         uint16_t _wMaxPacketSize;
         const unsigned char *_extra;
-        int _extra_length;
+        int _extraLength;
         UsbInterfaceDescriptor *_interfaceDescriptor;
     };
 }
+
+#ifndef USBINTERFACEDESCRIPTOR_H
+#include "usbinterfacedescriptor.h"
+#endif
+
 #endif // USBENDPOINTDESCRIPTOR_H

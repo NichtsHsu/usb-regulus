@@ -1,4 +1,5 @@
 ﻿#include "usbhost.h"
+#include "usbhiddescriptor.h"
 #include "__usbmacro.h"
 
 namespace usb {
@@ -196,9 +197,10 @@ namespace usb {
                 for (uint8_t j = 0; j < device->configurationDescriptor()->bNumInterfaces(); ++j)
                 {
                     UsbInterfaceDescriptor *interfaceDesc = device->configurationDescriptor()->interface(j)->currentInterfaceDescriptor();
-                    if (interfaceDesc->isKeyboard() && interfaceDesc->hidDescriptor() != nullptr)
+                    if (interfaceDesc->isKeyboard() && interfaceDesc->extraDescriptor() != nullptr)
                     {
-                        int ret = interfaceDesc->hidDescriptor()->tryGetHidReportDescriptor();
+                        UsbHidDescriptor *hidDescriptor = qobject_cast<UsbHidDescriptor *>(interfaceDesc->extraDescriptor());
+                        int ret = hidDescriptor->tryGetHidReportDescriptor();
                         if (ret < LIBUSB_SUCCESS)
                             LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\"")
                                  .arg(interfaceDesc->interface()->displayName())
@@ -224,9 +226,11 @@ namespace usb {
                 for (uint8_t j = 0; j < device->configurationDescriptor()->bNumInterfaces(); ++j)
                 {
                     UsbInterfaceDescriptor *interfaceDesc = device->configurationDescriptor()->interface(j)->currentInterfaceDescriptor();
-                    if (interfaceDesc->isMouse() && interfaceDesc->hidDescriptor() != nullptr)
+                    if (interfaceDesc->isMouse() && interfaceDesc->extraDescriptor() != nullptr)
                     {
-                        int ret = interfaceDesc->hidDescriptor()->tryGetHidReportDescriptor();
+                        UsbHidDescriptor *hidDescriptor = qobject_cast<UsbHidDescriptor *>(
+                                    interfaceDesc->extraDescriptor());
+                        int ret = hidDescriptor->tryGetHidReportDescriptor();
                         if (ret < LIBUSB_SUCCESS)
                             LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\"")
                                  .arg(interfaceDesc->interface()->displayName())

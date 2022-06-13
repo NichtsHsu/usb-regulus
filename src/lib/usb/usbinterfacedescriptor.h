@@ -25,17 +25,10 @@
 namespace usb {
     class UsbInterface;
     class UsbEndpointDescriptor;
-    class UsbHidDescriptor;
+    class UsbInterfaceExtraDescriptor;
+    class UsbInterfaceAssociationDescriptor;
 }
-#ifndef USBENDPOINTDESCRIPTOR_H
-#include "usbendpointdescriptor.h"
-#endif
-#ifndef USBINTERFACE_H
-#include "usbinterface.h"
-#endif
-#ifndef USBHIDDESCRIPTOR_H
-#include "usbhiddescriptor.h"
-#endif
+
 #include "log/logger.h"
 
 namespace usb {
@@ -48,7 +41,7 @@ namespace usb {
     {
         Q_OBJECT
     public:
-        explicit UsbInterfaceDescriptor(const libusb_interface_descriptor *desc, UsbInterface *parent = nullptr);
+        explicit UsbInterfaceDescriptor(const libusb_interface_descriptor *desc, UsbInterface *parent);
 
         /**
          * @brief bLength
@@ -152,12 +145,10 @@ namespace usb {
         const QString &interfaceProtocol() const;
 
         /**
-         * @brief hidDescriptor
-         * @return the HID descriptor
-         * @note
-         * Only used for HID interface. Otherwise return nullptr.
+         * @brief extraDescriptor
+         * @return the extra descriptor
          */
-        UsbHidDescriptor *hidDescriptor() const;
+        UsbInterfaceExtraDescriptor *extraDescriptor() const;
 
         /**
          * @brief infomationToHtml
@@ -177,8 +168,21 @@ namespace usb {
          */
         bool isKeyboard() const;
 
+        /**
+         * @brief associationDescriptor
+         * @return the association descriptor
+         */
+        UsbInterfaceAssociationDescriptor *associationDescriptor() const;
+
+        /**
+         * @brief setAssociationDescriptor
+         * Set the association descriptor
+         * @param associationDescriptor
+         */
+        void setAssociationDescriptor(UsbInterfaceAssociationDescriptor *associationDescriptor);
+
     private slots:
-        void __requestHidDescriptor();
+        void __requestExtraDescriptor();
 
     private:
         uint8_t _bLength, _bDescriptorType, _bInterfaceNumber, _bAlternateSetting, _bNumEndpoints, _bInterfaceClass,
@@ -187,9 +191,23 @@ namespace usb {
         const unsigned char *_extra;
         int _extraLength;
         UsbInterface *_interface;
-        UsbHidDescriptor *_hidDescriptor;
+        UsbInterfaceExtraDescriptor *_extraDescriptor;
+        UsbInterfaceAssociationDescriptor *_associationDescriptor;
         QString _interfaceClass, _interfaceSubClass, _interfaceProtocol;
     };
 }
+
+#ifndef USBENDPOINTDESCRIPTOR_H
+#include "usbendpointdescriptor.h"
+#endif
+#ifndef USBINTERFACE_H
+#include "usbinterface.h"
+#endif
+#ifndef USBINTERFACEEXTRADESCRIPTOR_H
+#include "usbinterfaceextradescriptor.h"
+#endif
+#ifndef USBINTERFACEASSOCIATIONDESCRIPTOR_H
+#include "usbinterfaceassociationdescriptor.h"
+#endif
 
 #endif // USBINTERFACEDESCRIPTOR_H

@@ -5,22 +5,23 @@ UsbDeviceTreeView::UsbDeviceTreeView(QWidget *parent)
 {
     _menuDevice = new QMenu(this);
     _actionReset = new QAction(tr("Reset"));
-    connect(_actionReset, &QAction::triggered,
-            this, &UsbDeviceTreeView::__resetDevice);
     _menuDevice->addAction(_actionReset);
     _actionControlTransfer = new QAction(tr("Control Transfer"));
-    connect(_actionControlTransfer, &QAction::triggered,
-            this, &UsbDeviceTreeView::__openControlTransferWindow);
     _menuDevice->addAction(_actionControlTransfer);
     _menuInterface = new QMenu(this);
     _actionDataTransfer = new QAction(tr("Data Trasfer"));
-    connect(_actionDataTransfer, &QAction::triggered,
-            this, &UsbDeviceTreeView::__openDataTransferWindow);
     _menuInterface->addAction(_actionDataTransfer);
 
     _model = new QStandardItemModel(this);
     setModel(_model);
     setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(_actionReset, &QAction::triggered,
+            this, &UsbDeviceTreeView::__resetDevice);
+    connect(_actionControlTransfer, &QAction::triggered,
+            this, &UsbDeviceTreeView::__openControlTransferWindow);
+    connect(_actionDataTransfer, &QAction::triggered,
+            this, &UsbDeviceTreeView::__openDataTransferWindow);
     connect(this, &UsbDeviceTreeView::customContextMenuRequested,
             this, &UsbDeviceTreeView::__customMenu);
     header()->hide();
@@ -81,13 +82,9 @@ void UsbDeviceTreeView::__customMenu(const QPoint &point)
 {
     QModelIndex index = indexAt(point);
     if (index.parent() == QModelIndex())
-    {
         _menuDevice->exec(viewport()->mapToGlobal(point));
-    }
     else
-    {
         _menuInterface->exec(viewport()->mapToGlobal(point));
-    }
 }
 
 void UsbDeviceTreeView::__openDataTransferWindow()
@@ -95,9 +92,7 @@ void UsbDeviceTreeView::__openDataTransferWindow()
     UsbInterfaceItem *item = dynamic_cast<UsbInterfaceItem *>(
                 _model->itemFromIndex(currentIndex()));
     if (_dataTransferWindows.contains(item->interface()))
-    {
         _dataTransferWindows[item->interface()]->show();
-    }
     else
     {
         DataTransferWindow *window = new DataTransferWindow;
@@ -112,9 +107,7 @@ void UsbDeviceTreeView::__openControlTransferWindow()
     UsbDeviceItem *item = dynamic_cast<UsbDeviceItem *>(
                 _model->itemFromIndex(currentIndex()));
     if (_dataTransferWindows.contains(item->device()))
-    {
         _dataTransferWindows[item->device()]->show();
-    }
     else
     {
         DataTransferWindow *window = new DataTransferWindow;

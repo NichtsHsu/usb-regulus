@@ -32,11 +32,17 @@
 #include <QMoveEvent>
 #include <QResizeEvent>
 #include <QMap>
+#include <QMenu>
+#include <QAction>
+#include <QClipboard>
 
 #include <log/logger.h>
 #include <usb/usbhost.h>
 #include <global/settings.h>
 #include <global/tools.h>
+#include <misc/option.hpp>
+
+#include "usbdevicetreeview.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -49,6 +55,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    void changeEvent(QEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void moveEvent(QMoveEvent *event) override;
 
 private slots:
     /**
@@ -81,10 +92,11 @@ private slots:
      */
     void __updateTextBrowser(const QModelIndex &index);
 
-    void changeEvent(QEvent *event) override;
-    void closeEvent(QCloseEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
-    void moveEvent(QMoveEvent *event) override;
+    /**
+     * @brief __mainBrowserMenuShow
+     * Show menu of main browser
+     */
+    void __mainBrowserMenuShow(const QPoint &point);
 
 private:
     void __initWithSettings();
@@ -97,6 +109,10 @@ private:
     QSplitter *ui_widgetRightSplitter;
     QTranslator *_translator;
     QMap<Logger::Level, QAction *> _logLevelActionMap;
+    QMenu *_mainBrowserMenu;
+    QAction *_actionCopyAll, *_actionCopyAllHtml, *_actionCopyAllMarkdown;
+    Option<UsbDeviceItem *> _currentDisplayedDeviceItem;
+    Option<UsbInterfaceItem *> _currentDisplayedInterfaceItem;
 
     static const QString _textBroswerCss;
 };

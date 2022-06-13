@@ -30,9 +30,6 @@
 namespace usb{
     class UsbDevice;
 }
-#ifndef USBDEVICE_H
-#include "usbdevice.h"
-#endif
 
 namespace usb{
     /**
@@ -56,7 +53,7 @@ namespace usb{
     {
         Q_OBJECT
     public:
-        explicit UsbDeviceDescriptor(const libusb_device_descriptor *desc, UsbDevice *parent = nullptr);
+        explicit UsbDeviceDescriptor(const libusb_device_descriptor *desc, UsbDevice *parent);
 
         /**
          * @brief bLength
@@ -209,5 +206,9 @@ namespace usb{
         QString _vendorName, _productName, _deviceClass, _deviceSubClass, _deviceProtocol, _description;
     };
 }
+
+#ifndef USBDEVICE_H
+#include "usbdevice.h"
+#endif
 
 #endif // USBDEVICEDESCRIPTOR_H

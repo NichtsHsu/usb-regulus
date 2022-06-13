@@ -26,13 +26,8 @@
 namespace usb {
     class UsbDevice;
     class UsbInterface;
+    class UsbConfigurationExtraDescriptor;
 }
-#ifndef USBDEVICE_H
-#include "usbdevice.h"
-#endif
-#ifndef USBINTERFACE_H
-#include "usbinterface.h"
-#endif
 
 namespace usb {
     /**
@@ -56,7 +51,7 @@ namespace usb {
     {
         Q_OBJECT
     public:
-        explicit UsbConfigurationDescriptor(const libusb_config_descriptor *desc, UsbDevice *parent = nullptr);
+        explicit UsbConfigurationDescriptor(const libusb_config_descriptor *desc, UsbDevice *parent);
 
         /**
          * @brief bLength
@@ -148,14 +143,32 @@ namespace usb {
          */
         QString infomationToHtml() const;
 
+        /**
+         * @brief addConfigurationExtraDescriptor
+         * Add configuration extra descriptor
+         */
+        void addConfigurationExtraDescriptor(UsbConfigurationExtraDescriptor *desc);
+
     private:
         uint8_t _bLength, _bDescriptorType, _bNumInterfaces, _bConfigurationValue, _iConfiguration, _bmAttributes, _MaxPower;
         uint16_t _wTotalLength;
-        QVector<UsbInterface *> _interface;
+        QVector<UsbInterface *> _interfaces;
+        QVector<UsbConfigurationExtraDescriptor *> _extraDescriptors;
         const unsigned char *_extra;
         int _extra_length;
 
         UsbDevice *_device;
     };
 }
+
+#ifndef USBDEVICE_H
+#include "usbdevice.h"
+#endif
+#ifndef USBINTERFACE_H
+#include "usbinterface.h"
+#endif
+#ifndef USBCONFIGURATIONEXTRADESCRIPTOR_H
+#include "usbconfigurationextradescriptor.h"
+#endif
+
 #endif // USBCONFIGURATIONDESCRIPTOR_H

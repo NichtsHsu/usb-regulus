@@ -1,4 +1,5 @@
 ﻿#include "usbendpointdescriptor.h"
+#include "usbinterfaceassociationdescriptor.h"
 #include "__usbmacro.h"
 
 namespace usb {
@@ -7,9 +8,11 @@ namespace usb {
         _bLength(desc->bLength), _bDescriptorType(desc->bDescriptorType), _bEndpointAddress(desc->bEndpointAddress),
         _bmAttributes(desc->bmAttributes), _bInterval(desc->bInterval), _bRefresh(desc->bRefresh),
         _bSynchAddress(desc->bSynchAddress), _wMaxPacketSize(desc->wMaxPacketSize),
-        _extra(desc->extra), _extra_length(desc->extra_length), _interfaceDescriptor(parent)
+        _extra(desc->extra), _extraLength(desc->extra_length), _interfaceDescriptor(parent)
     {
-
+        if (_extraLength > 0)
+            /* Wait for all interface descriptor ready to set association descriptor */
+            QTimer::singleShot(200, this, &UsbEndpointDescriptor::__requestExtraDescriptor);
     }
 
     uint8_t UsbEndpointDescriptor::bLength() const
@@ -54,7 +57,7 @@ namespace usb {
 
     int UsbEndpointDescriptor::extra_length() const
     {
-        return _extra_length;
+        return _extraLength;
     }
 
     EndpointDirection UsbEndpointDescriptor::direction() const
@@ -100,7 +103,7 @@ namespace usb {
     int UsbEndpointDescriptor::transfer(QByteArray &buffer, int &realSize, unsigned int timeout)
     {
         int ret = 0;
-        UsbDevice *device = _interfaceDescriptor->interface()->configDescriptor()->device();
+        UsbDevice *device = _interfaceDescriptor->interface()->configurationDescriptor()->device();
         switch (transferType())
         {
             case EndpointTransferType::CONTROL:
@@ -153,6 +156,27 @@ namespace usb {
         END;
 
         return html;
+    }
+
+    void UsbEndpointDescriptor::__requestExtraDescriptor()
+    {
+        int len = _extraLength;
+        int pos = 0;
+        while (len > 1)
+        {
+            // Interface Association Descriptor
+            if (_extra[pos + 1] == uint8_t(ConfigurationExtraDescriptorType::ASSOCIATION) ||
+                    _extra[pos + 1] == uint8_t(ConfigurationExtraDescriptorType::OTG))
+            {
+                UsbConfigurationExtraDescriptor *configExtraDesc =
+                        UsbConfigurationExtraDescriptor::fromEndpointExtra(this, pos);
+                UsbConfigurationDescriptor *configDesc =
+                        _interfaceDescriptor->interface()->configurationDescriptor();
+                configDesc->addConfigurationExtraDescriptor(configExtraDesc);
+            }
+            len -= _extra[pos];
+            pos += _extra[pos];
+        }
     }
 
     uint16_t UsbEndpointDescriptor::wMaxPacketSize() const

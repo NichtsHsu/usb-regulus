@@ -1,16 +1,29 @@
 ﻿#include "usbconfigurationdescriptor.h"
+#include "usbinterfaceassociationdescriptor.h"
 #include "__usbmacro.h"
 
 namespace usb {
     UsbConfigurationDescriptor::UsbConfigurationDescriptor(const libusb_config_descriptor *desc, UsbDevice *parent):
         QObject(parent),
         _bLength(desc->bLength), _bDescriptorType(desc->bDescriptorType), _bNumInterfaces(desc->bNumInterfaces),
-        _iConfiguration(desc->iConfiguration), _bmAttributes(desc->bmAttributes), _MaxPower(desc->MaxPower),
-        _wTotalLength(desc->wTotalLength), _extra(desc->extra), _extra_length(desc->extra_length), _device(parent)
+        _bConfigurationValue(desc->bConfigurationValue), _iConfiguration(desc->iConfiguration),
+        _bmAttributes(desc->bmAttributes), _MaxPower(desc->MaxPower), _wTotalLength(desc->wTotalLength),
+        _extra(desc->extra), _extra_length(desc->extra_length), _device(parent)
     {
-        _interface.reserve(_bNumInterfaces);
+        _interfaces.reserve(_bNumInterfaces);
         for (int i = 0; i < _bNumInterfaces; ++i)
-            _interface.append(new UsbInterface(&desc->interface[i], this));
+            _interfaces.append(new UsbInterface(&desc->interface[i], this));
+        uint8_t len = _extra_length;
+        uint8_t pos = 0;
+        while (len > 1)
+        {
+            if (_extra[pos] > len)
+                break;
+            UsbConfigurationExtraDescriptor *extraDesc = UsbConfigurationExtraDescriptor::get(this, pos);
+            len -= _extra[pos];
+            pos += _extra[pos];
+            addConfigurationExtraDescriptor(extraDesc);
+        }
     }
 
     uint8_t UsbConfigurationDescriptor::bLength() const
@@ -70,7 +83,7 @@ namespace usb {
             LOGE(tr("Index should be 0~%1, but got %2.").arg(_bNumInterfaces).arg(index));
             return nullptr;
         }
-        return _interface[index];
+        return _interfaces[index];
     }
 
     UsbDevice *UsbConfigurationDescriptor::device() const
@@ -94,9 +107,30 @@ namespace usb {
         ATTR("bConfigurationValue", _bConfigurationValue, _bConfigurationValue);
         ATTRSTRDESC("iConfiguration", _iConfiguration, _device);
         ATTR("bmAttributes", _bmAttributes, bmAttributesInfo());
-        ATTR("MaxPower", _MaxPower, _MaxPower);
+        ATTR("MaxPower", _MaxPower, QString("%1 mA").arg(_MaxPower));
         END;
+        foreach (const auto &extraDesc, _extraDescriptors)
+            if (extraDesc->type() != ConfigurationExtraDescriptorType::ASSOCIATION)
+                APPEND(extraDesc);
+
         return html;
+    }
+
+    void UsbConfigurationDescriptor::addConfigurationExtraDescriptor(UsbConfigurationExtraDescriptor *desc)
+    {
+        if (desc)
+        {
+            _extraDescriptors.append(desc);
+            if (desc->type() == ConfigurationExtraDescriptorType::ASSOCIATION)
+            {
+                UsbInterfaceAssociationDescriptor *associationDescriptor =
+                        qobject_cast<UsbInterfaceAssociationDescriptor *>(desc);
+                for (uint8_t i = associationDescriptor->bFirstInterface();
+                     i < (associationDescriptor->bFirstInterface() + associationDescriptor->bInterfaceCount());
+                     ++i)
+                    _interfaces[i]->currentInterfaceDescriptor()->setAssociationDescriptor(associationDescriptor);
+            }
+        }
     }
 
     QString parseConfigDescBmAttributes(uint8_t bmAttributes)

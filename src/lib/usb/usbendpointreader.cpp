@@ -18,7 +18,7 @@ namespace usb {
             LOGE(tr("Can only accept IN endpoint!"));
             _endpointDescriptor = nullptr;
         }
-        _device = _endpointDescriptor->interfaceDescriptor()->interface()->configDescriptor()->device();
+        _device = _endpointDescriptor->interfaceDescriptor()->interface()->configurationDescriptor()->device();
     }
 
     const QByteArray &UsbEndpointReader::data() const

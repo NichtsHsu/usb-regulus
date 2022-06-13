@@ -43,17 +43,22 @@ HEADERS += \
     src/lib/usb/__usbmacro.h \
     src/lib/usb/usbbosdescriptor.h \
     src/lib/usb/usbconfigurationdescriptor.h \
+    src/lib/usb/usbconfigurationextradescriptor.h \
     src/lib/usb/usbcontroltransferhandler.h \
     src/lib/usb/usbdevice.h \
     src/lib/usb/usbdevicecapabilitydescriptor.h \
     src/lib/usb/usbdevicedescriptor.h \
+    src/lib/usb/usbdfudescriptor.h \
     src/lib/usb/usbendpointdescriptor.h \
     src/lib/usb/usbendpointreader.h \
     src/lib/usb/usbendpointwriter.h \
     src/lib/usb/usbhiddescriptor.h \
     src/lib/usb/usbhost.h \
     src/lib/usb/usbinterface.h \
+    src/lib/usb/usbinterfaceassociationdescriptor.h \
     src/lib/usb/usbinterfacedescriptor.h \
+    src/lib/usb/usbinterfaceextradescriptor.h \
+    src/lib/usb/usbotgdescriptor.h \
     src/mainwindow/mainwindow.h \
     src/mainwindow/usbdevicetreeview.h
 
@@ -71,17 +76,22 @@ SOURCES += \
     src/lib/usb/__usbmacro.cpp \
     src/lib/usb/usbbosdescriptor.cpp \
     src/lib/usb/usbconfigurationdescriptor.cpp \
+    src/lib/usb/usbconfigurationextradescriptor.cpp \
     src/lib/usb/usbcontroltransferhandler.cpp \
     src/lib/usb/usbdevice.cpp \
     src/lib/usb/usbdevicecapabilitydescriptor.cpp \
     src/lib/usb/usbdevicedescriptor.cpp \
+    src/lib/usb/usbdfudescriptor.cpp \
     src/lib/usb/usbendpointdescriptor.cpp \
     src/lib/usb/usbendpointreader.cpp \
     src/lib/usb/usbendpointwriter.cpp \
     src/lib/usb/usbhiddescriptor.cpp \
     src/lib/usb/usbhost.cpp \
     src/lib/usb/usbinterface.cpp \
+    src/lib/usb/usbinterfaceassociationdescriptor.cpp \
     src/lib/usb/usbinterfacedescriptor.cpp \
+    src/lib/usb/usbinterfaceextradescriptor.cpp \
+    src/lib/usb/usbotgdescriptor.cpp \
     src/main.cpp \
     src/mainwindow/mainwindow.cpp \
     src/mainwindow/usbdevicetreeview.cpp
