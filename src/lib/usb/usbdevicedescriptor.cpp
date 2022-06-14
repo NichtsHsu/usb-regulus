@@ -2,7 +2,8 @@
 #include "__usbmacro.h"
 
 namespace usb {
-    UsbDeviceDescriptor::UsbDeviceDescriptor(const libusb_device_descriptor *desc, UsbDevice *parent) : QObject(parent), _device(parent)
+    UsbDeviceDescriptor::UsbDeviceDescriptor(const libusb_device_descriptor *desc, UsbDevice *parent) :
+        QObject(parent), _device(parent), _hubDescriptor(nullptr)
     {
         _bLength = desc->bLength;
         _bDescriptorType = desc->bDescriptorType;
@@ -57,6 +58,10 @@ namespace usb {
                     + (hasProduct ? (QString(" ") + _productName) : (strlen(product) > 0 ? QString(" ") + QString(product): QString()));
         }
 #endif
+
+        /* Hub Device */
+        if (_bDeviceClass == 0x09)
+            QTimer::singleShot(200, this, &UsbDeviceDescriptor::__requestHubDescriptor);
     }
 
     uint8_t UsbDeviceDescriptor::bLength() const
@@ -187,6 +192,8 @@ namespace usb {
         ATTR("bMaxPacketSize0", _bMaxPacketSize0, _bMaxPacketSize0);
         ATTR("bNumConfigurations", _bNumConfigurations, _bNumConfigurations);
         END;
+        if (_hubDescriptor)
+            APPEND(_hubDescriptor);
 
         return html;
     }
@@ -222,4 +229,14 @@ namespace usb {
         return QString("USB %1.%2%3").arg(major).arg(minor).arg(subminor);
     }
 
+
+    void UsbDeviceDescriptor::__requestHubDescriptor()
+    {
+        _hubDescriptor = UsbHubDescriptor::tryGet(this);
+    }
+
+    UsbHubDescriptor *UsbDeviceDescriptor::hubDescriptor() const
+    {
+        return _hubDescriptor;
+    }
 }

@@ -27,6 +27,7 @@ namespace usb {
     class UsbEndpointDescriptor;
     class UsbInterfaceExtraDescriptor;
     class UsbInterfaceAssociationDescriptor;
+    class UsbHidDescriptor;
 }
 
 #include "log/logger.h"
@@ -144,11 +145,6 @@ namespace usb {
          */
         const QString &interfaceProtocol() const;
 
-        /**
-         * @brief extraDescriptor
-         * @return the extra descriptor
-         */
-        UsbInterfaceExtraDescriptor *extraDescriptor() const;
 
         /**
          * @brief infomationToHtml
@@ -175,11 +171,23 @@ namespace usb {
         UsbInterfaceAssociationDescriptor *associationDescriptor() const;
 
         /**
+         * @brief extraDescriptor
+         * @return the extra descriptor
+         */
+        const QVector<UsbInterfaceExtraDescriptor *> &extraDescriptors() const;
+
+        /**
          * @brief setAssociationDescriptor
          * Set the association descriptor
          * @param associationDescriptor
          */
         void setAssociationDescriptor(UsbInterfaceAssociationDescriptor *associationDescriptor);
+
+        /**
+         * @brief getHidDescriptor
+         * @return pointer to HID descriptor if is a HID interface, nullptr if not
+         */
+        UsbHidDescriptor *hidDescriptor();
 
     private slots:
         void __requestExtraDescriptor();
@@ -187,11 +195,12 @@ namespace usb {
     private:
         uint8_t _bLength, _bDescriptorType, _bInterfaceNumber, _bAlternateSetting, _bNumEndpoints, _bInterfaceClass,
         _bInterfaceSubClass, _bInterfaceProtocol, _iInterface;
-        QVector<UsbEndpointDescriptor *> _endpoint;
+        QVector<UsbEndpointDescriptor *> _endpoints;
         const unsigned char *_extra;
         int _extraLength;
         UsbInterface *_interface;
-        UsbInterfaceExtraDescriptor *_extraDescriptor;
+        QVector<UsbInterfaceExtraDescriptor *> _extraDescriptors;
+        // Can only have one Association Descriptor
         UsbInterfaceAssociationDescriptor *_associationDescriptor;
         QString _interfaceClass, _interfaceSubClass, _interfaceProtocol;
     };
@@ -208,6 +217,9 @@ namespace usb {
 #endif
 #ifndef USBINTERFACEASSOCIATIONDESCRIPTOR_H
 #include "usbinterfaceassociationdescriptor.h"
+#endif
+#ifndef USBHIDDESCRIPTOR_H
+#include "usbhiddescriptor.h"
 #endif
 
 #endif // USBINTERFACEDESCRIPTOR_H

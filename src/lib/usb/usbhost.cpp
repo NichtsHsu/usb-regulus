@@ -197,9 +197,9 @@ namespace usb {
                 for (uint8_t j = 0; j < device->configurationDescriptor()->bNumInterfaces(); ++j)
                 {
                     UsbInterfaceDescriptor *interfaceDesc = device->configurationDescriptor()->interface(j)->currentInterfaceDescriptor();
-                    if (interfaceDesc->isKeyboard() && interfaceDesc->extraDescriptor() != nullptr)
+                    UsbHidDescriptor *hidDescriptor;
+                    if (interfaceDesc->isKeyboard() && (hidDescriptor = interfaceDesc->hidDescriptor()) != nullptr)
                     {
-                        UsbHidDescriptor *hidDescriptor = qobject_cast<UsbHidDescriptor *>(interfaceDesc->extraDescriptor());
                         int ret = hidDescriptor->tryGetHidReportDescriptor();
                         if (ret < LIBUSB_SUCCESS)
                             LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\"")
@@ -226,10 +226,9 @@ namespace usb {
                 for (uint8_t j = 0; j < device->configurationDescriptor()->bNumInterfaces(); ++j)
                 {
                     UsbInterfaceDescriptor *interfaceDesc = device->configurationDescriptor()->interface(j)->currentInterfaceDescriptor();
-                    if (interfaceDesc->isMouse() && interfaceDesc->extraDescriptor() != nullptr)
+                    UsbHidDescriptor *hidDescriptor;
+                    if (interfaceDesc->isMouse() && (hidDescriptor = interfaceDesc->hidDescriptor()) != nullptr)
                     {
-                        UsbHidDescriptor *hidDescriptor = qobject_cast<UsbHidDescriptor *>(
-                                    interfaceDesc->extraDescriptor());
                         int ret = hidDescriptor->tryGetHidReportDescriptor();
                         if (ret < LIBUSB_SUCCESS)
                             LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\"")

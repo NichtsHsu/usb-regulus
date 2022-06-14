@@ -12,7 +12,7 @@ namespace usb {
         _bInterfaceClass(desc->bInterfaceClass), _bInterfaceSubClass(desc->bInterfaceSubClass),
         _bInterfaceProtocol(desc->bInterfaceProtocol),
         _iInterface(desc->iInterface), _extra(desc->extra), _extraLength(desc->extra_length),
-        _interface(parent), _extraDescriptor(nullptr), _associationDescriptor(nullptr)
+        _interface(parent), _associationDescriptor(nullptr)
     {
 #ifdef Q_OS_UNIX
         char strClass[128], strSubClass[128], strProtocol[128];
@@ -29,9 +29,9 @@ namespace usb {
         _interfaceProtocol = strProtocol;
 #endif
 
-        _endpoint.reserve(_bNumEndpoints);
+        _endpoints.reserve(_bNumEndpoints);
         for (int i = 0; i < _bNumEndpoints; ++i)
-            _endpoint.append(new UsbEndpointDescriptor(&desc->endpoint[i], this));
+            _endpoints.append(new UsbEndpointDescriptor(&desc->endpoint[i], this));
 
         /* Extra interface descriptor */
         if (_extraLength > 0)
@@ -108,7 +108,7 @@ namespace usb {
             LOGE(tr("Index should be 0~%1, but got %2.").arg(_bNumEndpoints).arg(index));
             return nullptr;
         }
-        return _endpoint[index];
+        return _endpoints[index];
     }
 
     UsbInterface *UsbInterfaceDescriptor::interface() const
@@ -131,9 +131,9 @@ namespace usb {
         return _interfaceProtocol;
     }
 
-    UsbInterfaceExtraDescriptor *UsbInterfaceDescriptor::extraDescriptor() const
+    const QVector<UsbInterfaceExtraDescriptor *> &UsbInterfaceDescriptor::extraDescriptors() const
     {
-        return _extraDescriptor;
+        return _extraDescriptors;
     }
 
     QString UsbInterfaceDescriptor::infomationToHtml() const
@@ -153,8 +153,8 @@ namespace usb {
             APPEND(_associationDescriptor);
         for (int i = 0; i < _bNumEndpoints; ++i)
             APPEND(endpoint(i));
-        if (_extraDescriptor)
-            APPEND(_extraDescriptor);
+        foreach (const auto &desc, _extraDescriptors)
+            APPEND(desc);
 
         return html;
     }
@@ -169,10 +169,10 @@ namespace usb {
                 break;
             // Human Interface Device Descriptor
             if (_bInterfaceClass == 3 && _extra[pos + 1] == 0x21)
-                _extraDescriptor = new UsbHidDescriptor(this, pos);
+                _extraDescriptors.append(new UsbHidDescriptor(this, pos));
             // Device Firmware Upgrade Descriptor
             else if (_bInterfaceClass == 0xFE && _bInterfaceSubClass == 0x01 && _extra[pos + 1] == 0x21)
-                _extraDescriptor = new UsbDfuDescriptor(this, pos);
+                _extraDescriptors.append(new UsbDfuDescriptor(this, pos));
             // Interface Association Descriptor or OTG Decriptor
             else if (_extra[pos + 1] == uint8_t(ConfigurationExtraDescriptorType::ASSOCIATION) ||
                      _extra[pos + 1] == uint8_t(ConfigurationExtraDescriptorType::OTG))
@@ -193,6 +193,14 @@ namespace usb {
                 (_bInterfaceNumber <
                  (associationDescriptor->bFirstInterface() + associationDescriptor->bInterfaceCount())))
             _associationDescriptor = associationDescriptor;
+    }
+
+    UsbHidDescriptor *UsbInterfaceDescriptor::hidDescriptor()
+    {
+        foreach (const auto &desc, _extraDescriptors)
+            if (desc->type() == InterfaceExtraDescriptorType::HID)
+                return qobject_cast<UsbHidDescriptor *>(desc);
+        return nullptr;
     }
 
     UsbInterfaceAssociationDescriptor *UsbInterfaceDescriptor::associationDescriptor() const

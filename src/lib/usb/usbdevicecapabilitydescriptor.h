@@ -32,14 +32,6 @@ namespace usb {
     /**
      * @brief The UsbDeviceCapabilityDescriptor class
      * The C++ wrapper of libusb_bos_dev_capability_descriptor.
-     * As the base class for Usb20ExtensionDescriptor, UsbSuperSpeedDeviceCapabilityDescriptor,
-     * UsbContainerIdDescriptor and UsbWirelessDeviceCapabilityDescriptor,
-     * so that we can just keep `UsbDeviceCapabilityDescriptor *` in UsbBosDescriptor.
-     * Can be converted to the corresponding derived class according to `type()` function:
-     *      WIRELESS -> UsbWirelessDeviceCapabilityDescriptor
-     *      USB_2_0 -> Usb20ExtensionDescriptor
-     *      SUPERSPEED -> UsbSuperSpeedDeviceCapabilityDescriptor
-     *      CONTAINER_ID -> UsbContainerIdDescriptor
      */
     class UsbDeviceCapabilityDescriptor : public QObject
     {
@@ -67,10 +59,6 @@ namespace usb {
         /**
          * @brief type
          * @return the real device capability descriptor type
-         *      WIRELESS -> UsbWirelessDeviceCapabilityDescriptor
-         *      USB_2_0 -> Usb20ExtensionDescriptor
-         *      SUPERSPEED -> UsbSuperSpeedDeviceCapabilityDescriptor
-         *      CONTAINER_ID -> UsbContainerIdDescriptor
          */
         DeviceCapabilityType type() const;
 

@@ -21,6 +21,7 @@
 
 #include <libusb.h>
 #include <QObject>
+#include <QTimer>
 
 #ifdef Q_OS_UNIX
 #include <usbutils/names.h>
@@ -29,6 +30,7 @@
 
 namespace usb{
     class UsbDevice;
+    class UsbHubDescriptor;
 }
 
 namespace usb{
@@ -150,6 +152,12 @@ namespace usb{
         UsbDevice *device() const;
 
         /**
+         * @brief hubDescriptor
+         * @return the hub descriptor if is a hub device, nullptr if not
+         */
+        UsbHubDescriptor *hubDescriptor() const;
+
+        /**
          * @brief vendorName
          * @return the defined vendor name associated with idVendor
          */
@@ -198,12 +206,16 @@ namespace usb{
          */
         QString infomationToHtml() const;
 
+    private slots:
+        void __requestHubDescriptor();
+
     private:
         uint8_t _bLength, _bDescriptorType, _bDeviceClass, _bDeviceSubClass, _bDeviceProtocol,
         _bMaxPacketSize0, _iManufacturer, _iProduct, _iSerialNumber, _bNumConfigurations;
         uint16_t _bcdUSB, _idVendor, _idProduct, _bcdDevice;
         UsbDevice *_device;
         QString _vendorName, _productName, _deviceClass, _deviceSubClass, _deviceProtocol, _description;
+        UsbHubDescriptor *_hubDescriptor;
     };
 }
 
