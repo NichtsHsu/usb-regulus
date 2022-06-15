@@ -52,7 +52,7 @@ namespace usb {
          * @brief num_altsetting
          * @return the number of alternate settings that belong to this interface
          */
-        int num_altsetting() const;
+        int numAltsetting() const;
 
         /**
          * @brief altsetting
@@ -111,11 +111,19 @@ namespace usb {
          */
         void release();
 
+        /**
+         * @brief setAltsetting
+         * @param altsetting
+         * Index of altsetting
+         * @return error code
+         */
+        int setAltsetting(int altsetting);
+
     signals:
 
     private:
         QVector<UsbInterfaceDescriptor *> _altsetting;
-        int _num_altsetting;
+        int _numAltsetting;
         UsbConfigurationDescriptor *_configurationDescriptor;
 
         int _currentAltsetting;

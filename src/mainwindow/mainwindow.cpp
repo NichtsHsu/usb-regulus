@@ -43,16 +43,23 @@ MainWindow::MainWindow(QWidget *parent):
 
     __initWithSettings();
 
-    connect(qGuiApp, &QGuiApplication::lastWindowClosed, qApp, &QApplication::quit, Qt::QueuedConnection);
-    connect(ui->actionExit, &QAction::triggered, qApp, &QApplication::quit, Qt::QueuedConnection);
+    connect(qGuiApp, &QGuiApplication::lastWindowClosed,
+            qApp, &QApplication::quit, Qt::QueuedConnection);
+    connect(ui->actionExit, &QAction::triggered,
+            qApp, &QApplication::quit, Qt::QueuedConnection);
     connect(ui->actionRefresh, &QAction::triggered, this, [this]() {
         LOGI(tr("Rescaning devices."));
     });
-    connect(ui->actionRefresh, &QAction::triggered, usb::UsbHost::instance(), &usb::UsbHost::rescan);
-    connect(usb::UsbHost::instance(), &usb::UsbHost::deviceListRefreshed, this, &MainWindow::__refreshDeviceList);
-    connect(usb::UsbHost::instance(), &usb::UsbHost::deviceAttached, this, &MainWindow::__insertDevice);
-    connect(usb::UsbHost::instance(), &usb::UsbHost::deviceDetached, this, &MainWindow::__removeDevice);
-    connect(ui->usbDeviceTreeView, &UsbDeviceTreeView::clicked, this, &MainWindow::__updateTextBrowser);
+    connect(ui->actionRefresh, &QAction::triggered,
+            usb::UsbHost::instance(), &usb::UsbHost::rescan);
+    connect(usb::UsbHost::instance(), &usb::UsbHost::deviceListRefreshed,
+            this, &MainWindow::__refreshDeviceList);
+    connect(usb::UsbHost::instance(), &usb::UsbHost::deviceAttached,
+            this, &MainWindow::__insertDevice);
+    connect(usb::UsbHost::instance(), &usb::UsbHost::deviceDetached,
+            this, &MainWindow::__removeDevice);
+    connect(ui->usbDeviceTreeView, &UsbDeviceTreeView::currentIndexChanged,
+            this, &MainWindow::__updateTextBrowser);
     connect(ui->actionProtectMouse, &QAction::triggered,
             usb::UsbHost::instance(), &usb::UsbHost::setProtectMouse);
     connect(ui->actionProtectKeyboard, &QAction::triggered,
@@ -124,7 +131,6 @@ void MainWindow::__removeDevice(int index)
         }
     }
     else if (_currentDisplayedInterfaceItem)
-    {
         for (uint8_t i = 0; i < device->configurationDescriptor()->bNumInterfaces(); ++i)
             if (_currentDisplayedInterfaceItem.get()->interface() ==
                     device->configurationDescriptor()->interface(i))
@@ -133,14 +139,12 @@ void MainWindow::__removeDevice(int index)
                 _currentDisplayedInterfaceItem.setNone();
                 break;
             }
-    }
 }
 
-void MainWindow::__updateTextBrowser(const QModelIndex &index)
+void MainWindow::__updateTextBrowser(const QModelIndex &index, bool ignoreSame)
 {
     QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->usbDeviceTreeView->model());
-    _currentDisplayedDeviceItem.setNone();
-    _currentDisplayedInterfaceItem.setNone();
+
     /* No parent, it is a UsbDeviceItem.
      * Otherwise, it is a UsbInterfaceItem.
      */
@@ -150,6 +154,11 @@ void MainWindow::__updateTextBrowser(const QModelIndex &index)
          * we can not use qobject_cast here.
          */
         UsbDeviceItem *item = dynamic_cast<UsbDeviceItem *>(model->itemFromIndex(index));
+        if (ignoreSame && _currentDisplayedDeviceItem)
+            if (_currentDisplayedDeviceItem.get() == item)
+                return;
+
+        _currentDisplayedInterfaceItem.setNone();
         ui_mainBrowser->setHtml(item->device()->infomationToHtml());
         _currentDisplayedDeviceItem.set(item);
     }
@@ -159,6 +168,11 @@ void MainWindow::__updateTextBrowser(const QModelIndex &index)
          * we can not use qobject_cast here.
          */
         UsbInterfaceItem *item = dynamic_cast<UsbInterfaceItem *>(model->itemFromIndex(index));
+        if (ignoreSame && _currentDisplayedInterfaceItem)
+            if (_currentDisplayedInterfaceItem.get() == item)
+                return;
+
+        _currentDisplayedDeviceItem.setNone();
         ui_mainBrowser->setHtml(item->interface()->infomationToHtml());
         _currentDisplayedInterfaceItem.set(item);
     }
@@ -178,6 +192,10 @@ void MainWindow::changeEvent(QEvent *event)
             _actionCopyAll->setText(tr("Copy All"));
             _actionCopyAllHtml->setText(tr("Copy All (HTML)"));
             _actionCopyAllMarkdown->setText(tr("Copy All (Markdown)"));
+            if (_currentDisplayedDeviceItem)
+                ui_mainBrowser->setHtml(_currentDisplayedDeviceItem.get()->device()->infomationToHtml());
+            else if (_currentDisplayedInterfaceItem)
+                ui_mainBrowser->setHtml(_currentDisplayedInterfaceItem.get()->interface()->infomationToHtml());
         break;
         case QEvent::WindowStateChange:
             settings().mainwindowProperties().state = windowState();

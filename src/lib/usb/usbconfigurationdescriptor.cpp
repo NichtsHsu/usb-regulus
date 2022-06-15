@@ -128,7 +128,8 @@ namespace usb {
                 for (uint8_t i = associationDescriptor->bFirstInterface();
                      i < (associationDescriptor->bFirstInterface() + associationDescriptor->bInterfaceCount());
                      ++i)
-                    _interfaces[i]->currentInterfaceDescriptor()->setAssociationDescriptor(associationDescriptor);
+                    for (uint8_t j = 0; j < _interfaces[i]->numAltsetting(); ++j)
+                        _interfaces[i]->altsetting(j)->setAssociationDescriptor(associationDescriptor);
             }
         }
     }

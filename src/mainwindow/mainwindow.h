@@ -89,8 +89,10 @@ private slots:
      * to display the information of USB devices or interfaces.
      * @param index
      * Index of the clicked item
+     * @param ignoreSame
+     * If new item is the same as current item, ignore update.
      */
-    void __updateTextBrowser(const QModelIndex &index);
+    void __updateTextBrowser(const QModelIndex &index, bool ignoreSame = false);
 
     /**
      * @brief __mainBrowserMenuShow

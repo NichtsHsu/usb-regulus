@@ -5,17 +5,17 @@ namespace usb {
     UsbInterface::UsbInterface(const libusb_interface *interface, UsbConfigurationDescriptor *parent) : QObject(parent),
         _configurationDescriptor(parent), _claimCount(0)
     {
-        _num_altsetting = interface->num_altsetting;
-        _altsetting.reserve(_num_altsetting);
-        for (int i = 0; i < _num_altsetting; ++i)
+        _numAltsetting = interface->num_altsetting;
+        _altsetting.reserve(_numAltsetting);
+        for (int i = 0; i < _numAltsetting; ++i)
             _altsetting.append(new UsbInterfaceDescriptor(&interface->altsetting[i], this));
 
         _currentAltsetting = 0;
     }
 
-    int UsbInterface::num_altsetting() const
+    int UsbInterface::numAltsetting() const
     {
-        return _num_altsetting;
+        return _numAltsetting;
     }
 
     UsbInterfaceDescriptor *UsbInterface::altsetting(int index) const
@@ -25,9 +25,9 @@ namespace usb {
             LOGE(tr("Index must be non-negative, but got %1.").arg(index));
             return nullptr;
         }
-        if (index >= _num_altsetting)
+        if (index >= _numAltsetting)
         {
-            LOGE(tr("Index should be 0~%1, but got %2.").arg(_num_altsetting).arg(index));
+            LOGE(tr("Index should be 0~%1, but got %2.").arg(_numAltsetting).arg(index));
             return nullptr;
         }
         return _altsetting[index];
@@ -73,6 +73,10 @@ namespace usb {
         QString html;
         /* Regenerate it for language support. */
         INTERFACE;
+        START("Interface Informations");
+        ATTRTEXT(tr("Number of altsettings"), QString::number(_numAltsetting));
+        ATTRTEXT(tr("Current altsetting"), QString::number(_currentAltsetting));
+        END;
         APPEND(currentInterfaceDescriptor());
         return html;
     }
@@ -167,5 +171,35 @@ namespace usb {
              .arg(_displayName)
              .arg(device->displayName())
              .arg(_claimCount));
+    }
+
+    int UsbInterface::setAltsetting(int altsetting)
+    {
+        if (altsetting < 0 || altsetting >= _numAltsetting)
+        {
+            LOGE(tr("Selected altsetting index %1 out of range (%2-%3).")
+                 .arg(altsetting)
+                 .arg(0)
+                 .arg(_numAltsetting));
+            return ERROR_OUT_OF_RANGE;
+        }
+
+        claim();
+        int ret = libusb_set_interface_alt_setting(_configurationDescriptor->device()->handle(),
+                                                   currentInterfaceDescriptor()->bInterfaceNumber(),
+                                                   altsetting);
+        if (ret < LIBUSB_SUCCESS)
+        {
+            LOGE(tr("Failed to set altsetting, error: %1.").arg(usb_error_name(ret)));
+            return ret;
+        }
+        LOGD(tr("Interface \"%1\" of device \"%2\" set altsetting to %3.")
+             .arg(displayName())
+             .arg(_configurationDescriptor->device()->displayName())
+             .arg(altsetting));
+        _currentAltsetting = altsetting;
+        release();
+
+        return 0;
     }
 }

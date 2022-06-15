@@ -29,6 +29,7 @@
 #include <QTimer>
 #include <QHeaderView>
 #include <QMenu>
+#include <QInputDialog>
 #include <datatransferwindow/datatransferwindow.h>
 
 /**
@@ -137,6 +138,7 @@ public:
     void changeEvent(QEvent *event) override;
 
 signals:
+    void currentIndexChanged(const QModelIndex &index, bool rightClick = false);
 
 public slots:
     void closeAllDataTransferWindow();
@@ -146,6 +148,8 @@ private slots:
     void __openDataTransferWindow();
     void __openControlTransferWindow();
     void __resetDevice();
+    void __customSetAltsetting();
+    void __setAltsetting(const QModelIndex &index, int altsetting);
 
 private:
     inline void __updateTranslations();
@@ -156,6 +160,11 @@ private:
     QAction *_actionControlTransfer;
     QMenu *_menuInterface;
     QAction *_actionDataTransfer;
+    QMenu *_actionSetAltsetting;
+    QAction *_actionSetAltsettingFirst;
+    QAction *_actionSetAltsettingPrevious;
+    QAction *_actionSetAltsettingNext;
+    QAction *_actionSetAltsettingCustom;
     QMap<QObject *, DataTransferWindow *> _dataTransferWindows;
 };
 
