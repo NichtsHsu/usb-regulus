@@ -142,7 +142,8 @@ namespace usb {
             }
             else
             {
-                LOGW(tr("Failed to register hotplug callback function, usb-regulus can not automatically refresh the device list."));
+                LOGW(tr("Failed to register hotplug callback function, "
+                        "usb-regulus can not automatically refresh the device list."));
                 _hasHotplug = false;
             }
         }
@@ -202,7 +203,7 @@ namespace usb {
                     {
                         int ret = hidDescriptor->tryGetHidReportDescriptor();
                         if (ret < LIBUSB_SUCCESS)
-                            LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\"")
+                            LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\".")
                                  .arg(interfaceDesc->interface()->displayName())
                                  .arg(device->displayName()));
                     }
@@ -231,7 +232,7 @@ namespace usb {
                     {
                         int ret = hidDescriptor->tryGetHidReportDescriptor();
                         if (ret < LIBUSB_SUCCESS)
-                            LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\"")
+                            LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\".")
                                  .arg(interfaceDesc->interface()->displayName())
                                  .arg(device->displayName()));
                     }

@@ -25,6 +25,7 @@ void DataTransferWindow::setInterface(usb::UsbInterface *interface)
         _interface->release();
     qDeleteAll(ui->scrollAreaWidgetContents->findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly));
     _interface = interface;
+    _currentAltsetting = _interface->currentAltsetting();
     _device = interface->configurationDescriptor()->device();
 
     // Make sure all IN endpoints are above OUT endpoints
@@ -80,6 +81,9 @@ void DataTransferWindow::showEvent(QShowEvent *event)
 {
     if (_interface && !_isControlTransfer)
     {
+        // Re-init if altsetting is changed
+        if (_interface->currentAltsetting() == _currentAltsetting)
+            setInterface(_interface);
         if (_interface->claim() < 0)
         {
             LOGD(tr("Hide because claiming interface failed."));

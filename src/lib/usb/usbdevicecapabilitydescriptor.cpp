@@ -82,7 +82,7 @@ namespace usb {
     QString Usb20ExtensionDescriptor::infomationToHtml() const
     {
         QString html;
-        START("USB 2.0 Extension Descriptor");
+        START(tr("USB 2.0 Extension Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bmAttributes", _bmAttributes, supportLPM() ?
                  tr("Link Power Management is supported"):
@@ -161,7 +161,7 @@ namespace usb {
     QString UsbSuperSpeedDeviceCapabilityDescriptor::infomationToHtml() const
     {
         QString html;
-        START("USB SuperSpeed Device Capability Descriptor");
+        START(tr("USB SuperSpeed Device Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bmAttributes", _bmAttributes, supportLTM() ?
                  tr("Latency Tolerance Messages is supported"):
@@ -195,7 +195,7 @@ namespace usb {
     QString UsbContainerIdDescriptor::infomationToHtml() const
     {
         QString html;
-        START("USB Container ID Descriptor");
+        START(tr("USB Container ID Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTRTEXT("ContainerID ", hexUuid(_containerID));
         END;
@@ -223,7 +223,7 @@ namespace usb {
     QString UsbWirelessDeviceCapabilityDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Wireless USB Device Capability Descriptor");
+        START(tr("Wireless USB Device Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
         ATTR("wPHYRates", _wPHYRates,
@@ -328,7 +328,7 @@ namespace usb {
     QString UsbSuperSpeedPlusDeviceCapabilityDescriptor::infomationToHtml() const
     {
         QString html;
-        START("USB SuperSpeed Plus Device Capability Descriptor");
+        START(tr("USB SuperSpeed Plus Device Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
         ATTR("wFunctionalitySupport", _wFunctionalitySupport, __parseFunctionalitySupport());
@@ -390,7 +390,7 @@ namespace usb {
                 tr("Sublink Type: %1, %2")
                 .arg((sublinkType & 0b1) ? tr("Asymmetric") : tr("Symmetric"))
                 .arg((sublinkType & 0b10) ? tr("Transmit mode") : tr("Receive mode")) + NEWLINE +
-                tr("Link Protocol: %1").arg(linkProtocol ? tr("SuperSpeedPlus") : tr("SuperSpeed"));
+                tr("Link Protocol: %1").arg(linkProtocol ? "SuperSpeed Plus" : "SuperSpeed");
     }
 
     uint16_t UsbSuperSpeedPlusDeviceCapabilityDescriptor::wFunctionalitySupport() const
@@ -442,7 +442,7 @@ namespace usb {
     QString UsbPlatformDescriptor::infomationToHtml() const
     {
         QString html;
-        START("USB Platform Capability Descriptor");
+        START(tr("USB Platform Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTRTEXT("PlatformCapabilityUUID", hexUuid(_platformCapabilityUUID));
         ATTRTEXT("CapabilityData", QString("0x") + _capabilityData.toHex());
@@ -485,7 +485,7 @@ namespace usb {
     QString UsbPowerDeliveryCapabilityDescriptor::infomationToHtml() const
     {
         QString html;
-        START("USB Power Delivery Capability Descriptor");
+        START(tr("USB Power Delivery Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
         ATTR("bcdBCVersion", _bcdBCVersion, "");
@@ -584,7 +584,7 @@ namespace usb {
     QString UsbBatteryInfoCapabilityDescriptor::infomationToHtml() const
     {
         QString html;
-        START("USB Battery Info Capability Descriptor");
+        START(tr("USB Battery Info Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTRSTRDESC("iBattery", _iBattery, _bosDescriptor->device());
         ATTRSTRDESC("iSerial", _iSerial, _bosDescriptor->device());
@@ -647,7 +647,7 @@ namespace usb {
     QString UsbPowerDeliveryConsumerPortCapabilityDescriptor::infomationToHtml() const
     {
         QString html;
-        START("USB PD Consumer Port Capability Descriptor");
+        START(tr("USB PD Consumer Port Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
         ATTR("wMinVoltage", _wMinVoltage, tr("%1 mV").arg(_wMinVoltage * 50));
@@ -710,7 +710,7 @@ namespace usb {
     QString UsbPowerDeliveryProviderPortCapabilityDescriptor::infomationToHtml() const
     {
         QString html;
-        START("USB PD Provider Port Capability Descriptor");
+        START(tr("USB PD Provider Port Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
         for (unsigned int i = 0; i <= _bNumOfPDObjects; ++i)
@@ -883,7 +883,7 @@ namespace usb {
     QString UsbPrecisionTimeMeasurementCapabilityDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Precision Time Measurement Capability Descriptor");
+        START(tr("Precision Time Measurement Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         END;
 
@@ -918,7 +918,7 @@ namespace usb {
     QString UsbExtendedWirelessDeviceCapabilityDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Extended Wireless Device Capability Descriptor");
+        START(tr("Extended Wireless Device Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("wIdleTimeout", _wIdleTimeout, tr("%1 ms").arg(_wIdleTimeout));
         ATTR("wWakeUpLatency", _wWakeUpLatency, tr("%1 ms").arg(_wWakeUpLatency));
@@ -981,7 +981,7 @@ namespace usb {
     QString UsbConfigurationSummaryDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Configuration Summary Descriptor");
+        START(tr("Configuration Summary Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bcdVersion", _bcdVersion, "");
         ATTR("bClass", _bClass, _bClass);

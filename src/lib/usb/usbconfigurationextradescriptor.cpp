@@ -144,7 +144,7 @@ namespace usb {
     QString UsbWirelessSecurityDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Security Descriptor");
+        START(tr("Security Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("wTotalLength", _wTotalLength, _wTotalLength);
         ATTR("bNumEncryptionTypes", _bNumEncryptionTypes, _bNumEncryptionTypes);
@@ -186,7 +186,7 @@ namespace usb {
     QString UsbWirelessEncryptionTypeDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Encryption Type Descriptor");
+        START(tr("Encryption Type Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bEncryptionType", _bEncryptionType, __parseEncryptionType());
         ATTR("bEncryptionValue", _bEncryptionValue, _bEncryptionValue);

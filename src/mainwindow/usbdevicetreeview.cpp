@@ -95,7 +95,7 @@ void UsbDeviceTreeView::remove(int index)
         if (_dataTransferWindows.contains(interfaceItem->interface()))
         {
             LOGD(tr("Remove a data transfer window which based on an interface of a detached device."));
-            _dataTransferWindows[interfaceItem->interface()]->hide();
+            _dataTransferWindows[interfaceItem->interface()]->close();
             delete _dataTransferWindows[interfaceItem->interface()];
             _dataTransferWindows.remove(interfaceItem->interface());
         }
@@ -243,6 +243,9 @@ void UsbDeviceTreeView::__setAltsetting(const QModelIndex &index, int altsetting
          */
         UsbInterfaceItem *item = dynamic_cast<UsbInterfaceItem *>(
                     _model->itemFromIndex(index));
+        if (_dataTransferWindows.contains(item->interface()))
+            _dataTransferWindows[item->interface()]->close();
+
         int ret = item->interface()->setAltsetting(altsetting);
         if (ret == 0)
             emit currentIndexChanged(index);
@@ -254,6 +257,11 @@ void UsbDeviceTreeView::__updateTranslations()
     _actionReset->setText(tr("Reset"));
     _actionControlTransfer->setText(tr("Control Transfer"));
     _actionDataTransfer->setText(tr("Data Trasfer"));
+    _actionSetAltsetting->setTitle(tr("Set Altsetting"));
+    _actionSetAltsettingFirst->setText(tr("First"));
+    _actionSetAltsettingPrevious->setText(tr("Previous"));
+    _actionSetAltsettingNext->setText(tr("Next"));
+    _actionSetAltsettingCustom->setText(tr("Custom .."));
 }
 
 UsbDeviceItem::UsbDeviceItem(const QString &text) : QStandardItem(text)

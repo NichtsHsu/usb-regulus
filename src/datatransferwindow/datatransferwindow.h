@@ -56,6 +56,7 @@ private:
     usb::UsbDevice *_device;
     usb::UsbInterface *_interface;
     bool _isControlTransfer;
+    uint8_t _currentAltsetting;
 };
 
 #endif // DATATRANSFERWINDOW_H

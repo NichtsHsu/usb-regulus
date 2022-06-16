@@ -88,7 +88,7 @@ namespace usb {
                 }
                 break;
                 default:
-                    LOGW(tr("Usb Device Capability Type %1 is not supported yet").arg(baseDesc->bDevCapabilityType));
+                    LOGW(tr("USB Device Capability Type %1 is not supported yet.").arg(baseDesc->bDevCapabilityType));
                 continue;
             }
 

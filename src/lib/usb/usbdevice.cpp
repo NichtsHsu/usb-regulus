@@ -105,13 +105,13 @@ namespace usb {
         QString html;
         /* Regenerate it for language support. */
         DEVICE;
-        START("Port Information");
-        ATTR("Bus Number", _bus, _bus);
-        ATTR("Port Number", _port, _port);
+        START(tr("Port Information"));
+        ATTR(tr("Bus Number"), _bus, _bus);
+        ATTR(tr("Port Number"), _port, _port);
         END;
-        START("Connection Information");
-        ATTRTEXT("Connection Speed", usbSpeedToString(_speed));
-        ATTR("Address", _address, _address);
+        START(tr("Connection Information"));
+        ATTRTEXT(tr("Connection Speed"), usbSpeedToString(_speed));
+        ATTR(tr("Address"), _address, _address);
         END;
         APPEND(_deviceDescriptor);
         APPEND(_configurationDescriptor);
@@ -160,6 +160,11 @@ namespace usb {
         else if (ret != LIBUSB_SUCCESS)
             log().e("UsbDevice", tr("Unhandled error: %1.").arg(usb_error_name(ret)));
         log().i("UsbDevice", tr("The device \"%1\" has been reset.").arg(device.displayName()));
+
+        for (uint8_t i = 0;
+             i < device.configurationDescriptor()->bNumInterfaces();
+             ++i)
+            device.configurationDescriptor()->interface(i)->setAltsetting(0);
     }
 
     void UsbDevice::reset(const UsbDevice *device)

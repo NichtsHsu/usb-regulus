@@ -127,7 +127,7 @@ namespace usb {
     QString UsbHidDescriptor::infomationToHtml() const
     {
         QString html;
-        START("HID Descriptor");
+        START(tr("HID Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bcdHID", _bcdHID, "");
         ATTR("bCountryCode", _bCountryCode, country());

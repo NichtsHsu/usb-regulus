@@ -123,7 +123,7 @@ namespace usb {
     QString UsbEnhancedSuperSpeedHubDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Enhanced SuperSpeed Hub Descriptor");
+        START(tr("Enhanced SuperSpeed Hub Descriptor"));
         ATTR("bDescLength", _bDescLength, _bDescLength);
         ATTR("bNbrPorts", _bNbrPorts, _bNbrPorts);
         ATTR("wHubCharacteristics", _wHubCharacteristics, __parseWHubCharacteristics());
@@ -214,7 +214,7 @@ namespace usb {
     QString Usb20HubDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Hub Descriptor");
+        START(tr("Hub Descriptor"));
         ATTR("bDescLength", _bDescLength, _bDescLength);
         ATTR("bNbrPorts", _bNbrPorts, _bNbrPorts);
         ATTR("wHubCharacteristics", _wHubCharacteristics, __parseWHubCharacteristics());

@@ -54,7 +54,7 @@ namespace usb {
     QString UsbDfuDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Device Firmware Upgrade Functional Descriptor");
+        START(tr("Device Firmware Upgrade Functional Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
         ATTR("wDetachTimeOut", _wDetachTimeOut, QString("%1 ms").arg(_wDetachTimeOut));
@@ -69,9 +69,9 @@ namespace usb {
     {
         QStringList features;
         if (BIT(_bmAttributes, 3))
-            features.append(tr("will perform a bus detach-attach sequence"));
+            features.append(tr("Will perform a bus detach-attach sequence"));
         if (BIT(_bmAttributes, 2))
-            features.append(tr("Is able to communicate after Manifestation"));
+            features.append(tr("Is able to communicate after Manifestation phase"));
         if (BIT(_bmAttributes, 1))
             features.append(tr("Upload capable"));
         if (BIT(_bmAttributes, 0))

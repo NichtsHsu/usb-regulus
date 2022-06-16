@@ -139,7 +139,7 @@ namespace usb {
     QString UsbInterfaceDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Interface Descriptor");
+        START(tr("Interface Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bInterfaceNumber", _bInterfaceNumber, _bInterfaceNumber);
         ATTR("bAlternateSetting", _bAlternateSetting, _bAlternateSetting);

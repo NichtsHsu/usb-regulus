@@ -100,14 +100,14 @@ namespace usb {
     {
         QString html;
 
-        START("Configuration Descriptor");
+        START(tr("Configuration Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("wTotalLength", _wTotalLength, _wTotalLength);
         ATTR("bNumInterfaces", _bNumInterfaces, _bNumInterfaces);
         ATTR("bConfigurationValue", _bConfigurationValue, _bConfigurationValue);
         ATTRSTRDESC("iConfiguration", _iConfiguration, _device);
         ATTR("bmAttributes", _bmAttributes, bmAttributesInfo());
-        ATTR("MaxPower", _MaxPower, QString("%1 mA").arg(_MaxPower));
+        ATTR("MaxPower", _MaxPower, tr("%1 mA").arg(_MaxPower));
         END;
         foreach (const auto &extraDesc, _extraDescriptors)
             if (extraDesc->type() != ConfigurationExtraDescriptorType::ASSOCIATION)

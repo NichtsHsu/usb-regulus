@@ -84,7 +84,7 @@ namespace usb {
     QString UsbInterfaceAssociationDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Interface Association Descriptor");
+        START(tr("Interface Association Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bFirstInterface", _bFirstInterface, _bFirstInterface);
         ATTR("bInterfaceCount", _bInterfaceCount, _bInterfaceCount);

@@ -112,10 +112,7 @@ namespace usb {
      */
     class UsbHidReportDescriptor: public QObject
     {
-    private:
-        explicit UsbHidReportDescriptor(UsbHidDescriptor *parent = nullptr);
-        friend UsbHidDescriptor;
-
+        Q_OBJECT
     public:
         /**
          * @brief bDescriptorType
@@ -155,6 +152,9 @@ namespace usb {
         UsbHidDescriptor *hidDescriptor() const;
 
     private:
+        explicit UsbHidReportDescriptor(UsbHidDescriptor *parent = nullptr);
+        friend UsbHidDescriptor;
+
         uint8_t _bDescriptorType;
         uint16_t _wDescriptorLength;
         QByteArray _rawDescriptor;

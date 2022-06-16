@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,2">
    <property name="leftMargin">
@@ -58,7 +58,7 @@
           </font>
          </property>
          <property name="text">
-          <string>bmRequest</string>
+          <string notr="true">bmRequest</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -166,14 +166,14 @@
            <item>
             <widget class="QLabel" name="labelBmRequest0x">
              <property name="text">
-              <string>0x</string>
+              <string notr="true">0x</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QLineEdit" name="lineEditBmRequestRawHex">
              <property name="text">
-              <string>00</string>
+              <string notr="true">00</string>
              </property>
              <property name="maxLength">
               <number>2</number>
@@ -206,7 +206,7 @@
           </font>
          </property>
          <property name="text">
-          <string>bRequest</string>
+          <string notr="true">bRequest</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -220,6 +220,9 @@
          </property>
          <item>
           <widget class="QComboBox" name="comboBoxBRequest">
+           <property name="currentText">
+            <string notr="true">GET_STATUS</string>
+           </property>
            <item>
             <property name="text">
              <string notr="true">GET_STATUS</string>
@@ -362,14 +365,14 @@
              <item>
               <widget class="QLabel" name="labelBRequest0x">
                <property name="text">
-                <string>0x</string>
+                <string notr="true">0x</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLineEdit" name="lineEditBRequestRawHex">
                <property name="text">
-                <string>00</string>
+                <string notr="true">00</string>
                </property>
                <property name="maxLength">
                 <number>2</number>
@@ -407,7 +410,7 @@
           </font>
          </property>
          <property name="text">
-          <string>wValue</string>
+          <string notr="true">wValue</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -422,14 +425,14 @@
          <item>
           <widget class="QLabel" name="labelWValue0x">
            <property name="text">
-            <string>0x</string>
+            <string notr="true">0x</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLineEdit" name="lineEditWValueRawHex">
            <property name="text">
-            <string>0000</string>
+            <string notr="true">0000</string>
            </property>
            <property name="maxLength">
             <number>4</number>
@@ -463,7 +466,7 @@
           </font>
          </property>
          <property name="text">
-          <string>wIndex</string>
+          <string notr="true">wIndex</string>
          </property>
         </widget>
        </item>
@@ -475,14 +478,14 @@
          <item>
           <widget class="QLabel" name="labelWIndex0x">
            <property name="text">
-            <string>0x</string>
+            <string notr="true">0x</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLineEdit" name="lineEditWIndexRawHex">
            <property name="text">
-            <string>0000</string>
+            <string notr="true">0000</string>
            </property>
            <property name="maxLength">
             <number>4</number>

@@ -73,7 +73,7 @@ namespace usb {
         QString html;
         /* Regenerate it for language support. */
         INTERFACE;
-        START("Interface Informations");
+        START(tr("Interface Informations"));
         ATTRTEXT(tr("Number of altsettings"), QString::number(_numAltsetting));
         ATTRTEXT(tr("Current altsetting"), QString::number(_currentAltsetting));
         END;
@@ -96,8 +96,7 @@ namespace usb {
                     "During claiming your mouse device will not be avaliable to you computer, "
                     "and may be some strange issues after released it. "
                     "If you understand and really need claim you mouse interface, "
-                    "Please uncheck the 'Protect Mouse' option in the menu 'Device', "
-                    "then restart the usb-regulus or unplug and plug your mouse."));
+                    "please uncheck the 'Protect Mouse' option in the menu 'Device'."));
             return ERROR_PROTECT_MOUSE;
         }
         if (currentInterfaceDescriptor()->isKeyboard() && UsbHost::instance()->protectKeyboard())
@@ -106,8 +105,7 @@ namespace usb {
                     "During claiming your keyboard device will not be avaliable to you computer, "
                     "and may be some strange issues after released it. "
                     "If you understand and really need claim you keyboard interface, "
-                    "Please uncheck the 'Protect Keyboard' option in the menu 'Device', "
-                    "then restart the usb-regulus or unplug and plug your keyboard."));
+                    "please uncheck the 'Protect Keyboard' option in the menu 'Device'."));
             return ERROR_PROTECT_KEYBOARD;
         }
         int ret = 0;

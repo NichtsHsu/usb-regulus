@@ -177,7 +177,7 @@ namespace usb {
     QString UsbDeviceDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Device Descriptor");
+        START(tr("Device Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bcdUSB", _bcdUSB, bcdUSBInfo());
         ATTR("bcdDevice", _bcdDevice, "");

@@ -145,7 +145,7 @@ namespace usb {
     QString UsbEndpointDescriptor::infomationToHtml() const
     {
         QString html;
-        START("Endpoint Descriptor");
+        START(tr("Endpoint Descriptor"));
         ATTR("bLength", _bLength, _bLength);
         ATTR("bEndpointAddress", _bEndpointAddress, endpointAddressInfo());
         ATTR("bmAttributes", _bmAttributes, bmAttributesInfo());
@@ -256,16 +256,16 @@ namespace usb {
         if (trasferType == EndpointTransferType::ISOCHRONOUS)
         {
             QString info = strEndpointTransferType(trasferType);
-            info += ",";
+            info += ", ";
             info += strEndpointSyncType(EndpointSyncType(CUT(bmAttributes, 2, 3)));
-            info += ",";
+            info += ", ";
             info += strEndpointIsochronousUsageType(EndpointIsochronousUsageType(CUT(bmAttributes, 4, 5)));
             return info;
         }
         else if (trasferType == EndpointTransferType::INTERRUPT)
         {
             QString info = strEndpointTransferType(trasferType);
-            info += ",";
+            info += ", ";
             info += strEndpointInterruptUsageType(EndpointInterruptUsageType(CUT(bmAttributes, 4, 5)));
             return info;
         }
