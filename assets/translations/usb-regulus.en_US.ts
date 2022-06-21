@@ -165,12 +165,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="85"/>
+        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="89"/>
         <source>Hide because claiming interface failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="93"/>
+        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="97"/>
         <source>claim the interface &quot;%1&quot; of device &quot;%2&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -189,39 +189,39 @@
     </message>
     <message>
         <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="103"/>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="95"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="110"/>
         <source>Read Once</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="110"/>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="119"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="134"/>
         <source>Keep Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="29"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="30"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="30"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="31"/>
         <source>Failed to read data, error: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="136"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="151"/>
         <source>Set Read Buffer Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="137"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="152"/>
         <source>Set read buffer size to:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="91"/>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="115"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="106"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="130"/>
         <source>Stop Read</source>
         <translation type="unfinished"></translation>
     </message>
@@ -230,7 +230,7 @@
     <name>EndpointOutWidget</name>
     <message>
         <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="55"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="163"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="178"/>
         <source>Mode: Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
@@ -251,13 +251,13 @@
     </message>
     <message>
         <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="169"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="101"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="116"/>
         <source>Write Once</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="176"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="124"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="139"/>
         <source>Keep Write</source>
         <translation type="unfinished"></translation>
     </message>
@@ -267,30 +267,30 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="26"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="84"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="138"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="27"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="99"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="153"/>
         <source>Write Count: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="31"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="32"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="32"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="33"/>
         <source>Failed to write data, error: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="95"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="118"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="110"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="133"/>
         <source>Stop Write</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="165"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="180"/>
         <source>Mode: Insert</source>
         <translation type="unfinished"></translation>
     </message>
@@ -430,19 +430,19 @@
     </message>
     <message>
         <location filename="../../src/mainwindow/mainwindow.cpp" line="30"/>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="192"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="191"/>
         <source>Copy All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/mainwindow.cpp" line="32"/>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="193"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="192"/>
         <source>Copy All (HTML)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/mainwindow.cpp" line="34"/>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="194"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="193"/>
         <source>Copy All (Markdown)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -498,64 +498,64 @@
     <name>UsbDeviceTreeView</name>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="7"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="254"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="264"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="9"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="255"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="265"/>
         <source>Control Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="12"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="256"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="266"/>
         <source>Data Trasfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="14"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="257"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="267"/>
         <source>Set Altsetting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="16"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="258"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="268"/>
         <source>First</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="18"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="259"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="269"/>
         <source>Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="20"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="260"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="270"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="23"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="261"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="271"/>
         <source>Custom ..</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="97"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="104"/>
         <source>Remove a data transfer window which based on an interface of a detached device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="226"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="233"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="227"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="234"/>
         <source>Set custom altsetting index</source>
         <translation type="unfinished"></translation>
     </message>
@@ -883,96 +883,123 @@
 <context>
     <name>usb::UsbEndpointDescriptor</name>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="95"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="96"/>
         <source>Endpoint %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="148"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="116"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="200"/>
+        <source>Control transfer should not happen here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="122"/>
+        <source>Isochrnous transfer does not support blocking transfer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="171"/>
+        <source>Isochronous transfer: %1 packets with packet size %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="252"/>
         <source>Endpoint Descriptor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="192"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="291"/>
+        <source>Asynchronous transfer callback: status %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="306"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="337"/>
+        <source>Isochronous transfer result: %1, %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="391"/>
         <source>IN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="194"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="393"/>
         <source>OUT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="196"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="214"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="232"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="248"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="285"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="395"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="413"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="431"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="447"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="484"/>
         <source>No such item (value: %1) in enumeration.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="206"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="405"/>
         <source>Bulk Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="208"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="407"/>
         <source>Control Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="210"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="409"/>
         <source>Interrupt Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="212"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="411"/>
         <source>Isochronous Transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="224"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="423"/>
         <source>Adaptive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="226"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="425"/>
         <source>Asynchronous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="228"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="427"/>
         <source>Synchronous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="230"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="429"/>
         <source>No Synchronization</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="242"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="441"/>
         <source>Data Usage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="244"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="443"/>
         <source>Feedback Usage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="246"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="445"/>
         <source>Implicit Feedback Usage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="281"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="480"/>
         <source>Periodic Usage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="283"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="482"/>
         <source>Notification Usage</source>
         <translation type="unfinished"></translation>
     </message>
@@ -980,28 +1007,26 @@
 <context>
     <name>usb::UsbEndpointReader</name>
     <message>
-        <location filename="../../src/lib/usb/usbendpointreader.cpp" line="18"/>
+        <location filename="../../src/lib/usb/usbendpointreader.cpp" line="30"/>
         <source>Can only accept IN endpoint!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointreader.cpp" line="64"/>
-        <location filename="../../src/lib/usb/usbendpointreader.cpp" line="107"/>
-        <source>Data read failed (%1).</source>
+        <location filename="../../src/lib/usb/usbendpointreader.cpp" line="113"/>
+        <source>Commit transfer failed (%1).</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>usb::UsbEndpointWriter</name>
     <message>
-        <location filename="../../src/lib/usb/usbendpointwriter.cpp" line="17"/>
+        <location filename="../../src/lib/usb/usbendpointwriter.cpp" line="23"/>
         <source>Can only accept OUT endpoint!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointwriter.cpp" line="59"/>
-        <location filename="../../src/lib/usb/usbendpointwriter.cpp" line="104"/>
-        <source>Data write failed (%1).</source>
+        <location filename="../../src/lib/usb/usbendpointwriter.cpp" line="110"/>
+        <source>Commit transfer failed (%1).</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1336,69 +1361,79 @@
 <context>
     <name>usb::UsbHost</name>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="21"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="172"/>
         <source>Unhandled hotplug event %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="65"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="41"/>
         <source>Failed to get device list (%1).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="98"/>
-        <source>Failed or timout to handle hotplug event.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="106"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="74"/>
         <source>Failed to initialize libusb (%1).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="114"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="95"/>
         <source>Libusb has no hotplug capability in your system, usb-regulus can not automatically refresh the device list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="145"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="113"/>
         <source>Failed to register hotplug callback function, usb-regulus can not automatically refresh the device list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="153"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="121"/>
         <source>Unable to initialize USB name database, you may get UNKNOWN as the device name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="206"/>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="235"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="198"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="229"/>
         <source>Failed to update HID Report Descriptor for interface &quot;%1&quot; of device &quot;%2&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="258"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="205"/>
+        <source>Set &apos;Protect Keyboard&apos; to %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="236"/>
+        <source>Set &apos;Protect Mouse&apos; to %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="255"/>
         <source>Hotplug event: attached.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="263"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="260"/>
         <source>Ignored attached event with an invalid device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="81"/>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="269"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="57"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="266"/>
         <source>New USB device &quot;%1&quot; attached.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="281"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="276"/>
+        <source>Hotplug event: detached.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="280"/>
         <source>Ignore the detached event because we didn&apos;t find any device match it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="287"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="286"/>
         <source>USB device &quot;%1&quot; detached.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1494,12 +1529,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbinterface.cpp" line="191"/>
+        <location filename="../../src/lib/usb/usbinterface.cpp" line="195"/>
         <source>Failed to set altsetting, error: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbinterface.cpp" line="194"/>
+        <location filename="../../src/lib/usb/usbinterface.cpp" line="198"/>
         <source>Interface &quot;%1&quot; of device &quot;%2&quot; set altsetting to %3.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2058,6 +2093,14 @@
     <message>
         <location filename="../../src/lib/usb/usbconfigurationextradescriptor.cpp" line="147"/>
         <source>Security Descriptor</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>usb::__private::UsbEventHandler</name>
+    <message>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="335"/>
+        <source>Failed or timout to handle hotplug event.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

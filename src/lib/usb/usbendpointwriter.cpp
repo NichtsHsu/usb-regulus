@@ -4,9 +4,15 @@
 namespace usb{
     UsbEndpointWriter::UsbEndpointWriter(QObject *parent)
         : QObject{parent}, _device(nullptr), _endpointDescriptor(nullptr),
-          _stopFlag(false), _wroteTimes(0)
+          _keepWrite(false), _wroteTimes(0)
     {
 
+    }
+
+    UsbEndpointWriter::~UsbEndpointWriter()
+    {
+        if (_endpointDescriptor)
+            _endpointDescriptor->disconnect(this);
     }
 
     void UsbEndpointWriter::init(UsbEndpointDescriptor *epDesc)
@@ -18,103 +24,39 @@ namespace usb{
             _endpointDescriptor = nullptr;
         }
         _device = _endpointDescriptor->interfaceDescriptor()->interface()->configurationDescriptor()->device();
-        _data.fill('\0', _endpointDescriptor->wMaxPacketSize());
+        connect(epDesc, &UsbEndpointDescriptor::asyncTransferCompleted,
+                this, &UsbEndpointWriter::transferCompleted);
+        connect(epDesc, &UsbEndpointDescriptor::asyncTransferCancelled,
+                this, &UsbEndpointWriter::transferCancelled);
+        connect(epDesc, &UsbEndpointDescriptor::asyncTransferFailed,
+                this, &UsbEndpointWriter::transferFailed);
     }
 
     void UsbEndpointWriter::writeOnce()
     {
-        if (!_endpointDescriptor)
-            return;
-        _stopFlagMutex.lock();
-        _stopFlag = false;
-        _stopFlagMutex.unlock();
-
-        int realWriteSize = 0;
-        int ret;
-        for(;;)
-        {
-            ret = _endpointDescriptor->transfer(_data, realWriteSize, TRANSFER_TIMEOUT);
-
-            _stopFlagMutex.lock();
-            if(_stopFlag)
-            {
-                _stopFlag = false;
-                _stopFlagMutex.unlock();
-                break;
-            }
-            _stopFlagMutex.unlock();
-
-            if (ret >= LIBUSB_SUCCESS)
-            {
-                ++_wroteTimes;
-                emit writeSucceed(_wroteTimes);
-                break;
-            }
-            else if (ret == LIBUSB_ERROR_TIMEOUT)
-            {
-                /* Ignore timeout */
-            }
-            else
-            {
-                LOGE(tr("Data write failed (%1).").arg(usb_error_name(ret)));
-                emit writeFailed(ret);
-                break;
-            }
-        }
-
-        emit safelyStopped();
+        __startTransfer();
+        _keepWriteMutex.lock();
+        _keepWrite = false;
+        _keepWriteMutex.unlock();
     }
 
     void UsbEndpointWriter::keepWrite()
     {
-        if (!_endpointDescriptor)
-            return;
-        _stopFlagMutex.lock();
-        _stopFlag = false;
-        _stopFlagMutex.unlock();
-
-        int realWriteSize = 0;
-        int ret;
-        for(;;)
-        {
-            ret = _endpointDescriptor->transfer(_data, realWriteSize, TRANSFER_TIMEOUT);
-
-            _stopFlagMutex.lock();
-            if(_stopFlag)
-            {
-                _stopFlag = false;
-                _stopFlagMutex.unlock();
-                break;
-            }
-            _stopFlagMutex.unlock();
-
-            if (ret >= LIBUSB_SUCCESS)
-            {
-                _wroteTimesMutex.lock();
-                ++_wroteTimes;
-                emit writeSucceed(_wroteTimes);
-                _wroteTimesMutex.unlock();
-            }
-            else if (ret == LIBUSB_ERROR_TIMEOUT)
-            {
-                /* Ignore timeout */
-            }
-            else
-            {
-                LOGE(tr("Data write failed (%1).").arg(usb_error_name(ret)));
-                emit writeFailed(ret);
-                break;
-            }
-        }
-
-        emit safelyStopped();
+        __startTransfer();
+        _keepWriteMutex.lock();
+        _keepWrite = true;
+        _keepWriteMutex.unlock();
     }
 
     void UsbEndpointWriter::stopWrite()
     {
-        _stopFlagMutex.lock();
-        _stopFlag = true;
-        _stopFlagMutex.unlock();
+        if (!_endpointDescriptor)
+            return;
+
+        _keepWriteMutex.lock();
+        _keepWrite = false;
+        _keepWriteMutex.unlock();
+        _endpointDescriptor->cancelAsyncTransfer();
     }
 
     void UsbEndpointWriter::clearWroteTimes()
@@ -122,6 +64,53 @@ namespace usb{
         _wroteTimesMutex.lock();
         _wroteTimes = 0;
         _wroteTimesMutex.unlock();
+    }
+
+    void UsbEndpointWriter::transferCompleted()
+    {
+        _wroteTimesMutex.lock();
+        _wroteTimes++;
+        _wroteTimesMutex.unlock();
+        emit writeSucceed(_wroteTimes);
+
+        _keepWriteMutex.lock();
+        if (_keepWrite)
+            __startTransfer();
+        else
+            emit safelyStopped();
+        _keepWriteMutex.unlock();
+    }
+
+    void UsbEndpointWriter::transferFailed(int code)
+    {
+        emit writeFailed(code);
+        emit safelyStopped();
+        _keepWriteMutex.lock();
+        _keepWrite = false;
+        _keepWriteMutex.unlock();
+    }
+
+    void UsbEndpointWriter::transferCancelled()
+    {
+        emit safelyStopped();
+        _keepWriteMutex.lock();
+        _keepWrite = false;
+        _keepWriteMutex.unlock();
+    }
+
+    void UsbEndpointWriter::__startTransfer()
+    {
+        if (!_endpointDescriptor)
+            return;
+
+        int ret;
+        ret = _endpointDescriptor->startAsyncTransfer(_data);
+        if (ret < LIBUSB_SUCCESS)
+        {
+            LOGE(tr("Commit transfer failed (%1).").arg(usb_error_name(ret)));
+            emit writeFailed(ret);
+            emit safelyStopped();
+        }
     }
 
     size_t UsbEndpointWriter::wroteTimes() const

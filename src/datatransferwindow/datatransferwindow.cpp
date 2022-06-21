@@ -82,7 +82,7 @@ void DataTransferWindow::showEvent(QShowEvent *event)
     if (_interface && !_isControlTransfer)
     {
         // Re-init if altsetting is changed
-        if (_interface->currentAltsetting() == _currentAltsetting)
+        if (_interface->currentAltsetting() != _currentAltsetting)
             setInterface(_interface);
         if (_interface->claim() < 0)
         {

@@ -3,7 +3,7 @@
 
 namespace usb {
     UsbInterface::UsbInterface(const libusb_interface *interface, UsbConfigurationDescriptor *parent) : QObject(parent),
-        _configurationDescriptor(parent), _claimCount(0)
+        _configurationDescriptor(parent), _claimCount(0), _selfClaim(false)
     {
         _numAltsetting = interface->num_altsetting;
         _altsetting.reserve(_numAltsetting);
@@ -182,7 +182,11 @@ namespace usb {
             return ERROR_OUT_OF_RANGE;
         }
 
-        claim();
+        if (!_selfClaim)
+        {
+            claim();
+            _selfClaim = true;
+        }
         int ret = libusb_set_interface_alt_setting(_configurationDescriptor->device()->handle(),
                                                    currentInterfaceDescriptor()->bInterfaceNumber(),
                                                    altsetting);
@@ -196,7 +200,11 @@ namespace usb {
              .arg(_configurationDescriptor->device()->displayName())
              .arg(altsetting));
         _currentAltsetting = altsetting;
-        release();
+        if (_currentAltsetting == 0)
+        {
+            release();
+            _selfClaim = false;
+        }
 
         return 0;
     }

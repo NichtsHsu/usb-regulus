@@ -43,6 +43,7 @@ namespace usb {
         Q_OBJECT
     public:
         explicit UsbEndpointReader(QObject *parent = nullptr);
+        ~UsbEndpointReader();
 
         void init(UsbEndpointDescriptor *epDesc);
 
@@ -110,14 +111,20 @@ namespace usb {
          */
         void stopRead();
 
+    private slots:
+        void transferCompleted(const QByteArray &data);
+        void transferFailed(int code);
+        void transferCancelled();
+
     private:
+        void inline __startTransfer();
+
         UsbDevice *_device;
         UsbEndpointDescriptor *_endpointDescriptor;
-
         QByteArray _data;
         int _readBufferSize;
-        bool _stopFlag;
-        QMutex _stopFlagMutex;
+        bool _keepRead;
+        QMutex _keepReadMutex;
     };
 }
 #endif // USBENDPOINTREADER_H

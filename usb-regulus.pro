@@ -193,5 +193,6 @@ DISTFILES += \
     README.md
 
 RESOURCES += \
+    assets/icon/icon.qrc \
     assets/qss/qss.qrc \
     assets/translations/translations.qrc

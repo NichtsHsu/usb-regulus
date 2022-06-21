@@ -64,7 +64,7 @@ private:
     Ui::EndpointInWidget *ui;
 
     bool _dataReady, _readOnce, _keepRead;
-    QThread _workerThread;
+    QThread *_workerThread;
     QTimer *_eventLoopTimer;
     QHexEdit *_hexEdit;
     QBuffer _buffer;

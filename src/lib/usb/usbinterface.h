@@ -129,6 +129,7 @@ namespace usb {
         int _currentAltsetting;
         QString _displayName;
         std::atomic<size_t> _claimCount;
+        bool _selfClaim;
     };
 }
 

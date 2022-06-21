@@ -7,9 +7,12 @@
 #include <libusb.h>
 
 #define TRANSFER_TIMEOUT 250
+#define MAX_STRDESC_LENGTH 128
+
 #define ERROR_PROTECT_MOUSE -101
 #define ERROR_PROTECT_KEYBOARD -102
 #define ERROR_OUT_OF_RANGE -103
+#define ERROR_DUPLICATE_REQUEST -104
 
 #define BIT(v, n) (v & (1 << n))
 #define CUT(v, b, e) ((v & (((1ull << (e - b + 1)) - 1) << b)) >> b)

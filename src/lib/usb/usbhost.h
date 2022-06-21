@@ -37,6 +37,22 @@
 #include "usbdevice.h"
 
 namespace usb {
+    namespace __private{
+        class UsbEventHandler: public QObject
+        {
+            Q_OBJECT
+        public:
+            UsbEventHandler(QObject *parent = nullptr);
+        signals:
+            void finished();
+        public slots:
+            void run();
+            void stop();
+        private:
+            bool _stopFlag;
+            QMutex _stopFlagMutex;
+        };
+    }
 
     /**
      * @brief The UsbHost class
@@ -87,20 +103,6 @@ namespace usb {
         libusb_context *context() const;
 
         /**
-         * @brief __addDevice
-         * the wrapper of hotplug callback function
-         * @warning DO NOT use this function
-         */
-        void __addDevice(libusb_device *device);
-
-        /**
-         * @brief __removeDevice
-         * the wrapper of hotplug callback function
-         * @warning DO NOT use this function
-         */
-        void __removeDevice(libusb_device *device);
-
-        /**
          * @brief protectMouse
          * If an interface is a mouse HID interface,
          * it will be refused to be claimed if protectMouse is true.
@@ -125,23 +127,30 @@ namespace usb {
 
         /**
          * @brief deviceAttached
-         * emit when device attached
+         * emit when device attached.
+         * @param device
+         * The attached device.
          * @param index
-         * the attached device index in the device list
+         * The attached device index in the device list.
+         * @note
+         * The index should not be used to access the device list,
+         * because maybe more than one device attach at the same time.
          * @see UsbHost::usbDevices
          */
-        void deviceAttached(int index);
+        void deviceAttached(usb::UsbDevice *device, int index);
 
         /**
          * @brief deviceDetached
-         * emit when device detached
+         * emit when device detached.
+         * @param device
+         * The detached device.
          * @param index
-         * the attached device index in the device list
-         * @warning note that this device is already removed from device list,
-         * this index cannot be used to access the detached device.
+         * The attached device index in the device list.
+         * @note
+         * The index should not be used to access the device list.
          * @see UsbHost::usbDevices
          */
-        void deviceDetached(int index);
+        void deviceDetached(usb::UsbDevice *device, int index);
 
     public slots:
         /**
@@ -161,15 +170,6 @@ namespace usb {
          * @see protectKeyboard
          */
         void setProtectKeyboard(bool protect);
-
-    private slots:
-        /**
-         * @brief __refreshHotplutEvent
-         * The hotplug event handle of libusb need be triggered periodically manually,
-         * therefore we create a new thread running the timer and periodically
-         * trigger the hotplug event handle.
-         */
-        void __refreshHotplutEvent();
 
     private:
         explicit UsbHost(QObject *parent = nullptr);
@@ -197,15 +197,35 @@ namespace usb {
         inline int __indexOfDevice(const UsbDevice &device) const;
         inline int __indexOfDevice(libusb_device *device);
 
+        /**
+         * @brief __addDevice
+         * the wrapper of hotplug callback function
+         */
+        void __addDevice(libusb_device *device);
+
+        /**
+         * @brief __removeDevice
+         * the wrapper of hotplug callback function
+         */
+        void __removeDevice(libusb_device *device);
+
+        /**
+         * @brief __hotplug_callback
+         * The real hotplug callback function to register for libusb.
+         * Internally calling the UsbHost::__addDevice() and UsbHost::__removeDevice().
+         */
+        static int LIBUSB_CALL __hotplug_callback(libusb_context *ctx, libusb_device *dev, libusb_hotplug_event event, void *user_data);
+
         static std::atomic<UsbHost *> _instance;
 
+        friend __private::UsbEventHandler;
         QVector<UsbDevice *> _usbDevices;
         libusb_context *_context;
         libusb_hotplug_callback_handle _hotplugCbHandle;
         bool _initialized, _hasHotplug;
         bool _protectMouse, _protectKeyboard;
-        QTimer *_hotplugCbTimer;
-        QThread *_hotplugCbThread;
+        __private::UsbEventHandler *_libusbEventHandler;
+        QThread *_libusbEventThread;
     };
 }
 

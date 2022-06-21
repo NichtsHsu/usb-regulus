@@ -3,26 +3,8 @@
 #include "__usbmacro.h"
 
 namespace usb {
-    namespace __private {
-        /**
-         * @brief __hotplug_callback
-         * The real hotplug callback function to register for libusb.
-         * Internally calling the UsbHost::__addDevice() and UsbHost::__removeDevice().
-         */
-        static int LIBUSB_CALL __hotplug_callback(libusb_context *ctx, libusb_device *dev, libusb_hotplug_event event, void *user_data)
-        {
-            Q_UNUSED(ctx);
-            UsbHost *usbHost = reinterpret_cast<UsbHost*>(user_data);
-            if (event == LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED)
-                usbHost->__addDevice(dev);
-            else if (event == LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT)
-                usbHost->__removeDevice(dev);
-            else
-                log().w("UsbHost", UsbHost::tr("Unhandled hotplug event %1.").arg(event));
-
-            return 0;
-        }
-    }
+    using namespace __private;
+    static std::mutex __mutW;
 
     UsbHost::UsbHost(QObject *parent):
         QObject{parent}, _context(nullptr), _protectMouse(true), _protectKeyboard(true)
@@ -32,18 +14,12 @@ namespace usb {
 
     UsbHost::~UsbHost()
     {
-        if (_initialized) {
+        if (_initialized)
+        {
+            _libusbEventHandler->stop();
+
             if (_hasHotplug)
-            {
-                _hotplugCbThread->exit();
-                _hotplugCbThread->wait();
-                _hotplugCbThread->deleteLater();
-
-                _hotplugCbTimer->disconnect();
-                _hotplugCbTimer->deleteLater();
-
                 libusb_hotplug_deregister_callback(_context, _hotplugCbHandle);
-            }
 #ifdef Q_OS_UNIX
             names_exit();
 #endif
@@ -90,14 +66,6 @@ namespace usb {
         libusb_free_device_list(dev_list, false);
     }
 
-    void UsbHost::__refreshHotplutEvent()
-    {
-        timeval tv = {0, 200};
-        int ret = libusb_handle_events_timeout(_context, &tv);
-        if (ret < 0)
-            LOGE(tr("Failed or timout to handle hotplug event."));
-    }
-
     void UsbHost::__init()
     {
         int ret;
@@ -108,6 +76,19 @@ namespace usb {
             _hasHotplug = false;
             return;
         }
+
+        _libusbEventHandler = new UsbEventHandler;
+        _libusbEventThread = new QThread;
+        _libusbEventHandler->moveToThread(_libusbEventThread);
+        connect(_libusbEventThread, &QThread::started,
+                _libusbEventHandler, &UsbEventHandler::run);
+        connect(_libusbEventHandler, &UsbEventHandler::finished,
+                _libusbEventHandler, &UsbEventHandler::deleteLater);
+        connect(_libusbEventHandler, &UsbEventHandler::finished,
+                _libusbEventThread, &QThread::quit);
+        connect(_libusbEventThread, &QThread::finished,
+                _libusbEventThread, &QThread::deleteLater);
+        _libusbEventThread->start();
 
         if (!libusb_has_capability(LIBUSB_CAP_HAS_HOTPLUG))
         {
@@ -124,23 +105,10 @@ namespace usb {
                                                    LIBUSB_HOTPLUG_MATCH_ANY,
                                                    LIBUSB_HOTPLUG_MATCH_ANY,
                                                    LIBUSB_HOTPLUG_MATCH_ANY,
-                                                   reinterpret_cast<libusb_hotplug_callback_fn>(__private::__hotplug_callback),
+                                                   reinterpret_cast<libusb_hotplug_callback_fn>(UsbHost::__hotplug_callback),
                                                    reinterpret_cast<void *>(this),
                                                    &_hotplugCbHandle);
-            if (ret == LIBUSB_SUCCESS)
-            {
-                /* Create a thread to periodically trigger the hotplug event handle of libusb */
-                _hotplugCbTimer = new QTimer;
-                _hotplugCbThread = new QThread;
-                _hotplugCbTimer->moveToThread(_hotplugCbThread);
-                _hotplugCbTimer->setSingleShot(false);
-                _hotplugCbTimer->setInterval(250);
-                connect(_hotplugCbThread, &QThread::started, _hotplugCbTimer, static_cast<void(QTimer::*)()>(&QTimer::start));
-                connect(_hotplugCbThread, &QThread::finished, _hotplugCbTimer, &QTimer::stop);
-                connect(_hotplugCbTimer, &QTimer::timeout, this, &UsbHost::__refreshHotplutEvent);
-                _hotplugCbThread->start();
-            }
-            else
+            if (ret < LIBUSB_SUCCESS)
             {
                 LOGW(tr("Failed to register hotplug callback function, "
                         "usb-regulus can not automatically refresh the device list."));
@@ -182,6 +150,30 @@ namespace usb {
         return -1;
     }
 
+    int UsbHost::__hotplug_callback(libusb_context *ctx, libusb_device *dev, libusb_hotplug_event event, void *user_data)
+    {
+        Q_UNUSED(ctx);
+        UsbHost *usbHost = reinterpret_cast<UsbHost*>(user_data);
+        if (event == LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED)
+            /** Cannot create children for a parent that is in a different thread in Qt.
+             * We use QTimer::singleShot to let the slot function run in main thread.
+             */
+            QTimer::singleShot(0, usbHost, [usbHost, dev] () {
+                usbHost->__addDevice(dev);
+            });
+        else if (event == LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT)
+            /** Cannot create children for a parent that is in a different thread in Qt.
+             * We use QTimer::singleShot to let the slot function run in main thread.
+             */
+            QTimer::singleShot(0, usbHost, [usbHost, dev] () {
+                usbHost->__removeDevice(dev);
+            });
+        else
+            log().w("UsbHost", UsbHost::tr("Unhandled hotplug event %1.").arg(event));
+
+        return 0;
+    }
+
     bool UsbHost::protectKeyboard() const
     {
         return _protectKeyboard;
@@ -209,6 +201,8 @@ namespace usb {
                     }
                 }
             }
+
+        LOGD(tr("Set 'Protect Keyboard' to %1.").arg(_protectKeyboard));
     }
 
     bool UsbHost::protectMouse() const
@@ -238,6 +232,8 @@ namespace usb {
                     }
                 }
             }
+
+        LOGD(tr("Set 'Protect Mouse' to %1.").arg(_protectKeyboard));
     }
 
     libusb_context *UsbHost::context() const
@@ -255,6 +251,7 @@ namespace usb {
         if (!_hasHotplug)
             return;
 
+        std::lock_guard<std::mutex> lock{ __mutW };
         LOGD(tr("Hotplug event: attached."));
         UsbDevice *usbDevice = new UsbDevice(device, this);
 
@@ -267,7 +264,7 @@ namespace usb {
         _usbDevices.append(usbDevice);
         __sortDeviceList();
         LOGI(tr("New USB device \"%1\" attached.").arg(usbDevice->displayName()));
-        emit deviceAttached(__indexOfDevice(*usbDevice));
+        emit deviceAttached(usbDevice, __indexOfDevice(*usbDevice));
     }
 
     void UsbHost::__removeDevice(libusb_device *device)
@@ -275,6 +272,8 @@ namespace usb {
         if (!_hasHotplug)
             return;
 
+        std::lock_guard<std::mutex> lock{ __mutW };
+        LOGD(tr("Hotplug event: detached."));
         int index = __indexOfDevice(device);
         if (index == -1)
         {
@@ -282,11 +281,15 @@ namespace usb {
             return;
         }
 
-        /* Emit the signal before delete, to avoid wild pointer used in other module */
-        emit deviceDetached(index);
+        UsbDevice *usbDevice = _usbDevices[index];
+        emit deviceDetached(_usbDevices[index], index);
         LOGI(tr("USB device \"%1\" detached.").arg(_usbDevices[index]->displayName()));
-        delete _usbDevices[index];
         _usbDevices.remove(index);
+
+        // Delay to delete
+        QTimer::singleShot(10, usbDevice, [usbDevice] () {
+            usbDevice->deleteLater();
+        });
     }
 
     bool UsbHost::initialized() const
@@ -295,7 +298,6 @@ namespace usb {
     }
 
     std::atomic<UsbHost *> UsbHost::_instance{nullptr};
-    static std::mutex __mutW;
 
     UsbHost *UsbHost::instance()
     {
@@ -312,4 +314,44 @@ namespace usb {
     {
         return _usbDevices;
     }
+
+    __private::UsbEventHandler::UsbEventHandler(QObject *parent):
+        QObject(parent), _stopFlag(false)
+    {
+
+    }
+
+    void __private::UsbEventHandler::run()
+    {
+        _stopFlagMutex.lock();
+        _stopFlag = false;
+        _stopFlagMutex.unlock();
+
+        for(;;)
+        {
+            timeval tv = {0, 200};
+            int ret = libusb_handle_events_timeout(UsbHost::instance()->_context, &tv);
+            if (ret < 0)
+                LOGE(tr("Failed or timout to handle hotplug event."));
+
+            _stopFlagMutex.lock();
+            if(_stopFlag)
+            {
+                _stopFlag = false;
+                _stopFlagMutex.unlock();
+                break;
+            }
+            _stopFlagMutex.unlock();
+        }
+
+        emit finished();
+    }
+
+    void __private::UsbEventHandler::stop()
+    {
+        _stopFlagMutex.lock();
+        _stopFlag = true;
+        _stopFlagMutex.unlock();
+    }
+
 }

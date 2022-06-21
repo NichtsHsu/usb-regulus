@@ -14,8 +14,9 @@ EndpointInWidget::EndpointInWidget(QWidget *parent) :
     layout()->replaceWidget(ui->hexEditPlaceHolder, _hexEdit);
     ui->hexEditPlaceHolder = nullptr;
     _reader = new usb::UsbEndpointReader;
-    _reader->moveToThread(&_workerThread);
-    _workerThread.start();
+    _workerThread = new QThread;
+    _reader->moveToThread(_workerThread);
+    _workerThread->start();
     /* We only set a flag here, to avoid blocking
      * the main thread because of high frequency data
      */
@@ -24,8 +25,8 @@ EndpointInWidget::EndpointInWidget(QWidget *parent) :
     connect(_reader, &usb::UsbEndpointReader::safelyStopped,
             this, &EndpointInWidget::__resetButtons);
     connect(_reader, &usb::UsbEndpointReader::readFailed,
-            this, [] (int ret) {
-        QMessageBox::critical(nullptr,
+            this, [this] (int ret) {
+        QMessageBox::critical(this,
                               tr("Error"),
                               tr("Failed to read data, error: %1.")
                               .arg(usb_error_name(ret)));
@@ -55,9 +56,23 @@ EndpointInWidget::~EndpointInWidget()
     _eventLoopTimer->stop();
     _reader->disconnect(this);
     disconnect(_reader);
-    _reader->stopRead();
-    _workerThread.quit();
-    _workerThread.wait();
+    if (!_readOnce && !_keepRead)
+    {
+        _reader->stopRead();
+        _workerThread->quit();
+        _reader->deleteLater();
+        _workerThread->deleteLater();
+    }
+    else
+    {
+        connect(_reader, &usb::UsbEndpointReader::safelyStopped,
+                _reader, &usb::UsbEndpointReader::deleteLater);
+        connect(_reader, &usb::UsbEndpointReader::safelyStopped,
+                _workerThread, &QThread::quit);
+        connect(_workerThread, &QThread::finished,
+                _workerThread, &QThread::deleteLater);
+        _reader->stopRead();
+    }
     delete ui;
 }
 

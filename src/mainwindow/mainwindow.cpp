@@ -110,18 +110,17 @@ void MainWindow::__refreshDeviceList()
     ui->usbDeviceTreeView->refresh(usb::UsbHost::instance()->usbDevices());
 }
 
-void MainWindow::__insertDevice(int index)
+void MainWindow::__insertDevice(usb::UsbDevice *device, int index)
 {
     /* Delay 1 second for loading string descriptor */
-    QTimer::singleShot(1000, this, [this, index]() {
-        this->ui->usbDeviceTreeView->insert(index, usb::UsbHost::instance()->usbDevices()[index]);
+    QTimer::singleShot(1000, this, [this, index, device]() {
+        this->ui->usbDeviceTreeView->insert(index, device);
     });
 }
 
-void MainWindow::__removeDevice(int index)
+void MainWindow::__removeDevice(usb::UsbDevice *device, int index)
 {
     ui->usbDeviceTreeView->remove(index);
-    usb::UsbDevice *device = usb::UsbHost::instance()->usbDevices()[index];
     if (_currentDisplayedDeviceItem)
     {
         if (_currentDisplayedDeviceItem.get()->device() == device)
@@ -209,6 +208,7 @@ void MainWindow::changeEvent(QEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    hide();
     ui->usbDeviceTreeView->closeAllDataTransferWindow();
     settings().protectMouse() = ui->actionProtectMouse->isChecked();
     settings().protectKeyboard() = ui->actionProtectKeyboard->isChecked();

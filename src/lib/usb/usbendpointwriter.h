@@ -43,6 +43,7 @@ namespace usb  {
         Q_OBJECT
     public:
         explicit UsbEndpointWriter(QObject *parent = nullptr);
+        ~UsbEndpointWriter();
 
         void init(UsbEndpointDescriptor *epDesc);
 
@@ -107,15 +108,19 @@ namespace usb  {
          */
         void clearWroteTimes();
 
+    private slots:
+        void transferCompleted();
+        void transferFailed(int code);
+        void transferCancelled();
+
     private:
+        void inline __startTransfer();
+
         UsbDevice *_device;
         UsbEndpointDescriptor *_endpointDescriptor;
-
         QByteArray _data;
-
-        bool _stopFlag;
-        QMutex _stopFlagMutex;
-
+        bool _keepWrite;
+        QMutex _keepWriteMutex;
         size_t _wroteTimes;
         QMutex _wroteTimesMutex;
     };

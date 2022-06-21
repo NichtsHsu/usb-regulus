@@ -248,22 +248,53 @@ namespace usb {
         UsbInterfaceDescriptor *interfaceDescriptor() const;
 
         /**
-         * @brief transfer
-         * Read data to buffer or write data from buffer.
+         * @brief syncTransfer
+         * Synchronously read data to buffer or write data from buffer.
+         * Only interrupt transfer and bulk transfer can use synchronous transfer.
+         * @see startAsyncTransfer() for asynchronous transfer
          * @param buffer
          * The buffer who carries data.
          * @note
-         * Buffers must be pre-allocated because its raw pointers will be used in transfers.
+         * Buffer must be pre-allocated because its raw pointers will be used in transfers.
          * @param realSize
          * Real read/write size.
          * @param timeout
-         * Timeout to wait.
-         * @return libusb error code
+         * Timeout to wait. Zero for unlimited timeout.
+         * @return error code
          * @note
          * Control transfer should not be happening here
          * @see UsbDevice::controlTransfer()
          */
-        int transfer(QByteArray &buffer, int &realSize, unsigned int timeout);
+        int syncTransfer(QByteArray &buffer, int &realSize, unsigned int timeout = 0);
+
+        /**
+         * @brief startAsyncTransfer
+         * Start an asychronous transfer without blocking
+         * @see asyncTransferCompleted() for the received data
+         * @see asyncTransferFailed() for transfer failure
+         * @see cancelAsyncTransfer() for cancel aynchronous transfer
+         * @see syncTransfer() for synchronous transfer
+         * @param buffer
+         * The buffer to write. Keep emtpy if reading data.
+         * @param readLength
+         * Set the reading buffer length.
+         * If isochronous transfer, set 0 to indicate the length of one isochronous packet.
+         * Else, set to 0 indicate the wMaxPacketSize.
+         * @note
+         * If isochronous transfer, Read length will be raised to multiples of
+         * the max isochronous packet size (not wMaxPacketSize).
+         * @param timeout
+         * Timeout to wait. Zero for unlimited timeout.
+         * @return error code
+         */
+        int startAsyncTransfer(const QByteArray &buffer = QByteArray(), int readLength = 0, unsigned int timeout = 0);
+
+        /**
+         * @brief cancelAsyncTransfer
+         * @return error code
+         * @see asyncTransferCancelled()
+         */
+        int cancelAsyncTransfer();
 
         /**
          * @brief infomationToHtml
@@ -271,15 +302,43 @@ namespace usb {
          */
         QString infomationToHtml() const;
 
+    signals:
+        /**
+         * @brief asyncTransferCompleted
+         * Emit when asynchronous transfer is completed
+         * @see startAsyncTransfer()
+         * @param data
+         * Received data if an IN endpoint
+         */
+        void asyncTransferCompleted(const QByteArray &data = QByteArray());
+
+        /**
+         * @brief asyncTransferFailed
+         * Emit when asynchronous transfer is failed
+         * @param code
+         * Error code
+         */
+        void asyncTransferFailed(int code);
+
+        /**
+         * @brief asyncTransferCanceled
+         * Emit when asynchronous transfer is canceled
+         * @see cancelAsyncTransfer()
+         */
+        void asyncTransferCancelled();
+
     private slots:
         void __requestExtraDescriptor();
 
     private:
+        static void LIBUSB_CALL __asyncTransferCallback(struct libusb_transfer *transfer);
+
         uint8_t _bLength, _bDescriptorType, _bEndpointAddress, _bmAttributes, _bInterval, _bRefresh, _bSynchAddress;
         uint16_t _wMaxPacketSize;
         const unsigned char *_extra;
         int _extraLength;
         UsbInterfaceDescriptor *_interfaceDescriptor;
+        libusb_transfer *_transfer;
     };
 }
 

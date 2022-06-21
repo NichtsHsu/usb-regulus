@@ -93,8 +93,8 @@ namespace usb {
 
     QString UsbDevice::getStringDescriptor(size_t index) const
     {
-        unsigned char strDesc[128];
-        int ret = libusb_get_string_descriptor_ascii(_handle, index, strDesc, 128);
+        unsigned char strDesc[MAX_STRDESC_LENGTH];
+        int ret = libusb_get_string_descriptor_ascii(_handle, index, strDesc, MAX_STRDESC_LENGTH);
         if (ret < LIBUSB_SUCCESS)
             return QString();
         return QString(reinterpret_cast<char *>(strDesc));

@@ -74,14 +74,14 @@ private slots:
      * This slot is a wrapper of UsbDeviceTreeView::insert()
      * @see UsbDeviceTreeView::insert()
      */
-    void __insertDevice(int index);
+    void __insertDevice(usb::UsbDevice *device, int index);
 
     /**
      * @brief __removeDevice
      * This slot is a wrapper of UsbDeviceTreeView::remove()
      * @see UsbDeviceTreeView::remove()
      */
-    void __removeDevice(int index);
+    void __removeDevice(usb::UsbDevice *device, int index);
 
     /**
      * @brief __updateTextBrowser

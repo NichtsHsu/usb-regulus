@@ -165,12 +165,12 @@
         <translation>数据传输</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="85"/>
+        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="89"/>
         <source>Hide because claiming interface failed.</source>
         <translation>独占接口失败，隐藏窗口。</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="93"/>
+        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="97"/>
         <source>claim the interface &quot;%1&quot; of device &quot;%2&quot;.</source>
         <translation>独占设备&quot;%2&quot;的接口&quot;%1&quot;。</translation>
     </message>
@@ -189,39 +189,39 @@
     </message>
     <message>
         <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="103"/>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="95"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="110"/>
         <source>Read Once</source>
         <translation>读取一次</translation>
     </message>
     <message>
         <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="110"/>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="119"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="134"/>
         <source>Keep Read</source>
         <translation>保持读取</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="29"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="30"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="30"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="31"/>
         <source>Failed to read data, error: %1.</source>
         <translation>读取数据失败，错误：%1。</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="136"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="151"/>
         <source>Set Read Buffer Size</source>
         <translation>设置读取缓冲区大小</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="137"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="152"/>
         <source>Set read buffer size to:</source>
         <translation>设置读取缓冲区大小为：</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="91"/>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="115"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="106"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="130"/>
         <source>Stop Read</source>
         <translation>停止读取</translation>
     </message>
@@ -230,7 +230,7 @@
     <name>EndpointOutWidget</name>
     <message>
         <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="55"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="163"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="178"/>
         <source>Mode: Overwrite</source>
         <translation>覆盖模式</translation>
     </message>
@@ -251,13 +251,13 @@
     </message>
     <message>
         <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="169"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="101"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="116"/>
         <source>Write Once</source>
         <translation>写入一次</translation>
     </message>
     <message>
         <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="176"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="124"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="139"/>
         <source>Keep Write</source>
         <translation>保持写入</translation>
     </message>
@@ -267,30 +267,30 @@
         <translation>清除计数</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="26"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="84"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="138"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="27"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="99"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="153"/>
         <source>Write Count: %1</source>
         <translation>写入次数: %1</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="31"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="32"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="32"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="33"/>
         <source>Failed to write data, error: %1.</source>
         <translation>写入数据失败，错误：%1。</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="95"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="118"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="110"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="133"/>
         <source>Stop Write</source>
         <translation>停止写入</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="165"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="180"/>
         <source>Mode: Insert</source>
         <translation>插入模式</translation>
     </message>
@@ -430,19 +430,19 @@
     </message>
     <message>
         <location filename="../../src/mainwindow/mainwindow.cpp" line="30"/>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="192"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="191"/>
         <source>Copy All</source>
         <translation>复制所有</translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/mainwindow.cpp" line="32"/>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="193"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="192"/>
         <source>Copy All (HTML)</source>
         <translation>复制所有 (HTML)</translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/mainwindow.cpp" line="34"/>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="194"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="193"/>
         <source>Copy All (Markdown)</source>
         <translation>复制所有 (Markdown)</translation>
     </message>
@@ -498,64 +498,64 @@
     <name>UsbDeviceTreeView</name>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="7"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="254"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="264"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="9"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="255"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="265"/>
         <source>Control Transfer</source>
         <translation>控制传输</translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="12"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="256"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="266"/>
         <source>Data Trasfer</source>
         <translation>数据传输</translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="14"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="257"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="267"/>
         <source>Set Altsetting</source>
         <translation>备选设置</translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="16"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="258"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="268"/>
         <source>First</source>
         <translation>第一个</translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="18"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="259"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="269"/>
         <source>Previous</source>
         <translation>上一个</translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="20"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="260"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="270"/>
         <source>Next</source>
         <translation>下一个</translation>
     </message>
     <message>
         <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="23"/>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="261"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="271"/>
         <source>Custom ..</source>
         <translation>自定义..</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="97"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="104"/>
         <source>Remove a data transfer window which based on an interface of a detached device.</source>
         <translation>移除一个基于已拔出的设备的接口的数据传输窗口。</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="226"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="233"/>
         <source>Custom</source>
         <translation>自定义</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="227"/>
+        <location filename="../../src/mainwindow/usbdevicetreeview.cpp" line="234"/>
         <source>Set custom altsetting index</source>
         <translation>设置自定义备选设置索引</translation>
     </message>
@@ -883,96 +883,123 @@
 <context>
     <name>usb::UsbEndpointDescriptor</name>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="95"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="96"/>
         <source>Endpoint %1 %2</source>
         <translation>端点 %1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="148"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="116"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="200"/>
+        <source>Control transfer should not happen here.</source>
+        <translation>控制传输不应该出现在此处。</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="122"/>
+        <source>Isochrnous transfer does not support blocking transfer.</source>
+        <translation>同步传输不支持阻塞式传输。</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="171"/>
+        <source>Isochronous transfer: %1 packets with packet size %2.</source>
+        <translation>同步传输：%1 个 %2 大小的数据包。</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="252"/>
         <source>Endpoint Descriptor</source>
         <translation>端点描述符</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="192"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="291"/>
+        <source>Asynchronous transfer callback: status %1.</source>
+        <translation>异步传输回调：状态 %1。</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="306"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="337"/>
+        <source>Isochronous transfer result: %1, %2.</source>
+        <translation>同步传输结果：%1，%2。</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="391"/>
         <source>IN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="194"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="393"/>
         <source>OUT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="196"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="214"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="232"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="248"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="285"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="395"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="413"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="431"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="447"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="484"/>
         <source>No such item (value: %1) in enumeration.</source>
         <translation>枚举不包含值 %1。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="206"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="405"/>
         <source>Bulk Transfer</source>
         <translation>批量传输</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="208"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="407"/>
         <source>Control Transfer</source>
         <translation>控制传输</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="210"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="409"/>
         <source>Interrupt Transfer</source>
         <translation>中断传输</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="212"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="411"/>
         <source>Isochronous Transfer</source>
         <translation>同步传输</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="224"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="423"/>
         <source>Adaptive</source>
         <translation>自适应</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="226"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="425"/>
         <source>Asynchronous</source>
         <translation>异步</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="228"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="427"/>
         <source>Synchronous</source>
         <translation>同步</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="230"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="429"/>
         <source>No Synchronization</source>
         <translation>无同步</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="242"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="441"/>
         <source>Data Usage</source>
         <translation>数据用途</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="244"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="443"/>
         <source>Feedback Usage</source>
         <translation>反馈用途</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="246"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="445"/>
         <source>Implicit Feedback Usage</source>
         <translation>隐式反馈用途</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="281"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="480"/>
         <source>Periodic Usage</source>
         <translation>定期用途</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="283"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="482"/>
         <source>Notification Usage</source>
         <translation>通知用途</translation>
     </message>
@@ -980,29 +1007,35 @@
 <context>
     <name>usb::UsbEndpointReader</name>
     <message>
-        <location filename="../../src/lib/usb/usbendpointreader.cpp" line="18"/>
+        <location filename="../../src/lib/usb/usbendpointreader.cpp" line="30"/>
         <source>Can only accept IN endpoint!</source>
         <translation>仅接受 IN 端点！</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointreader.cpp" line="64"/>
-        <location filename="../../src/lib/usb/usbendpointreader.cpp" line="107"/>
+        <location filename="../../src/lib/usb/usbendpointreader.cpp" line="113"/>
+        <source>Commit transfer failed (%1).</source>
+        <translation>提交传输失败 (%1)。</translation>
+    </message>
+    <message>
         <source>Data read failed (%1).</source>
-        <translation>读取数据失败(%1)。</translation>
+        <translation type="vanished">读取数据失败(%1)。</translation>
     </message>
 </context>
 <context>
     <name>usb::UsbEndpointWriter</name>
     <message>
-        <location filename="../../src/lib/usb/usbendpointwriter.cpp" line="17"/>
+        <location filename="../../src/lib/usb/usbendpointwriter.cpp" line="23"/>
         <source>Can only accept OUT endpoint!</source>
         <translation>仅接受 OUT 端点！</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointwriter.cpp" line="59"/>
-        <location filename="../../src/lib/usb/usbendpointwriter.cpp" line="104"/>
+        <location filename="../../src/lib/usb/usbendpointwriter.cpp" line="110"/>
+        <source>Commit transfer failed (%1).</source>
+        <translation>提交传输失败 (%1)。</translation>
+    </message>
+    <message>
         <source>Data write failed (%1).</source>
-        <translation>写入数据失败(%1)。</translation>
+        <translation type="vanished">写入数据失败(%1)。</translation>
     </message>
 </context>
 <context>
@@ -1336,69 +1369,83 @@
 <context>
     <name>usb::UsbHost</name>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="21"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="172"/>
         <source>Unhandled hotplug event %1.</source>
         <translation>无法处理的热插拔事件 %1。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="65"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="41"/>
         <source>Failed to get device list (%1).</source>
         <translation>获取设备列表失败(%1)。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="98"/>
         <source>Failed or timout to handle hotplug event.</source>
-        <translation>处理热插拔事件失败或超时。</translation>
+        <translation type="vanished">处理热插拔事件失败或超时。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="106"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="74"/>
         <source>Failed to initialize libusb (%1).</source>
         <translation>初始化 libusb 失败(%1)。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="114"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="95"/>
         <source>Libusb has no hotplug capability in your system, usb-regulus can not automatically refresh the device list.</source>
         <translation>Libusb 在您的系统上不支持热插拔功能，usb-regulus 无法自动更新设备列表。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="145"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="113"/>
         <source>Failed to register hotplug callback function, usb-regulus can not automatically refresh the device list.</source>
         <translation>注册热插拔回调函数失败，usb-regulus 无法自动更新设备列表。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="153"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="121"/>
         <source>Unable to initialize USB name database, you may get UNKNOWN as the device name.</source>
         <translation>无法初始化 USB 名称数据库，你可能会看到设备名为&quot;未知&quot;。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="206"/>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="235"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="198"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="229"/>
         <source>Failed to update HID Report Descriptor for interface &quot;%1&quot; of device &quot;%2&quot;.</source>
         <translation>更新设备 &quot;%2&quot; 的接口 &quot;%1&quot; 的 HID 报告描述符失败。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="258"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="205"/>
+        <source>Set &apos;Protect Keyboard&apos; to %1.</source>
+        <translation>设置‘键盘保护’为 %1。</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="236"/>
+        <source>Set &apos;Protect Mouse&apos; to %1.</source>
+        <translation>设置‘鼠标保护’为 %1。</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="255"/>
         <source>Hotplug event: attached.</source>
         <translation>热插拔事件：插入。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="263"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="260"/>
         <source>Ignored attached event with an invalid device.</source>
         <translation>忽略无效设备的插入事件。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="81"/>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="269"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="57"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="266"/>
         <source>New USB device &quot;%1&quot; attached.</source>
         <translation>新 USB 设备 &quot;%1&quot; 插入。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="281"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="276"/>
+        <source>Hotplug event: detached.</source>
+        <translation>热插拔事件：拔出。</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="280"/>
         <source>Ignore the detached event because we didn&apos;t find any device match it.</source>
         <translation>忽略不匹配任何设备的拔出事件。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbhost.cpp" line="287"/>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="286"/>
         <source>USB device &quot;%1&quot; detached.</source>
         <translation>USB 设备 &quot;%1&quot; 拔出。</translation>
     </message>
@@ -1494,12 +1541,12 @@
         <translation>所选的备选设置索引 %1 超出范围 (%2-%3)。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbinterface.cpp" line="191"/>
+        <location filename="../../src/lib/usb/usbinterface.cpp" line="195"/>
         <source>Failed to set altsetting, error: %1.</source>
         <translation>设置备选设置失败，错误：%1。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbinterface.cpp" line="194"/>
+        <location filename="../../src/lib/usb/usbinterface.cpp" line="198"/>
         <source>Interface &quot;%1&quot; of device &quot;%2&quot; set altsetting to %3.</source>
         <translation>设置设备 &quot;%2&quot; 的接口 &quot;%1&quot; 的备选设置为 %3。</translation>
     </message>
@@ -2059,6 +2106,14 @@
         <location filename="../../src/lib/usb/usbconfigurationextradescriptor.cpp" line="147"/>
         <source>Security Descriptor</source>
         <translation>安全描述符</translation>
+    </message>
+</context>
+<context>
+    <name>usb::__private::UsbEventHandler</name>
+    <message>
+        <location filename="../../src/lib/usb/usbhost.cpp" line="335"/>
+        <source>Failed or timout to handle hotplug event.</source>
+        <translation>处理热插拔事件失败或超时。</translation>
     </message>
 </context>
 </TS>

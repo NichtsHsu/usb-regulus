@@ -58,8 +58,11 @@ this, &UsbDeviceTreeView::__customSetAltsetting);
     header()->hide();
 }
 
+static std::mutex __mutW;
+
 void UsbDeviceTreeView::refresh(const QVector<usb::UsbDevice *> &devices)
 {
+    std::lock_guard<std::mutex> lock{ __mutW };
     _model->clear();
     foreach(usb::UsbDevice *const &device, devices)
     {
@@ -72,6 +75,8 @@ void UsbDeviceTreeView::refresh(const QVector<usb::UsbDevice *> &devices)
 
 void UsbDeviceTreeView::insert(int index, usb::UsbDevice *device)
 {
+    std::lock_guard<std::mutex> lock{ __mutW };
+    _menuDevice->hide();
     _menuInterface->hide();
     UsbDeviceItem *item  = new UsbDeviceItem;
     _model->insertRow(index, item);
@@ -80,6 +85,8 @@ void UsbDeviceTreeView::insert(int index, usb::UsbDevice *device)
 
 void UsbDeviceTreeView::remove(int index)
 {
+    std::lock_guard<std::mutex> lock{ __mutW };
+    _menuDevice->hide();
     _menuInterface->hide();
 
     /* QStandardItem was not declared with Q_OBJECT,

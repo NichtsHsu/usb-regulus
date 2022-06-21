@@ -8,7 +8,8 @@ namespace usb {
         _bLength(desc->bLength), _bDescriptorType(desc->bDescriptorType), _bEndpointAddress(desc->bEndpointAddress),
         _bmAttributes(desc->bmAttributes), _bInterval(desc->bInterval), _bRefresh(desc->bRefresh),
         _bSynchAddress(desc->bSynchAddress), _wMaxPacketSize(desc->wMaxPacketSize),
-        _extra(desc->extra), _extraLength(desc->extra_length), _interfaceDescriptor(parent)
+        _extra(desc->extra), _extraLength(desc->extra_length), _interfaceDescriptor(parent),
+        _transfer(nullptr)
     {
         if (_extraLength > 0)
             /* Wait for all interface descriptor ready to set association descriptor */
@@ -100,46 +101,157 @@ namespace usb {
         return _interfaceDescriptor;
     }
 
-    int UsbEndpointDescriptor::transfer(QByteArray &buffer, int &realSize, unsigned int timeout)
+    int UsbEndpointDescriptor::syncTransfer(QByteArray &buffer, int &realSize, unsigned int timeout)
     {
+        if (_transfer)
+            return ERROR_DUPLICATE_REQUEST;
+
         int ret = 0;
         UsbDevice *device = _interfaceDescriptor->interface()->configurationDescriptor()->device();
         switch (transferType())
         {
             case EndpointTransferType::CONTROL:
             {
-                LOGE("Control transfer should not be happening here.");
+                // Never reach here
+                LOGE(tr("Control transfer should not happen here."));
                 ret = LIBUSB_ERROR_NOT_SUPPORTED;
                 break;
             }
             case EndpointTransferType::ISOCHRONOUS:
             {
-                LOGE("Isochrnous transfer currently is not supported.");
+                LOGE(tr("Isochrnous transfer does not support blocking transfer."));
                 ret =  LIBUSB_ERROR_NOT_SUPPORTED;
                 break;
             }
             case EndpointTransferType::INTERRUPT:
             {
-                ret = libusb_interrupt_transfer(device->handle(),
-                                                _bEndpointAddress,
-                                                reinterpret_cast<unsigned char *>(buffer.data()),
-                                                buffer.size(),
-                                                &realSize,
-                                                timeout);
+                ret = libusb_interrupt_transfer(
+                            device->handle(),
+                            _bEndpointAddress,
+                            reinterpret_cast<unsigned char *>(buffer.data()),
+                            buffer.size(),
+                            &realSize,
+                            timeout);
                 break;
             }
             case EndpointTransferType::BULK:
             {
-                ret = libusb_bulk_transfer(device->handle(),
-                                           _bEndpointAddress,
-                                           reinterpret_cast<unsigned char *>(buffer.data()),
-                                           buffer.size(),
-                                           &realSize,
-                                           timeout);
+                ret = libusb_bulk_transfer(
+                            device->handle(),
+                            _bEndpointAddress,
+                            reinterpret_cast<unsigned char *>(buffer.data()),
+                            buffer.size(),
+                            &realSize,
+                            timeout);
                 break;
             }
         }
         return ret;
+    }
+
+    int UsbEndpointDescriptor::startAsyncTransfer(const QByteArray &buffer, int readLength, unsigned int timeout)
+    {
+        if (_transfer)
+            return ERROR_DUPLICATE_REQUEST;
+
+        int isoPackets = 1;
+        int packetSize = _wMaxPacketSize;
+        if (transferType() == EndpointTransferType::ISOCHRONOUS)
+        {
+            packetSize = libusb_get_max_iso_packet_size(
+                        _interfaceDescriptor->interface()->configurationDescriptor()->device()->device(),
+                        _bEndpointAddress);
+            if (packetSize < LIBUSB_SUCCESS)
+                return packetSize;
+
+            if (direction() == EndpointDirection::OUT)
+                isoPackets = buffer.size() ? ((buffer.size() - 1) / packetSize) + 1 : 1;
+            else
+                isoPackets = readLength > 0 ? ((readLength - 1) / packetSize) + 1 : 1;
+            LOGD(tr("Isochronous transfer: %1 packets with packet size %2.")
+                 .arg(isoPackets)
+                 .arg(packetSize));
+        }
+
+        _transfer = libusb_alloc_transfer(isoPackets);
+        if (transferType() == EndpointTransferType::ISOCHRONOUS)
+            libusb_set_iso_packet_lengths(_transfer, packetSize);
+
+        uint8_t *rawBuffer;
+        int length;
+
+        if (direction() == EndpointDirection::OUT)
+        {
+            length = buffer.length();
+            rawBuffer = new uint8_t[length];
+            memcpy(rawBuffer, buffer.data(), length);
+        }
+        else
+        {
+            length = readLength > 0 ? readLength : isoPackets * packetSize;
+            rawBuffer = new uint8_t[length];
+            memset(rawBuffer, 0, length);
+        }
+
+        switch (transferType())
+        {
+            case EndpointTransferType::CONTROL:
+            {
+                LOGE(tr("Control transfer should not happen here."));
+                return LIBUSB_ERROR_NOT_SUPPORTED;
+            }
+            case EndpointTransferType::ISOCHRONOUS:
+                libusb_fill_iso_transfer(
+                            _transfer,
+                            _interfaceDescriptor->interface()->configurationDescriptor()->device()->handle(),
+                            _bEndpointAddress,
+                            rawBuffer,
+                            length,
+                            isoPackets,
+                            &UsbEndpointDescriptor::__asyncTransferCallback,
+                            this,
+                            timeout);
+            break;
+            case EndpointTransferType::INTERRUPT:
+                libusb_fill_interrupt_transfer(
+                            _transfer,
+                            _interfaceDescriptor->interface()->configurationDescriptor()->device()->handle(),
+                            _bEndpointAddress,
+                            rawBuffer,
+                            length,
+                            &UsbEndpointDescriptor::__asyncTransferCallback,
+                            this,
+                            timeout);
+            break;
+            case EndpointTransferType::BULK:
+                libusb_fill_bulk_transfer(
+                            _transfer,
+                            _interfaceDescriptor->interface()->configurationDescriptor()->device()->handle(),
+                            _bEndpointAddress,
+                            rawBuffer,
+                            length,
+                            &UsbEndpointDescriptor::__asyncTransferCallback,
+                            this,
+                            timeout);
+            break;
+        }
+
+        int ret = libusb_submit_transfer(_transfer);
+        if (ret < LIBUSB_SUCCESS)
+        {
+            delete[] rawBuffer;
+            libusb_free_transfer(_transfer);
+            _transfer = nullptr;
+        }
+
+        return ret;
+    }
+
+    int UsbEndpointDescriptor::cancelAsyncTransfer()
+    {
+        if (!_transfer)
+            return LIBUSB_SUCCESS;
+        return libusb_cancel_transfer(_transfer);
     }
 
     QString UsbEndpointDescriptor::infomationToHtml() const
@@ -177,6 +289,102 @@ namespace usb {
             len -= _extra[pos];
             pos += _extra[pos];
         }
+    }
+
+    void UsbEndpointDescriptor::__asyncTransferCallback(libusb_transfer *transfer)
+    {
+        UsbEndpointDescriptor *ep = reinterpret_cast<UsbEndpointDescriptor *>(transfer->user_data);
+        int status = transfer->status;
+        log().d("UsbEndpointDescriptor",
+                tr("Asynchronous transfer callback: status %1.")
+                .arg(usb_error_name(status)));
+
+        switch(status)
+        {
+            case libusb_transfer_status::LIBUSB_TRANSFER_COMPLETED:
+                if (ep->transferType() == EndpointTransferType::ISOCHRONOUS)
+                {
+                    QByteArray data;
+                    bool isError = false;
+                    for (int i = 0; i < transfer->num_iso_packets; ++i)
+                    {
+                        libusb_iso_packet_descriptor *desc = &transfer->iso_packet_desc[i];
+                        int status = desc->status;
+                        log().d("UsbEndpointDescriptor",
+                                tr("Isochronous transfer result: %1, %2.")
+                                .arg(QString("packet %1").arg(i))
+                                .arg(QString("status %1").arg(usb_error_name(status))));
+                        if (status == libusb_transfer_status::LIBUSB_TRANSFER_COMPLETED ||
+                                status == libusb_transfer_status::LIBUSB_TRANSFER_OVERFLOW)
+                        {
+
+                            log().d("UsbEndpointDescriptor",
+                                    tr("Isochronous transfer result: %1, %2.")
+                                    .arg(QString("packet %1").arg(i))
+                                    .arg(QString("actual_length %1").arg(desc->actual_length)));
+                            if (ep->direction() == EndpointDirection::IN)
+                                data.append(reinterpret_cast<const char *>(
+                                                libusb_get_iso_packet_buffer_simple(transfer, i)),
+                                            desc->actual_length);
+                        }
+                        else if (status == libusb_transfer_status::LIBUSB_TRANSFER_CANCELLED)
+                        {
+                            QTimer::singleShot(0, ep, [ep]() {
+                                emit ep->asyncTransferCancelled();
+                            });
+                            isError = true;
+                            break;
+                        }
+                        else
+                        {
+                            QTimer::singleShot(0, ep, [ep, status]() {
+                                emit ep->asyncTransferFailed(status);
+                            });
+                            isError = true;
+                            break;
+                        }
+                    }
+
+                    log().d("UsbEndpointDescriptor",
+                            tr("Isochronous transfer result: %1, %2.")
+                            .arg(QString("isError %1").arg(isError))
+                            .arg(QString("length %1").arg(data.length())));
+                    if (!isError)
+                        QTimer::singleShot(0, ep, [ep, data]() {
+                            emit ep->asyncTransferCompleted(data);
+                        });
+                }
+                else
+                {
+                    if (ep->direction() == EndpointDirection::OUT)
+                        QTimer::singleShot(0, ep, [ep]() {
+                            emit ep->asyncTransferCompleted();
+                        });
+                    else
+                    {
+                        QByteArray data(reinterpret_cast<const char *>(transfer->buffer),
+                                        transfer->actual_length);
+                        QTimer::singleShot(0, ep, [ep, data]() {
+                            emit ep->asyncTransferCompleted(data);
+                        });
+                    }
+                }
+            break;
+            case libusb_transfer_status::LIBUSB_TRANSFER_CANCELLED:
+                QTimer::singleShot(0, ep, [ep]() {
+                    emit ep->asyncTransferCancelled();
+                });
+            break;
+            default:
+                QTimer::singleShot(0, ep, [ep, status]() {
+                    emit ep->asyncTransferFailed(status);
+                });
+            break;
+        }
+
+        delete[] ep->_transfer->buffer;
+        libusb_free_transfer(ep->_transfer);
+        ep->_transfer = nullptr;
     }
 
     uint16_t UsbEndpointDescriptor::wMaxPacketSize() const

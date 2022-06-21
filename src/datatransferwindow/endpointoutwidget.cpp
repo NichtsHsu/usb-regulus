@@ -16,8 +16,9 @@ EndpointOutWidget::EndpointOutWidget(QWidget *parent) :
     ui->hexEditPlaceHolder = nullptr;
     __setOverwriteMode(_hexEdit->overwriteMode());
     _writer = new usb::UsbEndpointWriter;
-    _writer->moveToThread(&_workerThread);
-    _workerThread.start();
+    _workerThread = new QThread;
+    _writer->moveToThread(_workerThread);
+    _workerThread->start();
 
     connect(_hexEdit, &QHexEdit::overwriteModeChanged,
             this, &EndpointOutWidget::__setOverwriteMode);
@@ -26,8 +27,8 @@ EndpointOutWidget::EndpointOutWidget(QWidget *parent) :
         ui->labelWriteCount->setText(tr("Write Count: %1").arg(count));
     });
     connect(_writer, &usb::UsbEndpointWriter::writeFailed,
-            this, [] (int ret) {
-        QMessageBox::critical(nullptr,
+            this, [this] (int ret) {
+        QMessageBox::critical(this,
                               tr("Error"),
                               tr("Failed to write data, error: %1.")
                               .arg(usb_error_name(ret)));
@@ -52,9 +53,23 @@ EndpointOutWidget::~EndpointOutWidget()
 {
     _writer->disconnect(this);
     disconnect(_writer);
-    _writer->stopWrite();
-    _workerThread.quit();
-    _workerThread.wait();
+    if (!_writeOnce && !_keepWrite)
+    {
+        _writer->stopWrite();
+        _workerThread->quit();
+        _writer->deleteLater();
+        _workerThread->deleteLater();
+    }
+    else
+    {
+        connect(_writer, &usb::UsbEndpointWriter::safelyStopped,
+                _writer, &usb::UsbEndpointWriter::deleteLater);
+        connect(_writer, &usb::UsbEndpointWriter::safelyStopped,
+                _workerThread, &QThread::quit);
+        connect(_workerThread, &QThread::finished,
+                _workerThread, &QThread::deleteLater);
+        _writer->stopWrite();
+    }
     delete ui;
 }
 

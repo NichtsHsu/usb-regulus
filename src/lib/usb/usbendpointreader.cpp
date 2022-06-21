@@ -3,22 +3,40 @@
 
 namespace usb {
     UsbEndpointReader::UsbEndpointReader(QObject *parent)
-        : QObject{parent}, _device(nullptr), _endpointDescriptor(nullptr),
-          _stopFlag(false)
+        : QObject{parent}, _device(nullptr), _endpointDescriptor(nullptr), _readBufferSize(0),
+          _keepRead(false)
     {
 
+    }
+
+    UsbEndpointReader::~UsbEndpointReader()
+    {
+        if (_endpointDescriptor)
+            _endpointDescriptor->disconnect(this);
     }
 
     void UsbEndpointReader::init(UsbEndpointDescriptor *epDesc)
     {
         _endpointDescriptor = epDesc;
-        _readBufferSize = _endpointDescriptor->wMaxPacketSize();
+        if (_endpointDescriptor->transferType() == EndpointTransferType::ISOCHRONOUS)
+            _readBufferSize = libusb_get_max_iso_packet_size(
+                        _endpointDescriptor->interfaceDescriptor()->interface()->
+                        configurationDescriptor()->device()->device(),
+                        _endpointDescriptor->bEndpointAddress());
+        else
+            _readBufferSize = _endpointDescriptor->wMaxPacketSize();
         if (_endpointDescriptor->direction() != EndpointDirection::IN)
         {
             LOGE(tr("Can only accept IN endpoint!"));
             _endpointDescriptor = nullptr;
         }
         _device = _endpointDescriptor->interfaceDescriptor()->interface()->configurationDescriptor()->device();
+        connect(epDesc, &UsbEndpointDescriptor::asyncTransferCompleted,
+                this, &UsbEndpointReader::transferCompleted);
+        connect(epDesc, &UsbEndpointDescriptor::asyncTransferCancelled,
+                this, &UsbEndpointReader::transferCancelled);
+        connect(epDesc, &UsbEndpointDescriptor::asyncTransferFailed,
+                this, &UsbEndpointReader::transferFailed);
     }
 
     const QByteArray &UsbEndpointReader::data() const
@@ -28,96 +46,74 @@ namespace usb {
 
     void UsbEndpointReader::readOnce()
     {
-        if (!_endpointDescriptor)
-            return;
-        _stopFlagMutex.lock();
-        _stopFlag = false;
-        _stopFlagMutex.unlock();
-
-        _data.fill('\0', _readBufferSize);
-        int realReadSize = 0;
-        int ret;
-        for(;;)
-        {
-            ret = _endpointDescriptor->transfer(_data, realReadSize, TRANSFER_TIMEOUT);
-
-            _stopFlagMutex.lock();
-            if(_stopFlag)
-            {
-                _stopFlag = false;
-                _stopFlagMutex.unlock();
-                break;
-            }
-            _stopFlagMutex.unlock();
-
-            if (ret >= LIBUSB_SUCCESS)
-            {
-                emit dataRead();
-                break;
-            }
-            else if (ret == LIBUSB_ERROR_TIMEOUT)
-            {
-                /* Ignore timeout */
-            }
-            else
-            {
-                LOGE(tr("Data read failed (%1).").arg(usb_error_name(ret)));
-                emit readFailed(ret);
-                break;
-            }
-        }
-
-        emit safelyStopped();
+        __startTransfer();
+        _keepReadMutex.lock();
+        _keepRead = false;
+        _keepReadMutex.unlock();
     }
 
     void UsbEndpointReader::keepRead()
     {
-        if (!_endpointDescriptor)
-            return;
-        _stopFlagMutex.lock();
-        _stopFlag = false;
-        _stopFlagMutex.unlock();
-
-        _data.fill('\0', _readBufferSize);
-        int realReadSize = 0;
-        int ret;
-        for(;;)
-        {
-            ret = _endpointDescriptor->transfer(_data, realReadSize, TRANSFER_TIMEOUT);
-
-            _stopFlagMutex.lock();
-            if(_stopFlag)
-            {
-                _stopFlag = false;
-                _stopFlagMutex.unlock();
-                break;
-            }
-            _stopFlagMutex.unlock();
-
-            if (ret >= LIBUSB_SUCCESS)
-            {
-                emit dataRead();
-            }
-            else if (ret == LIBUSB_ERROR_TIMEOUT)
-            {
-                /* Ignore timeout */
-            }
-            else
-            {
-                LOGE(tr("Data read failed (%1).").arg(usb_error_name(ret)));
-                emit readFailed(ret);
-                break;
-            }
-        }
-
-        emit safelyStopped();
+        __startTransfer();
+        _keepReadMutex.lock();
+        _keepRead = true;
+        _keepReadMutex.unlock();
     }
 
     void UsbEndpointReader::stopRead()
     {
-        _stopFlagMutex.lock();
-        _stopFlag = true;
-        _stopFlagMutex.unlock();
+        if (!_endpointDescriptor)
+            return;
+
+        _keepReadMutex.lock();
+        _keepRead = false;
+        _keepReadMutex.unlock();
+        _endpointDescriptor->cancelAsyncTransfer();
+    }
+
+    void UsbEndpointReader::transferCompleted(const QByteArray &data)
+    {
+        _data = data;
+        emit dataRead();
+
+        _keepReadMutex.lock();
+        if (_keepRead)
+            __startTransfer();
+        else
+            emit safelyStopped();
+        _keepReadMutex.unlock();
+    }
+
+    void UsbEndpointReader::transferFailed(int code)
+    {
+        emit readFailed(code);
+        emit safelyStopped();
+        _keepReadMutex.lock();
+        _keepRead = false;
+        _keepReadMutex.unlock();
+    }
+
+    void UsbEndpointReader::transferCancelled()
+    {
+        emit safelyStopped();
+        _keepReadMutex.lock();
+        _keepRead = false;
+        _keepReadMutex.unlock();
+    }
+
+    void UsbEndpointReader::__startTransfer()
+    {
+        if (!_endpointDescriptor)
+            return;
+
+        int ret;
+        ret = _endpointDescriptor->startAsyncTransfer(QByteArray(), _readBufferSize);
+        if (ret < LIBUSB_SUCCESS)
+        {
+            LOGE(tr("Commit transfer failed (%1).").arg(usb_error_name(ret)));
+            emit readFailed(ret);
+            emit safelyStopped();
+        }
     }
 
     int UsbEndpointReader::readBufferSize() const

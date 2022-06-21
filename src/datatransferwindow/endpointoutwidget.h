@@ -59,7 +59,7 @@ private:
     Ui::EndpointOutWidget *ui;
 
     bool _writeOnce, _keepWrite;
-    QThread _workerThread;
+    QThread *_workerThread;
     QHexEdit *_hexEdit;
     QBuffer _buffer;
     std::function<void()> _resetButtonAfterSafelyStop;

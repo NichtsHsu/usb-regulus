@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>usb-regulus.png</file>
+    </qresource>
+</RCC>
