@@ -193,6 +193,7 @@ void MainWindow::changeEvent(QEvent *event)
     {
         case QEvent::LanguageChange:
             ui->retranslateUi(this);
+            _actionCopy->setText(tr("Copy"));
             _actionCopyAll->setText(tr("Copy All"));
             _actionCopyAllHtml->setText(tr("Copy All (HTML)"));
             _actionCopyAllMarkdown->setText(tr("Copy All (Markdown)"));
