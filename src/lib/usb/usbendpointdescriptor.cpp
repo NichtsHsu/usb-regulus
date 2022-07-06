@@ -259,6 +259,7 @@ namespace usb {
         QString html;
         START(tr("Endpoint Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bEndpointAddress", _bEndpointAddress, endpointAddressInfo());
         ATTR("bmAttributes", _bmAttributes, bmAttributesInfo());
         ATTR("wMaxPacketSize", _wMaxPacketSize, _wMaxPacketSize);

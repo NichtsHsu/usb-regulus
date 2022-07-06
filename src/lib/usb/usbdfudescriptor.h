@@ -47,7 +47,7 @@ namespace usb {
          * D1       upload capable
          * D2       device is able to communicate via USB after Manifestation phase
          * D3       device will perform a bus detach-attach sequence when it receives a DFU_DETACH request
-         * D4..7    Reversed
+         * D4..7    Reserved
          */
         uint8_t bmAttributes() const;
 
@@ -71,7 +71,7 @@ namespace usb {
 
         /**
          * @brief infomationToHtml
-         * @return HTML form device informations
+         * @return HTML form informations
          */
         virtual QString infomationToHtml() const override;
 

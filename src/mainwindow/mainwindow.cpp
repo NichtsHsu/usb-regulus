@@ -27,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent):
     ui_mainBrowser->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     _mainBrowserMenu = new QMenu(ui_mainBrowser);
+    _actionCopy = new QAction(tr("Copy"));
+    _mainBrowserMenu->addAction(_actionCopy);
     _actionCopyAll = new QAction(tr("Copy All"));
     _mainBrowserMenu->addAction(_actionCopyAll);
     _actionCopyAllHtml = new QAction(tr("Copy All (HTML)"));
@@ -84,6 +86,9 @@ MainWindow::MainWindow(QWidget *parent):
     });
     connect(ui->actionCenterTheWindow, &QAction::triggered, this, [this] () {
         move(frameGeometry().topLeft() + screen()->geometry().center() - frameGeometry().center());
+    });
+    connect(_actionCopy, &QAction::triggered, this, [this] () {
+        qGuiApp->clipboard()->setText(ui_mainBrowser->textCursor().selectedText());
     });
     connect(_actionCopyAll, &QAction::triggered, this, [this] () {
         qGuiApp->clipboard()->setText(ui_mainBrowser->toPlainText());
@@ -213,6 +218,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     settings().protectMouse() = ui->actionProtectMouse->isChecked();
     settings().protectKeyboard() = ui->actionProtectKeyboard->isChecked();
     settings().saveToIni(Tools::getConfigFilePath());
+    usb::UsbHost::instance()->deleteLater();
     event->accept();
 }
 

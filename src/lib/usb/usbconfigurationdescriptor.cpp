@@ -102,6 +102,7 @@ namespace usb {
 
         START(tr("Configuration Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("wTotalLength", _wTotalLength, _wTotalLength);
         ATTR("bNumInterfaces", _bNumInterfaces, _bNumInterfaces);
         ATTR("bConfigurationValue", _bConfigurationValue, _bConfigurationValue);

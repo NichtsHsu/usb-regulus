@@ -148,7 +148,7 @@ namespace usb {
 
         /**
          * @brief infomationToHtml
-         * @return HTML form device informations
+         * @return HTML form informations
          */
         QString infomationToHtml() const;
 
@@ -217,9 +217,6 @@ namespace usb {
 #endif
 #ifndef USBINTERFACEASSOCIATIONDESCRIPTOR_H
 #include "usbinterfaceassociationdescriptor.h"
-#endif
-#ifndef USBHIDDESCRIPTOR_H
-#include "usbhiddescriptor.h"
 #endif
 
 #endif // USBINTERFACEDESCRIPTOR_H

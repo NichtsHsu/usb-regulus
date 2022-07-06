@@ -56,6 +56,7 @@ namespace usb {
         QString html;
         START(tr("Device Firmware Upgrade Functional Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
         ATTR("wDetachTimeOut", _wDetachTimeOut, QString("%1 ms").arg(_wDetachTimeOut));
         ATTR("wTransferSize", _wTransferSize, _wTransferSize);

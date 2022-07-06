@@ -41,6 +41,8 @@ HEADERS += \
     src/lib/log/logger.h \
     src/lib/misc/option.hpp \
     src/lib/usb/__usbmacro.h \
+    src/lib/usb/usbaudiocontrolinterfacedescriptor.h \
+    src/lib/usb/usbaudiostreaminterfacedescriptor.h \
     src/lib/usb/usbbosdescriptor.h \
     src/lib/usb/usbconfigurationdescriptor.h \
     src/lib/usb/usbconfigurationextradescriptor.h \
@@ -60,6 +62,7 @@ HEADERS += \
     src/lib/usb/usbinterfacedescriptor.h \
     src/lib/usb/usbinterfaceextradescriptor.h \
     src/lib/usb/usbotgdescriptor.h \
+    src/lib/usb/usbterminaltypes.h \
     src/mainwindow/mainwindow.h \
     src/mainwindow/usbdevicetreeview.h
 
@@ -75,6 +78,8 @@ SOURCES += \
     src/global/tools.cpp \
     src/lib/log/logger.cpp \
     src/lib/usb/__usbmacro.cpp \
+    src/lib/usb/usbaudiocontrolinterfacedescriptor.cpp \
+    src/lib/usb/usbaudiostreaminterfacedescriptor.cpp \
     src/lib/usb/usbbosdescriptor.cpp \
     src/lib/usb/usbconfigurationdescriptor.cpp \
     src/lib/usb/usbconfigurationextradescriptor.cpp \
@@ -94,6 +99,7 @@ SOURCES += \
     src/lib/usb/usbinterfacedescriptor.cpp \
     src/lib/usb/usbinterfaceextradescriptor.cpp \
     src/lib/usb/usbotgdescriptor.cpp \
+    src/lib/usb/usbterminaltypes.cpp \
     src/main.cpp \
     src/mainwindow/mainwindow.cpp \
     src/mainwindow/usbdevicetreeview.cpp

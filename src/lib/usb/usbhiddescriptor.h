@@ -83,7 +83,7 @@ namespace usb {
 
         /**
          * @brief infomationToHtml
-         * @return HTML form device informations
+         * @return HTML form informations
          */
         QString infomationToHtml() const override;
 
@@ -141,7 +141,7 @@ namespace usb {
 
         /**
          * @brief infomationToHtml
-         * @return HTML form device informations
+         * @return HTML form informations
          */
         QString infomationToHtml() const;
 

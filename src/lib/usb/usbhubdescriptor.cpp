@@ -125,6 +125,7 @@ namespace usb {
         QString html;
         START(tr("Enhanced SuperSpeed Hub Descriptor"));
         ATTR("bDescLength", _bDescLength, _bDescLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bNbrPorts", _bNbrPorts, _bNbrPorts);
         ATTR("wHubCharacteristics", _wHubCharacteristics, __parseWHubCharacteristics());
         ATTR("bPwrOn2PwrGood", _bPwrOn2PwrGood, tr("%1 ms").arg(_bPwrOn2PwrGood * 2));
@@ -133,7 +134,7 @@ namespace usb {
                                                           tr("%1 µs").arg(double(_bHubHdrDecLat) / 10):
                                                           tr("Less than 0.1 µs")));
         ATTR("wHubDelay", _wHubDelay, tr("%1 ns").arg(_wHubDelay));
-        ATTRTEXT("DeviceRemovable", QString("0x%1").arg(_DeviceRemovable, sizeof(_DeviceRemovable) * 2, 16, QChar('0')));
+        ATTR("DeviceRemovable", _DeviceRemovable, "");
         END;
 
         return html;
@@ -216,12 +217,13 @@ namespace usb {
         QString html;
         START(tr("Hub Descriptor"));
         ATTR("bDescLength", _bDescLength, _bDescLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bNbrPorts", _bNbrPorts, _bNbrPorts);
         ATTR("wHubCharacteristics", _wHubCharacteristics, __parseWHubCharacteristics());
         ATTR("bPwrOn2PwrGood", _bPwrOn2PwrGood, tr("%1 ms").arg(_bPwrOn2PwrGood * 2));
         ATTR("bHubContrCurrent", _bHubContrCurrent, tr("%1 mA").arg(_bHubContrCurrent));
-        ATTRTEXT("DeviceRemovable", QString("0x") + _DeviceRemovable.toHex());
-        ATTRTEXT("PortPwrCtrlMask", QString("0x") + _PortPwrCtrlMask.toHex());
+        ATTRCUSTOM("DeviceRemovable", QString("0x") + _DeviceRemovable.toHex(), "");
+        ATTRCUSTOM("PortPwrCtrlMask", QString("0x") + _PortPwrCtrlMask.toHex(), "");
         END;
 
         return html;

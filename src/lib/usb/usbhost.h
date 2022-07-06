@@ -37,6 +37,9 @@
 #include "usbdevice.h"
 
 namespace usb {
+    /** Qt Does not support mark Q_OBJECT for nested class,
+     * we have to place these classes under the __private namespace.
+     */
     namespace __private{
         class UsbEventHandler: public QObject
         {
@@ -52,6 +55,17 @@ namespace usb {
             bool _stopFlag;
             QMutex _stopFlagMutex;
         };
+
+        class UsbDeviceRescanWorker: public QObject
+        {
+            Q_OBJECT
+        public:
+            UsbDeviceRescanWorker(QObject *parent = nullptr);
+        signals:
+            void finished();
+        public slots:
+            void run();
+        };
     }
 
     /**
@@ -66,6 +80,8 @@ namespace usb {
      *
      * Connect the deviceAttached and the deviceDetached signals
      * to your slots so that you can konw when hotplug is occurred.
+     *
+     * You are expected to call deleteLater() before exit program
      */
     class UsbHost : public QObject
     {
@@ -219,13 +235,15 @@ namespace usb {
         static std::atomic<UsbHost *> _instance;
 
         friend __private::UsbEventHandler;
+        friend __private::UsbDeviceRescanWorker;
         QVector<UsbDevice *> _usbDevices;
         libusb_context *_context;
         libusb_hotplug_callback_handle _hotplugCbHandle;
         bool _initialized, _hasHotplug;
         bool _protectMouse, _protectKeyboard;
         __private::UsbEventHandler *_libusbEventHandler;
-        QThread *_libusbEventThread;
+        __private::UsbDeviceRescanWorker *_rescaner;
+        QThread *_libusbEventThread, *_rescanThread;
     };
 }
 

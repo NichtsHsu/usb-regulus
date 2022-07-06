@@ -133,7 +133,7 @@
     <string>Refresh</string>
    </property>
    <property name="shortcut">
-    <string notr="true">F5</string>
+    <string notr="true">Ctrl+F5</string>
    </property>
   </action>
   <action name="actionDebug">

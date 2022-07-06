@@ -35,7 +35,7 @@ namespace usb {
 
         /**
          * @brief infomationToHtml
-         * @return HTML form device informations
+         * @return HTML form informations
          */
         virtual QString infomationToHtml() const = 0;
 
@@ -86,7 +86,7 @@ namespace usb {
          * D3..4    Over-current Protection Mode
          * D5..6    TT Think Time
          * D7       Port Indicators Supported
-         * D8..15   Reversed
+         * D8..15   Reserved
          */
         uint16_t wHubCharacteristics() const;
 
@@ -107,7 +107,7 @@ namespace usb {
          * @brief DeviceRemovable
          * @return bitmap to indicate if device is removable or not
          * @note
-         * Bit 0 is reversed, Bit n indicates device in port n is removable or not.
+         * Bit 0 is reserved, Bit n indicates device in port n is removable or not.
          * Limit to 255 bit.
          */
         const QByteArray &DeviceRemovable() const;
@@ -120,7 +120,7 @@ namespace usb {
 
         /**
          * @brief infomationToHtml
-         * @return HTML form device informations
+         * @return HTML form informations
          */
         QString infomationToHtml() const override;
 
@@ -167,7 +167,7 @@ namespace usb {
          * D0..1    Logical Power Switching Mode
          * D2       Identifies a Compound Device
          * D3..4    Over-current Protection Mode
-         * D5..15   Reversed
+         * D5..15   Reserved
          */
         uint16_t wHubCharacteristics() const;
 
@@ -203,14 +203,14 @@ namespace usb {
          * @brief DeviceRemovable
          * @return bitmap to indicate if device is removable or not
          * @note
-         * Bit 0 is reversed, Bit n indicates device in port n is removable or not.
+         * Bit 0 is reserved, Bit n indicates device in port n is removable or not.
          * Limit to 15 bit.
          */
         uint16_t DeviceRemovable() const;
 
         /**
          * @brief infomationToHtml
-         * @return HTML form device informations
+         * @return HTML form informations
          */
         QString infomationToHtml() const override;
 

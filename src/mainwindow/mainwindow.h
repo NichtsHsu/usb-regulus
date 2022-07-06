@@ -112,7 +112,7 @@ private:
     QTranslator *_translator;
     QMap<Logger::Level, QAction *> _logLevelActionMap;
     QMenu *_mainBrowserMenu;
-    QAction *_actionCopyAll, *_actionCopyAllHtml, *_actionCopyAllMarkdown;
+    QAction *_actionCopy, *_actionCopyAll, *_actionCopyAllHtml, *_actionCopyAllMarkdown;
     Option<UsbDeviceItem *> _currentDisplayedDeviceItem;
     Option<UsbInterfaceItem *> _currentDisplayedInterfaceItem;
 

@@ -52,7 +52,7 @@ UsbDeviceTreeView::UsbDeviceTreeView(QWidget *parent)
         __setAltsetting(currentIndex(), item->interface()->currentAltsetting() + 1);
     });
     connect(_actionSetAltsettingCustom, &QAction::triggered,
-this, &UsbDeviceTreeView::__customSetAltsetting);
+            this, &UsbDeviceTreeView::__customSetAltsetting);
     connect(this, &UsbDeviceTreeView::customContextMenuRequested,
             this, &UsbDeviceTreeView::__customMenu);
     header()->hide();

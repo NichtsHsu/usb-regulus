@@ -86,6 +86,7 @@ namespace usb {
         QString html;
         START(tr("Interface Association Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bFirstInterface", _bFirstInterface, _bFirstInterface);
         ATTR("bInterfaceCount", _bInterfaceCount, _bInterfaceCount);
         ATTR("bFunctionClass", _bFunctionClass, _functionClass);

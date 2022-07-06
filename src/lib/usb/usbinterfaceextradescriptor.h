@@ -11,6 +11,8 @@ namespace usb {
     enum class InterfaceExtraDescriptorType {
         HID,            // Human Interface Device
         DFU,            // Device Firmware Upgrade
+        AC,             // AudioControl
+        AS,             // AudioStream
     };
 
     class UsbInterfaceExtraDescriptor: public QObject
@@ -39,7 +41,7 @@ namespace usb {
 
         /**
          * @brief infomationToHtml
-         * @return HTML form device informations
+         * @return HTML form informations
          */
         virtual QString infomationToHtml() const = 0;
 

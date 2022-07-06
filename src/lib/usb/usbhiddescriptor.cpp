@@ -103,6 +103,8 @@ namespace usb {
 
     QString UsbHidDescriptor::country() const
     {
+        return tr(_countryCodeMap[_bCountryCode]);
+
         // Dummy code, just for triggering Linguist
 #if 0
         tr("Not Supported");tr("Arabic");tr("Belgian");tr("Canadian-Bilingual");
@@ -115,8 +117,6 @@ namespace usb {
         tr("Swiss/German");tr("Switzerland");tr("Taiwan");tr("Turkish-Q");
         tr("UK");tr("US");tr("Yugoslavia");tr("Turkish-F");
 #endif
-
-        return tr(_countryCodeMap[_bCountryCode]);
     }
 
     UsbHidReportDescriptor *UsbHidDescriptor::hidReportDescriptor() const
@@ -129,6 +129,7 @@ namespace usb {
         QString html;
         START(tr("HID Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bcdHID", _bcdHID, "");
         ATTR("bCountryCode", _bCountryCode, country());
         ATTR("bNumDescriptors", _bNumDescriptors, _bNumDescriptors);

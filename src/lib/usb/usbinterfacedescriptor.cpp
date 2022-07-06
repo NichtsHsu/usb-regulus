@@ -1,6 +1,8 @@
 ﻿#include "usbinterfacedescriptor.h"
 #include "usbhiddescriptor.h"
 #include "usbdfudescriptor.h"
+#include "usbaudiocontrolinterfacedescriptor.h"
+#include "usbaudiostreaminterfacedescriptor.h"
 #include "usbinterfaceassociationdescriptor.h"
 #include "__usbmacro.h"
 
@@ -141,6 +143,7 @@ namespace usb {
         QString html;
         START(tr("Interface Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bInterfaceNumber", _bInterfaceNumber, _bInterfaceNumber);
         ATTR("bAlternateSetting", _bAlternateSetting, _bAlternateSetting);
         ATTR("bNumEndpoints", _bNumEndpoints, _bNumEndpoints);
@@ -161,14 +164,69 @@ namespace usb {
 
     void UsbInterfaceDescriptor::__requestExtraDescriptor()
     {
+        static const uint8_t IP_VERSION_01_00 = 0x00;
+        static const uint8_t IP_VERSION_02_00 = 0x20;
+        static const uint8_t IP_VERSION_03_00 = 0x30;
+
         int len = _extraLength;
         int pos = 0;
         while (len > 1)
         {
             if (_extra[pos] > len)
                 break;
+            /* AudioControl Interface Descriptor */
+            if (_bInterfaceClass == 0x01 && _bInterfaceSubClass == 0x01 && _extra[pos + 1] == 0x24)
+            {
+                UsbAudioControlInterfaceDescriptorBasic *desc = nullptr;
+
+                switch (_bInterfaceProtocol)
+                {
+                    case IP_VERSION_01_00:
+                        /* Audio 1.0 */
+                        desc = uac1::UsbAudioControlInterfaceDescriptor::get(this, pos);
+                    break;
+                    case IP_VERSION_02_00:
+                        /* Audio 2.0 */
+                        desc = uac2::UsbAudioControlInterfaceDescriptor::get(this, pos);
+                    break;
+                    case IP_VERSION_03_00:
+                        /* Audio 3.0 */
+                        LOGW(tr("Found Audio 3.0 descriptor, not support yet."));
+                        desc = nullptr;
+                    break;
+                }
+
+                if (desc)
+                    _extraDescriptors.append(desc);
+            }
+            /* AudioStream Interface Descriptor */
+            else if (_bInterfaceClass == 0x01 && _bInterfaceSubClass == 0x02 && _extra[pos + 1] == 0x24)
+            {
+                UsbAudioStreamInterfaceDescriptorBasic *desc = nullptr;
+
+                switch (_bInterfaceProtocol)
+                {
+                    case IP_VERSION_01_00:
+                        /* Audio 1.0 */
+                        desc = uac1::UsbAudioStreamInterfaceDescriptor::get(this, pos);
+                    break;
+                    case IP_VERSION_02_00:
+                        /* Audio 2.0 */
+                        desc = uac2::UsbAudioStreamInterfaceDescriptor::get(this, pos);
+                    break;
+                    case IP_VERSION_03_00:
+                        /* Audio 3.0 */
+                        LOGW(tr("Found Audio 3.0 descriptor, not support yet."));
+                        desc = nullptr;
+                    break;
+                }
+
+                if (desc)
+                    _extraDescriptors.append(desc);
+
+            }
             // Human Interface Device Descriptor
-            if (_bInterfaceClass == 3 && _extra[pos + 1] == 0x21)
+            else if (_bInterfaceClass == 3 && _extra[pos + 1] == 0x21)
                 _extraDescriptors.append(new UsbHidDescriptor(this, pos));
             // Device Firmware Upgrade Descriptor
             else if (_bInterfaceClass == 0xFE && _bInterfaceSubClass == 0x01 && _extra[pos + 1] == 0x21)

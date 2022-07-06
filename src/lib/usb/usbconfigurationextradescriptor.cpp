@@ -146,6 +146,7 @@ namespace usb {
         QString html;
         START(tr("Security Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("wTotalLength", _wTotalLength, _wTotalLength);
         ATTR("bNumEncryptionTypes", _bNumEncryptionTypes, _bNumEncryptionTypes);
         END;
@@ -188,6 +189,7 @@ namespace usb {
         QString html;
         START(tr("Encryption Type Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bEncryptionType", _bEncryptionType, __parseEncryptionType());
         ATTR("bEncryptionValue", _bEncryptionValue, _bEncryptionValue);
         ATTR("bAuthKeyIndex", _bAuthKeyIndex, _bAuthKeyIndex);
@@ -225,7 +227,7 @@ namespace usb {
             case 2:
             return tr("AES-128 in CCM mode");
             default:
-            return tr("Reversed");
+            return tr("Reserved");
         }
     }
 

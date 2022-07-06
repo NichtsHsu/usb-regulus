@@ -179,6 +179,7 @@ namespace usb {
         QString html;
         START(tr("Device Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bcdUSB", _bcdUSB, bcdUSBInfo());
         ATTR("bcdDevice", _bcdDevice, "");
         ATTR("bDeviceClass", _bDeviceClass, _deviceClass);
@@ -217,7 +218,7 @@ namespace usb {
          * Even though almost all vendors use 0x210H as bcdUSB,
          * we should still respect the specification's definitions.
          */
-        if (bcdUSB > 0x0201 && bcdUSB < 0x0300 && bcdUSB != 0x0250)
+        if (bcdUSB >= 0x0201 && bcdUSB < 0x0300 && bcdUSB != 0x0250)
             bcdUSB= 0x0210;
 
         if (bcdUSBMap.contains(bcdUSB))

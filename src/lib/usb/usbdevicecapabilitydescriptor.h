@@ -387,20 +387,20 @@ namespace usb {
          * @brief bmAttributes
          * @return bitmap encoding of supported device level features
          * @note
-         * D0       Reversed
+         * D0       Reserved
          * D1       Supports the Battery Charging Specification
          * D2       Supports the USB Power Delivery Specification
          * D3       Provider (device is capable of providing power)
          * D4       Consumer (device is a consumer of power)
          * D5       Supports the feature CHARGING_POLICY
          * D6       Supports power capabilities defined in the USB Type-C Specification
-         * D7       Reversed
+         * D7       Reserved
          * D8       Supports AC Supply Power Source
          * D9       Supports Battery Power Source
          * D10      Supports Other Power Source
          * D13..11  Number of batteries when D9 is set to one
          * D14      Uses VBUS
-         * D31..15  Reversed
+         * D31..15  Reserved
          * At least one of D8, D9 and D14 shall be set to one
          */
         uint32_t bmAttributes() const;
@@ -772,7 +772,7 @@ namespace usb {
          * @note
          * D0       strictly(if 0) use the device provided values of wIdleTimeout and wWakeUpLatency
          *          free(if 1) to choose idle timeout and wake up letency
-         * D7..1    Reversed
+         * D7..1    Reserved
          */
         uint8_t bmControl() const;
 

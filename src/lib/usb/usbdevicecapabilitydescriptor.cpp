@@ -84,6 +84,7 @@ namespace usb {
         QString html;
         START(tr("USB 2.0 Extension Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bmAttributes", _bmAttributes, supportLPM() ?
                  tr("Link Power Management is supported"):
                  tr("Link Power Management is NOT supported"));
@@ -163,6 +164,7 @@ namespace usb {
         QString html;
         START(tr("USB SuperSpeed Device Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bmAttributes", _bmAttributes, supportLTM() ?
                  tr("Latency Tolerance Messages is supported"):
                  tr("Latency Tolerance Messages is NOT supported"));
@@ -197,6 +199,7 @@ namespace usb {
         QString html;
         START(tr("USB Container ID Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTRTEXT("ContainerID ", hexUuid(_containerID));
         END;
 
@@ -225,6 +228,7 @@ namespace usb {
         QString html;
         START(tr("Wireless USB Device Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
         ATTR("wPHYRates", _wPHYRates,
              tr("Supports %1 Mbps").arg(__parseWPHYRateList().join(", ")));
@@ -330,6 +334,7 @@ namespace usb {
         QString html;
         START(tr("USB SuperSpeed Plus Device Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
         ATTR("wFunctionalitySupport", _wFunctionalitySupport, __parseFunctionalitySupport());
         for (unsigned int i = 0; i <= CUT(_bmAttributes, 0, 4); ++i)
@@ -375,7 +380,7 @@ namespace usb {
                 bitRate = "b/s";
             break;
             case 1:
-                bitRate = "Kb/s";
+                bitRate = "kb/s";
             break;
             case 2:
                 bitRate = "Mb/s";
@@ -444,6 +449,7 @@ namespace usb {
         QString html;
         START(tr("USB Platform Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTRTEXT("PlatformCapabilityUUID", hexUuid(_platformCapabilityUUID));
         ATTRTEXT("CapabilityData", QString("0x") + _capabilityData.toHex());
         END;
@@ -487,6 +493,7 @@ namespace usb {
         QString html;
         START(tr("USB Power Delivery Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
         ATTR("bcdBCVersion", _bcdBCVersion, "");
         ATTR("bcdPDVersion", _bcdPDVersion, "");
@@ -586,6 +593,7 @@ namespace usb {
         QString html;
         START(tr("USB Battery Info Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTRSTRDESC("iBattery", _iBattery, _bosDescriptor->device());
         ATTRSTRDESC("iSerial", _iSerial, _bosDescriptor->device());
         ATTRSTRDESC("iManufacturer", _iManufacturer, _bosDescriptor->device());
@@ -649,6 +657,7 @@ namespace usb {
         QString html;
         START(tr("USB PD Consumer Port Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
         ATTR("wMinVoltage", _wMinVoltage, tr("%1 mV").arg(_wMinVoltage * 50));
         ATTR("wMaxVoltage", _wMaxVoltage, tr("%1 mV").arg(_wMaxVoltage * 50));
@@ -712,6 +721,7 @@ namespace usb {
         QString html;
         START(tr("USB PD Provider Port Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
         for (unsigned int i = 0; i <= _bNumOfPDObjects; ++i)
             ATTR(QString("wPowerDataObject[%1]").arg(i),
@@ -885,6 +895,7 @@ namespace usb {
         QString html;
         START(tr("Precision Time Measurement Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         END;
 
         return html;
@@ -920,6 +931,7 @@ namespace usb {
         QString html;
         START(tr("Extended Wireless Device Capability Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("wIdleTimeout", _wIdleTimeout, tr("%1 ms").arg(_wIdleTimeout));
         ATTR("wWakeUpLatency", _wWakeUpLatency, tr("%1 ms").arg(_wWakeUpLatency));
         ATTR("bmControl", _bmControl, _bmControl ? tr("Free") : tr("Strict"));
@@ -983,6 +995,7 @@ namespace usb {
         QString html;
         START(tr("Configuration Summary Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bcdVersion", _bcdVersion, "");
         ATTR("bClass", _bClass, _bClass);
         ATTR("bSubClass", _bSubClass, _bSubClass);

@@ -61,6 +61,7 @@ namespace usb {
         QString html;
         START(tr("OTG Descriptor"));
         ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
         ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
         ATTR("bcdOTG", _bcdOTG, "");
         END;
