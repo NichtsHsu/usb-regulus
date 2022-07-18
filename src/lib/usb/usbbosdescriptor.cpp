@@ -7,7 +7,7 @@ namespace usb {
           _bNumDeviceCaps(desc->bNumDeviceCaps),
           _wTotalLength(desc->wTotalLength)
     {
-        for (int i = 0; i < _bNumDeviceCaps; ++i)
+        for (uint8_t i = 0; i < _bNumDeviceCaps; ++i)
         {
             libusb_bos_dev_capability_descriptor *baseDesc = desc->dev_capability[i];
             UsbDeviceCapabilityDescriptor *desc = nullptr;

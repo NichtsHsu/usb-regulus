@@ -1,10 +1,10 @@
-﻿#include "usbterminaltypes.h"
+﻿#include "usbaudioterminaltypes.h"
 #include <QtGlobal>
 
 #define COMMA ,
 
 namespace usb {
-    Q_GLOBAL_STATIC_WITH_ARGS(QMap<uint16_t COMMA const char *>, USB_TERMINAL_TYPES, (
+    Q_GLOBAL_STATIC_WITH_ARGS(QMap<uint16_t COMMA const char *>, AUDIO_TERMINAL_TYPES, (
                                   {{ 0x0100, "USB Undefined" },
                                    { 0x0101, "USB streaming" },
                                    { 0x01FF, "USB vendor specific" },
@@ -70,75 +70,77 @@ namespace usb {
                                    { 0x0717, "Other Musical Instrument" },
                                   }))
 
-    QString strTerminalType(uint16_t wTerminalType)
-    {
-        return QObject::tr(USB_TERMINAL_TYPES->value(wTerminalType, "USB Undefined"));
+    namespace uac1 {
+        QString strTerminalType(uint16_t wTerminalType)
+        {
+            return QObject::tr(AUDIO_TERMINAL_TYPES->value(wTerminalType, "USB Undefined"));
 
-        // Dummy code, just for triggering Linguist
+            // Dummy code, just for triggering Linguist
 #if 0
-        QObject::tr("USB Undefined");
-        QObject::tr("USB streaming");
-        QObject::tr("USB vendor specific");
-        QObject::tr("Input Undefined");
-        QObject::tr("Microphone");
-        QObject::tr("Desktop microphone");
-        QObject::tr("Personal microphone");
-        QObject::tr("Omni-directional microphone");
-        QObject::tr("Microphone array");
-        QObject::tr("Processing microphone array");
-        QObject::tr("Output Undefined");
-        QObject::tr("Speaker");
-        QObject::tr("Headphones");
-        QObject::tr("Head Mounted Display Audio");
-        QObject::tr("Desktop speaker");
-        QObject::tr("Room speaker");
-        QObject::tr("Communication speaker");
-        QObject::tr("Low frequency effects speaker");
-        QObject::tr("Bi-directional Undefined");
-        QObject::tr("Handset");
-        QObject::tr("Headset");
-        QObject::tr("Speakerphone, no echo reduction");
-        QObject::tr("Echo-suppressing speakerphone");
-        QObject::tr("Echo-canceling speakerphone");
-        QObject::tr("Telephony Undefined");
-        QObject::tr("Phone line");
-        QObject::tr("Telephone");
-        QObject::tr("Down Line Phone");
-        QObject::tr("External Undefined");
-        QObject::tr("Analog connector");
-        QObject::tr("Digital audio interface");
-        QObject::tr("Line connector");
-        QObject::tr("Legacy audio connector");
-        QObject::tr("S/PDIF interface");
-        QObject::tr("1394 DA stream");
-        QObject::tr("1394 DV stream soundtrack");
-        QObject::tr("ADAT Lightpipe");
-        QObject::tr("TDIF");
-        QObject::tr("MADI");
-        QObject::tr("Embedded Undefined");
-        QObject::tr("Level Calibration Noise Source");
-        QObject::tr("Equalization Noise");
-        QObject::tr("CD player");
-        QObject::tr("DAT");
-        QObject::tr("DCC");
-        QObject::tr("MiniDisk");
-        QObject::tr("Analog Tape");
-        QObject::tr("Phonograph");
-        QObject::tr("VCR Audio");
-        QObject::tr("Video Disc Audio");
-        QObject::tr("DVD Audio");
-        QObject::tr("TV Tuner Audio");
-        QObject::tr("Satellite Receiver Audio");
-        QObject::tr("Cable Tuner Audio");
-        QObject::tr("DSS Audio");
-        QObject::tr("Radio Receiver");
-        QObject::tr("Radio Transmitter");
-        QObject::tr("Multi-track Recorder");
-        QObject::tr("Synthesizer");
-        QObject::tr("Piano");
-        QObject::tr("Guitar");
-        QObject::tr("Drums/Rhythm");
-        QObject::tr("Other Musical Instrument");
+            QObject::tr("USB Undefined");
+            QObject::tr("USB streaming");
+            QObject::tr("USB vendor specific");
+            QObject::tr("Input Undefined");
+            QObject::tr("Microphone");
+            QObject::tr("Desktop microphone");
+            QObject::tr("Personal microphone");
+            QObject::tr("Omni-directional microphone");
+            QObject::tr("Microphone array");
+            QObject::tr("Processing microphone array");
+            QObject::tr("Output Undefined");
+            QObject::tr("Speaker");
+            QObject::tr("Headphones");
+            QObject::tr("Head Mounted Display Audio");
+            QObject::tr("Desktop speaker");
+            QObject::tr("Room speaker");
+            QObject::tr("Communication speaker");
+            QObject::tr("Low frequency effects speaker");
+            QObject::tr("Bi-directional Undefined");
+            QObject::tr("Handset");
+            QObject::tr("Headset");
+            QObject::tr("Speakerphone, no echo reduction");
+            QObject::tr("Echo-suppressing speakerphone");
+            QObject::tr("Echo-canceling speakerphone");
+            QObject::tr("Telephony Undefined");
+            QObject::tr("Phone line");
+            QObject::tr("Telephone");
+            QObject::tr("Down Line Phone");
+            QObject::tr("External Undefined");
+            QObject::tr("Analog connector");
+            QObject::tr("Digital audio interface");
+            QObject::tr("Line connector");
+            QObject::tr("Legacy audio connector");
+            QObject::tr("S/PDIF interface");
+            QObject::tr("1394 DA stream");
+            QObject::tr("1394 DV stream soundtrack");
+            QObject::tr("ADAT Lightpipe");
+            QObject::tr("TDIF");
+            QObject::tr("MADI");
+            QObject::tr("Embedded Undefined");
+            QObject::tr("Level Calibration Noise Source");
+            QObject::tr("Equalization Noise");
+            QObject::tr("CD player");
+            QObject::tr("DAT");
+            QObject::tr("DCC");
+            QObject::tr("MiniDisk");
+            QObject::tr("Analog Tape");
+            QObject::tr("Phonograph");
+            QObject::tr("VCR Audio");
+            QObject::tr("Video Disc Audio");
+            QObject::tr("DVD Audio");
+            QObject::tr("TV Tuner Audio");
+            QObject::tr("Satellite Receiver Audio");
+            QObject::tr("Cable Tuner Audio");
+            QObject::tr("DSS Audio");
+            QObject::tr("Radio Receiver");
+            QObject::tr("Radio Transmitter");
+            QObject::tr("Multi-track Recorder");
+            QObject::tr("Synthesizer");
+            QObject::tr("Piano");
+            QObject::tr("Guitar");
+            QObject::tr("Drums/Rhythm");
+            QObject::tr("Other Musical Instrument");
 #endif
+        }
     }
 }

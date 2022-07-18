@@ -5,6 +5,7 @@
  */
 
 #include <libusb.h>
+#include <QString>
 
 #define TRANSFER_TIMEOUT 250
 #define MAX_STRDESC_LENGTH 128
@@ -14,7 +15,7 @@
 #define ERROR_OUT_OF_RANGE -103
 #define ERROR_DUPLICATE_REQUEST -104
 
-#define BIT(v, n) ((v) & (1 << (n)))
+#define BIT(v, n) bool((v) & (1 << (n)))
 #define CUT(v, b, e) (((v) & (((1ull << ((e) - (b) + 1)) - 1) << (b))) >> (b))
 
 #define DEVICE do { html += QString("<h1 align='center'>%1</h1>").arg(_deviceDescriptor->description()); } while(0)
@@ -42,6 +43,7 @@
 #define NEWLINE QString("<br />")
 #define TAB QString("&nbsp;&nbsp;&nbsp;&nbsp;")
 
-const char *usb_error_name(int code);
+extern const char *usb_error_name(int code);
+extern QString hexUuid(const QByteArray &uuid);
 
 #endif // __USBMACRO_H

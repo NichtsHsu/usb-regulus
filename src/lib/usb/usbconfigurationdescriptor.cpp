@@ -11,7 +11,7 @@ namespace usb {
         _extra(desc->extra), _extra_length(desc->extra_length), _device(parent)
     {
         _interfaces.reserve(_bNumInterfaces);
-        for (int i = 0; i < _bNumInterfaces; ++i)
+        for (uint8_t i = 0; i < _bNumInterfaces; ++i)
             _interfaces.append(new UsbInterface(&desc->interface[i], this));
         uint8_t len = _extra_length;
         uint8_t pos = 0;

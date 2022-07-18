@@ -48,9 +48,10 @@ namespace usb {
 #ifdef Q_OS_UNIX
                 if(!currentInterfaceDescriptor()->interfaceProtocol().isEmpty())
                     _displayName = currentInterfaceDescriptor()->interfaceProtocol();
+                else if (!currentInterfaceDescriptor()->interfaceSubClass().isEmpty())
+                    _displayName = currentInterfaceDescriptor()->interfaceSubClass();
                 else
-                    _displayName = QString(currentInterfaceDescriptor()->interfaceClass()) + " "
-                            + QString(currentInterfaceDescriptor()->interfaceSubClass());
+                    _displayName = currentInterfaceDescriptor()->interfaceClass();
 #endif
             }
         }

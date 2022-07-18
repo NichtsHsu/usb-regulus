@@ -156,7 +156,6 @@ namespace usb {
              * therefore the parameter 'index' should also start with 1.
              * @return interface number of the index-th AudioStreaming
              * or MIDIStreaming interface in the Collection.
-
              */
             uint8_t baInterfaceNr(uint8_t index) const;
 
@@ -1200,7 +1199,7 @@ namespace usb {
 
             /**
              * @brief bCategory
-             * @return constant value indicating the primary use of this audio function,
+             * @return constant indicating the primary use of this audio function,
              * as intended by the manufacturer.
              */
             uint8_t bCategory() const;
@@ -1761,7 +1760,7 @@ namespace usb {
 
             /**
              * @brief wEffectType
-             * @return constant value identifying the type of effect this Unit is performing
+             * @return constant identifying the type of effect this Unit is performing
              * @see UsbEffectUnitDescriptor::strWEffectType()
              */
             uint16_t wEffectType() const;
@@ -2396,7 +2395,7 @@ namespace usb {
 
             /**
              * @brief bClockID
-             * @return constant value uniquely identifying the Clock Source Entity
+             * @return constant uniquely identifying the Clock Source Entity
              * within the audio function.
              */
             uint8_t bClockID() const;
@@ -2480,7 +2479,7 @@ namespace usb {
 
             /**
              * @brief bClockID
-             * @return constant value uniquely identifying the Clock Source Entity
+             * @return constant uniquely identifying the Clock Source Entity
              * within the audio function.
              */
             uint8_t bClockID() const;
@@ -2564,7 +2563,7 @@ namespace usb {
 
             /**
              * @brief bClockID
-             * @return constant value uniquely identifying the Clock Source Entity
+             * @return constant uniquely identifying the Clock Source Entity
              * within the audio function.
              */
             uint8_t bClockID() const;
@@ -2638,7 +2637,7 @@ namespace usb {
 
             /**
              * @brief bUnitID
-             * @return constant value uniquely identifying the Unit within the audio function
+             * @return constant uniquely identifying the Unit within the audio function
              */
             uint8_t bUnitID() const;
 

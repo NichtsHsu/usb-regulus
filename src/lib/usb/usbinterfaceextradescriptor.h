@@ -13,6 +13,8 @@ namespace usb {
         DFU,            // Device Firmware Upgrade
         AC,             // AudioControl
         AS,             // AudioStream
+        VC,             // VideoControl
+        VS,             // VideoStream
     };
 
     class UsbInterfaceExtraDescriptor: public QObject

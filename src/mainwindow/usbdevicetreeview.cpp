@@ -295,7 +295,7 @@ void UsbDeviceItem::setUsbDevice(usb::UsbDevice *usbDevice)
 
     /* Clear children at first */
     removeRows(0, rowCount());
-    for (int i = 0; i < usbDevice->configurationDescriptor()->bNumInterfaces(); ++i)
+    for (uint8_t i = 0; i < usbDevice->configurationDescriptor()->bNumInterfaces(); ++i)
     {
         usb::UsbInterface *interface = usbDevice->configurationDescriptor()->interface(i);
         UsbInterfaceItem *item  = new UsbInterfaceItem;

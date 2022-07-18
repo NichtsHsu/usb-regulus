@@ -248,9 +248,36 @@ namespace usb {
             return _bSamFreqType;
         }
 
+        QByteArray UsbTypeIFormatTypeDescriptor::tLowerSamFreq() const
+        {
+            if (_bSamFreqType == 0)
+                return _tSamFreq[0];
+            else
+            {
+                LOGE(tr("The tLowerSamFreq field is only valid when the bSamFreqType field is 0."));
+                return QByteArray();
+            }
+        }
+
+        QByteArray UsbTypeIFormatTypeDescriptor::tUpperSamFreq() const
+        {
+            if (_bSamFreqType == 0)
+                return _tSamFreq[1];
+            else
+            {
+                LOGE(tr("The tUpperSamFreq field is only valid when the bSamFreqType field is 0."));
+                return QByteArray();
+            }
+        }
+
         QByteArray UsbTypeIFormatTypeDescriptor::tSamFreq(uint8_t index) const
         {
-            if (index > 0 && index <= _bSamFreqType)
+            if (_bSamFreqType == 0)
+            {
+                LOGE(tr("The tSamFreq field is only valid when the bSamFreqType field is NOT 0."));
+                return QByteArray();
+            }
+            else if (index > 0 && index <= _bSamFreqType)
                 return _tSamFreq[index - 1];
             else
             {
@@ -276,13 +303,13 @@ namespace usb {
                      tr("Continuous sampling frequency"));
             if (_bSamFreqType)
             {
-                for (int i = 1; i <= _bSamFreqType; ++i)
+                for (uint8_t i = 1; i <= _bSamFreqType; ++i)
                     ATTRCUSTOM(QString("tSamFreq[%1]").arg(i), QString("0x") + tSamFreq(i).toHex(), "");
             }
             else
             {
-                ATTRCUSTOM("tLowerSamFreq", QString("0x") + _tSamFreq[0].toHex(), "");
-                ATTRCUSTOM("tUpperSamFreq", QString("0x") + _tSamFreq[1].toHex(), "");
+                ATTRCUSTOM("tLowerSamFreq", QString("0x") + tLowerSamFreq().toHex(), "");
+                ATTRCUSTOM("tUpperSamFreq", QString("0x") + tUpperSamFreq().toHex(), "");
             }
             END;
 
@@ -306,7 +333,7 @@ namespace usb {
             if (_bSamFreqType)
             {
                 _tSamFreq.reserve(_bSamFreqType);
-                for (int i = 0; i < _bSamFreqType; ++i)
+                for (uint8_t i = 0; i < _bSamFreqType; ++i)
                     _tSamFreq.append(QByteArray(reinterpret_cast<const char *>(
                                                     extra + 8 + i * 3), 3));
             }
@@ -355,9 +382,36 @@ namespace usb {
             return _bSamFreqType;
         }
 
+        QByteArray UsbTypeIIFormatTypeDescriptor::tLowerSamFreq() const
+        {
+            if (_bSamFreqType == 0)
+                return _tSamFreq[0];
+            else
+            {
+                LOGE(tr("The tLowerSamFreq field is only valid when the bSamFreqType field is 0."));
+                return QByteArray();
+            }
+        }
+
+        QByteArray UsbTypeIIFormatTypeDescriptor::tUpperSamFreq() const
+        {
+            if (_bSamFreqType == 0)
+                return _tSamFreq[1];
+            else
+            {
+                LOGE(tr("The tUpperSamFreq field is only valid when the bSamFreqType field is 0."));
+                return QByteArray();
+            }
+        }
+
         QByteArray UsbTypeIIFormatTypeDescriptor::tSamFreq(uint8_t index) const
         {
-            if (index > 0 && index <= _bSamFreqType)
+            if (_bSamFreqType == 0)
+            {
+                LOGE(tr("The tSamFreq field is only valid when the bSamFreqType field is NOT 0."));
+                return QByteArray();
+            }
+            else if (index > 0 && index <= _bSamFreqType)
                 return _tSamFreq[index - 1];
             else
             {
@@ -382,13 +436,13 @@ namespace usb {
                      tr("Continuous sampling frequency"));
             if (_bSamFreqType)
             {
-                for (int i = 1; i <= _bSamFreqType; ++i)
+                for (uint8_t i = 1; i <= _bSamFreqType; ++i)
                     ATTRCUSTOM(QString("tSamFreq[%1]").arg(i), QString("0x") + tSamFreq(i).toHex(), "");
             }
             else
             {
-                ATTRCUSTOM("tLowerSamFreq", QString("0x") + _tSamFreq[0].toHex(), "");
-                ATTRCUSTOM("tUpperSamFreq", QString("0x") + _tSamFreq[1].toHex(), "");
+                ATTRCUSTOM("tLowerSamFreq", QString("0x") + tLowerSamFreq().toHex(), "");
+                ATTRCUSTOM("tUpperSamFreq", QString("0x") + tUpperSamFreq().toHex(), "");
             }
             END;
 
@@ -411,7 +465,7 @@ namespace usb {
             if (_bSamFreqType)
             {
                 _tSamFreq.reserve(_bSamFreqType);
-                for (int i = 0; i < _bSamFreqType; ++i)
+                for (uint8_t i = 0; i < _bSamFreqType; ++i)
                     _tSamFreq.append(QByteArray(reinterpret_cast<const char *>(
                                                     extra + 9 + i * 3), 3));
             }
@@ -465,9 +519,36 @@ namespace usb {
             return _bSamFreqType;
         }
 
+        QByteArray UsbTypeIIIFormatTypeDescriptor::tLowerSamFreq() const
+        {
+            if (_bSamFreqType == 0)
+                return _tSamFreq[0];
+            else
+            {
+                LOGE(tr("The tLowerSamFreq field is only valid when the bSamFreqType field is 0."));
+                return QByteArray();
+            }
+        }
+
+        QByteArray UsbTypeIIIFormatTypeDescriptor::tUpperSamFreq() const
+        {
+            if (_bSamFreqType == 0)
+                return _tSamFreq[1];
+            else
+            {
+                LOGE(tr("The tUpperSamFreq field is only valid when the bSamFreqType field is 0."));
+                return QByteArray();
+            }
+        }
+
         QByteArray UsbTypeIIIFormatTypeDescriptor::tSamFreq(uint8_t index) const
         {
-            if (index > 0 && index <= _bSamFreqType)
+            if (_bSamFreqType == 0)
+            {
+                LOGE(tr("The tSamFreq field is only valid when the bSamFreqType field is NOT 0."));
+                return QByteArray();
+            }
+            else if (index > 0 && index <= _bSamFreqType)
                 return _tSamFreq[index - 1];
             else
             {
@@ -493,13 +574,13 @@ namespace usb {
                      tr("Continuous sampling frequency"));
             if (_bSamFreqType)
             {
-                for (int i = 1; i <= _bSamFreqType; ++i)
+                for (uint8_t i = 1; i <= _bSamFreqType; ++i)
                     ATTRCUSTOM(QString("tSamFreq[%1]").arg(i), QString("0x") + tSamFreq(i).toHex(), "");
             }
             else
             {
-                ATTRCUSTOM("tLowerSamFreq", QString("0x") + _tSamFreq[0].toHex(), "");
-                ATTRCUSTOM("tUpperSamFreq", QString("0x") + _tSamFreq[1].toHex(), "");
+                ATTRCUSTOM("tLowerSamFreq", QString("0x") + tLowerSamFreq().toHex(), "");
+                ATTRCUSTOM("tUpperSamFreq", QString("0x") + tUpperSamFreq().toHex(), "");
             }
             END;
 
@@ -523,7 +604,7 @@ namespace usb {
             if (_bSamFreqType)
             {
                 _tSamFreq.reserve(_bSamFreqType);
-                for (int i = 0; i < _bSamFreqType; ++i)
+                for (uint8_t i = 0; i < _bSamFreqType; ++i)
                     _tSamFreq.append(QByteArray(reinterpret_cast<const char *>(
                                                     extra + 8 + i * 3), 3));
             }
@@ -667,7 +748,7 @@ namespace usb {
             QStringList supports;
 
             if (CUT(_bmMPEGFeatures, 4, 5))
-                supports.append(tr("Supports Internal Dynamic Range Control:"));
+                supports.append(tr("Internal Dynamic Range Control:"));
             switch (CUT(_bmMPEGFeatures, 4, 5))
             {
                 case 0b01:
@@ -752,15 +833,15 @@ namespace usb {
             QStringList supports;
 
             if (BIT(_bmAC3Features, 0))
-                supports.append(tr("Supports RF mode"));
+                supports.append(tr("RF mode"));
             if (BIT(_bmAC3Features, 1))
-                supports.append(tr("Supports Line mode"));
+                supports.append(tr("Line mode"));
             if (BIT(_bmAC3Features, 2))
-                supports.append(tr("Supports Custom0 mode"));
+                supports.append(tr("Custom0 mode"));
             if (BIT(_bmAC3Features, 3))
-                supports.append(tr("Supports Custom1 mode"));
+                supports.append(tr("Custom1 mode"));
             if (CUT(_bmAC3Features, 4, 5))
-                supports.append(tr("Supports Internal Dynamic Range Control:"));
+                supports.append(tr("Internal Dynamic Range Control:"));
             switch (CUT(_bmAC3Features, 4, 5))
             {
                 case 0b01:
@@ -2055,7 +2136,7 @@ namespace usb {
             QStringList supports;
 
             if (CUT(_bmMPEGFeatures, 4, 5))
-                supports.append(tr("Supports Internal Dynamic Range Control:"));
+                supports.append(tr("Internal Dynamic Range Control:"));
             switch (CUT(_bmMPEGFeatures, 4, 5))
             {
                 case 0b01:
@@ -2197,15 +2278,15 @@ namespace usb {
             QStringList supports;
 
             if (BIT(_bmAC3Features, 0))
-                supports.append(tr("Supports RF mode"));
+                supports.append(tr("RF mode"));
             if (BIT(_bmAC3Features, 1))
-                supports.append(tr("Supports Line mode"));
+                supports.append(tr("Line mode"));
             if (BIT(_bmAC3Features, 2))
-                supports.append(tr("Supports Custom0 mode"));
+                supports.append(tr("Custom0 mode"));
             if (BIT(_bmAC3Features, 3))
-                supports.append(tr("Supports Custom1 mode"));
+                supports.append(tr("Custom1 mode"));
             if (CUT(_bmAC3Features, 4, 5))
-                supports.append(tr("Supports Internal Dynamic Range Control:"));
+                supports.append(tr("Internal Dynamic Range Control:"));
             switch (CUT(_bmAC3Features, 4, 5))
             {
                 case 0b01:

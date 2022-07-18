@@ -3,7 +3,8 @@
 #include "usbdfudescriptor.h"
 #include "usbaudiocontrolinterfacedescriptor.h"
 #include "usbaudiostreaminterfacedescriptor.h"
-#include "usbinterfaceassociationdescriptor.h"
+#include "usbvideocontrolinterfacedescriptor.h"
+#include "usbvideostreaminterfacedescriptor.h"
 #include "__usbmacro.h"
 
 namespace usb {
@@ -32,7 +33,7 @@ namespace usb {
 #endif
 
         _endpoints.reserve(_bNumEndpoints);
-        for (int i = 0; i < _bNumEndpoints; ++i)
+        for (uint8_t i = 0; i < _bNumEndpoints; ++i)
             _endpoints.append(new UsbEndpointDescriptor(&desc->endpoint[i], this));
 
         /* Extra interface descriptor */
@@ -154,10 +155,10 @@ namespace usb {
         END;
         if (_associationDescriptor)
             APPEND(_associationDescriptor);
-        for (int i = 0; i < _bNumEndpoints; ++i)
-            APPEND(endpoint(i));
         foreach (const auto &desc, _extraDescriptors)
             APPEND(desc);
+        for (uint8_t i = 0; i < _bNumEndpoints; ++i)
+            APPEND(endpoint(i));
 
         return html;
     }
@@ -225,13 +226,29 @@ namespace usb {
                     _extraDescriptors.append(desc);
 
             }
-            // Human Interface Device Descriptor
+            /* VideoControl Interface Descriptor */
+            else if (_bInterfaceClass == 0x0E && _bInterfaceSubClass == 0x01 && _extra[pos + 1] == 0x24)
+            {
+                uvc::UsbVideoControlInterfaceDescriptor *desc =
+                        uvc::UsbVideoControlInterfaceDescriptor::get(this, pos);
+                if (desc)
+                    _extraDescriptors.append(desc);
+            }
+            /* VideoStream Interface Descriptor */
+            else if (_bInterfaceClass == 0x0E && _bInterfaceSubClass == 0x02 && _extra[pos + 1] == 0x24)
+            {
+                uvc::UsbVideoStreamInterfaceDescriptor *desc =
+                        uvc::UsbVideoStreamInterfaceDescriptor::get(this, pos);
+                if (desc)
+                    _extraDescriptors.append(desc);
+            }
+            /* Human Interface Device Descriptor */
             else if (_bInterfaceClass == 3 && _extra[pos + 1] == 0x21)
                 _extraDescriptors.append(new UsbHidDescriptor(this, pos));
-            // Device Firmware Upgrade Descriptor
+            /* Device Firmware Upgrade Descriptor */
             else if (_bInterfaceClass == 0xFE && _bInterfaceSubClass == 0x01 && _extra[pos + 1] == 0x21)
                 _extraDescriptors.append(new UsbDfuDescriptor(this, pos));
-            // Interface Association Descriptor or OTG Decriptor
+            /* Interface Association Descriptor or OTG Decriptor */
             else if (_extra[pos + 1] == uint8_t(ConfigurationExtraDescriptorType::ASSOCIATION) ||
                      _extra[pos + 1] == uint8_t(ConfigurationExtraDescriptorType::OTG))
             {

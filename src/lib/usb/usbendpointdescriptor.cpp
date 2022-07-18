@@ -93,7 +93,7 @@ namespace usb {
 
     QString UsbEndpointDescriptor::endpointAddressInfo() const
     {
-        return QString(tr("Endpoint %1 %2").arg(_bEndpointAddress & 0x0F).arg(strEndpointDirection(direction())));
+        return tr("Endpoint %1 %2").arg(_bEndpointAddress & 0x0F).arg(strEndpointDirection(direction()));
     }
 
     UsbInterfaceDescriptor *UsbEndpointDescriptor::interfaceDescriptor() const

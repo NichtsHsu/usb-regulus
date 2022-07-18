@@ -158,7 +158,7 @@ namespace usb {
         public:
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              * @see UsbFormatTypeDescriptor::strBFormatType()
              */
             virtual uint8_t bFormatType() const = 0;
@@ -219,7 +219,7 @@ namespace usb {
 
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              */
             uint8_t bFormatType() const override;
 
@@ -248,7 +248,25 @@ namespace usb {
             uint8_t bSamFreqType() const;
 
             /**
+             * @brief tLowerSamFreq
+             * @warning
+             * Only valid when bSamFreqType is 0
+             * @return lower bound in Hz of the sampling frequency range for this isochronous data endpoint
+             */
+            QByteArray tLowerSamFreq() const;
+
+            /**
+             * @brief tUpperSamFreq
+             * @warning
+             * Only valid when bSamFreqType is 0
+             * @return upper bound in Hz of the sampling frequency range for this isochronous data endpoint
+             */
+            QByteArray tUpperSamFreq() const;
+
+            /**
              * @brief tSamFreq
+             * @warning
+             * Only valid when bSamFreqType is NOT 0
              * @param index
              * @note
              * The Spec defines the first tSamFreq is tSamFreq(1),
@@ -302,7 +320,7 @@ namespace usb {
 
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              */
             uint8_t bFormatType() const override;
 
@@ -325,7 +343,25 @@ namespace usb {
             uint8_t bSamFreqType() const;
 
             /**
+             * @brief tLowerSamFreq
+             * @warning
+             * Only valid when bSamFreqType is 0
+             * @return lower bound in Hz of the sampling frequency range for this isochronous data endpoint
+             */
+            QByteArray tLowerSamFreq() const;
+
+            /**
+             * @brief tUpperSamFreq
+             * @warning
+             * Only valid when bSamFreqType is 0
+             * @return upper bound in Hz of the sampling frequency range for this isochronous data endpoint
+             */
+            QByteArray tUpperSamFreq() const;
+
+            /**
              * @brief tSamFreq
+             * @warning
+             * Only valid when bSamFreqType is NOT 0
              * @param index
              * @note
              * The Spec defines the first tSamFreq is tSamFreq(1),
@@ -379,7 +415,7 @@ namespace usb {
 
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              */
             uint8_t bFormatType() const override;
 
@@ -408,7 +444,25 @@ namespace usb {
             uint8_t bSamFreqType() const;
 
             /**
+             * @brief tLowerSamFreq
+             * @warning
+             * Only valid when bSamFreqType is 0
+             * @return lower bound in Hz of the sampling frequency range for this isochronous data endpoint
+             */
+            QByteArray tLowerSamFreq() const;
+
+            /**
+             * @brief tUpperSamFreq
+             * @warning
+             * Only valid when bSamFreqType is 0
+             * @return upper bound in Hz of the sampling frequency range for this isochronous data endpoint
+             */
+            QByteArray tUpperSamFreq() const;
+
+            /**
              * @brief tSamFreq
+             * @warning
+             * Only valid when bSamFreqType is NOT 0
              * @param index
              * @note
              * The Spec defines the first tSamFreq is tSamFreq(1),
@@ -443,7 +497,7 @@ namespace usb {
         public:
             /**
              * @brief wFormatTag
-             * @return constant value identifying the precise format the AudioStreaming interface is using
+             * @return constant identifying the precise format the AudioStreaming interface is using
              * @see UsbAudioStreamInterfaceDescriptor::strWFormatTag()
              */
             virtual uint16_t wFormatTag() const = 0;
@@ -497,7 +551,7 @@ namespace usb {
 
             /**
              * @brief wFormatTag
-             * @return constant value identifying the precise format the AudioStreaming interface is using
+             * @return constant identifying the precise format the AudioStreaming interface is using
              * @see UsbAudioStreamInterfaceDescriptor::strWFormatTag()
              */
             uint16_t wFormatTag() const override;
@@ -569,7 +623,7 @@ namespace usb {
 
             /**
              * @brief wFormatTag
-             * @return constant value identifying the precise format the AudioStreaming interface is using
+             * @return constant identifying the precise format the AudioStreaming interface is using
              * @see UsbAudioStreamInterfaceDescriptor::strWFormatTag()
              */
             uint16_t wFormatTag() const override;
@@ -727,7 +781,7 @@ namespace usb {
 
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              * @see UsbAudioStreamInterfaceDescriptor::strBFormatType()
              */
             uint8_t bFormatType() const;
@@ -786,7 +840,7 @@ namespace usb {
         public:
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              * @see UsbAudioStreamInterfaceDescriptor::strBFormatType()
              */
             virtual uint8_t bFormatType() const = 0;
@@ -847,7 +901,7 @@ namespace usb {
 
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              */
             uint8_t bFormatType() const override;
 
@@ -907,7 +961,7 @@ namespace usb {
 
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              */
             uint8_t bFormatType() const override;
 
@@ -967,7 +1021,7 @@ namespace usb {
 
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              */
             uint8_t bFormatType() const override;
 
@@ -1027,7 +1081,7 @@ namespace usb {
 
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              */
             uint8_t bFormatType() const override;
 
@@ -1074,7 +1128,7 @@ namespace usb {
 
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              */
             uint8_t bFormatType() const override;
 
@@ -1104,7 +1158,7 @@ namespace usb {
 
             /**
              * @brief bSideBandProtocol
-             * @return constant value identifying the Side Band Protocol used for
+             * @return constant identifying the Side Band Protocol used for
              * the Packet Header and Control Channel content.
              * @see UsbFormatTypeDescriptor::strBSideBandProtocol()
              */
@@ -1154,7 +1208,7 @@ namespace usb {
 
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              */
             uint8_t bFormatType() const override;
 
@@ -1178,7 +1232,7 @@ namespace usb {
 
             /**
              * @brief bSideBandProtocol
-             * @return constant value identifying the Side Band Protocol used for the Packet Header content
+             * @return constant identifying the Side Band Protocol used for the Packet Header content
              */
             uint8_t bSideBandProtocol() const;
 
@@ -1227,7 +1281,7 @@ namespace usb {
 
             /**
              * @brief bFormatType
-             * @return constant value identifying the Format Type the AudioStreaming interface is using
+             * @return constant identifying the Format Type the AudioStreaming interface is using
              */
             uint8_t bFormatType() const override;
 
@@ -1251,7 +1305,7 @@ namespace usb {
 
             /**
              * @brief bSideBandProtocol
-             * @return constant value identifying the Side Band Protocol used for the Packet Header content
+             * @return constant identifying the Side Band Protocol used for the Packet Header content
              */
             uint8_t bSideBandProtocol() const;
 
@@ -1295,13 +1349,13 @@ namespace usb {
 
             /**
              * @brief bEncoderID
-             * @return constant value uniquely identifying the encoder within the interface
+             * @return constant uniquely identifying the encoder within the interface
              */
             uint8_t bEncoderID() const;
 
             /**
              * @brief bEncoder
-             * @return constant value identifying the encoder
+             * @return constant identifying the encoder
              * @see UsbEncoderDescriptor::strBEncoder()
              */
             uint8_t bEncoder() const;
@@ -1419,13 +1473,13 @@ namespace usb {
         public:
             /**
              * @brief bDecoderID
-             * @return constant value uniquely identifying the decoder within the interface
+             * @return constant uniquely identifying the decoder within the interface
              */
             virtual uint8_t bDecoderID() const = 0;
 
             /**
              * @brief bDecoder
-             * @return constant value identifying the decoder
+             * @return constant identifying the decoder
              * @see UsbDecoderDescriptor::strBDecoder();
              */
             virtual uint8_t bDecoder() const = 0;
@@ -1485,13 +1539,13 @@ namespace usb {
 
             /**
              * @brief bDecoderID
-             * @return constant value uniquely identifying the decoder within the interface
+             * @return constant uniquely identifying the decoder within the interface
              */
             uint8_t bDecoderID() const override;
 
             /**
              * @brief bDecoder
-             * @return constant value identifying the decoder
+             * @return constant identifying the decoder
              * @see UsbDecoderDescriptor::strBDecoder();
              */
             uint8_t bDecoder() const override;
@@ -1587,13 +1641,13 @@ namespace usb {
 
             /**
              * @brief bDecoderID
-             * @return constant value uniquely identifying the decoder within the interface
+             * @return constant uniquely identifying the decoder within the interface
              */
             uint8_t bDecoderID() const override;
 
             /**
              * @brief bDecoder
-             * @return constant value identifying the decoder
+             * @return constant identifying the decoder
              * @see UsbDecoderDescriptor::strBDecoder();
              */
             uint8_t bDecoder() const override;
@@ -1682,13 +1736,13 @@ namespace usb {
 
             /**
              * @brief bDecoderID
-             * @return constant value uniquely identifying the decoder within the interface
+             * @return constant uniquely identifying the decoder within the interface
              */
             uint8_t bDecoderID() const override;
 
             /**
              * @brief bDecoder
-             * @return constant value identifying the decoder
+             * @return constant identifying the decoder
              * @see UsbDecoderDescriptor::strBDecoder();
              */
             uint8_t bDecoder() const override;
@@ -1773,13 +1827,13 @@ namespace usb {
 
             /**
              * @brief bDecoderID
-             * @return constant value uniquely identifying the decoder within the interface
+             * @return constant uniquely identifying the decoder within the interface
              */
             uint8_t bDecoderID() const override;
 
             /**
              * @brief bDecoder
-             * @return constant value identifying the decoder
+             * @return constant identifying the decoder
              * @see UsbDecoderDescriptor::strBDecoder();
              */
             uint8_t bDecoder() const override;

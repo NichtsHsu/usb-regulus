@@ -1,31 +1,6 @@
 ﻿#include "usbdevicecapabilitydescriptor.h"
 #include "__usbmacro.h"
 
-static QString hexUuid(const QByteArray &uuid)
-{
-    if (uuid.length() < 16)
-        return QString();
-
-    const uint8_t *buffer = reinterpret_cast<const uint8_t *>(uuid.constData());
-    return QString("{%1%2%3%4-%5%6-%7%8-%9%10-%11%12%13%14%15%16}")
-            .arg(buffer[3], 2, 16, QChar('0'))
-            .arg(buffer[2], 2, 16, QChar('0'))
-            .arg(buffer[1], 2, 16, QChar('0'))
-            .arg(buffer[0], 2, 16, QChar('0'))
-            .arg(buffer[5], 2, 16, QChar('0'))
-            .arg(buffer[4], 2, 16, QChar('0'))
-            .arg(buffer[7], 2, 16, QChar('0'))
-            .arg(buffer[6], 2, 16, QChar('0'))
-            .arg(buffer[8], 2, 16, QChar('0'))
-            .arg(buffer[9], 2, 16, QChar('0'))
-            .arg(buffer[10], 2, 16, QChar('0'))
-            .arg(buffer[11], 2, 16, QChar('0'))
-            .arg(buffer[12], 2, 16, QChar('0'))
-            .arg(buffer[13], 2, 16, QChar('0'))
-            .arg(buffer[14], 2, 16, QChar('0'))
-            .arg(buffer[15], 2, 16, QChar('0'));
-}
-
 namespace usb {
     UsbDeviceCapabilityDescriptor::UsbDeviceCapabilityDescriptor(
             const libusb_bos_dev_capability_descriptor *desc,
@@ -171,7 +146,7 @@ namespace usb {
         ATTR("wSpeedSupported", _wSpeedSupported,
              tr("Supports") + QString(" ") + speedSupportedList().join(", "));
         ATTR("bFunctionalitySupport", _bFunctionalitySupport,
-             _bFunctionalitySupport ? tr("The lowest speed at all functionality is available"): QString(""));
+             _bFunctionalitySupport ? tr("The lowest speed at all functionality is available"): "");
         ATTR("bU1DevExitLat", _bU1DevExitLat, tr("Less than %1 µs").arg(_bU1DevExitLat));
         ATTR("bU2DevExitLat", _bU2DevExitLat, tr("Less than %1 µs").arg(_bU2DevExitLat));
         END;
@@ -312,7 +287,7 @@ namespace usb {
     QStringList UsbWirelessDeviceCapabilityDescriptor::__parseBmBandGroupList() const
     {
         QStringList bandGroupList;
-        for (int i = 0; i < 16; ++i)
+        for (uint8_t i = 0; i < 16; ++i)
             if (BIT(_bmBandGroup, i))
                 bandGroupList.append(QString::number(i));
         return bandGroupList;
@@ -377,16 +352,16 @@ namespace usb {
         switch (laneSpeedExponent)
         {
             case 0:
-                bitRate = "b/s";
+                bitRate = tr("b/s");
             break;
             case 1:
-                bitRate = "kb/s";
+                bitRate = tr("kb/s");
             break;
             case 2:
-                bitRate = "Mb/s";
+                bitRate = tr("Mb/s");
             break;
             case 3:
-                bitRate = "Gb/s";
+                bitRate = tr("Gb/s");
             break;
         }
 
@@ -1001,7 +976,7 @@ namespace usb {
         ATTR("bSubClass", _bSubClass, _bSubClass);
         ATTR("bProtocol", _bProtocol, _bProtocol);
         ATTR("bConfigurationCount", _bConfigurationCount, _bConfigurationCount);
-        for (int i = 0; i < _bConfigurationCount; ++i)
+        for (uint8_t i = 0; i < _bConfigurationCount; ++i)
             ATTR(QString("bConfigurationIndex[%1]").arg(i),
                  bConfigurationIndex(i),
                  bConfigurationIndex(i));

@@ -1,6 +1,6 @@
 ﻿#include "usbaudiocontrolinterfacedescriptor.h"
 #include "__usbmacro.h"
-#include "usbterminaltypes.h"
+#include "usbaudioterminaltypes.h"
 
 namespace usb {
     UsbAudioControlInterfaceDescriptorBasic::UsbAudioControlInterfaceDescriptorBasic(
@@ -146,7 +146,7 @@ namespace usb {
             _wTotalLength = *reinterpret_cast<const uint16_t *>(extra + 5);
             _bInCollection = *(extra + 7);
             _baInterfaceNr.reserve(_bInCollection);
-            for (int i = 8; i < 8 + _bInCollection; ++i)
+            for (uint8_t i = 8; i < 8 + _bInCollection; ++i)
                 _baInterfaceNr.append(*(extra + i));
         }
 
@@ -202,7 +202,7 @@ namespace usb {
             ATTR("bcdADC", _bcdADC, "");
             ATTR("wTotalLength", _wTotalLength, _wTotalLength);
             ATTR("bInCollection", _bInCollection, _bInCollection);
-            for (int i = 1; i <= _bInCollection; ++i)
+            for (uint8_t i = 1; i <= _bInCollection; ++i)
                 ATTR(QString("baInterfaceNr(%1)").arg(i), baInterfaceNr(i), baInterfaceNr(i));
             END;
 
@@ -384,14 +384,14 @@ namespace usb {
             _bUnitID = *(extra + 3);
             _bNrInPins = *(extra + 4);
             _baSourceID.reserve(_bNrInPins);
-            for (int i = 5; i < 5 + _bNrInPins; ++i)
+            for (uint8_t i = 5; i < 5 + _bNrInPins; ++i)
                 _baSourceID.append(*(extra + i));
             _bNrChannels = *(extra + 5 + _bNrInPins);
             _wChannelConfig = *reinterpret_cast<const uint16_t *>(extra + 6 + _bNrInPins);
             _iChannelNames = *(extra + 8 + _bNrInPins);
             const uint8_t N = _bLength - 10 - _bNrInPins;
             _bmControls.reserve(N);
-            for (int i = 9 + _bNrInPins; i < 9 + _bNrInPins + N; ++i)
+            for (uint8_t i = 9 + _bNrInPins; i < 9 + _bNrInPins + N; ++i)
                 _bmControls.append(*(extra + i));
             _iMixer = *(extra + 9 + _bNrInPins + N);
         }
@@ -412,7 +412,7 @@ namespace usb {
             ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
             ATTR("bUnitID", _bUnitID, _bUnitID);
             ATTR("bNrInPins", _bNrInPins, _bNrInPins);
-            for (int i = 1; i <= _bNrInPins; ++i)
+            for (uint8_t i = 1; i <= _bNrInPins; ++i)
                 ATTR(QString("baSourceID(%1)").arg(i), baSourceID(i), baSourceID(i));
             ATTR("bNrChannels", _bNrChannels, _bNrChannels);
             ATTR("wChannelConfig", _wChannelConfig, parseWChannelConfig(_wChannelConfig).join(NEWLINE));
@@ -534,7 +534,7 @@ namespace usb {
             ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
             ATTR("bUnitID", _bUnitID, _bUnitID);
             ATTR("bNrInPins", _bNrInPins, _bNrInPins);
-            for (int i = 1; i <= _bNrInPins; ++i)
+            for (uint8_t i = 1; i <= _bNrInPins; ++i)
                 ATTR(QString("baSourceID(%1)").arg(i), baSourceID(i), baSourceID(i));
             ATTRSTRDESC("iSelector", _iSelector, device);
             END;
@@ -554,7 +554,7 @@ namespace usb {
             _bUnitID = *(extra + 3);
             _bNrInPins = *(extra + 4);
             _baSourceID.reserve(_bNrInPins);
-            for (int i = 5; i < 5 + _bNrInPins; ++i)
+            for (uint8_t i = 5; i < 5 + _bNrInPins; ++i)
                 _baSourceID.append(*(extra + i));
             _iSelector = *(extra + 5 + _bNrInPins);
         }
@@ -618,7 +618,7 @@ namespace usb {
             ATTR("bUnitID", _bUnitID, _bUnitID);
             ATTR("bSourceID", _bSourceID, _bSourceID);
             ATTR("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
-            for (int i = 0; i <= _CHANNEL; ++i)
+            for (uint8_t i = 0; i <= _CHANNEL; ++i)
                 ATTRCUSTOM(QString("bmaControls(%1)").arg(i),
                            QString("0x") + bmaControls(i).toHex(),
                            __parseBmaControls(i));
@@ -642,7 +642,7 @@ namespace usb {
             _bControlSize = *(extra + 5);
             _CHANNEL = (_bLength - 7) / _bControlSize - 1;
             _bmaControls.reserve(_CHANNEL + 1);
-            for (int i = 0; i <= _CHANNEL; ++i)
+            for (uint8_t i = 0; i <= _CHANNEL; ++i)
                 _bmaControls.append(QByteArray(reinterpret_cast<const char *>(
                                                    extra + 6 + i * _bControlSize), _bControlSize));
             _iFeature = *(extra + 6 + (_CHANNEL + 1) * _bControlSize);
@@ -655,28 +655,28 @@ namespace usb {
             if (control.length() >= 1)
             {
                 if (BIT(control[0], 0))
-                    supports.append(tr("Supports Mute Control"));
+                    supports.append(tr("Mute Control"));
                 if (BIT(control[0], 1))
-                    supports.append(tr("Supports Volume Control"));
+                    supports.append(tr("Volume Control"));
                 if (BIT(control[0], 2))
-                    supports.append(tr("Supports Bass Control"));
+                    supports.append(tr("Bass Control"));
                 if (BIT(control[0], 3))
-                    supports.append(tr("Supports Mid Control"));
+                    supports.append(tr("Mid Control"));
                 if (BIT(control[0], 4))
-                    supports.append(tr("Supports Treble Control"));
+                    supports.append(tr("Treble Control"));
                 if (BIT(control[0], 5))
-                    supports.append(tr("Supports Graphic Equalizer Control"));
+                    supports.append(tr("Graphic Equalizer Control"));
                 if (BIT(control[0], 6))
-                    supports.append(tr("Supports Automatic Gain Control"));
+                    supports.append(tr("Automatic Gain Control"));
                 if (BIT(control[0], 7))
-                    supports.append(tr("Supports Delay Control"));
+                    supports.append(tr("Delay Control"));
             }
             if (control.length() >= 2)
             {
                 if (BIT(control[1], 0))
-                    supports.append(tr("Supports Bass Boost Control"));
+                    supports.append(tr("Bass Boost Control"));
                 if (BIT(control[2], 1))
-                    supports.append(tr("Supports Loudness Control"));
+                    supports.append(tr("Loudness Control"));
             }
 
             return supports.join(NEWLINE);
@@ -782,14 +782,14 @@ namespace usb {
             _wProcessType = *reinterpret_cast<const uint16_t *>(extra + 4);
             _bNrInPins = *(extra + 6);
             _baSourceID.reserve(_bNrInPins);
-            for (int i = 7; i < 7 + _bNrInPins; ++i)
+            for (uint8_t i = 7; i < 7 + _bNrInPins; ++i)
                 _baSourceID.append(*(extra + i));
             _bNrChannels = *(extra + 7 + _bNrInPins);
             _wChannelConfig =  *reinterpret_cast<const uint16_t *>(extra + 8 + _bNrInPins);
             _iChannelNames = *(extra + 10 + _bNrInPins);
             _bControlSize = *(extra + 11 + _bNrInPins);
             _bmControls.reserve(_bControlSize);
-            for (int i = 12 + _bNrInPins; i < 12 + _bControlSize + _bNrInPins; ++i)
+            for (uint8_t i = 12 + _bNrInPins; i < 12 + _bControlSize + _bNrInPins; ++i)
                 _bmControls.append(*reinterpret_cast<const char *>(extra + i));
             _iProcessing = *(extra + 12 + _bNrInPins + _bControlSize);
         }
@@ -807,7 +807,7 @@ namespace usb {
             if (_bNrInPins == 1)
                 ATTR("bSourceID", baSourceID(1), baSourceID(1));
             else
-                for (int i = 1; i <= _bNrInPins; ++i)
+                for (uint8_t i = 1; i <= _bNrInPins; ++i)
                     ATTR(QString("baSourceID(%1)").arg(i), baSourceID(i), baSourceID(i));
             ATTR("bNrChannels", _bNrChannels, _bNrChannels);
             ATTR("wChannelConfig", _wChannelConfig, parseWChannelConfig(_wChannelConfig).join(NEWLINE));
@@ -888,7 +888,7 @@ namespace usb {
             START(tr("Up/Down-mix Processing Unit Descriptor"));
             __parseBase(html);
             ATTR("bNrModes", _bNrModes, _bNrModes);
-            for (int i = 1; i <= _bNrModes; ++i)
+            for (uint8_t i = 1; i <= _bNrModes; ++i)
                 ATTR(QString("waModes(%1)").arg(i), waModes(i), parseWChannelConfig(waModes(i)).join(NEWLINE));
             END;
 
@@ -903,7 +903,7 @@ namespace usb {
 
             _bNrModes = *(extra + 14 + _bControlSize);
             _waModes.reserve(_bNrModes);
-            for (int i = 0; i < _bNrModes; ++i)
+            for (uint8_t i = 0; i < _bNrModes; ++i)
                 _waModes.append(*reinterpret_cast<const uint16_t *>(
                                     extra + 15 + _bControlSize + i * 2));
         }
@@ -912,9 +912,9 @@ namespace usb {
         {
             QStringList supports;
             if (BIT(_bmControls[0], 0))
-                supports.append(tr("Supports Enable Processing Control"));
+                supports.append(tr("Enable Processing Control"));
             if (BIT(_bmControls[0], 1))
-                supports.append(tr("Supports Mode Select Control"));
+                supports.append(tr("Mode Select Control"));
             return supports.join(NEWLINE);
         }
 
@@ -941,7 +941,7 @@ namespace usb {
             START(tr("Dolby Prologic Processing Unit Descriptor"));
             __parseBase(html);
             ATTR("bNrModes", _bNrModes, _bNrModes);
-            for (int i = 1; i <= _bNrModes; ++i)
+            for (uint8_t i = 1; i <= _bNrModes; ++i)
                 ATTR(QString("waModes(%1)").arg(i), waModes(i), parseWChannelConfig(waModes(i)).join(NEWLINE));
             END;
 
@@ -956,7 +956,7 @@ namespace usb {
 
             _bNrModes = *(extra + 14 + _bControlSize);
             _waModes.reserve(_bNrModes);
-            for (int i = 0; i < _bNrModes; ++i)
+            for (uint8_t i = 0; i < _bNrModes; ++i)
                 _waModes.append(*reinterpret_cast<const uint16_t *>(
                                     extra + 15 + _bControlSize + i * 2));
         }
@@ -965,9 +965,9 @@ namespace usb {
         {
             QStringList supports;
             if (BIT(_bmControls[0], 0))
-                supports.append(tr("Supports Enable Processing Control"));
+                supports.append(tr("Enable Processing Control"));
             if (BIT(_bmControls[0], 1))
-                supports.append(tr("Supports Mode Select Control"));
+                supports.append(tr("Mode Select Control"));
             return supports.join(NEWLINE);
         }
 
@@ -992,9 +992,9 @@ namespace usb {
         {
             QStringList supports;
             if (BIT(_bmControls[0], 0))
-                supports.append(tr("Supports Enable Processing Control"));
+                supports.append(tr("Enable Processing Control"));
             if (BIT(_bmControls[0], 1))
-                supports.append(tr("Supports Spaciousness Control"));
+                supports.append(tr("Spaciousness Control"));
             return supports.join(NEWLINE);
         }
 
@@ -1019,15 +1019,15 @@ namespace usb {
         {
             QStringList supports;
             if (BIT(_bmControls[0], 0))
-                supports.append(tr("Supports Enable Processing Control"));
+                supports.append(tr("Enable Processing Control"));
             if (BIT(_bmControls[0], 1))
-                supports.append(tr("Supports Reverb Type Control"));
+                supports.append(tr("Reverb Type Control"));
             if (BIT(_bmControls[0], 2))
-                supports.append(tr("Supports Reverb Level Control"));
+                supports.append(tr("Reverb Level Control"));
             if (BIT(_bmControls[0], 3))
-                supports.append(tr("Supports Reverb Time Control"));
+                supports.append(tr("Reverb Time Control"));
             if (BIT(_bmControls[0], 4))
-                supports.append(tr("Supports Reverb Delay Feedback Control"));
+                supports.append(tr("Reverb Delay Feedback Control"));
             return supports.join(NEWLINE);
         }
 
@@ -1052,13 +1052,13 @@ namespace usb {
         {
             QStringList supports;
             if (BIT(_bmControls[0], 0))
-                supports.append(tr("Supports Enable Processing Control"));
+                supports.append(tr("Enable Processing Control"));
             if (BIT(_bmControls[0], 1))
-                supports.append(tr("Supports Chorus Level Control"));
+                supports.append(tr("Chorus Level Control"));
             if (BIT(_bmControls[0], 2))
-                supports.append(tr("Supports Chorus Modulation Rate Control"));
+                supports.append(tr("Chorus Modulation Rate Control"));
             if (BIT(_bmControls[0], 3))
-                supports.append(tr("Supports Chorus Modulation Depth Control"));
+                supports.append(tr("Chorus Modulation Depth Control"));
             return supports.join(NEWLINE);
         }
 
@@ -1083,17 +1083,17 @@ namespace usb {
         {
             QStringList supports;
             if (BIT(_bmControls[0], 0))
-                supports.append(tr("Supports Enable Processing Control"));
+                supports.append(tr("Enable Processing Control"));
             if (BIT(_bmControls[0], 1))
-                supports.append(tr("Supports Compression Ratio Control"));
+                supports.append(tr("Compression Ratio Control"));
             if (BIT(_bmControls[0], 2))
-                supports.append(tr("Supports MaxAmpl Control"));
+                supports.append(tr("MaxAmpl Control"));
             if (BIT(_bmControls[0], 3))
-                supports.append(tr("Supports Threshold Control"));
+                supports.append(tr("Threshold Control"));
             if (BIT(_bmControls[0], 4))
-                supports.append(tr("Supports Attack time Control"));
+                supports.append(tr("Attack time Control"));
             if (BIT(_bmControls[0], 5))
-                supports.append(tr("Supports Release time Control"));
+                supports.append(tr("Release time Control"));
             return supports.join(NEWLINE);
         }
 
@@ -1181,7 +1181,7 @@ namespace usb {
             ATTR("bUnitID", _bUnitID, _bUnitID);
             ATTR("wExtensionCode", _wExtensionCode, _wExtensionCode);
             ATTR("bNrInPins", _bNrInPins, _bNrInPins);
-            for (int i = 1; i <= _bNrInPins; ++i)
+            for (uint8_t i = 1; i <= _bNrInPins; ++i)
                 ATTR(QString("baSourceID(%1)").arg(i), baSourceID(i), baSourceID(i));
             ATTR("bNrChannels", _bNrChannels, _bNrChannels);
             ATTR("wChannelConfig", _wChannelConfig, parseWChannelConfig(_wChannelConfig).join(NEWLINE));
@@ -1206,14 +1206,14 @@ namespace usb {
             _bUnitID = *(extra + 3);
             _wExtensionCode = *reinterpret_cast<const uint16_t *>(extra + 4);
             _bNrInPins = *(extra + 6);
-            for (int i = 7; i < 7 + _bNrInPins; ++i)
+            for (uint8_t i = 7; i < 7 + _bNrInPins; ++i)
                 _baSourceID.append(*(extra + i));
             _bNrChannels = *(extra + 7 + _bNrInPins);
             _wChannelConfig = *reinterpret_cast<const uint16_t *>(extra + 8 + _bNrInPins);
             _iChannelNames = *(extra + 10 + _bNrInPins);
             _bControlSize = *(extra + 11 + _bNrInPins);
             _bmControls.reserve(_bControlSize);
-            for (int i = 12 + _bNrInPins; i < 12 + _bControlSize + _bNrInPins; ++i)
+            for (uint8_t i = 12 + _bNrInPins; i < 12 + _bControlSize + _bNrInPins; ++i)
                 _bmControls.append(*reinterpret_cast<const char *>(extra + i));
             _iExtension = *(extra + 12 + _bNrInPins + _bControlSize);
         }
@@ -1819,14 +1819,14 @@ namespace usb {
             _bUnitID = *(extra + 3);
             _bNrInPins = *(extra + 4);
             _baSourceID.reserve(_bNrInPins);
-            for (int i = 5; i < 5 + _bNrInPins; ++i)
+            for (uint8_t i = 5; i < 5 + _bNrInPins; ++i)
                 _baSourceID.append(*(extra + i));
             _bNrChannels = *(extra + 5 + _bNrInPins);
             _bmChannelConfig = *reinterpret_cast<const uint32_t *>(extra + 6 + _bNrInPins);
             _iChannelNames = *(extra + 10 + _bNrInPins);
             const uint8_t N = _bLength - 13 - _bNrInPins;
             _bmMixerControls.reserve(N);
-            for (int i = 11 + _bNrInPins; i < 11 + _bNrInPins + N; ++i)
+            for (uint8_t i = 11 + _bNrInPins; i < 11 + _bNrInPins + N; ++i)
                 _bmMixerControls.append(*(extra + i));
             _bmControls = *(extra + 11 + _bNrInPins + N);
             _iMixer = *(extra + 12 + _bNrInPins + N);
@@ -1887,7 +1887,7 @@ namespace usb {
             ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
             ATTR("bUnitID", _bUnitID, _bUnitID);
             ATTR("bNrInPins", _bNrInPins, _bNrInPins);
-            for (int i = 1; i <= _bNrInPins; ++i)
+            for (uint8_t i = 1; i <= _bNrInPins; ++i)
                 ATTR(QString("baSourceID(%1)").arg(i), baSourceID(i), baSourceID(i));
             ATTR("bNrChannels", _bNrChannels, _bNrChannels);
             ATTR("bmChannelConfig", _bmChannelConfig, parseBmChannelConfig(_bmChannelConfig).join(NEWLINE));
@@ -2010,7 +2010,7 @@ namespace usb {
             ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
             ATTR("bUnitID", _bUnitID, _bUnitID);
             ATTR("bNrInPins", _bNrInPins, _bNrInPins);
-            for (int i = 1; i <= _bNrInPins; ++i)
+            for (uint8_t i = 1; i <= _bNrInPins; ++i)
                 ATTR(QString("baSourceID(%1)").arg(i), baSourceID(i), baSourceID(i));
             ATTR("bmControls", _bmControls, __parseBmControls());
             ATTRSTRDESC("iSelector", _iSelector, device);
@@ -2031,7 +2031,7 @@ namespace usb {
             _bUnitID = *(extra + 3);
             _bNrInPins = *(extra + 4);
             _baSourceID.reserve(_bNrInPins);
-            for (int i = 5; i < 5 + _bNrInPins; ++i)
+            for (uint8_t i = 5; i < 5 + _bNrInPins; ++i)
                 _baSourceID.append(*(extra + i));
             _bmControls  = *(extra + 5 + _bNrInPins);
             _iSelector = *(extra + 6 + _bNrInPins);
@@ -2108,7 +2108,7 @@ namespace usb {
             ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
             ATTR("bUnitID", _bUnitID, _bUnitID);
             ATTR("bSourceID", _bSourceID, _bSourceID);
-            for (int i = 0; i <= _CHANNEL; ++i)
+            for (uint8_t i = 0; i <= _CHANNEL; ++i)
                 ATTR(QString("bmaControls(%1)").arg(i), bmaControls(i), __parseBmaControls(i));
             ATTRSTRDESC("iFeature", _iFeature, device);
             END;
@@ -2129,7 +2129,7 @@ namespace usb {
             _bSourceID = *(extra + 4);
             _CHANNEL = (_bLength - 6) / 4 - 1;
             _bmaControls.reserve(_CHANNEL + 1);
-            for (int i = 0; i <= _CHANNEL; ++i)
+            for (uint8_t i = 0; i <= _CHANNEL; ++i)
                 _bmaControls.append(*reinterpret_cast<const uint32_t *>(
                                         extra + 5 + i * 4));
             _iFeature = *(extra + 5 + (_CHANNEL + 1) * 4);
@@ -2351,7 +2351,7 @@ namespace usb {
             _bSourceID = *(extra + 4);
             _CHANNEL = (_bLength - 16) / 4;
             _bmaControls.reserve(_CHANNEL + 1);
-            for (int i = 0; i <= _CHANNEL; ++i)
+            for (uint8_t i = 0; i <= _CHANNEL; ++i)
                 _bmaControls.append(*reinterpret_cast<const uint32_t *>(
                                         extra + 7 + i * 4));
             _iEffects = *(extra + 11 + (_CHANNEL + 1) * 4);
@@ -2366,7 +2366,7 @@ namespace usb {
             ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
             ATTR("bUnitID", _bUnitID, _bUnitID);
             ATTR("bSourceID", _bSourceID, _bSourceID);
-            for (int i = 0; i <= _CHANNEL; ++i)
+            for (uint8_t i = 0; i <= _CHANNEL; ++i)
                 ATTR(QString("bmaControls(%1)").arg(i), bmaControls(i), __parseBmaControls(i));
             ATTRSTRDESC("iEffects", _iEffects, device);
         }
@@ -2885,7 +2885,7 @@ namespace usb {
             _wProcessType = *reinterpret_cast<const uint16_t *>(extra + 4);
             _bNrInPins = *(extra + 6);
             _baSourceID.reserve(_bNrInPins);
-            for (int i = 7; i < 7 + _bNrInPins; ++i)
+            for (uint8_t i = 7; i < 7 + _bNrInPins; ++i)
                 _baSourceID.append(*(extra + i));
             _bNrChannels = *(extra + 7 + _bNrInPins);
             _bmChannelConfig =  *reinterpret_cast<const uint32_t *>(extra + 8 + _bNrInPins);
@@ -2907,7 +2907,7 @@ namespace usb {
             if (_bNrInPins == 1)
                 ATTR("bSourceID", baSourceID(1), baSourceID(1));
             else
-                for (int i = 1; i <= _bNrInPins; ++i)
+                for (uint8_t i = 1; i <= _bNrInPins; ++i)
                     ATTR(QString("baSourceID(%1)").arg(i), baSourceID(i), baSourceID(i));
             ATTR("bNrChannels", _bNrChannels, _bNrChannels);
             ATTR("bmChannelConfig", _bmChannelConfig, parseBmChannelConfig(_bmChannelConfig).join(NEWLINE));
@@ -2972,7 +2972,7 @@ namespace usb {
             START(tr("Up/Down-mix Processing Unit Descriptor"));
             __parseBase(html);
             ATTR("bNrModes", _bNrModes, _bNrModes);
-            for (int i = 1; i <= _bNrModes; ++i)
+            for (uint8_t i = 1; i <= _bNrModes; ++i)
                 ATTR(QString("daModes(%1)").arg(i), daModes(i), parseBmChannelConfig(daModes(i)).join(NEWLINE));
             END;
 
@@ -2987,7 +2987,7 @@ namespace usb {
 
             _bNrModes = *(extra + 17);
             _daModes.reserve(_bNrModes);
-            for (int i = 0; i < _bNrModes; ++i)
+            for (uint8_t i = 0; i < _bNrModes; ++i)
                 _daModes.append(*reinterpret_cast<const uint32_t *>(
                                     extra + 18 + i * 4));
         }
@@ -3067,7 +3067,7 @@ namespace usb {
             START(tr("Dolby Prologic Processing Unit Descriptor"));
             __parseBase(html);
             ATTR("bNrModes", _bNrModes, _bNrModes);
-            for (int i = 1; i <= _bNrModes; ++i)
+            for (uint8_t i = 1; i <= _bNrModes; ++i)
                 ATTR(QString("waModes(%1)").arg(i), daModes(i), parseBmChannelConfig(daModes(i)).join(NEWLINE));
             END;
 
@@ -3082,7 +3082,7 @@ namespace usb {
 
             _bNrModes = *(extra + 17);
             _daModes.reserve(_bNrModes);
-            for (int i = 0; i < _bNrModes; ++i)
+            for (uint8_t i = 0; i < _bNrModes; ++i)
                 _daModes.append(*reinterpret_cast<const uint32_t *>(
                                     extra + 18 + i * 4));
         }
@@ -3287,7 +3287,7 @@ namespace usb {
             ATTR("bUnitID", _bUnitID, _bUnitID);
             ATTR("wExtensionCode", _wExtensionCode, _wExtensionCode);
             ATTR("bNrInPins", _bNrInPins, _bNrInPins);
-            for (int i = 1; i <= _bNrInPins; ++i)
+            for (uint8_t i = 1; i <= _bNrInPins; ++i)
                 ATTR(QString("baSourceID(%1)").arg(i), baSourceID(i), baSourceID(i));
             ATTR("bNrChannels", _bNrChannels, _bNrChannels);
             ATTR("bmChannelConfig", _bmChannelConfig, parseBmChannelConfig(_bmChannelConfig).join(NEWLINE));
@@ -3311,7 +3311,7 @@ namespace usb {
             _bUnitID = *(extra + 3);
             _wExtensionCode = *reinterpret_cast<const uint16_t *>(extra + 4);
             _bNrInPins = *(extra + 6);
-            for (int i = 7; i < 7 + _bNrInPins; ++i)
+            for (uint8_t i = 7; i < 7 + _bNrInPins; ++i)
                 _baSourceID.append(*(extra + i));
             _bNrChannels = *(extra + 7 + _bNrInPins);
             _bmChannelConfig = *reinterpret_cast<const uint32_t *>(extra + 8 + _bNrInPins);
@@ -3546,7 +3546,7 @@ namespace usb {
             ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
             ATTR("bClockID", _bClockID, _bClockID);
             ATTR("bNrInPins", _bNrInPins, _bNrInPins);
-            for (int i = 1; i <= _bNrInPins; ++i)
+            for (uint8_t i = 1; i <= _bNrInPins; ++i)
                 ATTR(QString("baCSourceID(%1)").arg(i), baCSourceID(i), baCSourceID(i));
             ATTR("bmControls", _bmControls, __parseBmControls());
             ATTRSTRDESC("iClockSelector", _iClockSelector, device);
@@ -3567,7 +3567,7 @@ namespace usb {
             _bClockID = *(extra + 3);
             _bNrInPins = *(extra + 4);
             _baCSourceID.reserve(_bNrInPins);
-            for (int i = 5; i < 5 + _bNrInPins; ++i)
+            for (uint8_t i = 5; i < 5 + _bNrInPins; ++i)
                 _baCSourceID.append(*(extra + i));
             _bmControls = *(extra + 5 + _bNrInPins);
             _iClockSelector = *(extra + 6 + _bNrInPins);
