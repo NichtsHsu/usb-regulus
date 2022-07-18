@@ -14,6 +14,49 @@ See: [libusb calls without sudo using udev-rules](https://stackoverflow.com/ques
 
 Alternatively, simply run this application with root privileges.
 
+## Features
+
+* [x] Support detect and list USB devices
+* [x] Support hotplug
+* [x] Support parse and show following descriptors:
+  * [x] Configuration Descriptor
+  * [x] Device Descriptor
+  * [x] Interface Descriptor
+  * [x] Endpoint Descriptor
+  * [x] Hub Descriptor
+  * [x] BOS Descriptor and following Device Capability Descriptors
+    * [x] Wireless USB Device Capability Descriptor
+    * [x] USB 2.0 Extension Descriptor
+    * [x] SuperSpeed Device Capability Descriptor
+    * [x] SuperSpeed Plus Device Capability
+    * [x] Container ID Descriptor
+    * [x] Platform Capability Descriptor
+    * [x] Power Delivery Capability Descriptor
+    * [x] Battery Info Capability Descriptor
+    * [x] PD Consumer Port Capability Descriptor
+    * [x] PD Provider Port Capability Descriptor
+    * [x] Precision Time Measurement Capability Descriptor
+    * [x] Extended Wireless Device Capability Descriptor
+    * [x] Configuration Summary Descriptor
+    * [ ] Billboard Capability Descriptor
+    * [ ] Billboard AUM Capability Descriptor
+    * [ ] Authentication Capability Descriptor
+  * [x] Following extra descriptors of Interface Descriptors
+    * [x] HID Descriptor and its Report Descriptor
+    * [x] DFU Descriptor
+    * [x] Descriptors specified at Audio Spec v1.0
+    * [x] Descriptors specified at Audio Spec v2.0
+    * [ ] Descriptors specified at Audio Spec v3.0
+    * [x] Descriptors specified at Video Spec v1.5
+  * [x] Following extra descriptors of Configuration Descriptors
+    * [x] Interface Association Descriptor
+    * [x] OTG Descriptor
+    * [x] Security Descriptor
+    * [x] Encryption Type Descriptor
+* [x] Support Endpoint data transfers
+* [x] Display or edit data in hex and ASCII, supported by [QHexEdit](https://github.com/Simsys/qhexedit2)
+* [x] Support set altnative settings of interfaces
+
 ## Download
 
 The [release page](https://github.com/NichtsHsu/usb-regulus/releases) provides the lastest AppImage files.

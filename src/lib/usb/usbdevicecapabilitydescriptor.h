@@ -43,7 +43,7 @@ namespace usb {
         WIRELESS_EXT = 0x0C,
         BILLBOARD = 0X0D,
         AUTHENTICATION = 0x0E,
-        BILLBOARD_EX = 0x0F,
+        BILLBOARD_AUM = 0x0F,
         CONFIGURATION_SUMMARY = 0x10,
     };
 
