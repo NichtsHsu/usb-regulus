@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of libusb_interface
+﻿/*! C++ class wrapper of USB Interface
 
  * Copyright (C) 2022 Nichts Hsu
 

@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of libusb_endpoint_descriptor
+﻿/*! C++ class wrapper of USB Endpoint Descriptor
 
  * Copyright (C) 2022 Nichts Hsu
 

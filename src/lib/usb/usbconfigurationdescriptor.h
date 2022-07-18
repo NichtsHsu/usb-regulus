@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of libusb_config_descriptor
+﻿/*! C++ class wrapper of USB Configuration Descriptor
 
  * Copyright (C) 2022 Nichts Hsu
 
