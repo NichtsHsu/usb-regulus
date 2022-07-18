@@ -206,6 +206,11 @@ namespace usb {
         size_t len;
         QString desc;
         hidrd_error ret = hidrd_convert(_rawDescriptor.data(), _wDescriptorLength, &output, &len);
+        if (output[len - 1] == '\n')
+        {
+            output[len - 1] = '\0';
+            --len;
+        }
         if (ret == HIDRD_SUCCESS)
             desc = QString::fromLatin1(output, len);
         else
