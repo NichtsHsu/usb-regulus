@@ -22,12 +22,6 @@
 #include "usbinterfaceextradescriptor.h"
 
 namespace usb {
-    class UsbInterfaceDescriptor;
-    class UsbHidDescriptor;
-    class UsbHidReportDescriptor;
-}
-
-namespace usb {
     /**
      * @brief The UsbDfuDescriptor class
      * USB DFU (Device Firmware Upgrade) Descriptor C++ class.

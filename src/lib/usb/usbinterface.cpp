@@ -1,4 +1,5 @@
 ﻿#include "usbinterface.h"
+#include "usbhost.h"
 #include "__usbmacro.h"
 
 namespace usb {

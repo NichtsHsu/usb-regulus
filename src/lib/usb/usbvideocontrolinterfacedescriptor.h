@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QMap>
 #include <QVector>
+
 #include "usbinterfaceextradescriptor.h"
 
 namespace usb {

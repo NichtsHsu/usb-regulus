@@ -23,7 +23,10 @@
 #include <QByteArray>
 #include <QThread>
 #include <QMutex>
-#include "usbdevice.h"
+
+namespace usb {
+    class UsbDevice;
+}
 
 namespace usb {
     /**
@@ -165,4 +168,7 @@ namespace usb {
     };
 }
 
+#ifndef USBDEVICE_H
+#include "usbdevice.h"
+#endif
 #endif // USBCONTROLTRANSFERHANDLER_H

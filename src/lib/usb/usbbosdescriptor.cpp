@@ -1,4 +1,6 @@
 ﻿#include "usbbosdescriptor.h"
+#include "usbhost.h"
+#include "__usbmacro.h"
 
 namespace usb {
     UsbBosDescriptor::UsbBosDescriptor(const libusb_bos_descriptor *desc, UsbDevice *usbDevice)
@@ -14,9 +16,7 @@ namespace usb {
             switch (DeviceCapabilityType(baseDesc->bDevCapabilityType))
             {
                 case DeviceCapabilityType::WIRELESS:
-                {
                     desc = new UsbWirelessDeviceCapabilityDescriptor(baseDesc, this);
-                }
                 break;
                 case DeviceCapabilityType::USB_2_0_EXTENSION:
                 {
@@ -43,49 +43,40 @@ namespace usb {
                 }
                 break;
                 case DeviceCapabilityType::PLATFORM:
-                {
                     desc = new UsbPlatformDescriptor(baseDesc, this);
-                }
                 break;
                 case DeviceCapabilityType::POWER_DELIVERY:
-                {
                     desc = new UsbPowerDeliveryCapabilityDescriptor(baseDesc, this);
-                }
                 break;
                 case DeviceCapabilityType::BATTERY_INFO:
-                {
                     desc = new UsbBatteryInfoCapabilityDescriptor(baseDesc, this);
-                }
                 break;
                 case DeviceCapabilityType::PD_CONSUMER_PORT:
-                {
                     desc = new UsbPowerDeliveryConsumerPortCapabilityDescriptor(baseDesc, this);
-                }
                 break;
                 case DeviceCapabilityType::PD_PROVIDER_PORT:
-                {
                     desc = new UsbPowerDeliveryProviderPortCapabilityDescriptor(baseDesc, this);
-                }
                 break;
                 case DeviceCapabilityType::SUPERSPEED_PLUS:
-                {
                     desc = new UsbSuperSpeedPlusDeviceCapabilityDescriptor(baseDesc, this);
-                }
                 break;
                 case DeviceCapabilityType::PRECISION_TIME_MEASUREMENT:
-                {
                     desc = new UsbPrecisionTimeMeasurementCapabilityDescriptor(baseDesc, this);
-                }
                 break;
                 case DeviceCapabilityType::WIRELESS_EXT:
-                {
                     desc = new UsbExtendedWirelessDeviceCapabilityDescriptor(baseDesc, this);
-                }
+                break;
+                case DeviceCapabilityType::BILLBOARD:
+                    desc = new UsbBillboardCapabilityDescriptor(baseDesc, this);
+                break;
+                case DeviceCapabilityType::AUTHENTICATION:
+                    desc = new UsbAuthenticationCapabilityDescriptor(baseDesc, this);
+                break;
+                case DeviceCapabilityType::BILLBOARD_AUM:
+                    desc = new UsbBillboardAumCapabilityDescriptor(baseDesc, this);
                 break;
                 case DeviceCapabilityType::CONFIGURATION_SUMMARY:
-                {
                     desc = new UsbConfigurationSummaryDescriptor(baseDesc, this);
-                }
                 break;
                 default:
                     LOGW(tr("USB Device Capability Type %1 is not supported yet.").arg(baseDesc->bDevCapabilityType));
@@ -99,6 +90,23 @@ namespace usb {
     UsbDevice *UsbBosDescriptor::device() const
     {
         return _device;
+    }
+
+    QString UsbBosDescriptor::infomationToHtml() const
+    {
+        QString html;
+        /* Regenerate it for language support. */
+        START(tr("BOS Descriptor"));
+        ATTR("bLength", _bLength, _bLength);
+        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
+        ATTR("wTotalLength", _wTotalLength, _wTotalLength);
+        ATTR("bNumDeviceCaps", _bNumDeviceCaps, _bNumDeviceCaps);
+        END;
+        END;
+        foreach (const auto &devCapDesc, _usbDeviceCapabilityDescriptorList)
+            APPEND(devCapDesc);
+
+        return html;
     }
 
     const QList<UsbDeviceCapabilityDescriptor *> &UsbBosDescriptor::usbDeviceCapabilityDescriptorList() const

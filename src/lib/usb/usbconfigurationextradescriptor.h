@@ -125,7 +125,7 @@ namespace usb {
      * @brief The UsbWirelessSecurityDescriptor class
      * Security Descriptor C++ wrapper for wireless USB device
      */
-    class UsbWirelessSecurityDescriptor: public UsbConfigurationExtraDescriptor
+    class UsbWirelessSecurityDescriptor : public UsbConfigurationExtraDescriptor
     {
         Q_OBJECT
     public:
@@ -178,7 +178,7 @@ namespace usb {
      * @brief The UsbWirelessSecurityDescriptor class
      * Security Descriptor C++ wrapper for wireless USB device
      */
-    class UsbWirelessEncryptionTypeDescriptor: public UsbConfigurationExtraDescriptor
+    class UsbWirelessEncryptionTypeDescriptor : public UsbConfigurationExtraDescriptor
     {
         Q_OBJECT
     public:
@@ -240,8 +240,11 @@ namespace usb {
 #ifndef USBCONFIGURATIONDESCRIPTOR_H
 #include "usbconfigurationdescriptor.h"
 #endif
-#ifndef USBINTERFACEASSOCIATIONDESCRIPTOR_H
-#include "usbinterfaceassociationdescriptor.h"
+#ifndef USBINTERFACEDESCRIPTOR_H
+#include "usbinterfacedescriptor.h"
+#endif
+#ifndef USBENDPOINTDESCRIPTOR_H
+#include "usbendpointdescriptor.h"
 #endif
 #ifndef USBOTGDESCRIPTOR_H
 #include "usbotgdescriptor.h"

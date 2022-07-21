@@ -24,30 +24,15 @@ Alternatively, simply run this application with root privileges.
   * [x] Interface Descriptor
   * [x] Endpoint Descriptor
   * [x] Hub Descriptor
-  * [x] BOS Descriptor and following Device Capability Descriptors
-    * [x] Wireless USB Device Capability Descriptor
-    * [x] USB 2.0 Extension Descriptor
-    * [x] SuperSpeed Device Capability Descriptor
-    * [x] SuperSpeed Plus Device Capability
-    * [x] Container ID Descriptor
-    * [x] Platform Capability Descriptor
-    * [x] Power Delivery Capability Descriptor
-    * [x] Battery Info Capability Descriptor
-    * [x] PD Consumer Port Capability Descriptor
-    * [x] PD Provider Port Capability Descriptor
-    * [x] Precision Time Measurement Capability Descriptor
-    * [x] Extended Wireless Device Capability Descriptor
-    * [x] Configuration Summary Descriptor
-    * [ ] Billboard Capability Descriptor
-    * [ ] Billboard AUM Capability Descriptor
-    * [ ] Authentication Capability Descriptor
+  * [x] BOS Descriptor
+  * [x] All Device Capability Descriptors specified at USB Spec 3.2
   * [x] Following extra descriptors of Interface Descriptors
     * [x] HID Descriptor and its Report Descriptor
     * [x] DFU Descriptor
-    * [x] Descriptors specified at Audio Spec v1.0
-    * [x] Descriptors specified at Audio Spec v2.0
-    * [ ] Descriptors specified at Audio Spec v3.0
-    * [x] Descriptors specified at Video Spec v1.5
+    * [x] All Descriptors specified at Audio Spec v1.0
+    * [x] All Descriptors specified at Audio Spec v2.0
+    * [ ] All Descriptors specified at Audio Spec v3.0
+    * [x] All Descriptors specified at Video Spec v1.5
   * [x] Following extra descriptors of Configuration Descriptors
     * [x] Interface Association Descriptor
     * [x] OTG Descriptor
@@ -72,7 +57,7 @@ git clone --recurse-submodules https://github.com/NichtsHsu/usb-regulus.git
 ### Linux
 
 1. Install [Qt6](https://www.qt.io/download) and select GCC x64 toolkit.
-2. Install necessary C++ compiling enviroment, such as `build-essential`, `g++`, `make`, `cmake`, `ninja-build` and so on.
+2. Install necessary C++ compiling enviroment, such as `build-essential`, `g++`, `make`, `cmake` and so on.
 3. Install `libusb-1.0` and `libudev`. For an example, on Ubuntu:
 
     ```bash

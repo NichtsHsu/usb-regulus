@@ -45,8 +45,6 @@ MainWindow::MainWindow(QWidget *parent):
 
     __initWithSettings();
 
-    connect(qGuiApp, &QGuiApplication::lastWindowClosed,
-            qApp, &QApplication::quit, Qt::QueuedConnection);
     connect(ui->actionExit, &QAction::triggered,
             qApp, &QApplication::quit, Qt::QueuedConnection);
     connect(ui->actionRefresh, &QAction::triggered, this, [this]() {
@@ -220,6 +218,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     settings().protectKeyboard() = ui->actionProtectKeyboard->isChecked();
     settings().saveToIni(Tools::getConfigFilePath());
     usb::UsbHost::instance()->deleteLater();
+    qApp->quit();
     event->accept();
 }
 

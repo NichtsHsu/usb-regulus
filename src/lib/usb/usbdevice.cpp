@@ -116,10 +116,7 @@ namespace usb {
         APPEND(_deviceDescriptor);
         APPEND(_configurationDescriptor);
         if (_bosDescriptor)
-        {
-            foreach (const auto &devCapDesc, _bosDescriptor->usbDeviceCapabilityDescriptorList())
-                APPEND(devCapDesc);
-        }
+            APPEND(_bosDescriptor);
 
         return html;
     }

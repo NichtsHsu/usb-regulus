@@ -256,8 +256,5 @@ namespace usb {
 #ifndef USBBOSDESCRIPTOR_H
 #include "usbbosdescriptor.h"
 #endif
-#ifndef USBHUBDESCRIPTOR_H
-#include "usbhubdescriptor.h"
-#endif
 
 #endif // USBDEVICE_H

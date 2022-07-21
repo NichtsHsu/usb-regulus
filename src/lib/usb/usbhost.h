@@ -41,7 +41,7 @@ namespace usb {
      * we have to place these classes under the __private namespace.
      */
     namespace __private{
-        class UsbEventHandler: public QObject
+        class UsbEventHandler : public QObject
         {
             Q_OBJECT
         public:
@@ -56,7 +56,7 @@ namespace usb {
             QMutex _stopFlagMutex;
         };
 
-        class UsbDeviceRescanWorker: public QObject
+        class UsbDeviceRescanWorker : public QObject
         {
             Q_OBJECT
         public:

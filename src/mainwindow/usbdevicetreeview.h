@@ -37,7 +37,7 @@
  * Each UsbDeviceItem binds and should bind a USB device, all GUI operation are handled
  * by UsbDeviceItem and send to its associated USB device.
  */
-class UsbDeviceItem: public QStandardItem
+class UsbDeviceItem : public QStandardItem
 {
 public:
     UsbDeviceItem() = default;
@@ -73,7 +73,7 @@ private:
  * Each UsbDeviceItem binds and should bind a USB interface.
  * The UsbDeviceItem normally will be created by UsbDeviceItem.
  */
-class UsbInterfaceItem: public QStandardItem
+class UsbInterfaceItem : public QStandardItem
 {
 public:
     UsbInterfaceItem() = default;

@@ -1,4 +1,5 @@
 ﻿#include "usbhiddescriptor.h"
+#include "usbhost.h"
 #include "__usbmacro.h"
 #include "hidrd/src/hidrd_convert.h"
 

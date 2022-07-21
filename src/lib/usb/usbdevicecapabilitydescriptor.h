@@ -22,6 +22,7 @@
 #include <libusb.h>
 #include <QObject>
 #include <QByteArray>
+#include <QVector>
 
 namespace usb {
     class UsbBosDescriptor;
@@ -76,7 +77,8 @@ namespace usb {
 
         /**
          * @brief type
-         * @return the real device capability descriptor type
+         * @return the device capability descriptor type
+         * @see DeviceCapabilityType
          */
         DeviceCapabilityType type() const;
 
@@ -85,6 +87,9 @@ namespace usb {
          * @return the parent UsbBosDescriptor
          */
         UsbBosDescriptor *bosDescriptor() const;
+
+        static QString strType(uint8_t bDescriptorType);
+        static QString strType(DeviceCapabilityType type);
 
         /**
          * @brief infomationToHtml
@@ -103,7 +108,7 @@ namespace usb {
      * Therefore we parse raw data from libusb_bos_dev_capability_descriptor.
      * @see DeviceCapabilityType::WIRELESS
      */
-    class UsbWirelessDeviceCapabilityDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbWirelessDeviceCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -190,7 +195,7 @@ namespace usb {
      * The C++ wrapper of libusb_usb_2_0_extension_descriptor
      * @see DeviceCapabilityType::USB_2_0_EXTENSION
      */
-    class Usb20ExtensionDescriptor: public UsbDeviceCapabilityDescriptor
+    class Usb20ExtensionDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -236,7 +241,7 @@ namespace usb {
      * The C++ wrapper of libusb_ss_usb_device_capability_descriptor
      * @see DeviceCapabilityType::SUPERSPEED
      */
-    class UsbSuperSpeedDeviceCapabilityDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbSuperSpeedDeviceCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -316,7 +321,7 @@ namespace usb {
      * The C++ wrapper of libusb_container_id_descriptor
      * @see DeviceCapabilityType::CONTAINER_ID
      */
-    class UsbContainerIdDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbContainerIdDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -354,7 +359,7 @@ namespace usb {
      * Therefore we parse raw data from libusb_bos_dev_capability_descriptor.
      * @see DeviceCapabilityType::PLATFORM
      */
-    class UsbPlatformDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbPlatformDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -393,7 +398,7 @@ namespace usb {
      * Therefore we parse raw data from libusb_bos_dev_capability_descriptor.
      * @see DeviceCapabilityType::POWER_DELIVERY
      */
-    class UsbPowerDeliveryCapabilityDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbPowerDeliveryCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -469,7 +474,7 @@ namespace usb {
      * Therefore we parse raw data from libusb_bos_dev_capability_descriptor.
      * @see DeviceCapabilityType::BATTERY_INFO
      */
-    class UsbBatteryInfoCapabilityDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbBatteryInfoCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -543,7 +548,7 @@ namespace usb {
      * Therefore we parse raw data from libusb_bos_dev_capability_descriptor.
      * @see DeviceCapabilityType::PD_CONSUMER_PORT
      */
-    class UsbPowerDeliveryConsumerPortCapabilityDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbPowerDeliveryConsumerPortCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -614,7 +619,7 @@ namespace usb {
      * Therefore we parse raw data from libusb_bos_dev_capability_descriptor.
      * @see DeviceCapabilityType::PD_PROVIDER_PORT
      */
-    class UsbPowerDeliveryProviderPortCapabilityDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbPowerDeliveryProviderPortCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -672,7 +677,7 @@ namespace usb {
      * Therefore we parse raw data from libusb_bos_dev_capability_descriptor.
      * @see DeviceCapabilityType::SUPERSPEED_PLUS
      */
-    class UsbSuperSpeedPlusDeviceCapabilityDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbSuperSpeedPlusDeviceCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -740,7 +745,7 @@ namespace usb {
      * besides bLength, bDescriptorType and bDevCapabilityType.
      * @see DeviceCapabilityType::PRECISION_TIME_MEASUREMENT
      */
-    class UsbPrecisionTimeMeasurementCapabilityDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbPrecisionTimeMeasurementCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -761,7 +766,7 @@ namespace usb {
      * Therefore we parse raw data from libusb_bos_dev_capability_descriptor.
      * @see DeviceCapabilityType::WIRELESS_EXT
      */
-    class UsbExtendedWirelessDeviceCapabilityDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbExtendedWirelessDeviceCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:
@@ -806,12 +811,209 @@ namespace usb {
     };
 
     /**
+     * @brief The UsbBillboardCapabilityDescriptor class
+     * Libusb does not support Billboard Capability Descriptor.
+     * Therefore we parse raw data from libusb_bos_dev_capability_descriptor.
+     * @see DeviceCapabilityType::BILLBOARD
+     */
+    class UsbBillboardCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
+    {
+        Q_OBJECT
+    public:
+        explicit UsbBillboardCapabilityDescriptor(
+                const libusb_bos_dev_capability_descriptor *base,
+                UsbBosDescriptor *parent);
+
+        /**
+         * @brief iAddtionalInfoURL
+         * @return string descriptor providing a URL where the user can go to
+         * get more detailed information about the product and the various AUM it supports.
+         */
+        uint8_t iAddtionalInfoURL() const;
+
+        /**
+         * @brief bNumberOfAlternateOrUSB4Modes
+         * @return number of AUM supported
+         */
+        uint8_t bNumberOfAlternateOrUSB4Modes() const;
+
+        /**
+         * @brief bPreferredAlternateOrUSB4Mode
+         * @return index of the preferred AUM
+         */
+        uint8_t bPreferredAlternateOrUSB4Mode() const;
+
+        /**
+         * @brief VCONNPower
+         * @return bitmapt indicating the information about VCONN Power
+         * @note
+         * D0..2    VCONN Power needed by the adapter for full functionality
+         * D3..14   Reserved
+         * D15      The adapter does not require any VCONN Power
+         */
+        uint16_t VCONNPower() const;
+
+        /**
+         * @brief bmConfigured
+         * @return bitmap that each bit pair in this field indicates
+         * the state of the Alternate Modes identified by the
+         * combination of wSVID[i] and bAlternateOrUSB4Mode[i].
+         * @note
+         * D0..1                First AUM defined
+         * D(n-1)*2..(n-1)*2+1  N-th AUM defined
+         * Value:
+         * 00b:     Unspecified Error
+         * 01b:     AUM configuration not attempted or exited
+         * 10b:     AUM configuration attempted but unsuccessful and not entered
+         * 11b:     AUM configuration successful
+         */
+        QByteArray bmConfigured() const;
+
+        /**
+         * @brief bcdVersion
+         * @return Billboard Capability version number in Binary-Coded Decimal
+         */
+        uint16_t bcdVersion() const;
+
+        /**
+         * @brief bAdditionalFailureInfo
+         * @return bitmap indicating additional failure infomations
+         * @note
+         * D0       lack of power
+         * D1       no USB-PD communication
+         * D2..7    Reversed
+         */
+        uint8_t bAdditionalFailureInfo() const;
+
+        /**
+         * @brief wSVID
+         * @param index
+         * @return Standard or Vendor ID of index-th AUM
+         */
+        uint16_t wSVID(uint8_t index) const;
+
+        /**
+         * @brief bAlternateOrUSB4Mode
+         * @param index
+         * @return Index of the index-th AUM within the SVID as returned
+         * in response to a Discover Modes command.
+         */
+        uint8_t bAlternateOrUSB4Mode(uint8_t index) const;
+
+        /**
+         * @brief iAlternateOrUSB4ModeString
+         * @param index
+         * @return string descriptor describing protocol of index-th AUM
+         */
+        uint8_t iAlternateOrUSB4ModeString(uint8_t index) const;
+
+        /**
+         * @brief infomationToHtml
+         * @return HTML form descriptor informations
+         */
+        virtual QString infomationToHtml() const override;
+
+    private:
+        inline QString __parseVCONNPower() const;
+        inline QString __parseBmConfigured() const;
+        inline QString __parseBmConfigured(uint8_t index) const;
+        inline QString __parseBAdditionalFailureInfo() const;
+#ifdef Q_OS_UNIX
+        inline QString __getSVID(uint8_t index) const;
+#endif
+
+        uint8_t _iAddtionalInfoURL, _bNumberOfAlternateOrUSB4Modes,
+        _bPreferredAlternateOrUSB4Mode, _bAdditionalFailureInfo;
+        uint16_t _VCONNPower, _bcdVersion;
+        QByteArray _bmConfigured;
+        QVector<uint16_t> _wSVID;
+        QVector<uint8_t> _bAlternateOrUSB4Mode, _iAlternateOrUSB4ModeString;
+    };
+
+    class UsbAuthenticationCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
+    {
+        Q_OBJECT
+    public:
+        explicit UsbAuthenticationCapabilityDescriptor(
+                const libusb_bos_dev_capability_descriptor *base,
+                UsbBosDescriptor *parent);
+
+        /**
+         * @brief bmAttributes
+         * @return bitmap encoding of supported features
+         * @note
+         * D0       Firmware can be updated
+         * D1       Device changes interfaces when updated
+         * D3..7    Reserved
+         */
+        uint8_t bmAttributes() const;
+
+        /**
+         * @brief bcdProtocolVersion
+         * @return USB Type-C Authentication Protocol Version
+         */
+        uint8_t bcdProtocolVersion() const;
+
+        /**
+         * @brief bcdCapability
+         * @return same value as Param1 in a DIGESTS Authentication Response
+         */
+        uint8_t bcdCapability() const;
+
+        /**
+         * @brief infomationToHtml
+         * @return HTML form descriptor informations
+         */
+        virtual QString infomationToHtml() const override;
+
+    private:
+        inline QString __parseBmAttributes() const;
+        uint8_t _bmAttributes, _bcdProtocolVersion, _bcdCapability;
+    };
+
+    /**
+     * @brief The UsbBillboardAumCapabilityDescriptor class
+     * Billboard AUM Capability Descriptor C++ wrapper
+     */
+    class UsbBillboardAumCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
+    {
+        Q_OBJECT
+    public:
+        explicit UsbBillboardAumCapabilityDescriptor(
+                const libusb_bos_dev_capability_descriptor *base,
+                UsbBosDescriptor *parent);
+
+        /**
+         * @brief bIndex
+         * @return index at which the AUM appears in the array of Alternate Modes
+         * described in the Billboard Capability Descriptor.
+         */
+        uint8_t bIndex() const;
+
+        /**
+         * @brief dwAlternateModeVdo
+         * @return contents of the Mode VDO
+         */
+        uint32_t dwAlternateModeVdo() const;
+
+        /**
+         * @brief infomationToHtml
+         * @return HTML form descriptor informations
+         */
+        virtual QString infomationToHtml() const override;
+
+    private:
+        uint8_t _bIndex;
+        uint32_t _dwAlternateModeVdo;
+    };
+
+    /**
      * @brief The UsbConfigurationSummaryDescriptor class
-     * Libusb does not support Configuration Summary Descriptor Descriptor.
+     * Libusb does not support Configuration Summary Descriptor.
      * Therefore we parse raw data from libusb_bos_dev_capability_descriptor.
      * @see DeviceCapabilityType::CONFIGURATION_SUMMARY
      */
-    class UsbConfigurationSummaryDescriptor: public UsbDeviceCapabilityDescriptor
+    class UsbConfigurationSummaryDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
     public:

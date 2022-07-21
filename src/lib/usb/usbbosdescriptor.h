@@ -24,22 +24,8 @@
 #include <QList>
 
 namespace usb {
-    class UsbHost;
     class UsbDevice;
     class UsbDeviceCapabilityDescriptor;
-    class UsbWirelessDeviceCapabilityDescriptor;
-    class Usb20ExtensionDescriptor;
-    class UsbSuperSpeedDeviceCapabilityDescriptor;
-    class UsbContainerIdDescriptor;
-    class UsbPlatformDescriptor;
-    class UsbPowerDeliveryCapabilityDescriptor;
-    class UsbBatteryInfoCapabilityDescriptor;
-    class UsbPowerDeliveryConsumerPortCapabilityDescriptor;
-    class UsbPowerDeliveryProviderPortCapabilityDescriptor;
-    class UsbSuperSpeedPlusDeviceCapabilityDescriptor;
-    class UsbPrecisionTimeMeasurementCapabilityDescriptor;
-    class UsbExtendedWirelessDeviceCapabilityDescriptor;
-    class UsbConfigurationSummaryDescriptor;
     enum class DeviceCapabilityType;
 }
 
@@ -92,6 +78,12 @@ namespace usb {
          */
         UsbDevice *device() const;
 
+        /**
+         * @brief infomationToHtml
+         * @return HTML form informations
+         */
+        QString infomationToHtml() const;
+
     private:
         UsbDevice *_device;
         uint8_t _bLength, _bDescriptorType, _bNumDeviceCaps;
@@ -105,9 +97,6 @@ namespace usb {
 #endif
 #ifndef USBDEVICECAPABILITYDESCRIPTOR_H
 #include "usbdevicecapabilitydescriptor.h"
-#endif
-#ifndef USBHOST_H
-#include "usbhost.h"
 #endif
 
 #endif // USBBOSDESCRIPTOR_H

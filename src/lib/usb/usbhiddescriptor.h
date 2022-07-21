@@ -23,15 +23,13 @@
 #include <QByteArray>
 #include <QString>
 #include <log/logger.h>
+
 #include "usbinterfaceextradescriptor.h"
 
 namespace usb {
-    class UsbInterfaceDescriptor;
     class UsbHidDescriptor;
     class UsbHidReportDescriptor;
-}
 
-namespace usb {
     /**
      * @brief The UsbHidDescriptor class
      * USB HID (Human Interface Device) Descriptor C++ class.
@@ -128,7 +126,7 @@ namespace usb {
      * so make its constructor private.
      * @see UsbHidDescriptor::hidReportDescriptor()
      */
-    class UsbHidReportDescriptor: public QObject
+    class UsbHidReportDescriptor : public QObject
     {
         Q_OBJECT
     public:
@@ -179,8 +177,4 @@ namespace usb {
         UsbHidDescriptor *_hidDescriptor;
     };
 }
-
-#ifndef USBINTERFACE_H
-#include "usbinterfacedescriptor.h"
-#endif
 #endif // USBHIDDESCRIPTOR_H

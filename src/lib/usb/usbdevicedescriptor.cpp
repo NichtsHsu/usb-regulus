@@ -38,7 +38,7 @@ namespace usb {
 
         /* Get vendor name and product name */
         {
-            char vendorName[128], productName[128], manufacturer[128], product[128], sysfs_name[PATH_MAX];;
+            char vendorName[128], productName[128], manufacturer[128], product[128], sysfs_name[PATH_MAX];
             bool hasVendor, hasProduct;
             memset(vendorName, '\0', sizeof(vendorName));
             memset(productName, '\0', sizeof(productName));

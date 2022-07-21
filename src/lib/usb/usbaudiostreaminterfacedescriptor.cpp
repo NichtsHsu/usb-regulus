@@ -313,6 +313,7 @@ namespace usb {
             }
             END;
 
+            qDebug() << html;
             return html;
         }
 
@@ -1279,6 +1280,7 @@ namespace usb {
             ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
             ATTR("bSubslotSize", _bSubslotSize, tr("%1 byte(s)").arg(_bSubslotSize));
             ATTR("bBitResolution", _bBitResolution, _bBitResolution);
+            END;
 
             return html;
         }
@@ -1337,6 +1339,7 @@ namespace usb {
             ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
             ATTR("wMaxBitRate", _wMaxBitRate, QString("%1 kb/s").arg(_wMaxBitRate));
             ATTR("wSlotsPerFrame", _wSlotsPerFrame, _wSlotsPerFrame);
+            END;
 
             return html;
         }
@@ -1395,6 +1398,7 @@ namespace usb {
             ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
             ATTR("bSubslotSize", _bSubslotSize, tr("%1 byte(s)").arg(_bSubslotSize));
             ATTR("bBitResolution", _bBitResolution, _bBitResolution);
+            END;
 
             return html;
         }
@@ -1441,6 +1445,7 @@ namespace usb {
             ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
             ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
             ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
+            END;
 
             return html;
         }
@@ -1515,6 +1520,7 @@ namespace usb {
             ATTR("bHeaderLength", _bHeaderLength, tr("%1 byte(s)").arg(_bHeaderLength));
             ATTR("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
             ATTR("bSideBandProtocol", _bSideBandProtocol, strBSideBandProtocol(_bSideBandProtocol));
+            END;
 
             return html;
         }
@@ -1588,6 +1594,7 @@ namespace usb {
             ATTR("wSamplesPerFrame", _wSamplesPerFrame, _wSamplesPerFrame);
             ATTR("bHeaderLength", _bHeaderLength, tr("%1 byte(s)").arg(_bHeaderLength));
             ATTR("bSideBandProtocol", _bSideBandProtocol, strBSideBandProtocol(_bSideBandProtocol));
+            END;
 
             return html;
         }
@@ -1660,6 +1667,7 @@ namespace usb {
             ATTR("bBitResolution", _bBitResolution, _bBitResolution);
             ATTR("bHeaderLength", _bHeaderLength, tr("%1 byte(s)").arg(_bHeaderLength));
             ATTR("bSideBandProtocol", _bSideBandProtocol, strBSideBandProtocol(_bSideBandProtocol));
+            END;
 
             return html;
         }

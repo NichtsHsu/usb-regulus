@@ -73,7 +73,7 @@ namespace usb {
      * @brief The Usb20HubDescriptor class
      * Hub Descriptor for USB 2.0
      */
-    class Usb20HubDescriptor: public UsbHubDescriptor
+    class Usb20HubDescriptor : public UsbHubDescriptor
     {
         Q_OBJECT
     public:

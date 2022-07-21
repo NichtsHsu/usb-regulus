@@ -35,7 +35,7 @@ namespace usb {
         VS,             // VideoStream
     };
 
-    class UsbInterfaceExtraDescriptor: public QObject
+    class UsbInterfaceExtraDescriptor : public QObject
     {
         Q_OBJECT
     public:

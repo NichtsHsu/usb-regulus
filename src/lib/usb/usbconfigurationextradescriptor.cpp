@@ -1,8 +1,8 @@
 ﻿#include "usbconfigurationextradescriptor.h"
+#include "usbinterfaceassociationdescriptor.h"
 #include "__usbmacro.h"
 
 namespace usb {
-
     UsbConfigurationExtraDescriptor::UsbConfigurationExtraDescriptor(UsbConfigurationDescriptor *parent)
         : QObject{parent}, _configurationDescriptor(parent)
     {
