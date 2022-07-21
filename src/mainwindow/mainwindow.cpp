@@ -1,8 +1,6 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-const QString MainWindow::_textBroswerCss;
-
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -23,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent):
     ui->splitterMain->setStretchFactor(1, 3);
 
     ui_mainBrowser->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui_mainBrowser->document()->setDefaultStyleSheet(_textBroswerCss);
     ui_mainBrowser->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     _mainBrowserMenu = new QMenu(ui_mainBrowser);
@@ -35,6 +32,16 @@ MainWindow::MainWindow(QWidget *parent):
     _mainBrowserMenu->addAction(_actionCopyAllHtml);
     _actionCopyAllMarkdown = new QAction(tr("Copy All (Markdown)"));
     _mainBrowserMenu->addAction(_actionCopyAllMarkdown);
+
+    QStringList themes = Tools::getValidThemes();
+    foreach (const QString &theme, themes)
+    {
+        QAction *action = new QAction(theme);
+        connect(action, &QAction::triggered, this, [this, theme] () {
+            this->__setTheme(theme);
+        });
+        ui->menuTheme->addAction(action);
+    }
 
     _logLevelActionMap = {
         { Logger::Level::Debug, ui->actionDebug },
@@ -96,6 +103,9 @@ MainWindow::MainWindow(QWidget *parent):
     });
     connect(_actionCopyAllMarkdown, &QAction::triggered, this, [this] () {
         qGuiApp->clipboard()->setText(ui_mainBrowser->toMarkdown());
+    });
+    connect(ui->actionThemeNone, &QAction::triggered, this, [this] () {
+        this->__setTheme();
     });
     connect(ui_mainBrowser, &QTextBrowser::customContextMenuRequested,
             this, &MainWindow::__mainBrowserMenuShow);
@@ -249,6 +259,7 @@ void MainWindow::__initWithSettings()
 
     __loadTranslation(settings().language());
     __setLoggerLevel(settings().logLevel());
+    __setTheme(settings().theme());
 }
 
 void MainWindow::__setLoggerLevel(Logger::Level level)
@@ -260,6 +271,13 @@ void MainWindow::__setLoggerLevel(Logger::Level level)
     ui->actionError->setChecked(false);
     _logLevelActionMap[level]->setChecked(true);
     settings().logLevel() = level;
+}
+
+void MainWindow::__setTheme(const QString &theme)
+{
+    QString qss = Tools::getThemeStyleSheet(theme);
+    settings().theme() = theme;
+    qApp->setStyleSheet(qss);
 }
 
 void MainWindow::__loadTranslation(const QString &lang)

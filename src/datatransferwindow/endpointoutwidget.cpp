@@ -13,6 +13,7 @@ EndpointOutWidget::EndpointOutWidget(QWidget *parent) :
 
     _hexEdit = new QHexEdit;
     layout()->replaceWidget(ui->hexEditPlaceHolder, _hexEdit);
+    ui->hexEditPlaceHolder->deleteLater();
     ui->hexEditPlaceHolder = nullptr;
     __setOverwriteMode(_hexEdit->overwriteMode());
     _writer = new usb::UsbEndpointWriter;
@@ -76,7 +77,7 @@ EndpointOutWidget::~EndpointOutWidget()
 void EndpointOutWidget::setEndpoint(usb::UsbEndpointDescriptor *epDesc)
 {
     _endpointDescriptor = epDesc;
-    ui->labelEndpointName->setText(_endpointDescriptor->endpointAddressInfo());
+    //ui->labelEndpointName->setText(_endpointDescriptor->endpointAddressInfo());
     QByteArray data;
     data.fill('\0', _endpointDescriptor->wMaxPacketSize());
     _buffer.setData(data);

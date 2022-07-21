@@ -103,6 +103,7 @@ private slots:
 private:
     void __initWithSettings();
     void __setLoggerLevel(Logger::Level level);
+    void __setTheme(const QString &theme = "(none)");
     void __loadTranslation(const QString &lang);
 
     Ui::MainWindow *ui;
@@ -115,7 +116,5 @@ private:
     QAction *_actionCopy, *_actionCopyAll, *_actionCopyAllHtml, *_actionCopyAllMarkdown;
     Option<UsbDeviceItem *> _currentDisplayedDeviceItem;
     Option<UsbInterfaceItem *> _currentDisplayedInterfaceItem;
-
-    static const QString _textBroswerCss;
 };
 #endif // MAINWINDOW_H

@@ -7,17 +7,24 @@
 #include <QApplication>
 #include <log/logger.h>
 
-class Tools
+class Tools: public QObject
 {
+    Q_OBJECT
 public:
     /**
-     * @brief getQStyleSheet
-     * Read common QSS and specified QSS file.
-     * @param name
-     * If not set, only read common QSS file.
-     * @return Qt's Style Sheet
+     * @brief getValidThemes
+     * @return string list includes all themes
      */
-    static QString getQStyleSheet(const QString &name = QString());
+    static QStringList getValidThemes();
+
+    /**
+     * @brief getThemeStyleSheet
+     * @param theme
+     * Theme name included in getValidThemes()
+     * @see Tools::getValidThemes()
+     * @return style sheet of specified theme
+     */
+    static QString getThemeStyleSheet(const QString &theme = QString());
 
     /**
      * @brief getConfigFilePath

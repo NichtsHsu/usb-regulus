@@ -37,24 +37,24 @@ void Logger::__record(Level type, const QString &module, const QString &message)
         switch(type)
         {
             case Level::Debug:
-                messageHtml += QString("<font color=black><b>[ <font color=green>") + tr("Debug") + QString("</font> ]</b></font> ");
+                messageHtml += QString("<font color=''><b>[ <font color=green>") + tr("Debug") + QString("</font> ]</b></font> ");
             break;
 
             case Level::Info:
-                messageHtml += QString("<font color=black><b>[ <font color=blue>") + tr("Info") + QString("</font> ]</b></font> ");
+                messageHtml += QString("<font color=''><b>[ <font color=blue>") + tr("Info") + QString("</font> ]</b></font> ");
             break;
 
             case Level::Warning:
-                messageHtml += QString("<font color=black><b>[ <font color=orange>") + tr("Warning") + QString("</font> ]</b></font> ");
+                messageHtml += QString("<font color=''><b>[ <font color=orange>") + tr("Warning") + QString("</font> ]</b></font> ");
             break;
 
             case Level::Error:
-                messageHtml += QString("<font color=black><b>[ <font color=red>") + tr("Error") + QString("</font> ]</b></font> ");
+                messageHtml += QString("<font color=''><b>[ <font color=red>") + tr("Error") + QString("</font> ]</b></font> ");
             break;
         }
 
         messageHtml += QString("<font color=purple><u>") + module + QString("</u></font> :");
-        messageHtml += QString("<font color=black>") + message + QString("</font><br />");
+        messageHtml += QString("<font color=''>") + message + QString("</font><br />");
 
         moveCursor(QTextCursor::End);
         textCursor().insertHtml(messageHtml);

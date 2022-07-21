@@ -9,7 +9,6 @@ DataTransferWindow::DataTransferWindow(QWidget *parent) :
     _isControlTransfer(false)
 {
     ui->setupUi(this);
-    setStyleSheet(Tools::getQStyleSheet());
 }
 
 DataTransferWindow::~DataTransferWindow()
@@ -39,6 +38,10 @@ void DataTransferWindow::setInterface(usb::UsbInterface *interface)
                 EndpointInWidget *widget = new EndpointInWidget;
                 ui->scrollAreaWidgetContents->layout()->addWidget(widget);
                 widget->setEndpoint(epDesc);
+                QFrame *line = new QFrame;
+                line->setFrameShape(QFrame::HLine);
+                line->setFrameShadow(QFrame::Sunken);
+                ui->scrollAreaWidgetContents->layout()->addWidget(line);
             }
             break;
             default:

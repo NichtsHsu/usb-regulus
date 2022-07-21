@@ -112,8 +112,16 @@
      <addaction name="actionLangEnUS"/>
      <addaction name="actionLangZhCN"/>
     </widget>
+    <widget class="QMenu" name="menuTheme">
+     <property name="title">
+      <string>Theme</string>
+     </property>
+     <addaction name="actionThemeNone"/>
+     <addaction name="separator"/>
+    </widget>
     <addaction name="menuLog_Level"/>
     <addaction name="menuLanguage"/>
+    <addaction name="menuTheme"/>
    </widget>
    <addaction name="menuDevice"/>
    <addaction name="menuEdit"/>
@@ -221,6 +229,16 @@
   <action name="actionCenterTheWindow">
    <property name="text">
     <string>Center the Window</string>
+   </property>
+  </action>
+  <action name="actionsss">
+   <property name="text">
+    <string>sss</string>
+   </property>
+  </action>
+  <action name="actionThemeNone">
+   <property name="text">
+    <string>(none)</string>
    </property>
   </action>
  </widget>

@@ -88,11 +88,13 @@ ControlTransferWidget::ControlTransferWidget(QWidget *parent) :
     _hexEditSend = new QHexEdit;
     _hexEditSend->setOverwriteMode(false);
     ui->verticalLayoutSend->replaceWidget(ui->hexEditPlaceHolderSend, _hexEditSend);
+    ui->hexEditPlaceHolderSend->deleteLater();
     ui->hexEditPlaceHolderSend = nullptr;
 
     _hexEditReceive = new QHexEdit;
     _hexEditReceive->setReadOnly(true);
     ui->verticalLayoutReceive->replaceWidget(ui->hexEditPlaceHolderReceive, _hexEditReceive);
+    ui->hexEditPlaceHolderReceive->deleteLater();
     ui->hexEditPlaceHolderReceive = nullptr;
 
     _comboxBRequestModel = new QStringListModel;

@@ -61,6 +61,9 @@ public:
     QString &language();
     const QString &language() const;
 
+    QString &theme();
+    const QString &theme() const;
+
     void saveToIni(const QString &filePath) const;
 
     void loadFromIni(const QString &filePath);
@@ -76,7 +79,7 @@ private:
     bool _protectKeyboard;
     WindowProperties _mainwindowProperties;
     Logger::Level _logLevel;
-    QString _language;
+    QString _language, _theme;
 };
 
 /**

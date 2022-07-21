@@ -4,3 +4,6 @@
 [submodule "reference/qhexedit2"]
 	path = reference/qhexedit2
 	url = https://github.com/NichtsHsu/qhexedit2.git
+[submodule "assets/themes"]
+	path = assets/themes
+	url = https://github.com/NichtsHsu/QSS.git

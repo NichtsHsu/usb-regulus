@@ -12,6 +12,7 @@ EndpointInWidget::EndpointInWidget(QWidget *parent) :
     _hexEdit = new QHexEdit;
     _hexEdit->setReadOnly(true);
     layout()->replaceWidget(ui->hexEditPlaceHolder, _hexEdit);
+    ui->hexEditPlaceHolder->deleteLater();
     ui->hexEditPlaceHolder = nullptr;
     _reader = new usb::UsbEndpointReader;
     _workerThread = new QThread;
@@ -79,7 +80,7 @@ EndpointInWidget::~EndpointInWidget()
 void EndpointInWidget::setEndpoint(usb::UsbEndpointDescriptor *epDesc)
 {
     _endpointDescriptor = epDesc;
-    ui->labelEndpointName->setText(_endpointDescriptor->endpointAddressInfo());
+    //ui->labelEndpointName->setText(_endpointDescriptor->endpointAddressInfo());
     _reader->init(_endpointDescriptor);
 }
 

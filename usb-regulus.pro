@@ -3,6 +3,7 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
+CONFIG += file_copies
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -112,6 +113,16 @@ TRANSLATIONS += \
     assets/translations/usb-regulus.en_US.ts \
     assets/translations/usb-regulus.zh_CN.ts
 
+COPIES += themes
+
+themes.files = $$files(assets/themes/*.qss) $$files(assets/themes/LICENSE) $$files(assets/themes/README.md)
+themes.path = $$OUT_PWD/assets/themes
+
+COPIES += theme_imgs
+
+theme_imgs.files = $$files(assets/themes/QSS_IMG/*)
+theme_imgs.path = $$OUT_PWD/assets/themes/QSS_IMG
+
 unix {
     !packagesExist(libusb-1.0):error("Could not find libusb-1.0 using pkg-config, please install libusb-1.0")
     !packagesExist(libudev):error("Could not find libudev using pkg-config, please install libudev")
@@ -204,5 +215,4 @@ DISTFILES += \
 
 RESOURCES += \
     assets/icon/icon.qrc \
-    assets/qss/qss.qrc \
     assets/translations/translations.qrc

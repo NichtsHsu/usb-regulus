@@ -7,6 +7,16 @@ Settings::Settings(QObject *parent)
 
 }
 
+QString &Settings::theme()
+{
+    return _theme;
+}
+
+const QString &Settings::theme() const
+{
+    return _theme;
+}
+
 std::atomic<Settings *> Settings::_instance{nullptr};
 static std::mutex __mutW;
 
@@ -95,6 +105,7 @@ void Settings::saveToIni(const QString &filePath) const
     ini.beginGroup("userconfigs");
     ini.setValue("logLevel", int(_logLevel));
     ini.setValue("language", _language);
+    ini.setValue("theme", _theme);
     ini.endGroup();
 }
 
@@ -127,6 +138,7 @@ void Settings::loadFromIni(const QString &filePath)
     ini.beginGroup("userconfigs");
     _logLevel = Logger::Level(ini.value("logLevel", int(Logger::Level::Info)).toInt());
     _language = ini.value("language", "en_US").toString();
+    _theme = ini.value("theme", "(none)").toString();
     ini.endGroup();
 }
 

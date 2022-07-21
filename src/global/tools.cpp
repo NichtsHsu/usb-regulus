@@ -3,42 +3,47 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
-#include <QDir>
 #endif
+#include <QApplication>
+#include <QDir>
 
-QString Tools::getQStyleSheet(const QString &name)
+QStringList Tools::getValidThemes()
 {
-    QString finalQss;
-    QFile baseCssFile(":/qss/common.qss");
-    if (baseCssFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QTextStream qts(&baseCssFile);
-        finalQss = qts.readAll();
+    QStringList themes;
+    QDir themePath(qApp->applicationDirPath() + "/assets/themes/");
+    foreach( const QFileInfo& entry, themePath.entryInfoList(
+                 QStringList() << "*.qss", QDir::Files | QDir::Hidden | QDir::NoSymLinks ) ) {
+        themes.append(entry.baseName());
     }
-    else
+
+    return themes;
+}
+
+QString Tools::getThemeStyleSheet(const QString &theme)
+{
+    if (theme == "(none)")
+        return QString();
+
+    QString qss;
+    QString fileName = qApp->applicationDirPath() + "/assets/themes/" + theme + ".qss";
+    QFile qssFile(qApp->applicationDirPath() + "/assets/themes/" + theme + ".qss");
+    if (!qssFile.exists())
     {
-        log().w("Tools", QObject::tr("Failed to open qss file \"%1\".").arg(":/qss/common.qss"));
+        log().w("Tools", tr("Qss file \"%1\" doesn't exist.").arg(fileName));
         return QString();
     }
-    baseCssFile.close();
 
-    if (!name.isEmpty())
+    if (!qssFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QFile cssFile(QString(":/qss/%1.qss").arg(name));
-        if (cssFile.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            QTextStream qts(&cssFile);
-            finalQss += qts.readAll();
-        }
-        else
-        {
-            log().w("Tools", QObject::tr("Failed to open qss file \"%1\".").arg(QString(":/qss/%1.qss").arg(name)));
-            return QString();
-        }
-        cssFile.close();
+        log().w("Tools", tr("Failed to open qss file \"%1\".").arg(fileName));
+        return QString();
     }
 
-    return finalQss;
+    QTextStream qts(&qssFile);
+    qss = qts.readAll();
+    qssFile.close();
+
+    return qss;
 }
 
 QString Tools::getConfigFilePath()
