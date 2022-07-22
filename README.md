@@ -41,7 +41,7 @@ Alternatively, simply run this application with root privileges.
     * [x] Encryption Type Descriptor
 * [x] Support Endpoint data transfers
 * [x] Display or edit data in hex and ASCII, supported by [QHexEdit](https://github.com/Simsys/qhexedit2)
-* [x] Support set altnative settings of interfaces
+* [x] Support set alternative settings of interfaces
 * [x] Multiple themes supported by [GTRONICK/QSS](https://github.com/GTRONICK/QSS)
 
 ## Screenshots
