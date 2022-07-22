@@ -288,7 +288,7 @@ void MainWindow::__loadTranslation(const QString &lang)
         oldTranslator = _translator;
 
     _translator = new QTranslator();
-    QString filename = QString(":/lang/usb-regulus.%1.qm").arg(lang);
+    QString filename = QString(qApp->applicationDirPath() + "/assets/translations/usb-regulus.%1.qm").arg(lang);
     if (_translator->load(filename))
     {
         qApp->removeTranslator(oldTranslator);

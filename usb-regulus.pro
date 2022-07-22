@@ -123,6 +123,16 @@ COPIES += theme_imgs
 theme_imgs.files = $$files(assets/themes/QSS_IMG/*)
 theme_imgs.path = $$OUT_PWD/assets/themes/QSS_IMG
 
+COPIES += icon
+
+icon.files = $$files(assets/icon/usb-regulus.png)
+icon.path = $$OUT_PWD/assets/icon
+
+COPIES += translations
+
+translations.files = $$files(assets/translations/*.qm)
+translations.path = $$OUT_PWD/assets/translations
+
 unix {
     !packagesExist(libusb-1.0):error("Could not find libusb-1.0 using pkg-config, please install libusb-1.0")
     !packagesExist(libudev):error("Could not find libudev using pkg-config, please install libudev")
@@ -212,7 +222,3 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     LICENSE \
     README.md
-
-RESOURCES += \
-    assets/icon/icon.qrc \
-    assets/translations/translations.qrc

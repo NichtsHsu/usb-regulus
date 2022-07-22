@@ -74,6 +74,9 @@ git clone --recurse-submodules https://github.com/NichtsHsu/usb-regulus.git
     make
     ```
 
+5. Run with `./usb-regulus` command.
+5. Copy the `assets` folder under build directory together if you want to copy the `usb-regulus` binary file.
+
 ### MacOS
 
 I have never used MacOS, but it should not be much different from Linux.

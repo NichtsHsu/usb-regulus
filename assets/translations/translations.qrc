@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/lang">
-        <file>usb-regulus.en_US.qm</file>
-        <file>usb-regulus.zh_CN.qm</file>
-    </qresource>
-</RCC>
