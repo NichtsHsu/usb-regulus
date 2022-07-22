@@ -138,7 +138,7 @@ void Settings::loadFromIni(const QString &filePath)
     ini.beginGroup("userconfigs");
     _logLevel = Logger::Level(ini.value("logLevel", int(Logger::Level::Info)).toInt());
     _language = ini.value("language", "en_US").toString();
-    _theme = ini.value("theme", "(none)").toString();
+    _theme = ini.value("theme", "Aqua").toString();
     ini.endGroup();
 }
 
