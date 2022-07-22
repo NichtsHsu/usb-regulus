@@ -77,7 +77,7 @@ EndpointOutWidget::~EndpointOutWidget()
 void EndpointOutWidget::setEndpoint(usb::UsbEndpointDescriptor *epDesc)
 {
     _endpointDescriptor = epDesc;
-    //ui->labelEndpointName->setText(_endpointDescriptor->endpointAddressInfo());
+    ui->labelEndpointName->setText(_endpointDescriptor->endpointAddressInfo());
     QByteArray data;
     data.fill('\0', _endpointDescriptor->wMaxPacketSize());
     _buffer.setData(data);

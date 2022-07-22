@@ -80,7 +80,7 @@ EndpointInWidget::~EndpointInWidget()
 void EndpointInWidget::setEndpoint(usb::UsbEndpointDescriptor *epDesc)
 {
     _endpointDescriptor = epDesc;
-    //ui->labelEndpointName->setText(_endpointDescriptor->endpointAddressInfo());
+    ui->labelEndpointName->setText(_endpointDescriptor->endpointAddressInfo());
     _reader->init(_endpointDescriptor);
 }
 

@@ -41,6 +41,15 @@ Alternatively, simply run this application with root privileges.
 * [x] Support Endpoint data transfers
 * [x] Display or edit data in hex and ASCII, supported by [QHexEdit](https://github.com/Simsys/qhexedit2)
 * [x] Support set altnative settings of interfaces
+* [x] Multiple themes supported by [GTRONICK/QSS](https://github.com/GTRONICK/QSS)
+
+## Screenshots
+
+![Mainwindow](./README_IMG/mainwindow.png)
+
+![Control Transfer](./README_IMG/control_transfer.png)
+
+![Endpoint Transfer](./README_IMG/endpoint_transfer.png)
 
 ## Download
 
