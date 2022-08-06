@@ -67,25 +67,36 @@ git clone --recurse-submodules https://github.com/NichtsHsu/usb-regulus.git
 ### Linux
 
 1. Install [Qt6](https://www.qt.io/download) and select GCC x64 toolkit.
-2. Install necessary C++ compiling enviroment, such as `build-essential`, `g++`, `make`, `cmake` and so on.
+
+    Or, if you are working on a higher version of Linux, which contains the qt6 package, such as Ubuntu 22.04, just install it:
+
+    ```bash
+    sudo apt install qt6-base-dev qml-qt6 qtcreator # qtcreator is optional
+    ```
+
+2. Install necessary C++ compiling packages, such as `build-essential`, `g++`, `make`, `cmake` and so on.
 3. Install `libusb-1.0` and `libudev`. For an example, on Ubuntu:
 
     ```bash
     sudo apt install libusb-1.0-0-dev libudev-dev
     ```
 
-4. Open Qt Creator, and select this project, then build. Or, if you would like to build with terminal:
+4. Open Qt Creator, and select this project, then build.
+
+    If you would like to build with terminal:
 
     ```bash
     cd usb-regulus
     mkdir build
     cd build
-    {Your Qt Install Path}/gcc_64/bin/qmake ..
+    qmake ..
     make
     ```
 
-5. Run with `./usb-regulus` command.
-5. Copy the `assets` folder under build directory together if you want to copy the `usb-regulus` binary file.
+    If your shell complains `command not found: qmake`, please use `{Your Qt Install Path}/gcc_64/bin/qmake` instead.
+
+5. Run with `./usb-regulus` command. Or, write a [desktop entry file](https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html) for it.
+6. Remember to copy the `assets` folder under build directory together if you want to copy the `usb-regulus` binary file.
 
 ### MacOS
 
