@@ -76,13 +76,13 @@
     </message>
     <message>
         <location filename="../../ui/datatransferwindow/controltransferwidget.ui" line="525"/>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="346"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="348"/>
         <source>Set Receive Buffer Size</source>
         <translation>设置接收缓冲区大小</translation>
     </message>
     <message>
         <location filename="../../ui/datatransferwindow/controltransferwidget.ui" line="537"/>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="363"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="365"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
@@ -98,7 +98,7 @@
     </message>
     <message>
         <location filename="../../ui/datatransferwindow/controltransferwidget.ui" line="585"/>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="261"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="263"/>
         <source>Mode: Insert</source>
         <translation>插入模式</translation>
     </message>
@@ -108,51 +108,51 @@
         <translation>接收的数据</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="113"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="115"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="114"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="116"/>
         <source>Failed to transfer data, error: %1.</source>
         <translation>传输数据失败，错误：%1。</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="259"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="261"/>
         <source>Mode: Overwrite</source>
         <translation>覆盖模式</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="294"/>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="297"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="296"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="299"/>
         <source>The value of bmRequest is invalid: %1.</source>
         <translation>bmRequest 的值：%1 不合法。</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="304"/>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="307"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="306"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="309"/>
         <source>The value of bRequest is invalid: %1.</source>
         <translation>bRequest 的值：%1 不合法。</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="314"/>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="317"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="316"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="319"/>
         <source>The value of wIndex is invalid: %1.</source>
         <translation>wIndex 的值：%1 不合法。</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="324"/>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="327"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="326"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="329"/>
         <source>The value of wValue is invalid: %1.</source>
         <translation>wValue 的值：%1 不合法。</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="337"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="339"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="347"/>
+        <location filename="../../src/datatransferwindow/controltransferwidget.cpp" line="349"/>
         <source>Set Receive buffer size to:</source>
         <translation>设置接收缓冲区大小为：</translation>
     </message>
@@ -165,12 +165,12 @@
         <translation>数据传输</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="89"/>
+        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="92"/>
         <source>Hide because claiming interface failed.</source>
         <translation>独占接口失败，隐藏窗口。</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="97"/>
+        <location filename="../../src/datatransferwindow/datatransferwindow.cpp" line="100"/>
         <source>claim the interface &quot;%1&quot; of device &quot;%2&quot;.</source>
         <translation>独占设备&quot;%2&quot;的接口&quot;%1&quot;。</translation>
     </message>
@@ -178,50 +178,50 @@
 <context>
     <name>EndpointInWidget</name>
     <message>
-        <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="58"/>
+        <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="28"/>
         <source>EP UNKOWN</source>
         <translation>未知端点</translation>
     </message>
     <message>
-        <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="96"/>
+        <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="48"/>
         <source>Set Buffer Size</source>
         <translation>设置缓冲区大小</translation>
     </message>
     <message>
-        <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="103"/>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="110"/>
+        <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="55"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="111"/>
         <source>Read Once</source>
         <translation>读取一次</translation>
     </message>
     <message>
-        <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="110"/>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="134"/>
+        <location filename="../../ui/datatransferwindow/endpointinwidget.ui" line="62"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="135"/>
         <source>Keep Read</source>
         <translation>保持读取</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="30"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="31"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="31"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="32"/>
         <source>Failed to read data, error: %1.</source>
         <translation>读取数据失败，错误：%1。</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="151"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="152"/>
         <source>Set Read Buffer Size</source>
         <translation>设置读取缓冲区大小</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="152"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="153"/>
         <source>Set read buffer size to:</source>
         <translation>设置读取缓冲区大小为：</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="106"/>
-        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="130"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="107"/>
+        <location filename="../../src/datatransferwindow/endpointinwidget.cpp" line="131"/>
         <source>Stop Read</source>
         <translation>停止读取</translation>
     </message>
@@ -229,68 +229,68 @@
 <context>
     <name>EndpointOutWidget</name>
     <message>
-        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="55"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="178"/>
+        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="107"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="179"/>
         <source>Mode: Overwrite</source>
         <translation>覆盖模式</translation>
     </message>
     <message>
-        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="81"/>
+        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="133"/>
         <source>Write count: 0</source>
         <translation>写入次数: 0</translation>
     </message>
     <message>
-        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="124"/>
+        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="28"/>
         <source>EP UNKNOWN</source>
         <translation>未知端点</translation>
     </message>
     <message>
-        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="155"/>
+        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="48"/>
         <source>Reset Data</source>
         <translation>重置数据</translation>
     </message>
     <message>
-        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="169"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="116"/>
+        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="62"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="117"/>
         <source>Write Once</source>
         <translation>写入一次</translation>
     </message>
     <message>
-        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="176"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="139"/>
+        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="69"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="140"/>
         <source>Keep Write</source>
         <translation>保持写入</translation>
     </message>
     <message>
-        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="162"/>
+        <location filename="../../ui/datatransferwindow/endpointoutwidget.ui" line="55"/>
         <source>Clear Counter</source>
         <translation>清除计数</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="27"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="99"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="153"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="28"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="100"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="154"/>
         <source>Write Count: %1</source>
         <translation>写入次数: %1</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="32"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="33"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="33"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="34"/>
         <source>Failed to write data, error: %1.</source>
         <translation>写入数据失败，错误：%1。</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="110"/>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="133"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="111"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="134"/>
         <source>Stop Write</source>
         <translation>停止写入</translation>
     </message>
     <message>
-        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="180"/>
+        <location filename="../../src/datatransferwindow/endpointoutwidget.cpp" line="181"/>
         <source>Mode: Insert</source>
         <translation>插入模式</translation>
     </message>
@@ -299,44 +299,68 @@
     <name>Logger</name>
     <message>
         <location filename="../../src/lib/log/logger.cpp" line="14"/>
-        <location filename="../../src/lib/log/logger.cpp" line="40"/>
-        <location filename="../../src/lib/log/logger.cpp" line="133"/>
+        <location filename="../../src/lib/log/logger.cpp" line="117"/>
+        <source>Copy</source>
+        <translation>复制</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/log/logger.cpp" line="16"/>
+        <location filename="../../src/lib/log/logger.cpp" line="118"/>
+        <source>Copy All</source>
+        <translation>复制所有</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/log/logger.cpp" line="18"/>
+        <location filename="../../src/lib/log/logger.cpp" line="119"/>
+        <source>Save to File</source>
+        <translation>保存到文件</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/log/logger.cpp" line="21"/>
+        <location filename="../../src/lib/log/logger.cpp" line="120"/>
+        <source>Clear</source>
+        <translation>清空</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/log/logger.cpp" line="45"/>
+        <location filename="../../src/lib/log/logger.cpp" line="71"/>
+        <location filename="../../src/lib/log/logger.cpp" line="180"/>
         <source>Debug</source>
         <translation>调试</translation>
     </message>
     <message>
-        <location filename="../../src/lib/log/logger.cpp" line="17"/>
-        <location filename="../../src/lib/log/logger.cpp" line="44"/>
-        <location filename="../../src/lib/log/logger.cpp" line="137"/>
+        <location filename="../../src/lib/log/logger.cpp" line="48"/>
+        <location filename="../../src/lib/log/logger.cpp" line="75"/>
+        <location filename="../../src/lib/log/logger.cpp" line="184"/>
         <source>Info</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../src/lib/log/logger.cpp" line="20"/>
-        <location filename="../../src/lib/log/logger.cpp" line="48"/>
-        <location filename="../../src/lib/log/logger.cpp" line="141"/>
+        <location filename="../../src/lib/log/logger.cpp" line="51"/>
+        <location filename="../../src/lib/log/logger.cpp" line="79"/>
+        <location filename="../../src/lib/log/logger.cpp" line="188"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../src/lib/log/logger.cpp" line="23"/>
-        <location filename="../../src/lib/log/logger.cpp" line="52"/>
-        <location filename="../../src/lib/log/logger.cpp" line="145"/>
+        <location filename="../../src/lib/log/logger.cpp" line="54"/>
+        <location filename="../../src/lib/log/logger.cpp" line="83"/>
+        <location filename="../../src/lib/log/logger.cpp" line="192"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../src/lib/log/logger.cpp" line="116"/>
+        <location filename="../../src/lib/log/logger.cpp" line="163"/>
         <source>Set log level %1.</source>
         <translation>设置日志等级为%1。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/log/logger.cpp" line="124"/>
+        <location filename="../../src/lib/log/logger.cpp" line="171"/>
         <source>Failed to export log because cannot open file &quot;%1&quot; to write.</source>
         <translation>因无法打开文件&quot;%1&quot;写入，导出日志失败。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/log/logger.cpp" line="155"/>
+        <location filename="../../src/lib/log/logger.cpp" line="202"/>
         <source>Log exported to file &quot;%1&quot;.</source>
         <translation>日志已导出到文件&quot;%1&quot;。</translation>
     </message>
@@ -359,125 +383,462 @@
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="97"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="99"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="101"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="103"/>
         <source>Log Level</source>
         <translation>日志等级</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="125"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="119"/>
+        <source>Theme</source>
+        <translation>主题</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="135"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="133"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="143"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="144"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="154"/>
         <source>Debug</source>
         <translation>调试</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="152"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="162"/>
         <source>Info</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="160"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="170"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="168"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="178"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="201"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="211"/>
         <source>Protect Mouse</source>
         <translation>鼠标保护</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="204"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="214"/>
         <source>Do not claim the Mouse HID interface</source>
         <translation>不独占鼠标 HID 接口</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="215"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="225"/>
         <source>Protect Keyboard</source>
         <translation>键盘保护</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="218"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="228"/>
         <source>Do not claim the Keyboard HID interface</source>
         <translation>不独占键盘 HID 接口</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="223"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="233"/>
         <source>Center the Window</source>
         <translation>窗口居中</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow/mainwindow.ui" line="110"/>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="249"/>
+        <source>Preferences</source>
+        <translation>偏好设置</translation>
+    </message>
+    <message>
+        <source>(none)</source>
+        <translation type="vanished">(无主题)</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/mainwindow.ui" line="112"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="30"/>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="194"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="28"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="223"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="32"/>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="195"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="30"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="224"/>
         <source>Copy All</source>
         <translation>复制所有</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="34"/>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="196"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="32"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="225"/>
         <source>Copy All (HTML)</source>
         <translation>复制所有 (HTML)</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="36"/>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="197"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="34"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="226"/>
         <source>Copy All (Markdown)</source>
         <translation>复制所有 (Markdown)</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="51"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="61"/>
         <source>Rescaning devices.</source>
         <translation>重新扫描设备。</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="279"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="356"/>
+        <source>Set theme to %1.</source>
+        <translation>设置主题为 %1。</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="373"/>
         <source>Set language to %1.</source>
         <translation>设置语言为 %1。</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow/mainwindow.cpp" line="286"/>
+        <location filename="../../src/mainwindow/mainwindow.cpp" line="380"/>
         <source>Failed to load translation of language %1.</source>
         <translation>无法加载对应语言 %1 的翻译文件。</translation>
     </message>
 </context>
 <context>
-    <name>QObject</name>
+    <name>PreferenceDialog</name>
     <message>
-        <location filename="../../src/global/tools.cpp" line="20"/>
-        <location filename="../../src/global/tools.cpp" line="35"/>
-        <source>Failed to open qss file &quot;%1&quot;.</source>
-        <translation>打开 QSS 文件 &quot;%1&quot; 失败。</translation>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="32"/>
+        <source>Preferences</source>
+        <translation>偏好设置</translation>
     </message>
     <message>
-        <location filename="../../src/global/tools.cpp" line="57"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="51"/>
+        <source>General</source>
+        <translation>基本</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="67"/>
+        <source>Debug</source>
+        <translation>调试</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="72"/>
+        <source>Info</source>
+        <translation>通知</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="77"/>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="82"/>
+        <source>Error</source>
+        <translation>错误</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="90"/>
+        <source>Log Level</source>
+        <translation>日志等级</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="97"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="356"/>
+        <source>Theme</source>
+        <translation>主题</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="104"/>
+        <source>Language</source>
+        <translation>语言</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="112"/>
+        <source>English (US)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="117"/>
+        <source>简体中文</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="142"/>
+        <source>Start &amp;&amp; Exit</source>
+        <translation>启动与退出</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="148"/>
+        <source>Main Window</source>
+        <translation>主窗口</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="169"/>
+        <source>Start State</source>
+        <translation>起始状态</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="180"/>
+        <source>Last position and size</source>
+        <translation>上一次的位置与大小</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="185"/>
+        <source>Minimize</source>
+        <translation>最小化</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="190"/>
+        <source>Maximize</source>
+        <translation>最大化</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="195"/>
+        <source>Center with default size</source>
+        <translation>以默认大小居中</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="205"/>
+        <source>Center with custom size</source>
+        <translation>以自定义大小居中</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="210"/>
+        <source>Custom position and size</source>
+        <translation>自定义位置与大小</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="220"/>
+        <source>Left</source>
+        <translation>左侧</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="241"/>
+        <source>Top</source>
+        <translation>顶部</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="262"/>
+        <source>Width</source>
+        <translation>宽度</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="283"/>
+        <source>Height</source>
+        <translation>高度</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="305"/>
+        <source>Log</source>
+        <translation>日志</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="344"/>
+        <source>...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="329"/>
+        <source>Save before Exit</source>
+        <translation>退出前保存</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="200"/>
+        <source>Center with last size</source>
+        <translation>以上一次的大小居中</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="374"/>
+        <source>Start with Random Theme</source>
+        <translation>启动时使用随机主题</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="398"/>
+        <source>Font</source>
+        <translation>字体</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="404"/>
+        <source>UI Font</source>
+        <translation>界面字体</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="425"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="604"/>
+        <source>Font Family</source>
+        <translation>字体家族</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="449"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="669"/>
+        <source>6</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="454"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="674"/>
+        <source>7</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="459"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="679"/>
+        <source>8</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="464"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="684"/>
+        <source>9</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="469"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="689"/>
+        <source>10</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="474"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="694"/>
+        <source>11</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="479"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="699"/>
+        <source>12</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="484"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="704"/>
+        <source>14</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="489"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="709"/>
+        <source>16</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="494"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="714"/>
+        <source>18</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="499"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="719"/>
+        <source>20</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="504"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="724"/>
+        <source>22</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="509"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="729"/>
+        <source>24</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="514"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="734"/>
+        <source>26</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="519"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="739"/>
+        <source>28</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="524"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="744"/>
+        <source>36</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="529"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="749"/>
+        <source>48</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="534"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="754"/>
+        <source>72</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="542"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="655"/>
+        <source>Font Size</source>
+        <translation>字体大小</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="549"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="624"/>
+        <source>Font Style</source>
+        <translation>字体样式</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="557"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="632"/>
+        <source>Regular</source>
+        <translation>常规</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="562"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="637"/>
+        <source>Bold</source>
+        <translation>粗体</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="567"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="642"/>
+        <source>Italic</source>
+        <translation>斜体</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="572"/>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="647"/>
+        <source>Bold Italic</source>
+        <translation>粗斜体</translation>
+    </message>
+    <message>
+        <location filename="../../ui/mainwindow/preferencedialog.ui" line="583"/>
+        <source>Monospaced Font</source>
+        <translation>等宽字体</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow/preferencedialog.cpp" line="144"/>
+        <source>Failed to create config directory &quot;%1&quot;, fallback to &quot;%2&quot;.</source>
+        <translation>创建配置文件目录 &quot;%1&quot; 失败，回滚到 &quot;%2&quot;。</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Failed to open qss file &quot;%1&quot;.</source>
+        <translation type="vanished">打开 QSS 文件 &quot;%1&quot; 失败。</translation>
+    </message>
+    <message>
+        <location filename="../../src/global/tools.cpp" line="62"/>
+        <location filename="../../src/global/tools.cpp" line="87"/>
         <source>Failed to create config directory &quot;%1&quot;, fallback to &quot;%2&quot;.</source>
         <translation>创建配置文件目录 &quot;%1&quot; 失败，回滚到 &quot;%2&quot;。</translation>
     </message>
@@ -795,6 +1156,66 @@
         <location filename="../../src/lib/usb/usbaudioterminaltypes.cpp" line="142"/>
         <source>Other Musical Instrument</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SaveLogDialog</name>
+    <message>
+        <location filename="../../ui/lib/log/savelogdialog.ui" line="14"/>
+        <source>Select File</source>
+        <translation>选择文件</translation>
+    </message>
+    <message>
+        <source>File path </source>
+        <translation type="obsolete">文件路径</translation>
+    </message>
+    <message>
+        <location filename="../../ui/lib/log/savelogdialog.ui" line="22"/>
+        <source>File path</source>
+        <translation>文件路径</translation>
+    </message>
+    <message>
+        <location filename="../../ui/lib/log/savelogdialog.ui" line="43"/>
+        <source>Log level</source>
+        <translation>日志等级</translation>
+    </message>
+    <message>
+        <location filename="../../ui/lib/log/savelogdialog.ui" line="53"/>
+        <source>Debug</source>
+        <translation>调试</translation>
+    </message>
+    <message>
+        <location filename="../../ui/lib/log/savelogdialog.ui" line="58"/>
+        <source>Info</source>
+        <translation>通知</translation>
+    </message>
+    <message>
+        <location filename="../../ui/lib/log/savelogdialog.ui" line="63"/>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <location filename="../../ui/lib/log/savelogdialog.ui" line="68"/>
+        <source>Error</source>
+        <translation>错误</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/log/savelogdialog.cpp" line="34"/>
+        <source>Select File to Save Log</source>
+        <translation>选择保存日志的文件</translation>
+    </message>
+</context>
+<context>
+    <name>Tools</name>
+    <message>
+        <location filename="../../src/global/tools.cpp" line="32"/>
+        <source>Qss file &quot;%1&quot; doesn&apos;t exist.</source>
+        <translation>Qss 文件 &quot;%1&quot; 不存在。</translation>
+    </message>
+    <message>
+        <location filename="../../src/global/tools.cpp" line="38"/>
+        <source>Failed to open qss file &quot;%1&quot;.</source>
+        <translation>打开 qss 文件 &quot;%1&quot; 失败。</translation>
     </message>
 </context>
 <context>
@@ -1194,7 +1615,7 @@
     </message>
     <message>
         <location filename="../../src/lib/usb/usbdevice.cpp" line="27"/>
-        <location filename="../../src/lib/usb/usbdevice.cpp" line="200"/>
+        <location filename="../../src/lib/usb/usbdevice.cpp" line="203"/>
         <source>Failed to get device descriptor (%1).</source>
         <translation>获取设备描述符失败(%1)。</translation>
     </message>
@@ -1239,17 +1660,17 @@
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbdevice.cpp" line="156"/>
+        <location filename="../../src/lib/usb/usbdevice.cpp" line="161"/>
         <source>Re-enumeration is required, or the device has been disconnected.</source>
         <translation>需要重新枚举或设备已经断开连接。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbdevice.cpp" line="158"/>
+        <location filename="../../src/lib/usb/usbdevice.cpp" line="163"/>
         <source>Unhandled error: %1.</source>
         <translation>未处理的错误：%1.</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbdevice.cpp" line="159"/>
+        <location filename="../../src/lib/usb/usbdevice.cpp" line="166"/>
         <source>The device &quot;%1&quot; has been reset.</source>
         <translation>设备 &quot;%1&quot; 已被重置。</translation>
     </message>
@@ -6007,22 +6428,22 @@
     <message>
         <location filename="../../src/lib/usb/usbvideostreaminterfacedescriptor.cpp" line="302"/>
         <source>wKeyFrameRate field</source>
-        <translation type="unfinished">wKeyFrameRate 字段</translation>
+        <translation>wKeyFrameRate 字段</translation>
     </message>
     <message>
         <location filename="../../src/lib/usb/usbvideostreaminterfacedescriptor.cpp" line="304"/>
         <source>wPFrameRate field</source>
-        <translation type="unfinished">wPFrameRate 字段</translation>
+        <translation>wPFrameRate 字段</translation>
     </message>
     <message>
         <location filename="../../src/lib/usb/usbvideostreaminterfacedescriptor.cpp" line="306"/>
         <source>wCompQuality field</source>
-        <translation type="unfinished">wCompQuality 字段</translation>
+        <translation>wCompQuality 字段</translation>
     </message>
     <message>
         <location filename="../../src/lib/usb/usbvideostreaminterfacedescriptor.cpp" line="308"/>
         <source>wCompWindowSize field</source>
-        <translation type="unfinished">wCompWindowSize 字段</translation>
+        <translation>wCompWindowSize 字段</translation>
     </message>
     <message>
         <location filename="../../src/lib/usb/usbvideostreaminterfacedescriptor.cpp" line="310"/>
@@ -6558,7 +6979,7 @@
     <message>
         <location filename="../../src/lib/usb/usbvideostreaminterfacedescriptor.cpp" line="2546"/>
         <source>Reset</source>
-        <translation type="unfinished">重置</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/lib/usb/usbvideostreaminterfacedescriptor.cpp" line="2548"/>

@@ -1,4 +1,4 @@
-﻿/*! The main window of usb-regulus
+/*! The main window of usb-regulus
 
  * Copyright (C) 2022 Nichts Hsu
 
@@ -43,6 +43,7 @@
 #include <misc/option.hpp>
 
 #include "usbdevicetreeview.h"
+#include "preferencedialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -96,15 +97,29 @@ private slots:
 
     /**
      * @brief __mainBrowserMenuShow
-     * Show menu of main browser
+     * Show menu of main browser.
      */
     void __mainBrowserMenuShow(const QPoint &point);
 
+    /**
+     * @brief __openPreferenceDialog
+     * Open prefrence dialog.
+     */
+    void __openPreferenceDialog();
+
+    /**
+     * @brief __preferenceDialogApply
+     * When click `Ok` or `Apply` in the preference dialog.
+     */
+    void __preferenceDialogApply();
+
 private:
     void __initWithSettings();
+    void __updateWithSettings();
     void __setLoggerLevel(Logger::Level level);
     void __setTheme(const QString &theme = "(none)");
     void __loadTranslation(const QString &lang);
+    static QString __FontToCss();
 
     Ui::MainWindow *ui;
 
@@ -116,5 +131,6 @@ private:
     QAction *_actionCopy, *_actionCopyAll, *_actionCopyAllHtml, *_actionCopyAllMarkdown;
     Option<UsbDeviceItem *> _currentDisplayedDeviceItem;
     Option<UsbInterfaceItem *> _currentDisplayedInterfaceItem;
+    PreferenceDialog *_preferenceDialog;
 };
 #endif // MAINWINDOW_H

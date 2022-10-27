@@ -1,7 +1,7 @@
 ﻿# usb-regulus
 
 ![platform](https://img.shields.io/badge/platform-linux-lightgrey)
-![version](https://img.shields.io/badge/version-v0.1.4-blue)
+![version](https://img.shields.io/badge/version-v0.1.5-blue)
 [![license](https://img.shields.io/badge/license-GPLv3-blue)](https://github.com/NichtsHsu/usb-regulus/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-%23FF4D5B.svg)](https://996.icu)
 

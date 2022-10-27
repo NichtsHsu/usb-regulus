@@ -22,6 +22,8 @@ INCLUDEPATH += \
     $$PWD/reference/ \
 
 FORMS += \
+    ui/mainwindow/preferencedialog.ui \
+    ui/lib/log/savelogdialog.ui \
     ui/datatransferwindow/controltransferwidget.ui \
     ui/datatransferwindow/datatransferwindow.ui \
     ui/datatransferwindow/endpointinwidget.ui \
@@ -40,6 +42,7 @@ HEADERS += \
     src/global/settings.h \
     src/global/tools.h \
     src/lib/log/logger.h \
+    src/lib/log/savelogdialog.h \
     src/lib/misc/option.hpp \
     src/lib/usb/__usbmacro.h \
     src/lib/usb/usbaudiocontrolinterfacedescriptor.h \
@@ -67,6 +70,7 @@ HEADERS += \
     src/lib/usb/usbvideocontrolinterfacedescriptor.h \
     src/lib/usb/usbvideostreaminterfacedescriptor.h \
     src/mainwindow/mainwindow.h \
+    src/mainwindow/preferencedialog.h \
     src/mainwindow/usbdevicetreeview.h
 
 SOURCES += \
@@ -80,6 +84,7 @@ SOURCES += \
     src/global/settings.cpp \
     src/global/tools.cpp \
     src/lib/log/logger.cpp \
+    src/lib/log/savelogdialog.cpp \
     src/lib/usb/__usbmacro.cpp \
     src/lib/usb/usbaudiocontrolinterfacedescriptor.cpp \
     src/lib/usb/usbaudiostreaminterfacedescriptor.cpp \
@@ -107,6 +112,7 @@ SOURCES += \
     src/lib/usb/usbvideostreaminterfacedescriptor.cpp \
     src/main.cpp \
     src/mainwindow/mainwindow.cpp \
+    src/mainwindow/preferencedialog.cpp \
     src/mainwindow/usbdevicetreeview.cpp
 
 TRANSLATIONS += \

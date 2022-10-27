@@ -1,4 +1,4 @@
-﻿/*! A simple logger system which is derived from QTextBrowser
+/*! A simple logger system which is derived from QTextBrowser
 
  * Copyright (C) 2022 Nichts Hsu
 
@@ -22,13 +22,10 @@
 #include <QTextBrowser>
 #include <QString>
 #include <QTime>
-#include <QFile>
 #include <QList>
-#include <QTextStream>
 #include <QtGlobal>
 #include <QMutex>
-#include <QTimer>
-#include <mutex>
+#include <QMenu>
 
 /**
   * Simplified interfaces for any QObject
@@ -69,7 +66,7 @@ public:
      */
     static Logger *instance();
 
-signals:
+    void changeEvent(QEvent *event) override;
 
 public slots:
     /**
@@ -120,13 +117,17 @@ public slots:
      * @param logLevel
      * The lowest level for log to save.
      */
-    void toFile(const QString &filePath, Logger::Level logLevel);
+    void toFile(const QString &filePath, Logger::Level logLevel = Logger::Level::Debug);
 
     /**
      * @brief clear
      * Clear all log.
      */
     void clear();
+
+private slots:
+    void __customMenu(const QPoint &point);
+    void __actionSaveFile();
 
 private:
     explicit Logger(QWidget *parent = nullptr);
@@ -153,6 +154,9 @@ private:
 
     QList<BackupBlock> _backup;
     QMutex _writeMutex;
+
+    QMenu *_menu;
+    QAction *_actionCopy, *_actionCopyAll, *_actionSave, *_actionClear;
 };
 
 /**

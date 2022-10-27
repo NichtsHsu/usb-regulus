@@ -1,9 +1,40 @@
 ﻿#include "logger.h"
+#include "savelogdialog.h"
+#include <QFile>
+#include <QTimer>
+#include <QGuiApplication>
+#include <QTextStream>
+#include <QClipboard>
+#include <mutex>
 
 Logger::Logger(QWidget *parent):
     QTextBrowser(parent), _logLevel(Level::Info)
 {
+    _menu = new QMenu(this);
+    _actionCopy = new QAction(tr("Copy"));
+    _menu->addAction(_actionCopy);
+    _actionCopyAll = new QAction(tr("Copy All"));
+    _menu->addAction(_actionCopyAll);
+    _actionSave = new QAction(tr("Save to File"));
+    _menu->addAction(_actionSave);
+    _menu->addSeparator();
+    _actionClear = new QAction(tr("Clear"));
+    _menu->addAction(_actionClear);
+
     document()->setMaximumBlockCount(500);
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, &Logger::customContextMenuRequested,
+            this, &Logger::__customMenu);
+    connect(_actionCopy, &QAction::triggered, this, [this] () {
+        qGuiApp->clipboard()->setText(textCursor().selectedText());
+    });
+    connect(_actionCopyAll, &QAction::triggered, this, [this] () {
+        qGuiApp->clipboard()->setText(toPlainText());
+    });
+    connect(_actionSave, &QAction::triggered,
+            this, &Logger::__actionSaveFile);
+    connect(_actionClear, &QAction::triggered,
+            this, &Logger::clear);
 }
 
 QString Logger::__strLogLevel()
@@ -11,19 +42,19 @@ QString Logger::__strLogLevel()
     switch (_logLevel)
     {
         case Logger::Level::Debug:
-            return tr("Debug");
+        return tr("Debug");
         break;
         case Logger::Level::Info:
-            return tr("Info");
+        return tr("Info");
         break;
         case Logger::Level::Warning:
-            return tr("Warning");
+        return tr("Warning");
         break;
         case Logger::Level::Error:
-            return tr("Error");
+        return tr("Error");
         break;
         default:
-            return QString::number(int(_logLevel));
+        return QString::number(int(_logLevel));
     }
 }
 
@@ -76,6 +107,22 @@ Logger *Logger::instance()
             Logger::_instance = new Logger;
     }
     return Logger::_instance;
+}
+
+void Logger::changeEvent(QEvent *event)
+{
+    switch (event->type())
+    {
+        case QEvent::LanguageChange:
+            _actionCopy->setText(tr("Copy"));
+            _actionCopyAll->setText(tr("Copy All"));
+            _actionSave->setText(tr("Save to File"));
+            _actionClear->setText(tr("Clear"));
+        break;
+        default:
+        break;
+    }
+    event->accept();
 }
 
 Logger::Level Logger::logLevel() const
@@ -160,6 +207,19 @@ void Logger::clear()
 {
     setHtml("");
     _backup.clear();
+}
+
+void Logger::__customMenu(const QPoint &point)
+{
+    _menu->exec(viewport()->mapToGlobal(point));
+}
+
+void Logger::__actionSaveFile()
+{
+    SaveLogDialog *dialog = new SaveLogDialog;
+    if (dialog->exec() == SaveLogDialog::Accepted)
+        toFile(dialog->logFilePath(), dialog->selectedLogLevel());
+    dialog->deleteLater();
 }
 
 Logger &log()

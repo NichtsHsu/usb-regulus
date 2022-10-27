@@ -27,6 +27,15 @@ public:
     static QString getThemeStyleSheet(const QString &theme = QString());
 
     /**
+     * @brief getConfigFolder
+     * Unix: $HOME/.config/usb-regulus
+     *      The directory path will be create if not exist
+     * Others: $PWD
+     * @return the folder to save config
+     */
+    static QString getConfigFolder();
+
+    /**
      * @brief getConfigFilePath
      * @note
      * Unix: $HOME/.config/usb-regulus/config.ini

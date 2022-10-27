@@ -1,5 +1,6 @@
-﻿#include "mainwindow.h"
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
@@ -11,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent):
     ui->setupUi(this);
 
     ui_mainBrowser = new QTextBrowser;
+    ui_mainBrowser->setObjectName("MainBrowser");
     ui_widgetRightSplitter = new QSplitter(Qt::Vertical);
     ui->widgetRight->layout()->addWidget(ui_widgetRightSplitter);
     ui_widgetRightSplitter->addWidget(ui_mainBrowser);
@@ -21,7 +23,6 @@ MainWindow::MainWindow(QWidget *parent):
     ui->splitterMain->setStretchFactor(1, 3);
 
     ui_mainBrowser->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui_mainBrowser->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     _mainBrowserMenu = new QMenu(ui_mainBrowser);
     _actionCopy = new QAction(tr("Copy"));
@@ -32,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent):
     _mainBrowserMenu->addAction(_actionCopyAllHtml);
     _actionCopyAllMarkdown = new QAction(tr("Copy All (Markdown)"));
     _mainBrowserMenu->addAction(_actionCopyAllMarkdown);
+
+    _preferenceDialog = new PreferenceDialog;
 
     QStringList themes = Tools::getValidThemes();
     foreach (const QString &theme, themes)
@@ -71,6 +74,8 @@ MainWindow::MainWindow(QWidget *parent):
             usb::UsbHost::instance(), &usb::UsbHost::setProtectMouse);
     connect(ui->actionProtectKeyboard, &QAction::triggered,
             usb::UsbHost::instance(), &usb::UsbHost::setProtectKeyboard);
+    connect(ui->actionPreferences, &QAction::triggered,
+            this, &MainWindow::__openPreferenceDialog);
     connect(ui->actionDebug, &QAction::triggered, this, [this] () {
         __setLoggerLevel(Logger::Level::Debug);
     });
@@ -109,6 +114,8 @@ MainWindow::MainWindow(QWidget *parent):
     });
     connect(ui_mainBrowser, &QTextBrowser::customContextMenuRequested,
             this, &MainWindow::__mainBrowserMenuShow);
+    connect(_preferenceDialog, &PreferenceDialog::OkOrApplyClicked,
+            this, &MainWindow::__preferenceDialogApply);
 
     usb::UsbHost::instance()->rescan();
 }
@@ -116,6 +123,7 @@ MainWindow::MainWindow(QWidget *parent):
 MainWindow::~MainWindow()
 {
     delete ui;
+    _preferenceDialog->deleteLater();
 }
 
 void MainWindow::__refreshDeviceList()
@@ -145,7 +153,7 @@ void MainWindow::__removeDevice(usb::UsbDevice *device, int index)
     else if (_currentDisplayedInterfaceItem)
         for (uint8_t i = 0; i < device->configurationDescriptor()->bNumInterfaces(); ++i)
             if (_currentDisplayedInterfaceItem.get()->interface() ==
-                    device->configurationDescriptor()->interface(i))
+                device->configurationDescriptor()->interface(i))
             {
                 ui_mainBrowser->clear();
                 _currentDisplayedInterfaceItem.setNone();
@@ -195,6 +203,17 @@ void MainWindow::__mainBrowserMenuShow(const QPoint &point)
     _mainBrowserMenu->exec(ui_mainBrowser->viewport()->mapToGlobal(point));
 }
 
+void MainWindow::__openPreferenceDialog()
+{
+    _preferenceDialog->show();
+}
+
+void MainWindow::__preferenceDialogApply()
+{
+    _preferenceDialog->updateToSettings();
+    __updateWithSettings();
+}
+
 void MainWindow::changeEvent(QEvent *event)
 {
     switch (event->type())
@@ -210,10 +229,6 @@ void MainWindow::changeEvent(QEvent *event)
             else if (_currentDisplayedInterfaceItem)
                 ui_mainBrowser->setHtml(_currentDisplayedInterfaceItem.get()->interface()->infomationToHtml());
         break;
-        case QEvent::WindowStateChange:
-            settings().mainwindowProperties().state = windowState();
-        break;
-
         default:
         break;
     }
@@ -227,6 +242,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
     settings().protectMouse() = ui->actionProtectMouse->isChecked();
     settings().protectKeyboard() = ui->actionProtectKeyboard->isChecked();
     settings().saveToIni(Tools::getConfigFilePath());
+    if (settings().saveLogBeforeExit())
+    {
+        QDateTime dateTime = QDateTime::currentDateTime();
+        log().toFile(settings().autoSaveLogDir() +
+                     QString("/usb-regulus_") + dateTime.toString("yyyyMMdd_hhmmss.txt"));
+    }
     usb::UsbHost::instance()->deleteLater();
     qApp->quit();
     event->accept();
@@ -234,32 +255,86 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    settings().mainwindowProperties().size = event->size();
+    if (settings().mainwindowProperties().startState == WindowStartStates::LAST_POS_SIZE ||
+        settings().mainwindowProperties().startState ==
+        WindowStartStates::CENTER_LAST_SIZE)
+        settings().mainwindowProperties().size = event->size();
     event->accept();
 }
 
 void MainWindow::moveEvent(QMoveEvent *event)
 {
-    settings().mainwindowProperties().position = event->pos();
+    if (settings().mainwindowProperties().startState == WindowStartStates::LAST_POS_SIZE)
+        settings().mainwindowProperties().position = event->pos();
     event->accept();
 }
 
 void MainWindow::__initWithSettings()
 {
-    if (settings().mainwindowProperties().state)
-        setWindowState(settings().mainwindowProperties().state.get());
-    if (settings().mainwindowProperties().size)
-        resize(settings().mainwindowProperties().size.get());
-    if (settings().mainwindowProperties().position)
-        move(settings().mainwindowProperties().position.get());
+    /* General */
+    __loadTranslation(settings().language());
+    __setLoggerLevel(settings().logLevel());
+    /* Theme will be handled later */
+
+    /* Start & Exit */
+    QPoint defaultPos(0, 0);
+    QSize defaultSize(1280, 720);
+    switch (settings().mainwindowProperties().startState)
+    {
+        case WindowStartStates::LAST_POS_SIZE:
+        case WindowStartStates::CUSTOM:
+            resize(settings().mainwindowProperties().size.safeGet(defaultSize));
+            move(settings().mainwindowProperties().position.safeGet(defaultPos));
+        break;
+        case WindowStartStates::MIN:
+            setWindowState(Qt::WindowState::WindowMinimized);
+        break;
+        case WindowStartStates::MAX:
+            setWindowState(Qt::WindowState::WindowMaximized);
+        break;
+        case WindowStartStates::CENTER_DEFAULT_SIZE:
+            resize(defaultSize);
+            move(frameGeometry().topLeft() + screen()->geometry().center() - frameGeometry().center());
+        break;
+        case WindowStartStates::CENTER_LAST_SIZE:
+        case WindowStartStates::CENTER_CUSTOM_SIZE:
+            resize(settings().mainwindowProperties().size.safeGet(defaultSize));
+            move(frameGeometry().topLeft() + screen()->geometry().center() - frameGeometry().center());
+        break;
+    }
+    if (settings().startWithRandomTheme())
+    {
+        QStringList themeList = Tools::getValidThemes();
+        srand(time(nullptr));
+        int randomThemeIndex = rand() % themeList.length();
+        settings().theme() = themeList[randomThemeIndex];
+    }
+    __setTheme(settings().theme());
+
+    /* Others */
     ui->actionProtectMouse->setChecked(settings().protectMouse());
     usb::UsbHost::instance()->setProtectMouse(settings().protectMouse());
     ui->actionProtectKeyboard->setChecked(settings().protectKeyboard());
     usb::UsbHost::instance()->setProtectKeyboard(settings().protectKeyboard());
 
+    /* Font */
+    /* Qt prohibits mixing `setStyleSheet` and `setFont`, */
+    /* therefore fonts will be handled in `__FontToCss` */
+}
+
+void MainWindow::__updateWithSettings()
+{
+    /* General */
     __loadTranslation(settings().language());
     __setLoggerLevel(settings().logLevel());
     __setTheme(settings().theme());
+
+    /* Start & Exit */
+    /* Ignore this section */
+
+    /* Font */
+    /* Qt prohibits mixing `setStyleSheet` and `setFont`, */
+    /* therefore fonts will be handled in `__FontToCss` */
 }
 
 void MainWindow::__setLoggerLevel(Logger::Level level)
@@ -275,9 +350,10 @@ void MainWindow::__setLoggerLevel(Logger::Level level)
 
 void MainWindow::__setTheme(const QString &theme)
 {
-    QString qss = Tools::getThemeStyleSheet(theme);
+    QString qss = __FontToCss() + Tools::getThemeStyleSheet(theme);
     settings().theme() = theme;
     qApp->setStyleSheet(qss);
+    LOGI(tr("Set theme to %1.").arg(theme));
 }
 
 void MainWindow::__loadTranslation(const QString &lang)
@@ -303,4 +379,30 @@ void MainWindow::__loadTranslation(const QString &lang)
         _translator = oldTranslator;
         LOGE(tr("Failed to load translation of language %1.").arg(lang));
     }
+}
+
+QString MainWindow::__FontToCss()
+{
+    QString fontCss =
+            "* {"
+            "   font-family: \"%1\";"
+            "   font-size: %2pt;"
+            "   font-style: %3;"
+            "   font-weight: %4;"
+            "}"
+            "QTextBrowser#MainBrowser {"
+            "   font-family: \"%5\";"
+            "   font-size: %6pt;"
+            "   font-style: %7;"
+            "   font-weight: %8;"
+            "}";
+    return fontCss
+            .arg(settings().uiFont().family())
+            .arg(settings().uiFont().pointSize())
+            .arg(settings().uiFont().italic() ? "italic" : "normal")
+            .arg(settings().uiFont().weight())
+            .arg(settings().monospacedFont().family())
+            .arg(settings().monospacedFont().pointSize())
+            .arg(settings().monospacedFont().italic() ? "italic" : "normal")
+            .arg(settings().monospacedFont().weight());
 }

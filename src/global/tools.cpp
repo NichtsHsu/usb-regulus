@@ -46,6 +46,31 @@ QString Tools::getThemeStyleSheet(const QString &theme)
     return qss;
 }
 
+QString Tools::getConfigFolder()
+{
+#ifdef Q_OS_UNIX
+    const char *homedir;
+
+    if ((homedir = getenv("HOME")) == NULL) {
+        homedir = getpwuid(getuid())->pw_dir;
+    }
+
+    QDir configDir(QString(homedir) + "/.config/usb-regulus");
+    if (!configDir.exists())
+        if (!configDir.mkpath("."))
+        {
+            log().w("Tools", QObject::tr("Failed to create config directory \"%1\", fallback to \"%2\".")
+                    .arg(QString(homedir) + "/.config/usb-regulus")
+                    .arg(qApp->applicationDirPath()));
+            return qApp->applicationDirPath();
+        }
+
+    return QString(homedir) + "/.config/usb-regulus";
+#else
+    return qApp->applicationDirPath();
+#endif
+}
+
 QString Tools::getConfigFilePath()
 {
 #ifdef Q_OS_UNIX

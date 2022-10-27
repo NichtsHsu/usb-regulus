@@ -1,10 +1,62 @@
-﻿#include "settings.h"
+#include "settings.h"
+#include <QFontDatabase>
+#include "tools.h"
 
 Settings::Settings(QObject *parent)
     : QObject{parent},
       _protectMouse(true)
 {
 
+}
+
+const QFont &Settings::monospacedFont() const
+{
+    return _monospacedFont;
+}
+
+const QFont &Settings::uiFont() const
+{
+    return _uiFont;
+}
+
+QFont &Settings::monospacedFont()
+{
+    return _monospacedFont;
+}
+
+const bool &Settings::startWithRandomTheme() const
+{
+    return _startWithRandomTheme;
+}
+
+QFont &Settings::uiFont()
+{
+    return _uiFont;
+}
+
+const QString &Settings::autoSaveLogDir() const
+{
+    return _autoSaveLogDir;
+}
+
+bool &Settings::startWithRandomTheme()
+{
+    return _startWithRandomTheme;
+}
+
+const bool &Settings::saveLogBeforeExit() const
+{
+    return _saveLogBeforeExit;
+}
+
+QString &Settings::autoSaveLogDir()
+{
+    return _autoSaveLogDir;
+}
+
+bool &Settings::saveLogBeforeExit()
+{
+    return _saveLogBeforeExit;
 }
 
 QString &Settings::theme()
@@ -85,8 +137,7 @@ void Settings::saveToIni(const QString &filePath) const
 {
     QSettings ini(filePath, QSettings::IniFormat);
     ini.beginGroup("mainwindow");
-    if (_mainwindowProperties.state)
-        ini.setValue("state", _mainwindowProperties.state.get().toInt());
+    ini.setValue("startState", int(_mainwindowProperties.startState));
     if (_mainwindowProperties.size)
     {
         ini.setValue("width", _mainwindowProperties.size.get().width());
@@ -98,13 +149,20 @@ void Settings::saveToIni(const QString &filePath) const
         ini.setValue("y", _mainwindowProperties.position.get().y());
     }
     ini.endGroup();
+    ini.beginGroup("fonts");
+    ini.setValue("ui", _uiFont.toString());
+    ini.setValue("monospaced", _monospacedFont.toString());
+    ini.endGroup();
     ini.beginGroup("usbconfigs");
     ini.setValue("protectMouse", _protectMouse);
     ini.setValue("protectKeyboard", _protectKeyboard);
     ini.endGroup();
     ini.beginGroup("userconfigs");
     ini.setValue("logLevel", int(_logLevel));
+    ini.setValue("saveLogBeforeExit", _saveLogBeforeExit);
+    ini.setValue("autoSaveLogDir", _autoSaveLogDir);
     ini.setValue("language", _language);
+    ini.setValue("startWithRandomTheme", _startWithRandomTheme);
     ini.setValue("theme", _theme);
     ini.endGroup();
 }
@@ -113,11 +171,8 @@ void Settings::loadFromIni(const QString &filePath)
 {
     QSettings ini(filePath, QSettings::IniFormat);
     ini.beginGroup("mainwindow");
-    if (ini.contains("state"))
-        _mainwindowProperties.state =
-                Qt::WindowStates::fromInt(ini.value("state", 0).toInt());
-    else
-        _mainwindowProperties.state.setNone();
+    _mainwindowProperties.startState = WindowStartStates(
+                ini.value("startState", int(WindowStartStates::CENTER_DEFAULT_SIZE)).toInt());
     if (ini.contains("width") && ini.contains("height"))
         _mainwindowProperties.size.set(
                     ini.value("width", 0).toInt(),
@@ -131,13 +186,22 @@ void Settings::loadFromIni(const QString &filePath)
     else
         _mainwindowProperties.position.setNone();
     ini.endGroup();
+    ini.beginGroup("fonts");
+    _uiFont.fromString(ini.value("ui", QFontDatabase::systemFont(
+                                     QFontDatabase::GeneralFont).toString()).toString());
+    _monospacedFont.fromString(ini.value("monospaced", QFontDatabase::systemFont(
+                                             QFontDatabase::FixedFont).toString()).toString());
+    ini.endGroup();
     ini.beginGroup("usbconfigs");
     _protectMouse = ini.value("protectMouse", true).toBool();
     _protectKeyboard = ini.value("protectKeyboard", true).toBool();
     ini.endGroup();
     ini.beginGroup("userconfigs");
     _logLevel = Logger::Level(ini.value("logLevel", int(Logger::Level::Info)).toInt());
+    _saveLogBeforeExit = ini.value("saveLogBeforeExit", false).toBool();
+    _autoSaveLogDir = ini.value("autoSaveLogDir", Tools::getConfigFolder()).toString();
     _language = ini.value("language", "en_US").toString();
+    _startWithRandomTheme = ini.value("startWithRandomTheme", false).toBool();
     _theme = ini.value("theme", "Aqua").toString();
     ini.endGroup();
 }

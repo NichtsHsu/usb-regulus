@@ -1,4 +1,4 @@
-﻿/*! An Option wrapper for C++11
+/*! An Option wrapper for C++11
 
  * Copyright (C) 2022 Nichts Hsu
 
@@ -69,6 +69,16 @@ public:
      */
     T &get();
     const T &get() const;
+
+    /**
+     * @brief safeGet
+     * Always return a valid reference.
+     * @param def
+     * Default value if is None.
+     * @return
+     */
+    T &safeGet(T &def);
+    const T &safeGet(const T &def) const;
 
     /**
      * @brief setNone
@@ -161,6 +171,22 @@ T &Option<T>::get()
 template<typename T>
 const T &Option<T>::get() const
 {
+    return *_inner;
+}
+
+template<typename T>
+T &Option<T>::safeGet(T &def)
+{
+    if (isNone())
+        return def;
+    return *_inner;
+}
+
+template<typename T>
+const T &Option<T>::safeGet(const T &def) const
+{
+    if (isNone())
+        return def;
     return *_inner;
 }
 
