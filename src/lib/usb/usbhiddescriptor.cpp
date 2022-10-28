@@ -1,4 +1,4 @@
-﻿#include "usbhiddescriptor.h"
+#include "usbhiddescriptor.h"
 #include "usbhost.h"
 #include "__usbmacro.h"
 #include "hidrd/src/hidrd_convert.h"
@@ -225,10 +225,10 @@ namespace usb {
         html += QString("<h2 align='center'>%1</h2>").arg(tr("HID Report Descriptor"));
         html += QString("<p><b>%1</b></p>").arg(tr("Raw dump data"));
         html += QString("<p>");
-        for (size_t i = 0; i < _wDescriptorLength; ++i)
+        for (int i = 0; i < _wDescriptorLength; ++i)
         {
             html += QString("%1").arg(uint8_t(_rawDescriptor[i]), 2, 16, QChar('0'));
-            if (i == size_t(_wDescriptorLength - 1))
+            if (i == int(_wDescriptorLength - 1))
                 break;
             else if (i % 16 == 15)
                 html += QString("<br />");

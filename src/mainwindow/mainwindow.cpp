@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDateTime>
+#include <QScreen>
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),

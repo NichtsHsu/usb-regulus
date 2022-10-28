@@ -66,14 +66,7 @@ git clone --recurse-submodules https://github.com/NichtsHsu/usb-regulus.git
 
 ### Linux
 
-1. Install [Qt6](https://www.qt.io/download) and select GCC x64 toolkit.
-
-    Or, if you are working on a higher version of Linux, which contains the qt6 package, such as Ubuntu 22.04, just install it:
-
-    ```bash
-    sudo apt install qt6-base-dev qml-qt6 qtcreator # qtcreator is optional
-    ```
-
+1. Install [Qt](https://www.qt.io/download) and select GCC x64 toolkit (I have only tested Qt 5.15.3 and Qt 6.4.0). Or, if you are working on a release of Linux which contains the qt5/6 package just install it.
 2. Install necessary C++ compiling packages, such as `build-essential`, `g++`, `make`, `cmake` and so on.
 3. Install `libusb-1.0` and `libudev`. For an example, on Ubuntu:
 

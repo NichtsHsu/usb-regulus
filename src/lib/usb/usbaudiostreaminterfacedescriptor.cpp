@@ -1,4 +1,4 @@
-﻿#include "usbaudiostreaminterfacedescriptor.h"
+#include "usbaudiostreaminterfacedescriptor.h"
 #include "usbaudiocontrolinterfacedescriptor.h"
 #include "__usbmacro.h"
 
@@ -313,7 +313,6 @@ namespace usb {
             }
             END;
 
-            qDebug() << html;
             return html;
         }
 

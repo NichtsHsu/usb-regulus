@@ -1,4 +1,4 @@
-﻿#include "controltransferwidget.h"
+#include "controltransferwidget.h"
 #include "ui_controltransferwidget.h"
 #include "usb/__usbmacro.h"
 
@@ -124,19 +124,19 @@ ControlTransferWidget::ControlTransferWidget(QWidget *parent) :
             this, &ControlTransferWidget::__bmRequestUseRawHex);
     connect(ui->checkBoxBRequestRawHex, &QCheckBox::toggled,
             this, &ControlTransferWidget::__bRequestUseRawHex);
-    connect(ui->comboBoxDirection, &QComboBox::currentIndexChanged,
+    connect(ui->comboBoxDirection, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ControlTransferWidget::__updateBmRequest);
-    connect(ui->comboBoxDirection, &QComboBox::currentIndexChanged,
+    connect(ui->comboBoxDirection, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ControlTransferWidget::__updateBRequestList);
-    connect(ui->comboBoxType, &QComboBox::currentIndexChanged,
+    connect(ui->comboBoxType, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ControlTransferWidget::__updateBmRequest);
-    connect(ui->comboBoxType, &QComboBox::currentIndexChanged,
+    connect(ui->comboBoxType, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ControlTransferWidget::__updateBRequestList);
-    connect(ui->comboBoxRecipient, &QComboBox::currentIndexChanged,
+    connect(ui->comboBoxRecipient, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ControlTransferWidget::__updateBmRequest);
-    connect(ui->comboBoxRecipient, &QComboBox::currentIndexChanged,
+    connect(ui->comboBoxRecipient, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ControlTransferWidget::__updateBRequestList);
-    connect(ui->comboBoxBRequest, &QComboBox::currentIndexChanged,
+    connect(ui->comboBoxBRequest, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &ControlTransferWidget::__updateBRequest);
     connect(ui->pushButtonSend, &QPushButton::released,
             this, &ControlTransferWidget::__buttonSendReleased);

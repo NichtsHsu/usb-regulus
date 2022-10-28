@@ -1,4 +1,4 @@
-﻿/*! Sub-component of DataTransferWindow, responsible for transferring data from control endpoint
+/*! Sub-component of DataTransferWindow, responsible for transferring data from control endpoint
 
  * Copyright (C) 2022 Nichts Hsu
 

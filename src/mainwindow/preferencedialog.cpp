@@ -26,7 +26,7 @@ PreferenceDialog::PreferenceDialog(QWidget *parent) :
             break;
         };
     });
-    connect(ui->comboBoxMainWindowStartState, &QComboBox::currentIndexChanged,
+    connect(ui->comboBoxMainWindowStartState, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &PreferenceDialog::__updateWindowPropTextEdit);
     connect(ui->checkBoxSaveExit, &QCheckBox::clicked,
             ui->lineEditLogDir, [this] (bool checked) {
