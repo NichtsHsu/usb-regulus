@@ -1,4 +1,4 @@
-﻿/*! A global-single-instance mode USB devices manager
+/*! A global-single-instance mode USB devices manager
 
  * Copyright (C) 2022 Nichts Hsu
 
@@ -61,10 +61,13 @@ namespace usb {
             Q_OBJECT
         public:
             UsbDeviceRescanWorker(QObject *parent = nullptr);
+            void setUpdateMode(bool updateMode);
         signals:
             void finished();
         public slots:
             void run();
+        private:
+            bool _updateMode;
         };
     }
 
@@ -224,6 +227,7 @@ namespace usb {
          * the wrapper of hotplug callback function
          */
         void __removeDevice(libusb_device *device);
+        void __removeDevice(const UsbDevice &device);
 
         /**
          * @brief __hotplug_callback
@@ -244,6 +248,7 @@ namespace usb {
         __private::UsbEventHandler *_libusbEventHandler;
         __private::UsbDeviceRescanWorker *_rescaner;
         QThread *_libusbEventThread, *_rescanThread;
+        QTimer *_rescanTimer;
     };
 }
 

@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB Device
+/*! C++ class wrapper of USB Device
 
  * Copyright (C) 2022 Nichts Hsu
 
@@ -231,7 +231,7 @@ namespace usb {
          * @return if idVendor, idProduct, bus and port are equal.
          */
         bool operator==(const UsbDevice &) const;
-        bool operator==(libusb_device *);
+        bool operator==(libusb_device *) const;
 
     private:
         libusb_device *_device;

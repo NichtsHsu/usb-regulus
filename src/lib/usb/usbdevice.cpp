@@ -1,4 +1,4 @@
-﻿#include "usbdevice.h"
+#include "usbdevice.h"
 #include "__usbmacro.h"
 
 namespace usb {
@@ -28,14 +28,6 @@ namespace usb {
             return;
         }
         _deviceDescriptor = new UsbDeviceDescriptor(&devDesc, this);
-
-        int config;
-        ret = libusb_get_configuration(_handle, &config);
-        if (ret < LIBUSB_SUCCESS)
-        {
-            LOGE(tr("Failed to get configuration (%1).").arg(usb_error_name(ret)));
-            return;
-        }
 
         libusb_config_descriptor *configDesc;
         ret = libusb_get_config_descriptor(_device, 0, &configDesc);
@@ -194,7 +186,7 @@ namespace usb {
         return _handle;
     }
 
-    bool UsbDevice::operator==(libusb_device *device)
+    bool UsbDevice::operator==(libusb_device *device) const
     {
         libusb_device_descriptor devDesc;
         int ret = libusb_get_device_descriptor(device, &devDesc);

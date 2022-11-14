@@ -1,4 +1,4 @@
-﻿#include "tools.h"
+#include "tools.h"
 #ifdef Q_OS_UNIX
 #include <unistd.h>
 #include <sys/types.h>
@@ -11,7 +11,7 @@ QStringList Tools::getValidThemes()
 {
     QStringList themes;
     QDir themePath(qApp->applicationDirPath() + "/assets/themes/");
-    foreach( const QFileInfo& entry, themePath.entryInfoList(
+    foreach (const QFileInfo& entry, themePath.entryInfoList(
                  QStringList() << "*.qss", QDir::Files | QDir::Hidden | QDir::NoSymLinks ) ) {
         themes.append(entry.baseName());
     }

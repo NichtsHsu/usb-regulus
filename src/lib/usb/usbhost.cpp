@@ -1,4 +1,4 @@
-﻿#include "usbhost.h"
+#include "usbhost.h"
 #include "usbhiddescriptor.h"
 #include "__usbmacro.h"
 
@@ -17,6 +17,7 @@ namespace usb {
         if (_initialized)
         {
             _libusbEventHandler->stop();
+            _libusbEventThread->exit();
 
             _rescaner->disconnect(this);
             _rescanThread->exit();
@@ -70,7 +71,7 @@ namespace usb {
 
         if (!libusb_has_capability(LIBUSB_CAP_HAS_HOTPLUG))
         {
-            LOGW(tr("Libusb has no hotplug capability in your system, usb-regulus can not automatically refresh the device list."));
+            LOGW(tr("Libusb has no hotplug capability on your OS."));
             _hasHotplug = false;
         }
         else
@@ -88,10 +89,22 @@ namespace usb {
                                                    &_hotplugCbHandle);
             if (ret < LIBUSB_SUCCESS)
             {
-                LOGW(tr("Failed to register hotplug callback function, "
-                        "usb-regulus can not automatically refresh the device list."));
+                LOGW(tr("Failed to register hotplug callback function."));
                 _hasHotplug = false;
             }
+            else
+                _hasHotplug = true;
+        }
+
+        if (!_hasHotplug)
+        {
+            LOGW(tr("Since usb-regulus cannot register the hotplug callback function, "
+                    "so usb-regulus will start a timer every 100ms to poll the devices list "
+                    "and check if any device was plugged or unplugged"));
+            _rescaner->setUpdateMode(true);
+            QTimer *timer = new QTimer(this);
+            connect(timer, &QTimer::timeout, _rescaner, &UsbDeviceRescanWorker::run);
+            timer->start(100);
         }
 
 #ifdef Q_OS_UNIX
@@ -100,7 +113,6 @@ namespace usb {
 #endif
 
         _initialized = true;
-        _hasHotplug = true;
     }
 
     void UsbHost::__sortDeviceList()
@@ -226,9 +238,6 @@ namespace usb {
 
     void UsbHost::__addDevice(libusb_device *device)
     {
-        if (!_hasHotplug)
-            return;
-
         std::lock_guard<std::mutex> lock{ __mutW };
         LOGD(tr("Hotplug event: attached."));
         UsbDevice *usbDevice = new UsbDevice(device, this);
@@ -236,6 +245,7 @@ namespace usb {
         if (!usbDevice->valid())
         {
             LOGW(tr("Ignored attached event with an invalid device."));
+            delete usbDevice;
             return;
         }
 
@@ -247,9 +257,28 @@ namespace usb {
 
     void UsbHost::__removeDevice(libusb_device *device)
     {
-        if (!_hasHotplug)
+        std::lock_guard<std::mutex> lock{ __mutW };
+        LOGD(tr("Hotplug event: detached."));
+        int index = __indexOfDevice(device);
+        if (index == -1)
+        {
+            LOGW(tr("Ignore the detached event because we didn't find any device match it."));
             return;
+        }
 
+        UsbDevice *usbDevice = _usbDevices[index];
+        emit deviceDetached(_usbDevices[index], index);
+        LOGI(tr("USB device \"%1\" detached.").arg(_usbDevices[index]->displayName()));
+        _usbDevices.remove(index);
+
+        // Delay to delete
+        QTimer::singleShot(10, usbDevice, [usbDevice] () {
+            usbDevice->deleteLater();
+        });
+    }
+
+    void UsbHost::__removeDevice(const UsbDevice &device)
+    {
         std::lock_guard<std::mutex> lock{ __mutW };
         LOGD(tr("Hotplug event: detached."));
         int index = __indexOfDevice(device);
@@ -334,15 +363,18 @@ namespace usb {
 
 
     UsbDeviceRescanWorker::UsbDeviceRescanWorker(QObject *parent):
-        QObject(parent)
+        QObject(parent), _updateMode(false)
     {
 
     }
 
+    void UsbDeviceRescanWorker::setUpdateMode(bool updateMode)
+    {
+        _updateMode = updateMode;
+    }
+
     void UsbDeviceRescanWorker::run()
     {
-        std::lock_guard<std::mutex> lock{ __mutW };
-
         UsbHost *host = UsbHost::instance();
         int ret;
         if (!host->_initialized)
@@ -357,26 +389,60 @@ namespace usb {
             return;
         }
 
-        foreach(UsbDevice * const device, host->_usbDevices)
-            delete device;
-        host->_usbDevices.clear();
-
         libusb_device *device = nullptr;
         int i = 0;
-        while ((device = dev_list[i++]) != nullptr)
+        if (_updateMode && !host->_usbDevices.empty())
         {
-            UsbDevice *usbDevice = new UsbDevice(device, this);
-            if (usbDevice->valid())
-            {
-                host->_usbDevices.append(usbDevice);
-                log().i("usb::UsbHost", tr("New USB device \"%1\" attached.").arg(usbDevice->displayName()));
-            }
-            else
-                delete usbDevice;
-        }
+            QHash<const UsbDevice *, bool> deviceExistMap;
+            foreach (const UsbDevice *device, host->usbDevices())
+                deviceExistMap.insert(device, false);
 
-        host->__sortDeviceList();
-        emit finished();
+            auto deviceExists = [host, &deviceExistMap] (libusb_device *usbDevice) -> bool {
+                bool exists = false;
+                foreach (const UsbDevice *device, host->usbDevices())
+                    if (device->operator==(usbDevice))
+                    {
+                        deviceExistMap[device] = true;
+                        exists = true;
+                    }
+                return exists;
+            };
+
+            while ((device = dev_list[i++]) != nullptr)
+            {
+                if (deviceExists(device))
+                    continue;
+                host->__addDevice(device);
+            }
+
+            QHash<const UsbDevice *, bool>::const_iterator iter = deviceExistMap.constBegin();
+            while (iter != deviceExistMap.constEnd()) {
+                if (!iter.value())
+                    host->__removeDevice(*iter.key());
+                ++iter;
+            }
+        }
+        else
+        {
+            std::lock_guard<std::mutex> lock{ __mutW };
+            foreach(UsbDevice * const oldDevice, host->_usbDevices)
+                delete oldDevice;
+            host->_usbDevices.clear();
+            while ((device = dev_list[i++]) != nullptr)
+            {
+                UsbDevice *usbDevice = new UsbDevice(device, this);
+                if (usbDevice->valid())
+                {
+                    host->_usbDevices.append(usbDevice);
+                    log().i("usb::UsbHost", tr("New USB device \"%1\" attached.").arg(usbDevice->displayName()));
+                }
+                else
+                    delete usbDevice;
+            }
+
+            host->__sortDeviceList();
+            emit finished();
+        }
 
         libusb_free_device_list(dev_list, false);
     }
