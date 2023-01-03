@@ -37,6 +37,7 @@ namespace usb {
             return;
         }
         _configurationDescriptor = new UsbConfigurationDescriptor(configDesc, this);
+        libusb_free_config_descriptor(configDesc);
 
         _speed = UsbSpeed(libusb_get_device_speed(_device));
 
