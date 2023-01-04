@@ -1,6 +1,8 @@
 #include "controltransferwidget.h"
 #include "ui_controltransferwidget.h"
 #include "usb/__usbmacro.h"
+#include <QStyleOption>
+#include <QPainter>
 
 const QMap<QString, uint8_t> ControlTransferWidget::bRequestCodeMap ={
     { "GET_STATUS", 0 },
@@ -164,7 +166,15 @@ void ControlTransferWidget::setDevice(usb::UsbDevice *device)
 void ControlTransferWidget::showEvent(QShowEvent *event)
 {
     __clearAll();
-    event->accept();
+    QWidget::showEvent(event);
+}
+
+void ControlTransferWidget::paintEvent(QPaintEvent *)
+{
+    QStyleOption opt;
+    opt.initFrom(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
 void ControlTransferWidget::__bmRequestUseRawHex(bool useRawHex)

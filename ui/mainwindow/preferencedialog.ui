@@ -417,7 +417,7 @@
            <number>2</number>
           </property>
           <property name="horizontalSpacing">
-           <number>12</number>
+           <number>4</number>
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="labelFontUI">
@@ -428,11 +428,20 @@
           </item>
           <item row="0" column="1">
            <widget class="QFontComboBox" name="fontComboBoxUI">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="editable">
              <bool>false</bool>
             </property>
             <property name="currentText">
              <string notr="true">DejaVu Sans</string>
+            </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
             </property>
            </widget>
           </item>
@@ -443,6 +452,9 @@
             </property>
             <property name="currentIndex">
              <number>5</number>
+            </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
             </property>
             <item>
              <property name="text">
@@ -552,6 +564,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QComboBox" name="comboBoxFontStyleUI">
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+            </property>
             <item>
              <property name="text">
               <string>Regular</string>
@@ -596,7 +611,7 @@
            <number>2</number>
           </property>
           <property name="horizontalSpacing">
-           <number>12</number>
+           <number>4</number>
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="labelFontMono">
@@ -613,6 +628,9 @@
             <property name="currentText">
              <string notr="true">Andale Mono</string>
             </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+            </property>
             <property name="fontFilters">
              <set>QFontComboBox::MonospacedFonts</set>
             </property>
@@ -627,6 +645,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QComboBox" name="comboBoxFontStyleMono">
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+            </property>
             <item>
              <property name="text">
               <string>Regular</string>
@@ -663,6 +684,9 @@
             </property>
             <property name="currentIndex">
              <number>5</number>
+            </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
             </property>
             <item>
              <property name="text">

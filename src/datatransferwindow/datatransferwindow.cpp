@@ -1,5 +1,7 @@
-﻿#include "datatransferwindow.h"
+#include "datatransferwindow.h"
 #include "ui_datatransferwindow.h"
+#include <QStyleOption>
+#include <QPainter>
 
 DataTransferWindow::DataTransferWindow(QWidget *parent) :
     QWidget(parent),
@@ -102,7 +104,7 @@ void DataTransferWindow::showEvent(QShowEvent *event)
              .arg(_interface->configurationDescriptor()->device()->displayName()));
     }
 
-    event->accept();
+    QWidget::showEvent(event);
 }
 
 void DataTransferWindow::closeEvent(QCloseEvent *event)
@@ -113,12 +115,20 @@ void DataTransferWindow::closeEvent(QCloseEvent *event)
             if (_interface)
                 _interface->release();
         });
-    event->accept();
+    QWidget::closeEvent(event);
 }
 
 void DataTransferWindow::changeEvent(QEvent *event)
 {
     if(event->type() == QEvent::LanguageChange)
         ui->retranslateUi(this);
-    event->accept();
+    QWidget::changeEvent(event);
+}
+
+void DataTransferWindow::paintEvent(QPaintEvent *)
+{
+    QStyleOption opt;
+    opt.initFrom(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }

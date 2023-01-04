@@ -1,4 +1,4 @@
-﻿#include "logger.h"
+#include "logger.h"
 #include "savelogdialog.h"
 #include <QFile>
 #include <QTimer>
@@ -64,28 +64,28 @@ void Logger::__record(Level type, const QString &module, const QString &message)
     QString time = QTime::currentTime().toString();
 
     if (_logLevel <= type) {
-        QString messageHtml = QString("<font color=purple>") + time + QString("</font> ");
+        QString messageHtml = QString("<span style=\"color: purple;\">") + time + QString("</span> ");
         switch(type)
         {
             case Level::Debug:
-                messageHtml += QString("<font color=''><b>[ <font color=green>") + tr("Debug") + QString("</font> ]</b></font> ");
+                messageHtml += QString("<b>[ <span style=\"color: green;\">") + tr("Debug") + QString("</span> ]</b> ");
             break;
 
             case Level::Info:
-                messageHtml += QString("<font color=''><b>[ <font color=blue>") + tr("Info") + QString("</font> ]</b></font> ");
+                messageHtml += QString("<b>[ <span style=\"color: blue;\">") + tr("Info") + QString("</span> ]</b> ");
             break;
 
             case Level::Warning:
-                messageHtml += QString("<font color=''><b>[ <font color=orange>") + tr("Warning") + QString("</font> ]</b></font> ");
+                messageHtml += QString("<b>[ <span style=\"color: orange;\">") + tr("Warning") + QString("</span> ]</b> ");
             break;
 
             case Level::Error:
-                messageHtml += QString("<font color=''><b>[ <font color=red>") + tr("Error") + QString("</font> ]</b></font> ");
+                messageHtml += QString("<b>[ <span style=\"color: red;\">") + tr("Error") + QString("</span> ]</b> ");
             break;
         }
 
-        messageHtml += QString("<font color=purple><u>") + module + QString("</u></font> :");
-        messageHtml += QString("<font color=''>") + message + QString("</font><br />");
+        messageHtml += QString("<span style=\"color: purple;\"><u>") + module + QString("</u></span> :");
+        messageHtml += message + QString("<br />");
 
         moveCursor(QTextCursor::End);
         textCursor().insertHtml(messageHtml);
@@ -122,7 +122,7 @@ void Logger::changeEvent(QEvent *event)
         default:
         break;
     }
-    event->accept();
+    QTextBrowser::changeEvent(event);
 }
 
 Logger::Level Logger::logLevel() const

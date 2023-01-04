@@ -233,7 +233,7 @@ void MainWindow::changeEvent(QEvent *event)
         default:
         break;
     }
-    event->accept();
+    QMainWindow::changeEvent(event);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -247,11 +247,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         QDateTime dateTime = QDateTime::currentDateTime();
         log().toFile(settings().autoSaveLogDir() +
-                     QString("/usb-regulus_") + dateTime.toString("yyyyMMdd_hhmmss.txt"));
+                     QString("/usb-regulus_") + dateTime.toString("yyyyMMdd_hhmmss") + QString(".txt"));
     }
     usb::UsbHost::instance()->deleteLater();
     qApp->quit();
-    event->accept();
+    QMainWindow::closeEvent(event);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -260,14 +260,14 @@ void MainWindow::resizeEvent(QResizeEvent *event)
         settings().mainwindowProperties().startState ==
         WindowStartStates::CENTER_LAST_SIZE)
         settings().mainwindowProperties().size = event->size();
-    event->accept();
+    QMainWindow::resizeEvent(event);
 }
 
 void MainWindow::moveEvent(QMoveEvent *event)
 {
     if (settings().mainwindowProperties().startState == WindowStartStates::LAST_POS_SIZE)
         settings().mainwindowProperties().position = event->pos();
-    event->accept();
+    QMainWindow::moveEvent(event);
 }
 
 void MainWindow::__initWithSettings()
@@ -351,7 +351,7 @@ void MainWindow::__setLoggerLevel(Logger::Level level)
 
 void MainWindow::__setTheme(const QString &theme)
 {
-    QString qss = __FontToCss() + Tools::getThemeStyleSheet(theme);
+    QString qss = Tools::getThemeStyleSheet(theme) + __FontToCss();
     settings().theme() = theme;
     qApp->setStyleSheet(qss);
     LOGI(tr("Set theme to %1.").arg(theme));

@@ -44,7 +44,8 @@ public:
 
     void setDevice(usb::UsbDevice *device);
 
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
+    void paintEvent(QPaintEvent *) override;
 
 private slots:
     void __bmRequestUseRawHex(bool useRawHex);

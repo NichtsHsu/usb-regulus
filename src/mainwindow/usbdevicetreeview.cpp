@@ -1,4 +1,4 @@
-﻿#include "usbdevicetreeview.h"
+#include "usbdevicetreeview.h"
 
 UsbDeviceTreeView::UsbDeviceTreeView(QWidget *parent)
     : QTreeView(parent)
@@ -114,7 +114,7 @@ void UsbDeviceTreeView::changeEvent(QEvent *event)
 {
     if(event->type() == QEvent::LanguageChange)
         __updateTranslations();
-    event->accept();
+    QTreeView::changeEvent(event);
 }
 
 void UsbDeviceTreeView::closeAllDataTransferWindow()

@@ -46,7 +46,7 @@ PreferenceDialog::~PreferenceDialog()
 void PreferenceDialog::showEvent(QShowEvent *event)
 {
     updateFromSettings();
-    event->accept();
+    QDialog::showEvent(event);
 }
 
 void PreferenceDialog::updateFromSettings()
@@ -205,5 +205,5 @@ void PreferenceDialog::changeEvent(QEvent *event)
 {
     if(event->type() == QEvent::LanguageChange)
         ui->retranslateUi(this);
-    event->accept();
+    QDialog::changeEvent(event);
 }

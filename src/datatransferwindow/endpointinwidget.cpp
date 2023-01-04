@@ -1,6 +1,8 @@
-﻿#include "endpointinwidget.h"
+#include "endpointinwidget.h"
 #include "ui_endpointinwidget.h"
 #include "usb/__usbmacro.h"
+#include <QStyleOption>
+#include <QPainter>
 
 EndpointInWidget::EndpointInWidget(QWidget *parent) :
     QWidget(parent),
@@ -88,13 +90,21 @@ void EndpointInWidget::changeEvent(QEvent *event)
 {
     if(event->type() == QEvent::LanguageChange)
         ui->retranslateUi(this);
-    event->accept();
+    QWidget::changeEvent(event);
 }
 
 void EndpointInWidget::hideEvent(QHideEvent *event)
 {
     _reader->stopRead();
-    event->accept();
+    QWidget::hideEvent(event);
+}
+
+void EndpointInWidget::paintEvent(QPaintEvent *)
+{
+    QStyleOption opt;
+    opt.initFrom(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
 void EndpointInWidget::__buttonReadOnceReleased()

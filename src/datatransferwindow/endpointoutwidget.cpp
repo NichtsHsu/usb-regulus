@@ -1,6 +1,8 @@
-﻿#include "endpointoutwidget.h"
+#include "endpointoutwidget.h"
 #include "ui_endpointoutwidget.h"
 #include "usb/__usbmacro.h"
+#include <QStyleOption>
+#include <QPainter>
 
 EndpointOutWidget::EndpointOutWidget(QWidget *parent) :
     QWidget(parent),
@@ -88,7 +90,7 @@ void EndpointOutWidget::setEndpoint(usb::UsbEndpointDescriptor *epDesc)
 void EndpointOutWidget::hideEvent(QHideEvent *event)
 {
     _writer->stopWrite();
-    event->accept();
+    QWidget::hideEvent(event);
 }
 
 void EndpointOutWidget::changeEvent(QEvent *event)
@@ -99,7 +101,15 @@ void EndpointOutWidget::changeEvent(QEvent *event)
         __setOverwriteMode(_hexEdit->overwriteMode());
         ui->labelWriteCount->setText(tr("Write Count: %1").arg(_writer->wroteTimes()));
     }
-    event->accept();
+    QWidget::changeEvent(event);
+}
+
+void EndpointOutWidget::paintEvent(QPaintEvent *)
+{
+    QStyleOption opt;
+    opt.initFrom(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
 void EndpointOutWidget::__buttonWriteOnceReleased()

@@ -1,4 +1,4 @@
-﻿/*! Sub-component of DataTransferWindow, responsible for writing data to OUT endpoint
+/*! Sub-component of DataTransferWindow, responsible for writing data to OUT endpoint
 
  * Copyright (C) 2022 Nichts Hsu
 
@@ -42,6 +42,7 @@ public:
     void setEndpoint(usb::UsbEndpointDescriptor *epDesc);
     void hideEvent(QHideEvent *event) override;
     void changeEvent(QEvent *event) override;
+    void paintEvent(QPaintEvent *) override;
 
 signals:
     void __writeOnceTriggered();

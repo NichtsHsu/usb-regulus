@@ -1,4 +1,4 @@
-﻿/*! Sub-component of DataTransferWindow, responsible for reading data from IN endpoint
+/*! Sub-component of DataTransferWindow, responsible for reading data from IN endpoint
 
  * Copyright (C) 2022 Nichts Hsu
 
@@ -45,6 +45,7 @@ public:
     void setEndpoint(usb::UsbEndpointDescriptor *epDesc);
     void changeEvent(QEvent *event) override;
     void hideEvent(QHideEvent *event) override;
+    void paintEvent(QPaintEvent *) override;
 
 signals:
     void __readOnceTriggered();
