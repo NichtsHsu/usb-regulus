@@ -1,6 +1,7 @@
 #include "usbhiddescriptor.h"
 #include "usbhost.h"
 #include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 #include "hidrd/src/hidrd_convert.h"
 
 namespace usb {
@@ -127,33 +128,30 @@ namespace usb {
 
     QString UsbHidDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("HID Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bcdHID", _bcdHID, "");
-        ATTR("bCountryCode", _bCountryCode, country());
-        ATTR("bNumDescriptors", _bNumDescriptors, _bNumDescriptors);
-        END;
+        UsbHtmlBuilder builder;
+        builder.start(tr("HID Descriptor"))
+        .attr("bLength", _bLength)
+        .attr("bDescriptorType", _bDescriptorType)
+        .attr("bcdHID", _bcdHID, "")
+        .attr("bCountryCode", _bCountryCode, country())
+        .attr("bNumDescriptors", _bNumDescriptors)
+        .end();
         if (_hidReportDescriptor->_rawDescriptor.length() == _hidReportDescriptor->_wDescriptorLength)
-            APPEND(_hidReportDescriptor);
+            builder.append(_hidReportDescriptor);
         else if (interfaceDescriptor()->isMouse() && UsbHost::instance()->protectMouse())
-            html += QString("<p><i>%1</i></p>")
-                    .arg(tr("Note: The 'Protect Mouse' option is checked, "
+            builder.note(tr("Note: The 'Protect Mouse' option is checked, "
                             "therefore usb-regulus cannot read the HID report descriptor of current interface. "
                             "If you want to get the HID report descriptor, "
                             "please uncheck the 'Protect Mouse' option in the menu 'Device'."));
         else if (interfaceDescriptor()->isKeyboard() && UsbHost::instance()->protectKeyboard())
-            html += QString("<p><i>%1</i></p>")
-                    .arg(tr("Note: The 'Protect Keyboard' option is checked, "
+            builder.note(tr("Note: The 'Protect Keyboard' option is checked, "
                             "therefore usb-regulus cannot read the HID report descriptor of current interface. "
                             "If you want to get the HID report descriptor, "
                             "please uncheck the 'Protect Keyboard' option in the menu 'Device'."));
         else
-            html += QString("<p><i>%1</i></p>")
-                    .arg(tr("Note: HID Report Descriptor is invalid because of unhandled reason."));
+            builder.note(tr("Note: HID Report Descriptor is invalid because of unhandled reason."));
 
-        return html;
+        return builder.build();
     }
 
     int UsbHidDescriptor::tryGetHidReportDescriptor()

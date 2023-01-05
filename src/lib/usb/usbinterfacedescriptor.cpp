@@ -1,11 +1,11 @@
-﻿#include "usbinterfacedescriptor.h"
+#include "usbinterfacedescriptor.h"
 #include "usbhiddescriptor.h"
 #include "usbdfudescriptor.h"
 #include "usbaudiocontrolinterfacedescriptor.h"
 #include "usbaudiostreaminterfacedescriptor.h"
 #include "usbvideocontrolinterfacedescriptor.h"
 #include "usbvideostreaminterfacedescriptor.h"
-#include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     UsbInterfaceDescriptor::UsbInterfaceDescriptor(const libusb_interface_descriptor *desc, UsbInterface *parent) :
@@ -141,26 +141,25 @@ namespace usb {
 
     QString UsbInterfaceDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Interface Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bInterfaceNumber", _bInterfaceNumber, _bInterfaceNumber);
-        ATTR("bAlternateSetting", _bAlternateSetting, _bAlternateSetting);
-        ATTR("bNumEndpoints", _bNumEndpoints, _bNumEndpoints);
-        ATTR("bInterfaceClass", _bInterfaceClass, _interfaceClass);
-        ATTR("bInterfaceSubClass", _bInterfaceSubClass, _interfaceSubClass);
-        ATTR("bInterfaceProtocol", _bInterfaceProtocol, _interfaceProtocol);
-        ATTRSTRDESC("iInterface", _iInterface, _interface->configurationDescriptor()->device());
-        END;
-        if (_associationDescriptor)
-            APPEND(_associationDescriptor);
+        UsbHtmlBuilder builder;
+        builder.start(tr("Interface Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bInterfaceNumber", _bInterfaceNumber)
+                .attr("bAlternateSetting", _bAlternateSetting)
+                .attr("bNumEndpoints", _bNumEndpoints)
+                .attr("bInterfaceClass", _bInterfaceClass, _interfaceClass)
+                .attr("bInterfaceSubClass", _bInterfaceSubClass, _interfaceSubClass)
+                .attr("bInterfaceProtocol", _bInterfaceProtocol, _interfaceProtocol)
+                .strdesc("iInterface", _iInterface, _interface->configurationDescriptor()->device())
+                .end()
+                .append(_associationDescriptor);
         foreach (const auto &desc, _extraDescriptors)
-            APPEND(desc);
+            builder.append(desc);
         for (uint8_t i = 0; i < _bNumEndpoints; ++i)
-            APPEND(endpoint(i));
+            builder.append(endpoint(i));
 
-        return html;
+        return builder.build();
     }
 
     void UsbInterfaceDescriptor::__requestExtraDescriptor()
@@ -265,8 +264,8 @@ namespace usb {
     void UsbInterfaceDescriptor::setAssociationDescriptor(UsbInterfaceAssociationDescriptor *associationDescriptor)
     {
         if ((_bInterfaceNumber >= associationDescriptor->bFirstInterface()) &&
-                (_bInterfaceNumber <
-                 (associationDescriptor->bFirstInterface() + associationDescriptor->bInterfaceCount())))
+            (_bInterfaceNumber <
+             (associationDescriptor->bFirstInterface() + associationDescriptor->bInterfaceCount())))
             _associationDescriptor = associationDescriptor;
     }
 

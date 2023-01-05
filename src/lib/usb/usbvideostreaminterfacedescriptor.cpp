@@ -1,6 +1,7 @@
-﻿#include "usbvideostreaminterfacedescriptor.h"
+#include "usbvideostreaminterfacedescriptor.h"
 #include "usbendpointdescriptor.h"
 #include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     namespace uvc {
@@ -225,34 +226,33 @@ namespace usb {
 
         QString UsbInputHeaderDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Input Header Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bNumFormats", _bNumFormats, _bNumFormats);
-            ATTR("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
+            UsbHtmlBuilder builder;
+            builder.start(tr("Input Header Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bNumFormats", _bNumFormats)
+            .attr("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
                  .arg(_bEndpointAddress & 0x0F)
-                 .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))));
-            ATTR("bmInfo", _bmInfo, _bmInfo ?
-                     tr("Supports Dynamic Format Change"): QString());
-            ATTR("bTerminalLink", _bTerminalLink, _bTerminalLink);
-            ATTR("bStillCaptureMethod", _bStillCaptureMethod, __parseBStillCaptureMethod());
-            ATTR("bTriggerSupport", _bTriggerSupport, _bTriggerSupport ?
-                     tr("Supports hardware triggering") : QString());
-            ATTR("bTriggerUsage", _bTriggerUsage, _bTriggerSupport ?
+                 .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))))
+            .attr("bmInfo", _bmInfo, _bmInfo ?
+                     tr("Supports Dynamic Format Change"): QString())
+            .attr("bTerminalLink", _bTerminalLink)
+            .attr("bStillCaptureMethod", _bStillCaptureMethod, __parseBStillCaptureMethod())
+            .attr("bTriggerSupport", _bTriggerSupport, _bTriggerSupport ?
+                     tr("Supports hardware triggering") : QString())
+            .attr("bTriggerUsage", _bTriggerUsage, _bTriggerSupport ?
                      (_bTriggerUsage ?
                           tr("General purpose button event"):
                           tr("Initiate still image capture")):
-                     QString());
-            ATTR("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
+                     QString())
+            .attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
             for (uint8_t i = 1; i <= _bNumFormats; ++i)
-                ATTRCUSTOM(QString("bmaControls(%1)").arg(i),
+                builder.attr(QString("bmaControls(%1)").arg(i),
                            QString("0x") + bmaControls(i).toHex(),
                            __parseBmaControls(i));
-            END;
 
-            return html;
+            return builder.end().build();
         }
 
         UsbInputHeaderDescriptor::UsbInputHeaderDescriptor(
@@ -311,7 +311,7 @@ namespace usb {
             if (BIT(bmControls[0], 5))
                 supports.append(tr("Update Frame Segment Control"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbOutputHeaderDescriptor::bLength() const
@@ -368,24 +368,23 @@ namespace usb {
 
         QString UsbOutputHeaderDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Output Header Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bNumFormats", _bNumFormats, _bNumFormats);
-            ATTR("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
+            UsbHtmlBuilder builder;
+            builder.start(tr("Output Header Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bNumFormats", _bNumFormats)
+            .attr("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
                  .arg(_bEndpointAddress & 0x0F)
-                 .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))));
-            ATTR("bTerminalLink", _bTerminalLink, _bTerminalLink);
-            ATTR("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
+                 .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))))
+            .attr("bTerminalLink", _bTerminalLink)
+            .attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
             for (uint8_t i = 1; i <= _bNumFormats; ++i)
-                ATTRCUSTOM(QString("bmaControls(%1)").arg(i),
+                builder.attr(QString("bmaControls(%1)").arg(i),
                            QString("0x") + bmaControls(i).toHex(),
                            __parseBmaControls(i));
-            END;
 
-            return html;
+            return builder.end().build();
         }
 
         UsbOutputHeaderDescriptor::UsbOutputHeaderDescriptor(
@@ -421,7 +420,7 @@ namespace usb {
             if (BIT(bmControls[0], 3))
                 supports.append(tr("wCompWindowSize field"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbStillImageFrameDescriptor::bLength() const
@@ -492,26 +491,25 @@ namespace usb {
 
         QString UsbStillImageFrameDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Still Image Frame Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
+            UsbHtmlBuilder builder;
+            builder.start(tr("Still Image Frame Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
                  .arg(_bEndpointAddress & 0x0F)
-                 .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))));
-            ATTR("bNumImageSizePatterns", _bNumImageSizePatterns, _bNumImageSizePatterns);
+                 .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))))
+            .attr("bNumImageSizePatterns", _bNumImageSizePatterns);
             for (uint8_t i = 1; i <= _bNumImageSizePatterns; ++i)
             {
-                ATTR(QString("wWidth(%1)").arg(i), wWidth(i), wWidth(i));
-                ATTR(QString("wHeight(%1)").arg(i), wHeight(i), wHeight(i));
+                builder.attr(QString("wWidth(%1)").arg(i), wWidth(i))
+                .attr(QString("wHeight(%1)").arg(i), wHeight(i));
             }
-            ATTR("bNumCompressionPattern", _bNumCompressionPattern, _bNumCompressionPattern);
+            builder.attr("bNumCompressionPattern", _bNumCompressionPattern);
             for (uint8_t i = 1; i <= _bNumCompressionPattern; ++i)
-                ATTR(QString("bCompression(%1)").arg(i), bCompression(i), bCompression(i));
-            END;
+                builder.attr(QString("bCompression(%1)").arg(i), bCompression(i));
 
-            return html;
+            return builder.end().build();
         }
 
         UsbStillImageFrameDescriptor::UsbStillImageFrameDescriptor(
@@ -600,23 +598,22 @@ namespace usb {
 
         QString UsbUncompressedVideoFormatDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Uncompressed Video Format Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatIndex", _bFormatIndex, _bFormatIndex);
-            ATTR("bNumFrameDescriptors", _bNumFrameDescriptors, _bNumFrameDescriptors);
-            ATTRTEXT("guidFormat", hexUuid(_guidFormat));
-            ATTR("bBitsPerPixel", _bBitsPerPixel, tr("%1 bit(s) per pixel").arg(_bBitsPerPixel));
-            ATTR("bDefaultFrameIndex", _bDefaultFrameIndex, _bDefaultFrameIndex);
-            ATTR("bAspectRatioX", _bAspectRatioX, _bAspectRatioX);
-            ATTR("bAspectRatioY", _bAspectRatioY, _bAspectRatioY);
-            ATTR("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags());
-            ATTR("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "");
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+            .start(tr("Uncompressed Video Format Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFormatIndex", _bFormatIndex)
+            .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
+            .attr("guidFormat", "", hexUuid(_guidFormat))
+            .attr("bBitsPerPixel", _bBitsPerPixel, tr("%1 bit(s) per pixel").arg(_bBitsPerPixel))
+            .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
+            .attr("bAspectRatioX", _bAspectRatioX)
+            .attr("bAspectRatioY", _bAspectRatioY)
+            .attr("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags())
+            .attr("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "")
+            .end()
+            .build();
         }
 
         UsbUncompressedVideoFormatDescriptor::UsbUncompressedVideoFormatDescriptor(
@@ -668,7 +665,7 @@ namespace usb {
                 break;
             }
 
-            return infomations.join(NEWLINE);
+            return infomations.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbUncompressedVideoFrameDescriptor::bLength() const
@@ -789,47 +786,46 @@ namespace usb {
             if (BIT(_bmCapabilities, 1))
                 supports.append(tr("Fixed frame-rate"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbUncompressedVideoFrameDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Uncompressed Video Frame Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFrameIndex", _bFrameIndex, _bFrameIndex);
-            ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
-            ATTR("wWidth", _wWidth, _wWidth);
-            ATTR("wHeight", _wHeight, _wHeight);
-            ATTR("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate));
-            ATTR("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate));
-            ATTR("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
-                 tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize));
-            ATTR("dwDefaultFrameInterval", _dwDefaultFrameInterval,
-                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval));
-            ATTR("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
+            UsbHtmlBuilder builder;
+            builder.start(tr("Uncompressed Video Frame Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFrameIndex", _bFrameIndex)
+            .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+            .attr("wWidth", _wWidth)
+            .attr("wHeight", _wHeight)
+            .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
+            .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
+            .attr("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
+                 tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize))
+            .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
+                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
+            .attr("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
                      tr("%1 discrete frame intervals").arg(_bFrameIntervalType) :
                      tr("Continuous frame interval"));
             if (_bFrameIntervalType)
             {
                 for (uint8_t i = 1; i <= _bFrameIntervalType; ++i)
-                    ATTR(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
+                    builder.attr(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
                          tr("%1 * 100 ns").arg(dwFrameInterval(i)));
             }
             else
             {
-                ATTR("dwMinFrameInterval", dwMinFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMinFrameInterval()));
-                ATTR("dwMaxFrameInterval", dwMaxFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMaxFrameInterval()));
-                ATTR("dwFrameIntervalStep", _dwFrameIntervalStep,
+                builder.attr("dwMinFrameInterval", dwMinFrameInterval(),
+                     tr("%1 * 100 ns").arg(dwMinFrameInterval()))
+                .attr("dwMaxFrameInterval", dwMaxFrameInterval(),
+                     tr("%1 * 100 ns").arg(dwMaxFrameInterval()))
+                .attr("dwFrameIntervalStep", _dwFrameIntervalStep,
                      tr("%1 * 100 ns").arg(_dwFrameIntervalStep));
             }
-            END;
 
-            return html;
+            return builder.end().build();
         }
 
         UsbUncompressedVideoFrameDescriptor::UsbUncompressedVideoFrameDescriptor(
@@ -922,22 +918,21 @@ namespace usb {
 
         QString UsbMotionJpegVideoFormatDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Motion-JPEG Video Format Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatIndex", _bFormatIndex, _bFormatIndex);
-            ATTR("bNumFrameDescriptors", _bNumFrameDescriptors, _bNumFrameDescriptors);
-            ATTR("bmFlags", _bmFlags, BIT(_bmFlags, 0) ? tr("Fixed Size Samples"): "");
-            ATTR("bDefaultFrameIndex", _bDefaultFrameIndex, _bDefaultFrameIndex);
-            ATTR("bAspectRatioX", _bAspectRatioX, _bAspectRatioX);
-            ATTR("bAspectRatioY", _bAspectRatioY, _bAspectRatioY);
-            ATTR("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags());
-            ATTR("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "");
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+            .start(tr("Motion-JPEG Video Format Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFormatIndex", _bFormatIndex)
+            .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
+            .attr("bmFlags", _bmFlags, BIT(_bmFlags, 0) ? tr("Fixed Size Samples"): "")
+            .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
+            .attr("bAspectRatioX", _bAspectRatioX)
+            .attr("bAspectRatioY", _bAspectRatioY)
+            .attr("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags())
+            .attr("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "")
+            .end()
+            .build();
         }
 
         UsbMotionJpegVideoFormatDescriptor::UsbMotionJpegVideoFormatDescriptor(
@@ -986,7 +981,7 @@ namespace usb {
                 break;
             }
 
-            return infomations.join(NEWLINE);
+            return infomations.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbMotionJpegVideoFrameDescriptor::bLength() const
@@ -1107,47 +1102,46 @@ namespace usb {
             if (BIT(_bmCapabilities, 1))
                 supports.append(tr("Fixed frame-rate"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbMotionJpegVideoFrameDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Motion-JPEG Video Frame Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFrameIndex", _bFrameIndex, _bFrameIndex);
-            ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
-            ATTR("wWidth", _wWidth, _wWidth);
-            ATTR("wHeight", _wHeight, _wHeight);
-            ATTR("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate));
-            ATTR("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate));
-            ATTR("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
-                 tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize));
-            ATTR("dwDefaultFrameInterval", _dwDefaultFrameInterval,
-                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval));
-            ATTR("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
+            UsbHtmlBuilder builder;
+            builder.start(tr("Motion-JPEG Video Frame Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFrameIndex", _bFrameIndex)
+            .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+            .attr("wWidth", _wWidth)
+            .attr("wHeight", _wHeight)
+            .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
+            .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
+            .attr("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
+                 tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize))
+            .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
+                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
+            .attr("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
                      tr("%1 discrete frame intervals").arg(_bFrameIntervalType) :
                      tr("Continuous frame interval"));
             if (_bFrameIntervalType)
             {
                 for (uint8_t i = 1; i <= _bFrameIntervalType; ++i)
-                    ATTR(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
+                    builder.attr(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
                          tr("%1 * 100 ns").arg(dwFrameInterval(i)));
             }
             else
             {
-                ATTR("dwMinFrameInterval", dwMinFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMinFrameInterval()));
-                ATTR("dwMaxFrameInterval", dwMaxFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMaxFrameInterval()));
-                ATTR("dwFrameIntervalStep", _dwFrameIntervalStep,
+                builder.attr("dwMinFrameInterval", dwMinFrameInterval(),
+                     tr("%1 * 100 ns").arg(dwMinFrameInterval()))
+                .attr("dwMaxFrameInterval", dwMaxFrameInterval(),
+                     tr("%1 * 100 ns").arg(dwMaxFrameInterval()))
+                .attr("dwFrameIntervalStep", _dwFrameIntervalStep,
                      tr("%1 * 100 ns").arg(_dwFrameIntervalStep));
             }
-            END;
 
-            return html;
+            return builder.end().build();
         }
 
         UsbMotionJpegVideoFrameDescriptor::UsbMotionJpegVideoFrameDescriptor(
@@ -1225,19 +1219,18 @@ namespace usb {
 
         QString UsbMpeg2TsFormatDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("MPEG-2 TS Format Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatIndex", _bFormatIndex, _bFormatIndex);
-            ATTR("bDataOffset", _bDataOffset, _bDataOffset);
-            ATTR("bPacketLength", _bPacketLength, _bPacketLength);
-            ATTR("bStrideLength", _bStrideLength, _bStrideLength);
-            ATTRCUSTOM("guidStrideFormat", "", hexUuid(_guidStrideFormat));
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+            .start(tr("MPEG-2 TS Format Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFormatIndex", _bFormatIndex)
+            .attr("bDataOffset", _bDataOffset)
+            .attr("bPacketLength", _bPacketLength)
+            .attr("bStrideLength", _bStrideLength)
+            .attr("guidStrideFormat", "", hexUuid(_guidStrideFormat))
+            .end()
+            .build();
         }
 
         UsbMpeg2TsFormatDescriptor::UsbMpeg2TsFormatDescriptor(
@@ -1290,18 +1283,17 @@ namespace usb {
 
         QString UsbDvFormatDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("DV Format Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatIndex", _bFormatIndex, _bFormatIndex);
-            ATTR("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
-                 tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize));
-            ATTR("bFormatType", _bFormatType, __parseBFormatType());
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+            .start(tr("DV Format Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFormatIndex", _bFormatIndex)
+            .attr("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
+                 tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize))
+            .attr("bFormatType", _bFormatType, __parseBFormatType())
+            .end()
+            .build();
         }
 
         UsbDvFormatDescriptor::UsbDvFormatDescriptor(
@@ -1373,17 +1365,16 @@ namespace usb {
 
         QString UsbColorMatchingDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Color Matching Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bColorPrimaries", _bColorPrimaries, __strBColorPrimaries());
-            ATTR("bTransferCharacteristics", _bTransferCharacteristics, __strBTransferCharacteristics());
-            ATTR("bMatrixCoefficients", _bMatrixCoefficients, __strBMatrixCoefficients());
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+            .start(tr("Color Matching Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bColorPrimaries", _bColorPrimaries, __strBColorPrimaries())
+            .attr("bTransferCharacteristics", _bTransferCharacteristics, __strBTransferCharacteristics())
+            .attr("bMatrixCoefficients", _bMatrixCoefficients, __strBMatrixCoefficients())
+            .end()
+            .build();
         }
 
         UsbColorMatchingDescriptor::UsbColorMatchingDescriptor(
@@ -1534,24 +1525,23 @@ namespace usb {
 
         QString UsbFrameBasedPayloadVideoFormatDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Frame Based Payload Video Format Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatIndex", _bFormatIndex, _bFormatIndex);
-            ATTR("bNumFrameDescriptors", _bNumFrameDescriptors, _bNumFrameDescriptors);
-            ATTRTEXT("guidFormat", hexUuid(_guidFormat));
-            ATTR("bBitsPerPixel", _bBitsPerPixel, tr("%1 bit(s) per pixel").arg(_bBitsPerPixel));
-            ATTR("bDefaultFrameIndex", _bDefaultFrameIndex, _bDefaultFrameIndex);
-            ATTR("bAspectRatioX", _bAspectRatioX, _bAspectRatioX);
-            ATTR("bAspectRatioY", _bAspectRatioY, _bAspectRatioY);
-            ATTR("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags());
-            ATTR("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "");
-            ATTR("bVariableSize", _bVariableSize, _bVariableSize ? tr("Variable Size") : tr("Fixed Size"));
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+            .start(tr("Frame Based Payload Video Format Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFormatIndex", _bFormatIndex)
+            .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
+            .attr("guidFormat", "", hexUuid(_guidFormat))
+            .attr("bBitsPerPixel", _bBitsPerPixel, tr("%1 bit(s) per pixel").arg(_bBitsPerPixel))
+            .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
+            .attr("bAspectRatioX", _bAspectRatioX)
+            .attr("bAspectRatioY", _bAspectRatioY)
+            .attr("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags())
+            .attr("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "")
+            .attr("bVariableSize", _bVariableSize, _bVariableSize ? tr("Variable Size") : tr("Fixed Size"))
+            .end()
+            .build();
         }
 
         UsbFrameBasedPayloadVideoFormatDescriptor::UsbFrameBasedPayloadVideoFormatDescriptor(
@@ -1604,7 +1594,7 @@ namespace usb {
                 break;
             }
 
-            return infomations.join(NEWLINE);
+            return infomations.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbFrameBasedPayloadVideoFrameDescriptor::bLength() const
@@ -1725,46 +1715,45 @@ namespace usb {
             if (BIT(_bmCapabilities, 1))
                 supports.append(tr("Fixed frame-rate"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbFrameBasedPayloadVideoFrameDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Frame Based Payload Video Frame Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFrameIndex", _bFrameIndex, _bFrameIndex);
-            ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
-            ATTR("wWidth", _wWidth, _wWidth);
-            ATTR("wHeight", _wHeight, _wHeight);
-            ATTR("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate));
-            ATTR("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate));
-            ATTR("dwDefaultFrameInterval", _dwDefaultFrameInterval,
-                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval));
-            ATTR("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
+            UsbHtmlBuilder builder;
+            builder.start(tr("Frame Based Payload Video Frame Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFrameIndex", _bFrameIndex)
+            .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+            .attr("wWidth", _wWidth)
+            .attr("wHeight", _wHeight)
+            .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
+            .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
+            .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
+                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
+            .attr("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
                      tr("%1 discrete frame intervals").arg(_bFrameIntervalType) :
-                     tr("Continuous frame interval"));
-            ATTR("dwBytesPerLine", _dwBytesPerLine, tr("%1 byte(s)").arg(_dwBytesPerLine));
+                     tr("Continuous frame interval"))
+            .attr("dwBytesPerLine", _dwBytesPerLine, tr("%1 byte(s)").arg(_dwBytesPerLine));
             if (_bFrameIntervalType)
             {
                 for (uint8_t i = 1; i <= _bFrameIntervalType; ++i)
-                    ATTR(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
+                    builder.attr(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
                          tr("%1 * 100 ns").arg(dwFrameInterval(i)));
             }
             else
             {
-                ATTR("dwMinFrameInterval", dwMinFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMinFrameInterval()));
-                ATTR("dwMaxFrameInterval", dwMaxFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMaxFrameInterval()));
-                ATTR("dwFrameIntervalStep", _dwFrameIntervalStep,
+                builder.attr("dwMinFrameInterval", dwMinFrameInterval(),
+                     tr("%1 * 100 ns").arg(dwMinFrameInterval()))
+                .attr("dwMaxFrameInterval", dwMaxFrameInterval(),
+                     tr("%1 * 100 ns").arg(dwMaxFrameInterval()))
+                .attr("dwFrameIntervalStep", _dwFrameIntervalStep,
                      tr("%1 * 100 ns").arg(_dwFrameIntervalStep));
             }
-            END;
 
-            return html;
+            return builder.end().build();
         }
 
         UsbFrameBasedPayloadVideoFrameDescriptor::UsbFrameBasedPayloadVideoFrameDescriptor(
@@ -1832,17 +1821,16 @@ namespace usb {
 
         QString UsbStreamBasedFormatDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Stream Based Format Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatIndex", _bFormatIndex, _bFormatIndex);
-            ATTRTEXT("guidFormat", hexUuid(_guidFormat));
-            ATTR("dwPacketLength", _dwPacketLength, _dwPacketLength);
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+            .start(tr("Stream Based Format Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFormatIndex", _bFormatIndex)
+            .attr("guidFormat", "", hexUuid(_guidFormat))
+            .attr("dwPacketLength", _dwPacketLength)
+            .end()
+            .build();
         }
 
         UsbStreamBasedFormatDescriptor::UsbStreamBasedFormatDescriptor(
@@ -1982,41 +1970,40 @@ namespace usb {
                 "One", "Two", "Three", "Four"
             };
 
-            QString html;
-            START(tr("H.264 Payload Video Format Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatIndex", _bFormatIndex, _bFormatIndex);
-            ATTR("bNumFrameDescriptors", _bNumFrameDescriptors, _bNumFrameDescriptors);
-            ATTR("bMaxCodecConfigDelay", _bMaxCodecConfigDelay, tr("%1 frame(s)").arg(_bMaxCodecConfigDelay));
-            ATTR("bmSupportedSliceModes", _bmSupportedSliceModes, __parseBmSupportedSliceModes());
-            ATTR("bmSupportedSyncFrameTypes", _bmSupportedSyncFrameTypes, __parseBmSupportedSyncFrameTypes());
-            ATTR("bResolutionScaling", _bResolutionScaling, __strBResolutionScaling());
-            ATTR("bmSupportedRateControlModes", _bmSupportedRateControlModes, __parseBmSupportedRateControlModes());
+            UsbHtmlBuilder builder;
+            builder.start(tr("H.264 Payload Video Format Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFormatIndex", _bFormatIndex)
+            .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
+            .attr("bMaxCodecConfigDelay", _bMaxCodecConfigDelay, tr("%1 frame(s)").arg(_bMaxCodecConfigDelay))
+            .attr("bmSupportedSliceModes", _bmSupportedSliceModes, __parseBmSupportedSliceModes())
+            .attr("bmSupportedSyncFrameTypes", _bmSupportedSyncFrameTypes, __parseBmSupportedSyncFrameTypes())
+            .attr("bResolutionScaling", _bResolutionScaling, __strBResolutionScaling())
+            .attr("bmSupportedRateControlModes", _bmSupportedRateControlModes, __parseBmSupportedRateControlModes());
             for (uint8_t i = 0; i < 4; ++i)
-                ATTR(QString("wMaxMBperSec%1ResolutionNoScalability").arg(order[i]),
+                builder.attr(QString("wMaxMBperSec%1ResolutionNoScalability").arg(order[i]),
                      _wMaxMBperSecResolutionNoScalability[i],
                      tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionNoScalability[i]));
             for (uint8_t i = 0; i < 4; ++i)
-                ATTR(QString("wMaxMBperSec%1ResolutionTemporalScalability").arg(order[i]),
+                builder.attr(QString("wMaxMBperSec%1ResolutionTemporalScalability").arg(order[i]),
                      _wMaxMBperSecResolutionTemporalScalability[i],
                      tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionTemporalScalability[i]));
             for (uint8_t i = 0; i < 4; ++i)
-                ATTR(QString("wMaxMBperSec%1ResolutionTemporalQualityScalability").arg(order[i]),
+                builder.attr(QString("wMaxMBperSec%1ResolutionTemporalQualityScalability").arg(order[i]),
                      _wMaxMBperSecResolutionTemporalQualityScalability[i],
                      tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionTemporalQualityScalability[i]));
             for (uint8_t i = 0; i < 4; ++i)
-                ATTR(QString("wMaxMBperSec%1ResolutionsTemporalSpatialScalability").arg(order[i]),
+                builder.attr(QString("wMaxMBperSec%1ResolutionsTemporalSpatialScalability").arg(order[i]),
                      _wMaxMBperSecResolutionsTemporalSpatialScalability[i],
                      tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionsTemporalSpatialScalability[i]));
             for (uint8_t i = 0; i < 4; ++i)
-                ATTR(QString("wMaxMBperSec%1ResolutionFullScalability").arg(order[i]),
+                builder.attr(QString("wMaxMBperSec%1ResolutionFullScalability").arg(order[i]),
                      _wMaxMBperSecResolutionFullScalability[i],
                      tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionFullScalability[i]));
-            END;
 
-            return html;
+            return builder.end().build();
         }
 
         UsbH264PayloadVideoFormatDescriptor::UsbH264PayloadVideoFormatDescriptor(
@@ -2066,7 +2053,7 @@ namespace usb {
             if (BIT(_bmSupportedSliceModes, 3))
                 supports.append(tr("Number of Macroblock rows per slice mode"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbH264PayloadVideoFormatDescriptor::__parseBmSupportedSyncFrameTypes() const
@@ -2087,7 +2074,7 @@ namespace usb {
             if (BIT(_bmSupportedSyncFrameTypes, 6))
                 supports.append(tr("Gradual Decoder Refresh frames"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbH264PayloadVideoFormatDescriptor::__strBResolutionScaling() const
@@ -2125,7 +2112,7 @@ namespace usb {
             if (BIT(_bmSupportedRateControlModes, 5))
                 supports.append(tr("Global VBR without underflow"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbH264PayloadVideoFrameDescriptor::bLength() const
@@ -2237,34 +2224,33 @@ namespace usb {
 
         QString UsbH264PayloadVideoFrameDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("H.264 Payload Video Frame Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFrameIndex", _bFrameIndex, _bFrameIndex);
-            ATTR("wWidth", _wWidth, _wWidth);
-            ATTR("wHeight", _wHeight, _wHeight);
-            ATTR("wSARwidth", _wSARwidth, _wSARwidth);
-            ATTR("wSARheight", _wSARheight, _wSARheight);
-            ATTR("wProfile", _wProfile, __strWProfile());
-            ATTR("bLevelIDC", _bLevelIDC, __strBLevelIDC());
-            ATTR("wConstrainedToolset", _wConstrainedToolset, _wConstrainedToolset);
-            ATTR("bmSupportedUsages", _bmSupportedUsages, __parseBmSupportedUsages());
-            ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
-            ATTR("bmSVCCapabilities", _bmSVCCapabilities, __parseBmSVCCapabilities());
-            ATTR("bmMVCCapabilities", _bmMVCCapabilities, __parseBmMVCCapabilities());
-            ATTR("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate));
-            ATTR("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate));
-            ATTR("dwDefaultFrameInterval", _dwDefaultFrameInterval,
-                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval));
-            ATTR("bNumFrameIntervals", _bNumFrameIntervals, _bNumFrameIntervals);
+            UsbHtmlBuilder builder;
+            builder.start(tr("H.264 Payload Video Frame Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFrameIndex", _bFrameIndex)
+            .attr("wWidth", _wWidth)
+            .attr("wHeight", _wHeight)
+            .attr("wSARwidth", _wSARwidth)
+            .attr("wSARheight", _wSARheight)
+            .attr("wProfile", _wProfile, __strWProfile())
+            .attr("bLevelIDC", _bLevelIDC, __strBLevelIDC())
+            .attr("wConstrainedToolset", _wConstrainedToolset)
+            .attr("bmSupportedUsages", _bmSupportedUsages, __parseBmSupportedUsages())
+            .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+            .attr("bmSVCCapabilities", _bmSVCCapabilities, __parseBmSVCCapabilities())
+            .attr("bmMVCCapabilities", _bmMVCCapabilities, __parseBmMVCCapabilities())
+            .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
+            .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
+            .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
+                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
+            .attr("bNumFrameIntervals", _bNumFrameIntervals);
             for (uint8_t i = 1; i <= _bNumFrameIntervals; ++i)
-                ATTR(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
+                builder.attr(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
                      tr("%1 * 100 ns").arg(dwFrameInterval(i)));
-            END;
 
-            return html;
+            return builder.end().build();
         }
 
         UsbH264PayloadVideoFrameDescriptor::UsbH264PayloadVideoFrameDescriptor(
@@ -2384,7 +2370,7 @@ namespace usb {
             if (BIT(_bmSupportedUsages, 25))
                 supports.append(tr("MVC Multiview Mode"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbH264PayloadVideoFrameDescriptor::__parseBmCapabilities() const
@@ -2405,7 +2391,7 @@ namespace usb {
             if (BIT(_bmCapabilities, 6))
                 supports.append(tr("Long Term Reference frame"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbH264PayloadVideoFrameDescriptor::__parseBmSVCCapabilities() const
@@ -2424,7 +2410,7 @@ namespace usb {
             supports.append(tr("Maximum number of spatial layers: %1")
                             .arg(CUT(_bmSVCCapabilities, 11, 13) + 1));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbH264PayloadVideoFrameDescriptor::__parseBmMVCCapabilities() const
@@ -2435,7 +2421,7 @@ namespace usb {
             supports.append(tr("Maximum number of view components: %1")
                             .arg(CUT(_bmMVCCapabilities, 3, 10)));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbVp8PayloadVideoFormatDescriptor::bLength() const
@@ -2500,23 +2486,22 @@ namespace usb {
 
         QString UsbVp8PayloadVideoFormatDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("VP8 Payload Video Format Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatIndex", _bFormatIndex, _bFormatIndex);
-            ATTR("bNumFrameDescriptors", _bNumFrameDescriptors, _bNumFrameDescriptors);
-            ATTR("bDefaultFrameIndex", _bDefaultFrameIndex, _bDefaultFrameIndex);
-            ATTR("bMaxCodecConfigDelay", _bMaxCodecConfigDelay, _bMaxCodecConfigDelay);
-            ATTR("bSupportedPartitionCount", _bSupportedPartitionCount, _bSupportedPartitionCount);
-            ATTR("bmSupportedSyncFrameTypes", _bmSupportedSyncFrameTypes, __parseBmSupportedSyncFrameTypes());
-            ATTR("bResolutionScaling", _bResolutionScaling, __strBResolutionScaling());
-            ATTR("bmSupportedRateControlModes", _bmSupportedRateControlModes, __parseBmSupportedRateControlModes());
-            ATTR("wMaxMBperSec", _wMaxMBperSec, tr("%1 MB/s").arg(_wMaxMBperSec));
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+            .start(tr("VP8 Payload Video Format Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFormatIndex", _bFormatIndex)
+            .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
+            .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
+            .attr("bMaxCodecConfigDelay", _bMaxCodecConfigDelay)
+            .attr("bSupportedPartitionCount", _bSupportedPartitionCount)
+            .attr("bmSupportedSyncFrameTypes", _bmSupportedSyncFrameTypes, __parseBmSupportedSyncFrameTypes())
+            .attr("bResolutionScaling", _bResolutionScaling, __strBResolutionScaling())
+            .attr("bmSupportedRateControlModes", _bmSupportedRateControlModes, __parseBmSupportedRateControlModes())
+            .attr("wMaxMBperSec", _wMaxMBperSec, tr("%1 MB/s").arg(_wMaxMBperSec))
+            .end()
+            .build();
         }
 
         UsbVp8PayloadVideoFormatDescriptor::UsbVp8PayloadVideoFormatDescriptor(
@@ -2553,7 +2538,7 @@ namespace usb {
             if (BIT(_bmSupportedSyncFrameTypes, 4))
                 supports.append(tr("Gradual Decoder Refresh frames"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbVp8PayloadVideoFormatDescriptor::__strBResolutionScaling() const
@@ -2587,7 +2572,7 @@ namespace usb {
             if (BIT(_bmSupportedRateControlModes, 3))
                 supports.append(tr("Global VBR"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbVp8PayloadVideoFrameDescriptor::bLength() const
@@ -2669,28 +2654,27 @@ namespace usb {
 
         QString UsbVp8PayloadVideoFrameDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("VP8 Payload Video Frame Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFrameIndex", _bFrameIndex, _bFrameIndex);
-            ATTR("wWidth", _wWidth, _wWidth);
-            ATTR("wHeight", _wHeight, _wHeight);
-            ATTR("bmSupportedUsages", _bmSupportedUsages, __parseBmSupportedUsages());
-            ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
-            ATTR("bmScalabilityCapabilities", _bmScalabilityCapabilities, __parseBmScalabilityCapabilities());
-            ATTR("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate));
-            ATTR("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate));
-            ATTR("dwDefaultFrameInterval", _dwDefaultFrameInterval,
-                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval));
-            ATTR("bNumFrameIntervals", _bNumFrameIntervals, _bNumFrameIntervals);
+            UsbHtmlBuilder bulider;
+            bulider.start(tr("VP8 Payload Video Frame Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bFrameIndex", _bFrameIndex)
+            .attr("wWidth", _wWidth)
+            .attr("wHeight", _wHeight)
+            .attr("bmSupportedUsages", _bmSupportedUsages, __parseBmSupportedUsages())
+            .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+            .attr("bmScalabilityCapabilities", _bmScalabilityCapabilities, __parseBmScalabilityCapabilities())
+            .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
+            .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
+            .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
+                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
+            .attr("bNumFrameIntervals", _bNumFrameIntervals);
             for (uint8_t i = 1; i <= _bNumFrameIntervals; ++i)
-                ATTR(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
+                bulider.attr(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
                      tr("%1 * 100 ns").arg(dwFrameInterval(i)));
-            END;
 
-            return html;
+            return bulider.end().build();
         }
 
         UsbVp8PayloadVideoFrameDescriptor::UsbVp8PayloadVideoFrameDescriptor(
@@ -2729,7 +2713,7 @@ namespace usb {
             if (BIT(_bmSupportedUsages, 18))
                 supports.append(tr("File storage all-I-frame mode"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbVp8PayloadVideoFrameDescriptor::__parseBmCapabilities() const
@@ -2744,7 +2728,7 @@ namespace usb {
             if (BIT(_bmCapabilities, 7))
                 supports.append(tr("Alternate reference frame"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbVp8PayloadVideoFrameDescriptor::__parseBmScalabilityCapabilities() const

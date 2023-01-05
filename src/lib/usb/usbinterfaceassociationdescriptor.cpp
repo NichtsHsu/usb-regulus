@@ -1,5 +1,5 @@
-﻿#include "usbinterfaceassociationdescriptor.h"
-#include "__usbmacro.h"
+#include "usbinterfaceassociationdescriptor.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     UsbInterfaceAssociationDescriptor::UsbInterfaceAssociationDescriptor(
@@ -83,18 +83,17 @@ namespace usb {
 
     QString UsbInterfaceAssociationDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Interface Association Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bFirstInterface", _bFirstInterface, _bFirstInterface);
-        ATTR("bInterfaceCount", _bInterfaceCount, _bInterfaceCount);
-        ATTR("bFunctionClass", _bFunctionClass, _functionClass);
-        ATTR("bFunctionSubClass", _bFunctionSubClass, _functionSubClass);
-        ATTR("bFunctionProtocol", _bFunctionProtocol, _functionProtocol);
-        ATTRSTRDESC("iFunction", _iFunction, configurationDescriptor()->device());
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("Interface Association Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bFirstInterface", _bFirstInterface)
+                .attr("bInterfaceCount", _bInterfaceCount)
+                .attr("bFunctionClass", _bFunctionClass, _functionClass)
+                .attr("bFunctionSubClass", _bFunctionSubClass, _functionSubClass)
+                .attr("bFunctionProtocol", _bFunctionProtocol, _functionProtocol)
+                .strdesc("iFunction", _iFunction, configurationDescriptor()->device())
+                .end()
+                .build();
     }
 } // namespace usb

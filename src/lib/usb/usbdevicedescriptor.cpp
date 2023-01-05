@@ -1,5 +1,5 @@
-﻿#include "usbdevicedescriptor.h"
-#include "__usbmacro.h"
+#include "usbdevicedescriptor.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     UsbDeviceDescriptor::UsbDeviceDescriptor(const libusb_device_descriptor *desc, UsbDevice *parent) :
@@ -176,27 +176,25 @@ namespace usb {
 
     QString UsbDeviceDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Device Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bcdUSB", _bcdUSB, bcdUSBInfo());
-        ATTR("bcdDevice", _bcdDevice, "");
-        ATTR("bDeviceClass", _bDeviceClass, _deviceClass);
-        ATTR("bDeviceSubClass", _bDeviceSubClass, _deviceSubClass);
-        ATTR("bDeviceProtocol", _bDeviceProtocol, _deviceProtocol);
-        ATTR("idVendor", _idVendor, _vendorName);
-        ATTR("idProduct", _idProduct, _productName);
-        ATTRSTRDESC("iManufacturer", _iManufacturer, _device);
-        ATTRSTRDESC("iProduct", _iProduct, _device);
-        ATTRSTRDESC("iSerialNumber", _iSerialNumber, _device);
-        ATTR("bMaxPacketSize0", _bMaxPacketSize0, _bMaxPacketSize0);
-        ATTR("bNumConfigurations", _bNumConfigurations, _bNumConfigurations);
-        END;
-        if (_hubDescriptor)
-            APPEND(_hubDescriptor);
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("Device Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bcdUSB", _bcdUSB, bcdUSBInfo())
+                .attr("bcdDevice", _bcdDevice, "")
+                .attr("bDeviceClass", _bDeviceClass, _deviceClass)
+                .attr("bDeviceSubClass", _bDeviceSubClass, _deviceSubClass)
+                .attr("bDeviceProtocol", _bDeviceProtocol, _deviceProtocol)
+                .attr("idVendor", _idVendor, _vendorName)
+                .attr("idProduct", _idProduct, _productName)
+                .strdesc("iManufacturer", _iManufacturer, _device)
+                .strdesc("iProduct", _iProduct, _device)
+                .strdesc("iSerialNumber", _iSerialNumber, _device)
+                .attr("bMaxPacketSize0", _bMaxPacketSize0)
+                .attr("bNumConfigurations", _bNumConfigurations)
+                .end()
+                .append(_hubDescriptor)
+                .build();
     }
 
     QString parseBcdUSB(uint16_t bcdUSB)

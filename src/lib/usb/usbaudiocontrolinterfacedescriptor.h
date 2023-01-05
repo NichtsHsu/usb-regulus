@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB AudioControl Interface Desciptors
+/*! C++ class wrapper of USB AudioControl Interface Desciptors
 
  * Copyright (C) 2022 Nichts Hsu
 
@@ -23,6 +23,7 @@
 #include <QByteArray>
 #include <QVector>
 #include "usbinterfaceextradescriptor.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     class UsbInterfaceDescriptor;
@@ -723,7 +724,7 @@ namespace usb {
         protected:
             explicit UsbProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
                                                  uint8_t descPos);
-            inline void __parseBase(QString &html) const;
+            inline void __parseBase(UsbHtmlBuilder &builder) const;
 
             /**
              * @brief __parseBmControls
@@ -1817,7 +1818,7 @@ namespace usb {
         protected:
             explicit UsbEffectUnitDescriptor(UsbInterfaceDescriptor *parent,
                                              uint8_t descPos);
-            inline void __parseBase(QString &html) const;
+            inline void __parseBase(UsbHtmlBuilder &builder) const;
 
             /**
              * @brief __parseBmaControls
@@ -2095,7 +2096,7 @@ namespace usb {
         protected:
             explicit UsbProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
                                                  uint8_t descPos);
-            inline void __parseBase(QString &html) const;
+            inline void __parseBase(UsbHtmlBuilder &builder) const;
 
             /**
              * @brief __parseBmControls

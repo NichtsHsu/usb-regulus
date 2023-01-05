@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB VideoControl Interface Descriptors
+/*! C++ class wrapper of USB VideoControl Interface Descriptors
 
  * Copyright (C) 2022 Nichts Hsu
 
@@ -24,6 +24,7 @@
 #include <QVector>
 
 #include "usbinterfaceextradescriptor.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     namespace uvc {
@@ -221,7 +222,7 @@ namespace usb {
         protected:
             explicit UsbInputTerminalDescriptor(UsbInterfaceDescriptor *parent,
                                                 uint8_t descPos);
-            inline void __parseBase(QString &html) const;
+            inline void __parseBase(UsbHtmlBuilder &builder) const;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bTerminalID,
             _bAssocTerminal, _iTerminal;
@@ -312,7 +313,7 @@ namespace usb {
         protected:
             explicit UsbOutputTerminalDescriptor(UsbInterfaceDescriptor *parent,
                                                  uint8_t descPos);
-            inline void __parseBase(QString &html) const;
+            inline void __parseBase(UsbHtmlBuilder &builder) const;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bTerminalID,
             _bAssocTerminal, _bSourceID, _iTerminal;

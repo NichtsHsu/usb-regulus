@@ -1,6 +1,6 @@
-﻿#include "usbendpointdescriptor.h"
-#include "usbinterfaceassociationdescriptor.h"
+#include "usbendpointdescriptor.h"
 #include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     UsbEndpointDescriptor::UsbEndpointDescriptor(const libusb_endpoint_descriptor *desc, UsbInterfaceDescriptor *parent) :
@@ -256,19 +256,18 @@ namespace usb {
 
     QString UsbEndpointDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Endpoint Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bEndpointAddress", _bEndpointAddress, endpointAddressInfo());
-        ATTR("bmAttributes", _bmAttributes, bmAttributesInfo());
-        ATTR("wMaxPacketSize", _wMaxPacketSize, _wMaxPacketSize);
-        ATTR("bInterval", _bInterval, _bInterval);
-        ATTR("bRefresh", _bRefresh, _bRefresh);
-        ATTR("bSynchAddress", _bSynchAddress, _bSynchAddress);
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("Endpoint Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bEndpointAddress", _bEndpointAddress, endpointAddressInfo())
+                .attr("bmAttributes", _bmAttributes, bmAttributesInfo())
+                .attr("wMaxPacketSize", _wMaxPacketSize)
+                .attr("bInterval", _bInterval)
+                .attr("bRefresh", _bRefresh)
+                .attr("bSynchAddress", _bSynchAddress)
+                .end()
+                .build();
     }
 
     void UsbEndpointDescriptor::__requestExtraDescriptor()
@@ -279,7 +278,7 @@ namespace usb {
         {
             // Interface Association Descriptor
             if (_extra[pos + 1] == uint8_t(ConfigurationExtraDescriptorType::ASSOCIATION) ||
-                    _extra[pos + 1] == uint8_t(ConfigurationExtraDescriptorType::OTG))
+                _extra[pos + 1] == uint8_t(ConfigurationExtraDescriptorType::OTG))
             {
                 UsbConfigurationExtraDescriptor *configExtraDesc =
                         UsbConfigurationExtraDescriptor::fromEndpointExtra(this, pos);
@@ -313,16 +312,16 @@ namespace usb {
                         int status = desc->status;
                         log().d("UsbEndpointDescriptor",
                                 tr("Isochronous transfer result: %1, %2.")
-                                .arg(QString("packet %1").arg(i))
-                                .arg(QString("status %1").arg(usb_error_name(status))));
+                                .arg(QString("packet %1").arg(i),
+                                     QString("status %1").arg(usb_error_name(status))));
                         if (status == libusb_transfer_status::LIBUSB_TRANSFER_COMPLETED ||
-                                status == libusb_transfer_status::LIBUSB_TRANSFER_OVERFLOW)
+                            status == libusb_transfer_status::LIBUSB_TRANSFER_OVERFLOW)
                         {
 
                             log().d("UsbEndpointDescriptor",
                                     tr("Isochronous transfer result: %1, %2.")
-                                    .arg(QString("packet %1").arg(i))
-                                    .arg(QString("actual_length %1").arg(desc->actual_length)));
+                                    .arg(QString("packet %1").arg(i),
+                                         QString("actual_length %1").arg(desc->actual_length)));
                             if (ep->direction() == EndpointDirection::IN)
                                 data.append(reinterpret_cast<const char *>(
                                                 libusb_get_iso_packet_buffer_simple(transfer, i)),
@@ -348,8 +347,8 @@ namespace usb {
 
                     log().d("UsbEndpointDescriptor",
                             tr("Isochronous transfer result: %1, %2.")
-                            .arg(QString("isError %1").arg(isError))
-                            .arg(QString("length %1").arg(data.length())));
+                            .arg(QString("isError %1").arg(isError),
+                                 QString("length %1").arg(data.length())));
                     if (!isError)
                         QTimer::singleShot(0, ep, [ep, data]() {
                             emit ep->asyncTransferCompleted(data);

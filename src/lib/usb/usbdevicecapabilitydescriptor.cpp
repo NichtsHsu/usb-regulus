@@ -1,5 +1,6 @@
-﻿#include "usbdevicecapabilitydescriptor.h"
+#include "usbdevicecapabilitydescriptor.h"
 #include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     UsbDeviceCapabilityDescriptor::UsbDeviceCapabilityDescriptor(
@@ -102,17 +103,16 @@ namespace usb {
 
     QString Usb20ExtensionDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("USB 2.0 Extension Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTR("bmAttributes", _bmAttributes, supportLPM() ?
-                 tr("Link Power Management is supported"):
-                 tr("Link Power Management is NOT supported"));
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("USB 2.0 Extension Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("bmAttributes", _bmAttributes, supportLPM() ?
+                          tr("Link Power Management is supported"):
+                          tr("Link Power Management is NOT supported"))
+                .end()
+                .build();
     }
 
     uint32_t Usb20ExtensionDescriptor::bmAttributes() const
@@ -183,22 +183,22 @@ namespace usb {
 
     QString UsbSuperSpeedDeviceCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("USB SuperSpeed Device Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTR("bmAttributes", _bmAttributes, supportLTM() ?
-                 tr("Latency Tolerance Messages is supported"):
-                 tr("Latency Tolerance Messages is NOT supported"));
-        ATTR("wSpeedSupported", _wSpeedSupported,
-             tr("Supports") + QString(" ") + speedSupportedList().join(", "));
-        ATTR("bFunctionalitySupport", _bFunctionalitySupport,
-             _bFunctionalitySupport ? tr("The lowest speed at all functionality is available"): "");
-        ATTR("bU1DevExitLat", _bU1DevExitLat, tr("Less than %1 µs").arg(_bU1DevExitLat));
-        ATTR("bU2DevExitLat", _bU2DevExitLat, tr("Less than %1 µs").arg(_bU2DevExitLat));
-        END;
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("USB SuperSpeed Device Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("bmAttributes", _bmAttributes, supportLTM() ?
+                          tr("Latency Tolerance Messages is supported"):
+                          tr("Latency Tolerance Messages is NOT supported"))
+                .attr("wSpeedSupported", _wSpeedSupported,
+                      tr("Supports") + QString(" ") + speedSupportedList().join(", "))
+                .attr("bFunctionalitySupport", _bFunctionalitySupport,
+                      _bFunctionalitySupport ? tr("The lowest speed at all functionality is available"): "")
+                .attr("bU1DevExitLat", _bU1DevExitLat, tr("Less than %1 µs").arg(_bU1DevExitLat))
+                .attr("bU2DevExitLat", _bU2DevExitLat, tr("Less than %1 µs").arg(_bU2DevExitLat))
+                .end()
+                .build();
     }
 
     UsbContainerIdDescriptor::UsbContainerIdDescriptor(
@@ -219,15 +219,14 @@ namespace usb {
 
     QString UsbContainerIdDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("USB Container ID Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTRTEXT("ContainerID ", hexUuid(_containerID));
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("USB Container ID Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("ContainerID ", "", hexUuid(_containerID))
+                .end()
+                .build();
     }
 
     uint8_t UsbContainerIdDescriptor::bLength() const
@@ -249,19 +248,19 @@ namespace usb {
 
     QString UsbWirelessDeviceCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Wireless USB Device Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
-        ATTR("wPHYRates", _wPHYRates,
-             tr("Supports %1 Mbps").arg(__parseWPHYRateList().join(", ")));
-        ATTR("bmTFITXPowerInfo", _bmTFITXPowerInfo, __parsePowerInfo(_bmTFITXPowerInfo));
-        ATTR("bmFFITXPowerInfo", _bmFFITXPowerInfo, __parsePowerInfo(_bmFFITXPowerInfo));
-        ATTR("bmBandGroup", _bmBandGroup,
-             tr("All bands in band groups %1 are supported").arg(__parseBmBandGroupList().join(", ")));
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("Wireless USB Device Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
+                .attr("wPHYRates", _wPHYRates,
+                      tr("Supports %1 Mbps").arg(__parseWPHYRateList().join(", ")))
+                .attr("bmTFITXPowerInfo", _bmTFITXPowerInfo, __parsePowerInfo(_bmTFITXPowerInfo))
+                .attr("bmFFITXPowerInfo", _bmFFITXPowerInfo, __parsePowerInfo(_bmFFITXPowerInfo))
+                .attr("bmBandGroup", _bmBandGroup,
+                      tr("All bands in band groups %1 are supported").arg(__parseBmBandGroupList().join(", ")))
+                .build();
     }
 
     uint8_t UsbWirelessDeviceCapabilityDescriptor::bmAttributes() const
@@ -330,7 +329,7 @@ namespace usb {
     {
         int steps = CUT(info, 0, 3);
         int size = CUT(info, 4, 7);
-        return tr("Power Level Steps: %1").arg(steps) + NEWLINE +
+        return tr("Power Level Steps: %1").arg(steps) + UsbHtmlBuilder::NEWLINE +
                 tr("Step Size: %1 dB").arg(size);
     }
 
@@ -356,27 +355,26 @@ namespace usb {
 
     QString UsbSuperSpeedPlusDeviceCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("USB SuperSpeed Plus Device Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
-        ATTR("wFunctionalitySupport", _wFunctionalitySupport, __parseFunctionalitySupport());
+        UsbHtmlBuilder builder;
+        builder.start(tr("USB SuperSpeed Plus Device Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
+                .attr("wFunctionalitySupport", _wFunctionalitySupport, __parseFunctionalitySupport());
         for (unsigned int i = 0; i <= CUT(_bmAttributes, 0, 4); ++i)
-            ATTR(QString("bmSublinkSpeedAttr[%1]").arg(i),
-                 sublinkSpeedAttr(i),
-                 __parseSublinkSpeedAttr(i));
-        END;
+            builder.attr(QString("bmSublinkSpeedAttr[%1]").arg(i),
+                         sublinkSpeedAttr(i),
+                         __parseSublinkSpeedAttr(i));
 
-        return html;
+        return builder.end().build();
     }
 
     QString UsbSuperSpeedPlusDeviceCapabilityDescriptor::__parseBmAttributes() const
     {
         int ssac = CUT(_bmAttributes, 0, 4);
         int ssic = CUT(_bmAttributes, 5, 8);
-        return tr("%1 Sublink Speed Attributes").arg(ssac + 1) + NEWLINE +
+        return tr("%1 Sublink Speed Attributes").arg(ssac + 1) + UsbHtmlBuilder::NEWLINE +
                 tr("%1 Sublink Speed IDs").arg(ssic + 1);
     }
 
@@ -385,8 +383,8 @@ namespace usb {
         int ssid = CUT(_wFunctionalitySupport, 0, 3);
         int minRxLaneCount = CUT(_wFunctionalitySupport, 8, 11);
         int minTxLaneCount = CUT(_wFunctionalitySupport, 12, 15);
-        return tr("Sublink Speed Attribute ID: %1").arg(ssid) + NEWLINE +
-                tr("Min Rx Lane Count: %1").arg(minRxLaneCount) + NEWLINE +
+        return tr("Sublink Speed Attribute ID: %1").arg(ssid) + UsbHtmlBuilder::NEWLINE +
+                tr("Min Rx Lane Count: %1").arg(minRxLaneCount) + UsbHtmlBuilder::NEWLINE +
                 tr("Min Tx Lane Count: %1").arg(minTxLaneCount);
     }
 
@@ -416,11 +414,11 @@ namespace usb {
             break;
         }
 
-        return tr("Sublink Speed Attribute ID: %1").arg(ssid) + NEWLINE +
-                tr("Lane Speed: %1 %2").arg(laneSpeedMantissa).arg(bitRate) + NEWLINE +
+        return tr("Sublink Speed Attribute ID: %1").arg(ssid) + UsbHtmlBuilder::NEWLINE +
+                tr("Lane Speed: %1 %2").arg(laneSpeedMantissa).arg(bitRate) + UsbHtmlBuilder::NEWLINE +
                 tr("Sublink Type: %1, %2")
-                .arg((sublinkType & 0b1) ? tr("Asymmetric") : tr("Symmetric"))
-                .arg((sublinkType & 0b10) ? tr("Transmit mode") : tr("Receive mode")) + NEWLINE +
+                .arg((sublinkType & 0b1) ? tr("Asymmetric") : tr("Symmetric"),
+                     (sublinkType & 0b10) ? tr("Transmit mode") : tr("Receive mode")) + UsbHtmlBuilder::NEWLINE +
                 tr("Link Protocol: %1").arg(linkProtocol ? "SuperSpeed Plus" : "SuperSpeed");
     }
 
@@ -472,16 +470,15 @@ namespace usb {
 
     QString UsbPlatformDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("USB Platform Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTRTEXT("PlatformCapabilityUUID", hexUuid(_platformCapabilityUUID));
-        ATTRTEXT("CapabilityData", QString("0x") + _capabilityData.toHex());
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("USB Platform Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("PlatformCapabilityUUID", "", hexUuid(_platformCapabilityUUID))
+                .attr("CapabilityData", "", QString("0x") + _capabilityData.toHex())
+                .end()
+                .build();
     }
 
     UsbPowerDeliveryCapabilityDescriptor::UsbPowerDeliveryCapabilityDescriptor(
@@ -517,18 +514,17 @@ namespace usb {
 
     QString UsbPowerDeliveryCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("USB Power Delivery Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
-        ATTR("bcdBCVersion", _bcdBCVersion, "");
-        ATTR("bcdPDVersion", _bcdPDVersion, "");
-        ATTR("bcdUSBTypeCVersion", _bcdUSBTypeCVersion, "");
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("USB Power Delivery Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
+                .attr("bcdBCVersion", _bcdBCVersion, "")
+                .attr("bcdPDVersion", _bcdPDVersion, "")
+                .attr("bcdUSBTypeCVersion", _bcdUSBTypeCVersion, "")
+                .end()
+                .build();
     }
 
     QString UsbPowerDeliveryCapabilityDescriptor::__parseBmAttributes() const
@@ -558,7 +554,7 @@ namespace usb {
         if (BIT(_bmAttributes, 14))
             featuresList.push_back(tr("Uses VBUS"));
 
-        return featuresList.join(NEWLINE);
+        return featuresList.join(UsbHtmlBuilder::NEWLINE);
     }
 
     UsbBatteryInfoCapabilityDescriptor::UsbBatteryInfoCapabilityDescriptor(
@@ -618,24 +614,23 @@ namespace usb {
 
     QString UsbBatteryInfoCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("USB Battery Info Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTRSTRDESC("iBattery", _iBattery, _bosDescriptor->device());
-        ATTRSTRDESC("iSerial", _iSerial, _bosDescriptor->device());
-        ATTRSTRDESC("iManufacturer", _iManufacturer, _bosDescriptor->device());
-        ATTR("bBatteryId", _bBatteryId, _bBatteryId);
-        ATTR("dwChargedThreshold", _dwChargedThreshold, tr("%1 mWh").arg(_dwChargedThreshold));
-        ATTR("dwWeakThreshold", _dwWeakThreshold, tr("%1 mWh").arg(_dwWeakThreshold));
-        ATTR("dwBatteryDesignCapacity", _dwBatteryDesignCapacity,
-             tr("%1 mWh").arg(_dwBatteryDesignCapacity));
-        ATTR("dwBatteryLastFullchargeCapacity", _dwBatteryLastFullchargeCapacity,
-             tr("%1 mWh").arg(_dwBatteryLastFullchargeCapacity));
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("USB Battery Info Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .strdesc("iBattery", _iBattery, _bosDescriptor->device())
+                .strdesc("iSerial", _iSerial, _bosDescriptor->device())
+                .strdesc("iManufacturer", _iManufacturer, _bosDescriptor->device())
+                .attr("bBatteryId", _bBatteryId)
+                .attr("dwChargedThreshold", _dwChargedThreshold, tr("%1 mWh").arg(_dwChargedThreshold))
+                .attr("dwWeakThreshold", _dwWeakThreshold, tr("%1 mWh").arg(_dwWeakThreshold))
+                .attr("dwBatteryDesignCapacity", _dwBatteryDesignCapacity,
+                      tr("%1 mWh").arg(_dwBatteryDesignCapacity))
+                .attr("dwBatteryLastFullchargeCapacity", _dwBatteryLastFullchargeCapacity,
+                      tr("%1 mWh").arg(_dwBatteryLastFullchargeCapacity))
+                .end()
+                .build();
     }
 
     UsbPowerDeliveryConsumerPortCapabilityDescriptor::UsbPowerDeliveryConsumerPortCapabilityDescriptor(
@@ -683,23 +678,22 @@ namespace usb {
 
     QString UsbPowerDeliveryConsumerPortCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("USB PD Consumer Port Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
-        ATTR("wMinVoltage", _wMinVoltage, tr("%1 mV").arg(_wMinVoltage * 50));
-        ATTR("wMaxVoltage", _wMaxVoltage, tr("%1 mV").arg(_wMaxVoltage * 50));
-        ATTR("dwMaxOperatingPower", _dwMaxOperatingPower,
-             tr("%1 mW").arg(_dwMaxOperatingPower * 10));
-        ATTR("dwMaxPeakPower", _dwMaxPeakPower,
-             tr("%1 mW").arg(_dwMaxPeakPower * 10));
-        ATTR("dwMaxPeakPowerTime", _dwMaxPeakPowerTime,
-             tr("%1 ms").arg(_dwMaxPeakPowerTime * 100));
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("USB PD Consumer Port Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+                .attr("wMinVoltage", _wMinVoltage, tr("%1 mV").arg(_wMinVoltage * 50))
+                .attr("wMaxVoltage", _wMaxVoltage, tr("%1 mV").arg(_wMaxVoltage * 50))
+                .attr("dwMaxOperatingPower", _dwMaxOperatingPower,
+                      tr("%1 mW").arg(_dwMaxOperatingPower * 10))
+                .attr("dwMaxPeakPower", _dwMaxPeakPower,
+                      tr("%1 mW").arg(_dwMaxPeakPower * 10))
+                .attr("dwMaxPeakPowerTime", _dwMaxPeakPowerTime,
+                      tr("%1 ms").arg(_dwMaxPeakPowerTime * 100))
+                .end()
+                .build();
     }
 
     QString UsbPowerDeliveryConsumerPortCapabilityDescriptor::__parseBmCapabilities() const
@@ -711,7 +705,7 @@ namespace usb {
             capabilitiesList.push_back(tr("Operates USB Power Delivery Specification"));
         if (BIT(_bmCapabilities, 2))
             capabilitiesList.push_back(tr("Operates USB Type-C Current Specification"));
-        return capabilitiesList.join(NEWLINE);
+        return capabilitiesList.join(UsbHtmlBuilder::NEWLINE);
     }
 
     UsbPowerDeliveryProviderPortCapabilityDescriptor::UsbPowerDeliveryProviderPortCapabilityDescriptor(
@@ -748,19 +742,18 @@ namespace usb {
 
     QString UsbPowerDeliveryProviderPortCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("USB PD Provider Port Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
+        UsbHtmlBuilder builder;
+        builder.start(tr("USB PD Provider Port Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
         for (unsigned int i = 0; i <= _bNumOfPDObjects; ++i)
-            ATTR(QString("wPowerDataObject[%1]").arg(i),
-                 wPowerDataObject(i),
-                 __parsePowerDataObject(wPowerDataObject(i)));
-        END;
+            builder.attr(QString("wPowerDataObject[%1]").arg(i),
+                         wPowerDataObject(i),
+                         __parsePowerDataObject(wPowerDataObject(i)));
 
-        return html;
+        return builder.end().build();
     }
 
     QString UsbPowerDeliveryProviderPortCapabilityDescriptor::__parseBmCapabilities() const
@@ -772,7 +765,7 @@ namespace usb {
             capabilitiesList.push_back(tr("Operates USB Power Delivery Specification"));
         if (BIT(_bmCapabilities, 2))
             capabilitiesList.push_back(tr("Operates USB Type-C Current Specification"));
-        return capabilitiesList.join(NEWLINE);
+        return capabilitiesList.join(UsbHtmlBuilder::NEWLINE);
     }
 
     QString UsbPowerDeliveryProviderPortCapabilityDescriptor::__parsePowerDataObject(uint32_t object) const
@@ -842,7 +835,7 @@ namespace usb {
         featuresList.push_back(tr("Voltage: %1 mV").arg(CUT(object, 10, 19) * 50));
         featuresList.push_back(tr("Maximum Current: %1 mA").arg(CUT(object, 0, 9) * 10));
 
-        return featuresList.join(NEWLINE);
+        return featuresList.join(UsbHtmlBuilder::NEWLINE);
     }
 
     QString UsbPowerDeliveryProviderPortCapabilityDescriptor::__parseBatterySupplyPDO(uint32_t object) const
@@ -853,7 +846,7 @@ namespace usb {
         featuresList.push_back(tr("Minimum Voltage: %1 mV").arg(CUT(object, 10, 19) * 50));
         featuresList.push_back(tr("Maximum Allowable Power: %1 mW").arg(CUT(object, 0, 9) * 250));
 
-        return featuresList.join(NEWLINE);
+        return featuresList.join(UsbHtmlBuilder::NEWLINE);
     }
 
     QString UsbPowerDeliveryProviderPortCapabilityDescriptor::__parseVariableSupplyPDO(uint32_t object) const
@@ -864,7 +857,7 @@ namespace usb {
         featuresList.push_back(tr("Minimum Voltage: %1 mV").arg(CUT(object, 10, 19) * 50));
         featuresList.push_back(tr("Maximum Current: %1 mA").arg(CUT(object, 0, 9) * 10));
 
-        return featuresList.join(NEWLINE);
+        return featuresList.join(UsbHtmlBuilder::NEWLINE);
     }
 
     QString UsbPowerDeliveryProviderPortCapabilityDescriptor::__parseSPRProgrammablePowerSupply(uint32_t object) const
@@ -877,7 +870,7 @@ namespace usb {
         featuresList.push_back(tr("Minimum Voltage: %1 mV").arg(CUT(object, 8, 15) * 100));
         featuresList.push_back(tr("Maximum Current: %1 mA").arg(CUT(object, 0, 6) * 50));
 
-        return featuresList.join(NEWLINE);
+        return featuresList.join(UsbHtmlBuilder::NEWLINE);
     }
 
     QString UsbPowerDeliveryProviderPortCapabilityDescriptor::__parseEPRAdjustableVoltageSupply(uint32_t object) const
@@ -910,7 +903,7 @@ namespace usb {
         featuresList.push_back(tr("Minimum Voltage: %1 mV").arg(CUT(object, 8, 15) * 100));
         featuresList.push_back(tr("PDP: %1 W").arg(CUT(object, 0, 7)));
 
-        return featuresList.join(NEWLINE);
+        return featuresList.join(UsbHtmlBuilder::NEWLINE);
     }
 
     UsbPrecisionTimeMeasurementCapabilityDescriptor::UsbPrecisionTimeMeasurementCapabilityDescriptor(
@@ -923,14 +916,13 @@ namespace usb {
 
     QString UsbPrecisionTimeMeasurementCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Precision Time Measurement Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("Precision Time Measurement Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .end()
+                .build();
     }
 
     UsbExtendedWirelessDeviceCapabilityDescriptor::UsbExtendedWirelessDeviceCapabilityDescriptor(
@@ -960,17 +952,16 @@ namespace usb {
 
     QString UsbExtendedWirelessDeviceCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Extended Wireless Device Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTR("wIdleTimeout", _wIdleTimeout, tr("%1 ms").arg(_wIdleTimeout));
-        ATTR("wWakeUpLatency", _wWakeUpLatency, tr("%1 ms").arg(_wWakeUpLatency));
-        ATTR("bmControl", _bmControl, _bmControl ? tr("Free") : tr("Strict"));
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("Extended Wireless Device Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("wIdleTimeout", _wIdleTimeout, tr("%1 ms").arg(_wIdleTimeout))
+                .attr("wWakeUpLatency", _wWakeUpLatency, tr("%1 ms").arg(_wWakeUpLatency))
+                .attr("bmControl", _bmControl, _bmControl ? tr("Free") : tr("Strict"))
+                .end()
+                .build();
     }
 
     UsbConfigurationSummaryDescriptor::UsbConfigurationSummaryDescriptor(
@@ -1025,23 +1016,20 @@ namespace usb {
 
     QString UsbConfigurationSummaryDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Configuration Summary Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTR("bcdVersion", _bcdVersion, "");
-        ATTR("bClass", _bClass, _bClass);
-        ATTR("bSubClass", _bSubClass, _bSubClass);
-        ATTR("bProtocol", _bProtocol, _bProtocol);
-        ATTR("bConfigurationCount", _bConfigurationCount, _bConfigurationCount);
+        UsbHtmlBuilder builder;
+        builder.start(tr("Configuration Summary Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("bcdVersion", _bcdVersion, "")
+                .attr("bClass", _bClass)
+                .attr("bSubClass", _bSubClass)
+                .attr("bProtocol", _bProtocol)
+                .attr("bConfigurationCount", _bConfigurationCount);
         for (uint8_t i = 0; i < _bConfigurationCount; ++i)
-            ATTR(QString("bConfigurationIndex[%1]").arg(i),
-                 bConfigurationIndex(i),
-                 bConfigurationIndex(i));
-        END;
+            builder.attr(QString("bConfigurationIndex[%1]").arg(i),bConfigurationIndex(i));
 
-        return html;
+        return builder.end().build();
     }
 
     UsbBillboardCapabilityDescriptor::UsbBillboardCapabilityDescriptor(
@@ -1142,39 +1130,34 @@ namespace usb {
 
     QString UsbBillboardCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Billboard Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTRSTRDESC("iAddtionalInfoURL", _iAddtionalInfoURL, _bosDescriptor->device());
-        ATTR("bNumberOfAlternateOrUSB4Modes",
-             _bNumberOfAlternateOrUSB4Modes,
-             _bNumberOfAlternateOrUSB4Modes);
-        ATTR("bPreferredAlternateOrUSB4Mode",
-             _bPreferredAlternateOrUSB4Mode,
-             _bPreferredAlternateOrUSB4Mode);
-        ATTR("VCONNPower", _VCONNPower, __parseVCONNPower());
-        ATTRTEXT("bmConfigured", __parseBmConfigured());
-        ATTR("bcdVersion", _bcdVersion, "");
-        ATTR("bAdditionalFailureInfo", _bAdditionalFailureInfo, __parseBAdditionalFailureInfo());
+        UsbHtmlBuilder builder;
+        builder.start(tr("Billboard Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .strdesc("iAddtionalInfoURL", _iAddtionalInfoURL, _bosDescriptor->device())
+                .attr("bNumberOfAlternateOrUSB4Modes", _bNumberOfAlternateOrUSB4Modes)
+                .attr("bPreferredAlternateOrUSB4Mode", _bPreferredAlternateOrUSB4Mode)
+                .attr("VCONNPower", _VCONNPower, __parseVCONNPower())
+                .attr("bmConfigured", "", __parseBmConfigured())
+                .attr("bcdVersion", _bcdVersion, "")
+                .attr("bAdditionalFailureInfo", _bAdditionalFailureInfo, __parseBAdditionalFailureInfo());
         for (uint8_t i = 0; i < _bNumberOfAlternateOrUSB4Modes; ++i)
         {
-#ifdef Q_OS_UNIX
-            ATTR(QString("wSVID[%1]").arg(i), _wSVID[i], __getSVID(i));
-#else
-            ATTR(QString("wSVID[%1]").arg(i), _wSVID[i], "");
-#endif
-            ATTR(QString("bAlternateOrUSB4Mode[%1]").arg(i),
-                 _bAlternateOrUSB4Mode[i],
-                 _bAlternateOrUSB4Mode[i]);
-            ATTRSTRDESC(QString("iAlternateOrUSB4ModeString[%1]").arg(i),
-                        _iAlternateOrUSB4ModeString[i],
-                        _bosDescriptor->device());
+            builder.attr(QString("wSVID[%1]").arg(i), _wSVID[i],
+             #ifdef Q_OS_UNIX
+                         __getSVID(i)
+             #else
+                         ""
+             #endif
+                         )
+                    .attr(QString("bAlternateOrUSB4Mode[%1]").arg(i), _bAlternateOrUSB4Mode[i])
+                    .strdesc(QString("iAlternateOrUSB4ModeString[%1]").arg(i),
+                             _iAlternateOrUSB4ModeString[i],
+                             _bosDescriptor->device());
         }
-        END;
 
-        return html;
+        return builder.end().build();
     }
 
     QString UsbBillboardCapabilityDescriptor::__parseVCONNPower() const
@@ -1193,7 +1176,7 @@ namespace usb {
         for (uint8_t i = 0; i < _bNumberOfAlternateOrUSB4Modes; ++i)
             aums.append(__parseBmConfigured(i).arg(i));
 
-        return aums.join(NEWLINE);
+        return aums.join(UsbHtmlBuilder::NEWLINE);
     }
 
     QString UsbBillboardCapabilityDescriptor::__parseBmConfigured(uint8_t index) const
@@ -1225,7 +1208,7 @@ namespace usb {
         if (BIT(_bAdditionalFailureInfo, 1))
             info.append(tr("No USB-PD communication"));
 
-        return info.join(NEWLINE);
+        return info.join(UsbHtmlBuilder::NEWLINE);
     }
 
 #ifdef Q_OS_UNIX
@@ -1261,16 +1244,15 @@ namespace usb {
 
     QString UsbBillboardAumCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Billboard AUM Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTR("bIndex", _bIndex, _bIndex);
-        ATTR("dwAlternateModeVdo", _dwAlternateModeVdo, _dwAlternateModeVdo);
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("Billboard AUM Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("bIndex", _bIndex)
+                .attr("dwAlternateModeVdo", _dwAlternateModeVdo)
+                .end()
+                .build();
     }
 
     UsbAuthenticationCapabilityDescriptor::UsbAuthenticationCapabilityDescriptor(
@@ -1299,17 +1281,16 @@ namespace usb {
 
     QString UsbAuthenticationCapabilityDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Authentication Capability Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType));
-        ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
-        ATTR("bcdProtocolVersion", _bcdProtocolVersion, "");
-        ATTR("bcdCapability", _bcdCapability, "");
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("Authentication Capability Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
+                .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
+                .attr("bcdProtocolVersion", _bcdProtocolVersion, "")
+                .attr("bcdCapability", _bcdCapability, "")
+                .end()
+                .build();
     }
 
     QString UsbAuthenticationCapabilityDescriptor::__parseBmAttributes() const
@@ -1320,7 +1301,7 @@ namespace usb {
         if (BIT(_bmAttributes, 1))
             features.append(tr("Device changes interfaces when updated"));
 
-        return features.join(NEWLINE);
+        return features.join(UsbHtmlBuilder::NEWLINE);
     }
 
 }

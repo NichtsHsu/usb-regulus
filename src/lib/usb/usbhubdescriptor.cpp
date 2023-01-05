@@ -1,5 +1,6 @@
-﻿#include "usbhubdescriptor.h"
+#include "usbhubdescriptor.h"
 #include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
 
@@ -122,22 +123,22 @@ namespace usb {
 
     QString UsbEnhancedSuperSpeedHubDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Enhanced SuperSpeed Hub Descriptor"));
-        ATTR("bDescLength", _bDescLength, _bDescLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bNbrPorts", _bNbrPorts, _bNbrPorts);
-        ATTR("wHubCharacteristics", _wHubCharacteristics, __parseWHubCharacteristics());
-        ATTR("bPwrOn2PwrGood", _bPwrOn2PwrGood, tr("%1 ms").arg(_bPwrOn2PwrGood * 2));
-        ATTR("bHubContrCurrent", _bHubContrCurrent, tr("%1 mA").arg(_bHubContrCurrent * 4));
-        ATTR("bHubHdrDecLat", _bHubHdrDecLat, QString(_bHubHdrDecLat ?
-                                                          tr("%1 µs").arg(double(_bHubHdrDecLat) / 10):
-                                                          tr("Less than 0.1 µs")));
-        ATTR("wHubDelay", _wHubDelay, tr("%1 ns").arg(_wHubDelay));
-        ATTR("DeviceRemovable", _DeviceRemovable, "");
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("Enhanced SuperSpeed Hub Descriptor"))
+                .attr("bDescLength", _bDescLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bNbrPorts", _bNbrPorts)
+                .attr("wHubCharacteristics", _wHubCharacteristics, __parseWHubCharacteristics())
+                .attr("bPwrOn2PwrGood", _bPwrOn2PwrGood, tr("%1 ms").arg(_bPwrOn2PwrGood * 2))
+                .attr("bHubContrCurrent", _bHubContrCurrent, tr("%1 mA").arg(_bHubContrCurrent * 4))
+                .attr("bHubHdrDecLat", _bHubHdrDecLat,
+                      QString(_bHubHdrDecLat ?
+                                  tr("%1 µs").arg(double(_bHubHdrDecLat) / 10):
+                                  tr("Less than 0.1 µs")))
+                .attr("wHubDelay", _wHubDelay, tr("%1 ns").arg(_wHubDelay))
+                .attr("DeviceRemovable", _DeviceRemovable, "")
+                .end()
+                .build();
     }
 
     UsbEnhancedSuperSpeedHubDescriptor::UsbEnhancedSuperSpeedHubDescriptor(
@@ -169,7 +170,7 @@ namespace usb {
         else
             features.append(tr("Global Over-current Protection"));
 
-        return features.join(NEWLINE);
+        return features.join(UsbHtmlBuilder::NEWLINE);
     }
 
     uint8_t Usb20HubDescriptor::bDescLength() const
@@ -214,19 +215,18 @@ namespace usb {
 
     QString Usb20HubDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Hub Descriptor"));
-        ATTR("bDescLength", _bDescLength, _bDescLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bNbrPorts", _bNbrPorts, _bNbrPorts);
-        ATTR("wHubCharacteristics", _wHubCharacteristics, __parseWHubCharacteristics());
-        ATTR("bPwrOn2PwrGood", _bPwrOn2PwrGood, tr("%1 ms").arg(_bPwrOn2PwrGood * 2));
-        ATTR("bHubContrCurrent", _bHubContrCurrent, tr("%1 mA").arg(_bHubContrCurrent));
-        ATTRCUSTOM("DeviceRemovable", QString("0x") + _DeviceRemovable.toHex(), "");
-        ATTRCUSTOM("PortPwrCtrlMask", QString("0x") + _PortPwrCtrlMask.toHex(), "");
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("Hub Descriptor"))
+                .attr("bDescLength", _bDescLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bNbrPorts", _bNbrPorts)
+                .attr("wHubCharacteristics", _wHubCharacteristics, __parseWHubCharacteristics())
+                .attr("bPwrOn2PwrGood", _bPwrOn2PwrGood, tr("%1 ms").arg(_bPwrOn2PwrGood * 2))
+                .attr("bHubContrCurrent", _bHubContrCurrent, tr("%1 mA").arg(_bHubContrCurrent))
+                .attr("DeviceRemovable", QString("0x") + _DeviceRemovable.toHex(), "")
+                .attr("PortPwrCtrlMask", QString("0x") + _PortPwrCtrlMask.toHex(), "")
+                .end()
+                .build();
     }
 
     Usb20HubDescriptor::Usb20HubDescriptor(UsbDeviceDescriptor *deviceDesc):
@@ -278,7 +278,7 @@ namespace usb {
         else
             features.append(tr("Port Indicators are NOT supported"));
 
-        return features.join(NEWLINE);
+        return features.join(UsbHtmlBuilder::NEWLINE);
     }
 
 } // namespace usb

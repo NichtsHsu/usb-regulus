@@ -1,6 +1,7 @@
-﻿#include "usbconfigurationdescriptor.h"
+#include "usbconfigurationdescriptor.h"
 #include "usbinterfaceassociationdescriptor.h"
 #include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     UsbConfigurationDescriptor::UsbConfigurationDescriptor(const libusb_config_descriptor *desc, UsbDevice *parent):
@@ -98,23 +99,22 @@ namespace usb {
 
     QString UsbConfigurationDescriptor::infomationToHtml() const
     {
-        QString html;
-
-        START(tr("Configuration Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("wTotalLength", _wTotalLength, _wTotalLength);
-        ATTR("bNumInterfaces", _bNumInterfaces, _bNumInterfaces);
-        ATTR("bConfigurationValue", _bConfigurationValue, _bConfigurationValue);
-        ATTRSTRDESC("iConfiguration", _iConfiguration, _device);
-        ATTR("bmAttributes", _bmAttributes, bmAttributesInfo());
-        ATTR("MaxPower", _MaxPower, tr("%1 mA").arg(_MaxPower));
-        END;
+        UsbHtmlBuilder builder;
+        builder.start(tr("Configuration Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("wTotalLength", _wTotalLength)
+                .attr("bNumInterfaces", _bNumInterfaces)
+                .attr("bConfigurationValue", _bConfigurationValue)
+                .strdesc("iConfiguration", _iConfiguration, _device)
+                .attr("bmAttributes", _bmAttributes, bmAttributesInfo())
+                .attr("MaxPower", _MaxPower, tr("%1 mA").arg(_MaxPower))
+                .end();
         foreach (const auto &extraDesc, _extraDescriptors)
             if (extraDesc->type() != ConfigurationExtraDescriptorType::ASSOCIATION)
-                APPEND(extraDesc);
+                builder.append(extraDesc);
 
-        return html;
+        return builder.build();
     }
 
     void UsbConfigurationDescriptor::addConfigurationExtraDescriptor(UsbConfigurationExtraDescriptor *desc)

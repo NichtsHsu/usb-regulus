@@ -1,5 +1,6 @@
-﻿#include "usbdfudescriptor.h"
+#include "usbdfudescriptor.h"
 #include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
 
@@ -53,17 +54,16 @@ namespace usb {
 
     QString UsbDfuDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("Device Firmware Upgrade Functional Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
-        ATTR("wDetachTimeOut", _wDetachTimeOut, QString("%1 ms").arg(_wDetachTimeOut));
-        ATTR("wTransferSize", _wTransferSize, _wTransferSize);
-        ATTR("bcdDFUVersion", _bcdDFUVersion, "");
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("Device Firmware Upgrade Functional Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
+                .attr("wDetachTimeOut", _wDetachTimeOut, QString("%1 ms").arg(_wDetachTimeOut))
+                .attr("wTransferSize", _wTransferSize)
+                .attr("bcdDFUVersion", _bcdDFUVersion, "")
+                .end()
+                .build();
     }
 
     QString UsbDfuDescriptor::__parseBmAttributes() const
@@ -78,6 +78,6 @@ namespace usb {
         if (BIT(_bmAttributes, 0))
             features.append(tr("Download capable"));
 
-        return features.join(NEWLINE);
+        return features.join(UsbHtmlBuilder::NEWLINE);
     }
 } // namespace usb

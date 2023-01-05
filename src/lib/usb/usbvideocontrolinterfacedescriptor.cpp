@@ -1,4 +1,4 @@
-﻿#include "usbvideocontrolinterfacedescriptor.h"
+#include "usbvideocontrolinterfacedescriptor.h"
 #include "__usbmacro.h"
 
 namespace usb {
@@ -152,20 +152,18 @@ namespace usb {
 
         QString UsbClassSpecificVCInterfaceHeaderDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Class-Specific VC Interface Header Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bcdUVC", _bcdUVC, "");
-            ATTR("wTotalLength", _wTotalLength, _wTotalLength);
-            ATTR("dwClockFrequency", _dwClockFrequency, tr("%1 Hz").arg(_dwClockFrequency));
-            ATTR("bInCollection", _bInCollection, _bInCollection);
+            UsbHtmlBuilder builder;
+            builder.start(tr("Class-Specific VC Interface Header Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bcdUVC", _bcdUVC, "")
+            .attr("wTotalLength", _wTotalLength)
+            .attr("dwClockFrequency", _dwClockFrequency, tr("%1 Hz").arg(_dwClockFrequency))
+            .attr("bInCollection", _bInCollection);
             for (uint8_t i = 1; i <= _bInCollection; ++i)
-                ATTR(QString("baInterfaceNr(%1)").arg(i), baInterfaceNr(i), baInterfaceNr(i));
-            END;
-
-            return html;
+                builder.attr(QString("baInterfaceNr(%1)").arg(i), baInterfaceNr(i));
+            return builder.end().build();
         }
 
         UsbClassSpecificVCInterfaceHeaderDescriptor::UsbClassSpecificVCInterfaceHeaderDescriptor(
@@ -223,12 +221,10 @@ namespace usb {
 
         QString UsbInputTerminalDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Input Terminal Descriptor"));
-            __parseBase(html);
-            END;
-
-            return html;
+            UsbHtmlBuilder builder;
+            builder.start(tr("Input Terminal Descriptor"));
+            __parseBase(builder);
+            return builder.end().build();
         }
 
         UsbInputTerminalDescriptor::UsbInputTerminalDescriptor(
@@ -246,17 +242,17 @@ namespace usb {
             _iTerminal = *(extra + 7);
         }
 
-        void UsbInputTerminalDescriptor::__parseBase(QString &html) const
+        void UsbInputTerminalDescriptor::__parseBase(UsbHtmlBuilder &builder) const
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bTerminalID", _bTerminalID, _bTerminalID);
-            ATTR("wTerminalType", _wTerminalType, strWTerminalType(_wTerminalType));
-            ATTR("bAssocTerminal", _bAssocTerminal, _bAssocTerminal);
-            ATTRSTRDESC("iTerminal", _iTerminal, device);
+            builder.attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bTerminalID", _bTerminalID)
+            .attr("wTerminalType", _wTerminalType, strWTerminalType(_wTerminalType))
+            .attr("bAssocTerminal", _bAssocTerminal)
+            .strdesc("iTerminal", _iTerminal, device);
         }
 
         UsbInputTerminalDescriptor *UsbInputTerminalDescriptor::get(
@@ -325,12 +321,10 @@ namespace usb {
 
         QString UsbOutputTerminalDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Output Terminal Descriptor"));
-            __parseBase(html);
-            END;
-
-            return html;
+            UsbHtmlBuilder builder;
+            builder.start(tr("Output Terminal Descriptor"));
+            __parseBase(builder);
+            return builder.end().build();
         }
 
         UsbOutputTerminalDescriptor::UsbOutputTerminalDescriptor(
@@ -349,18 +343,18 @@ namespace usb {
             _iTerminal = *(extra + 8);
         }
 
-        void UsbOutputTerminalDescriptor::__parseBase(QString &html) const
+        void UsbOutputTerminalDescriptor::__parseBase(UsbHtmlBuilder &builder) const
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bTerminalID", _bTerminalID, _bTerminalID);
-            ATTR("wTerminalType", _wTerminalType, strWTerminalType(_wTerminalType));
-            ATTR("bAssocTerminal", _bAssocTerminal, _bAssocTerminal);
-            ATTR("bSourceID", _bSourceID, _bSourceID);
-            ATTRSTRDESC("iTerminal", _iTerminal, device);
+            builder.attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bTerminalID", _bTerminalID)
+            .attr("wTerminalType", _wTerminalType, strWTerminalType(_wTerminalType))
+            .attr("bAssocTerminal", _bAssocTerminal)
+            .attr("bSourceID", _bSourceID)
+            .strdesc("iTerminal", _iTerminal, device);
         }
 
         UsbOutputTerminalDescriptor *UsbOutputTerminalDescriptor::get(
@@ -409,17 +403,16 @@ namespace usb {
 
         QString UsbCameraTerminalDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Camera Terminal Descriptor"));
-            __parseBase(html);
-            ATTR("wObjectiveFocalLengthMin", _wObjectiveFocalLengthMin, _wObjectiveFocalLengthMin);
-            ATTR("wObjectiveFocalLengthMax", _wObjectiveFocalLengthMax, _wObjectiveFocalLengthMax);
-            ATTR("wOcularFocalLength", _wOcularFocalLength, _wOcularFocalLength);
-            ATTR("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
-            ATTRCUSTOM("bmControls", QString("0x") + _bmControls.toHex(), __parseBmControls());
-            END;
-
-            return html;
+            UsbHtmlBuilder builder;
+            builder.start(tr("Camera Terminal Descriptor"));
+            __parseBase(builder);
+            return builder.attr("wObjectiveFocalLengthMin", _wObjectiveFocalLengthMin)
+            .attr("wObjectiveFocalLengthMax", _wObjectiveFocalLengthMax)
+            .attr("wOcularFocalLength", _wOcularFocalLength)
+            .attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize))
+            .attr("bmControls", QString("0x") + _bmControls.toHex(), __parseBmControls())
+            .end()
+            .build();
         }
 
         UsbCameraTerminalDescriptor::UsbCameraTerminalDescriptor(
@@ -481,7 +474,7 @@ namespace usb {
             if (BIT(_bmControls[2], 5))
                 supports.append(tr("Region of Interest"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbSelectorUnitDescriptor::bLength() const
@@ -530,19 +523,18 @@ namespace usb {
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            QString html;
-            START(tr("Selector Unit Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bUnitID", _bUnitID, _bUnitID);
-            ATTR("bNrInPins", _bNrInPins, _bNrInPins);
+            UsbHtmlBuilder builder;
+            builder.start(tr("Selector Unit Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bUnitID", _bUnitID)
+            .attr("bNrInPins", _bNrInPins);
             for (uint8_t i = 1; i <= _bNrInPins; ++i)
-                ATTR(QString("baSourceID(%1)").arg(i), baSourceID(i), baSourceID(i));
-            ATTRSTRDESC("iSelector", _iSelector, device);
-            END;
-
-            return html;
+                builder.attr(QString("baSourceID(%1)").arg(i), baSourceID(i));
+            return builder.strdesc("iSelector", _iSelector, device)
+            .end()
+            .build();
         }
 
         UsbSelectorUnitDescriptor::UsbSelectorUnitDescriptor(
@@ -616,21 +608,20 @@ namespace usb {
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            QString html;
-            START(tr("Processing Unit Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bUnitID", _bUnitID, _bUnitID);
-            ATTR("bSourceID", _bSourceID, _bSourceID);
-            ATTR("wMaxMultiplier", _wMaxMultiplier, QString("%1 x 100").arg(_wMaxMultiplier));
-            ATTR("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
-            ATTRCUSTOM("bmControls", QString("0x") + _bmControls.toHex(), __parseBmControls());
-            ATTRSTRDESC("iProcessing", _iProcessing, device);
-            ATTR("bmVideoStandards", _bmVideoStandards, __parseBmVideoStandards());
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+            .start(tr("Processing Unit Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bUnitID", _bUnitID)
+            .attr("bSourceID", _bSourceID)
+            .attr("wMaxMultiplier", _wMaxMultiplier, QString("%1 x 100").arg(_wMaxMultiplier))
+            .attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize))
+            .attr("bmControls", QString("0x") + _bmControls.toHex(), __parseBmControls())
+            .strdesc("iProcessing", _iProcessing, device)
+            .attr("bmVideoStandards", _bmVideoStandards, __parseBmVideoStandards())
+            .end()
+            .build();
         }
 
         UsbProcessingUnitDescriptor::UsbProcessingUnitDescriptor(
@@ -695,7 +686,7 @@ namespace usb {
             if (BIT(_bmControls[2], 2))
                 supports.append(tr("Contrast, Auto"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbProcessingUnitDescriptor::__parseBmVideoStandards() const
@@ -714,7 +705,7 @@ namespace usb {
             if (BIT(_bmVideoStandards, 5))
                 supports.append(tr("PAL - 525/60"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbExtensionUnitDescriptor::bLength() const
@@ -783,23 +774,22 @@ namespace usb {
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            QString html;
-            START(tr("Extension Unit Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bUnitID", _bUnitID, _bUnitID);
-            ATTRTEXT("guidExtensionCode", hexUuid(_guidExtensionCode));
-            ATTR("bNumControls", _bNumControls, _bNumControls);
-            ATTR("bNrInPins", _bNrInPins, _bNrInPins);
+            UsbHtmlBuilder builder;
+            builder.start(tr("Extension Unit Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bUnitID", _bUnitID)
+            .attr("guidExtensionCode", "", hexUuid(_guidExtensionCode))
+            .attr("bNumControls", _bNumControls)
+            .attr("bNrInPins", _bNrInPins);
             for (uint8_t i = 1; i <= _bNrInPins; ++i)
-                ATTR(QString("baSourceID(%1)").arg(i), baSourceID(i), baSourceID(i));
-            ATTR("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
-            ATTRCUSTOM("bmControls", QString("0x") + _bmControls.toHex(), "");
-            ATTRSTRDESC("iExtension", _iExtension, device);
-            END;
-
-            return html;
+                builder.attr(QString("baSourceID(%1)").arg(i), baSourceID(i));
+            return builder.attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize))
+            .attr("bmControls", QString("0x") + _bmControls.toHex(), "")
+            .strdesc("iExtension", _iExtension, device)
+            .end()
+            .build();
         }
 
         UsbExtensionUnitDescriptor::UsbExtensionUnitDescriptor(
@@ -876,21 +866,20 @@ namespace usb {
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            QString html;
-            START(tr("Encoding Unit Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bUnitID", _bUnitID, _bUnitID);
-            ATTR("bSourceID", _bSourceID, _bSourceID);
-            ATTRSTRDESC("iEncoding", _iEncoding, device);
-            ATTR("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
-            ATTRCUSTOM("bmControls", QString("0x") + _bmControls.toHex(), __parseBmControls(_bmControls));
-            ATTRCUSTOM("bmControlsRuntime", QString("0x") + _bmControlsRuntime.toHex(),
-                       __parseBmControls(_bmControlsRuntime));
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+            .start(tr("Encoding Unit Descriptor"))
+            .attr("bLength", _bLength)
+            .attr("bDescriptorType", _bDescriptorType)
+            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+            .attr("bUnitID", _bUnitID)
+            .attr("bSourceID", _bSourceID)
+            .strdesc("iEncoding", _iEncoding, device)
+            .attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize))
+            .attr("bmControls", QString("0x") + _bmControls.toHex(), __parseBmControls(_bmControls))
+            .attr("bmControlsRuntime", QString("0x") + _bmControlsRuntime.toHex(),
+                       __parseBmControls(_bmControlsRuntime))
+            .end()
+            .build();
         }
 
         UsbEncodingUnitDescriptor::UsbEncodingUnitDescriptor(
@@ -958,7 +947,7 @@ namespace usb {
             if (BIT(bmControls[2], 3))
                 supports.append(tr("Error Resiliency"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
     } // namespace uvc
 } // namespace usb

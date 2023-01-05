@@ -1,5 +1,6 @@
-﻿#include "usbotgdescriptor.h"
+#include "usbotgdescriptor.h"
 #include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     UsbOtgDescriptor::UsbOtgDescriptor(UsbConfigurationDescriptor *configDesc):
@@ -28,7 +29,7 @@ namespace usb {
         if (BIT(_bmAttributes, 3))
             features.append(tr("RSP support"));
 
-        return features.join(NEWLINE);
+        return features.join(UsbHtmlBuilder::NEWLINE);
     }
 
     uint16_t UsbOtgDescriptor::bcdOTG() const
@@ -58,14 +59,13 @@ namespace usb {
 
     QString UsbOtgDescriptor::infomationToHtml() const
     {
-        QString html;
-        START(tr("OTG Descriptor"));
-        ATTR("bLength", _bLength, _bLength);
-        ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-        ATTR("bmAttributes", _bmAttributes, __parseBmAttributes());
-        ATTR("bcdOTG", _bcdOTG, "");
-        END;
-
-        return html;
+        return UsbHtmlBuilder()
+                .start(tr("OTG Descriptor"))
+                .attr("bLength", _bLength)
+                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
+                .attr("bcdOTG", _bcdOTG, "")
+                .end()
+                .build();
     }
 } // namespace usb

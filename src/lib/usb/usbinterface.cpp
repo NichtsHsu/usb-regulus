@@ -1,6 +1,7 @@
-﻿#include "usbinterface.h"
+#include "usbinterface.h"
 #include "usbhost.h"
 #include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     UsbInterface::UsbInterface(const libusb_interface *interface, UsbConfigurationDescriptor *parent) : QObject(parent),
@@ -72,15 +73,14 @@ namespace usb {
 
     QString UsbInterface::infomationToHtml() const
     {
-        QString html;
-        /* Regenerate it for language support. */
-        INTERFACE;
-        START(tr("Interface Informations"));
-        ATTRTEXT(tr("Number of altsettings"), QString::number(_numAltsetting));
-        ATTRTEXT(tr("Current altsetting"), QString::number(_currentAltsetting));
-        END;
-        APPEND(currentInterfaceDescriptor());
-        return html;
+        return UsbHtmlBuilder()
+                .title(_displayName)
+                .start(tr("Interface Informations"))
+                .attr(tr("Number of altsettings"), "", QString::number(_numAltsetting))
+                .attr(tr("Current altsetting"), "", QString::number(_currentAltsetting))
+                .end()
+                .append(currentInterfaceDescriptor())
+                .build();
     }
 
     int UsbInterface::currentAltsetting() const
@@ -120,16 +120,12 @@ namespace usb {
                 LOGD(tr("Successfully claim the interface."));
             else
                 LOGE(tr("Failed to claim interface \"%1\" of device \"%2\" (%3).")
-                     .arg(_displayName)
-                     .arg(device->displayName())
-                     .arg(usb_error_name(ret)));
+                     .arg(_displayName, device->displayName(), usb_error_name(ret)));
         }
 
         ++_claimCount;
         LOGD(tr("Claim the interface \"%1\" of device \"%2\" with counts %3.")
-             .arg(_displayName)
-             .arg(device->displayName())
-             .arg(_claimCount));
+             .arg(_displayName, device->displayName()).arg(_claimCount));
         return ret;
     }
 
@@ -141,8 +137,7 @@ namespace usb {
         if (!_claimCount)
         {
             LOGD(tr("unexpectedly release the interface \"%1\" of device \"%2\".")
-                 .arg(_displayName)
-                 .arg(device->displayName()));
+                 .arg(_displayName, device->displayName()));
             return;
         }
         --_claimCount;
@@ -162,15 +157,11 @@ namespace usb {
             {
                 /* Just warning */
                 LOGW(tr("Failed to release interface \"%1\" of device \"%2\" (%3), it will be considered already released.")
-                     .arg(_displayName)
-                     .arg(device->displayName())
-                     .arg(usb_error_name(ret)));
+                     .arg(_displayName, device->displayName(), usb_error_name(ret)));
             }
         }
         LOGD(tr("Release the interface \"%1\" of device \"%2\" with counts %3.")
-             .arg(_displayName)
-             .arg(device->displayName())
-             .arg(_claimCount));
+             .arg(_displayName, device->displayName()).arg(_claimCount));
     }
 
     int UsbInterface::setAltsetting(int altsetting)
@@ -198,8 +189,7 @@ namespace usb {
             return ret;
         }
         LOGD(tr("Interface \"%1\" of device \"%2\" set altsetting to %3.")
-             .arg(displayName())
-             .arg(_configurationDescriptor->device()->displayName())
+             .arg(displayName(), _configurationDescriptor->device()->displayName())
              .arg(altsetting));
         _currentAltsetting = altsetting;
         if (_currentAltsetting == 0)

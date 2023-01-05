@@ -1,5 +1,6 @@
 #include "usbdevice.h"
 #include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
     UsbDevice::UsbDevice(libusb_device *device, QObject *parent) :
@@ -37,7 +38,9 @@ namespace usb {
             return;
         }
         _configurationDescriptor = new UsbConfigurationDescriptor(configDesc, this);
-        libusb_free_config_descriptor(configDesc);
+        QTimer::singleShot(5000, this, [configDesc](){
+            libusb_free_config_descriptor(configDesc);
+        });
 
         _speed = UsbSpeed(libusb_get_device_speed(_device));
 
@@ -95,23 +98,20 @@ namespace usb {
 
     QString UsbDevice::infomationToHtml() const
     {
-        QString html;
-        /* Regenerate it for language support. */
-        DEVICE;
-        START(tr("Port Information"));
-        ATTR(tr("Bus Number"), _bus, _bus);
-        ATTR(tr("Port Number"), _port, _port);
-        END;
-        START(tr("Connection Information"));
-        ATTRTEXT(tr("Connection Speed"), usbSpeedToString(_speed));
-        ATTR(tr("Address"), _address, _address);
-        END;
-        APPEND(_deviceDescriptor);
-        APPEND(_configurationDescriptor);
-        if (_bosDescriptor)
-            APPEND(_bosDescriptor);
-
-        return html;
+        return UsbHtmlBuilder()
+                .title(_deviceDescriptor->description())
+                .start(tr("Port Information"))
+                .attr(tr("Bus Number"), _bus)
+                .attr(tr("Port Number"), _port)
+                .end()
+                .start(tr("Connection Information"))
+                .attr(tr("Connection Speed"), "", usbSpeedToString(_speed))
+                .attr(tr("Address"), _address)
+                .end()
+                .append(_deviceDescriptor)
+                .append(_configurationDescriptor)
+                .append(_bosDescriptor)
+                .build();
     }
 
     int UsbDevice::controlTransfer(uint8_t bmRequestType,

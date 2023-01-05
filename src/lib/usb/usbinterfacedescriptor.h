@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB Interface Descriptor
+/*! C++ class wrapper of USB Interface Descriptor
 
  * Copyright (C) 2022 Nichts Hsu
 
@@ -29,8 +29,6 @@ namespace usb {
     class UsbInterfaceAssociationDescriptor;
     class UsbHidDescriptor;
 }
-
-#include "log/logger.h"
 
 namespace usb {
 

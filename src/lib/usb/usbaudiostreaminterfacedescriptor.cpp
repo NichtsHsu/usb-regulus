@@ -1,6 +1,7 @@
 #include "usbaudiostreaminterfacedescriptor.h"
 #include "usbaudiocontrolinterfacedescriptor.h"
 #include "__usbmacro.h"
+#include "usbhtmlbuilder.h"
 
 namespace usb {
 
@@ -129,17 +130,16 @@ namespace usb {
 
         QString UsbClassSpecificASInterfaceDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Class-Specific AS Interface Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bTerminalLink", _bTerminalLink, _bTerminalLink);
-            ATTR("bDelay", _bDelay, _bDelay);
-            ATTR("wFormatTag", _wFormatTag, strWFormatTag(_wFormatTag));
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("Class-Specific AS Interface Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bTerminalLink", _bTerminalLink)
+                    .attr("bDelay", _bDelay)
+                    .attr("wFormatTag", _wFormatTag, strWFormatTag(_wFormatTag))
+                    .end()
+                    .build();
         }
 
         UsbClassSpecificASInterfaceDescriptor::UsbClassSpecificASInterfaceDescriptor(
@@ -289,31 +289,31 @@ namespace usb {
 
         QString UsbTypeIFormatTypeDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Type I Format Type Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
-            ATTR("bNrChannels", _bNrChannels, _bNrChannels);
-            ATTR("bSubframeSize", _bSubframeSize, tr("%1 byte(s)").arg(_bSubframeSize));
-            ATTR("bBitResolution", _bBitResolution, _bBitResolution);
-            ATTR("bSamFreqType", _bSamFreqType, _bSamFreqType ?
-                     tr("%1 discrete sampling frequencies") :
-                     tr("Continuous sampling frequency"));
+            UsbHtmlBuilder builder = UsbHtmlBuilder();
+            builder.start(tr("Type I Format Type Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatType", _bFormatType, strBFormatType(_bFormatType))
+                    .attr("bNrChannels", _bNrChannels)
+                    .attr("bSubframeSize", _bSubframeSize, tr("%1 byte(s)").arg(_bSubframeSize))
+                    .attr("bBitResolution", _bBitResolution)
+                    .attr("bSamFreqType", _bSamFreqType, _bSamFreqType ?
+                              tr("%1 discrete sampling frequencies") :
+                              tr("Continuous sampling frequency"));
+
             if (_bSamFreqType)
             {
                 for (uint8_t i = 1; i <= _bSamFreqType; ++i)
-                    ATTRCUSTOM(QString("tSamFreq[%1]").arg(i), QString("0x") + tSamFreq(i).toHex(), "");
+                    builder.attr(QString("tSamFreq[%1]").arg(i), QString("0x") + tSamFreq(i).toHex(), "");
             }
             else
             {
-                ATTRCUSTOM("tLowerSamFreq", QString("0x") + tLowerSamFreq().toHex(), "");
-                ATTRCUSTOM("tUpperSamFreq", QString("0x") + tUpperSamFreq().toHex(), "");
+                builder.attr("tLowerSamFreq", QString("0x") + tLowerSamFreq().toHex(), "");
+                builder.attr("tUpperSamFreq", QString("0x") + tUpperSamFreq().toHex(), "");
             }
-            END;
 
-            return html;
+            return builder.end().build();
         }
 
         UsbTypeIFormatTypeDescriptor::UsbTypeIFormatTypeDescriptor(
@@ -423,30 +423,30 @@ namespace usb {
 
         QString UsbTypeIIFormatTypeDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Type II Format Type Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
-            ATTR("wMaxBitRate", _wMaxBitRate, QString("%1 kb/s").arg(_wMaxBitRate));
-            ATTR("wSamplesPerFrame", _wSamplesPerFrame, _wSamplesPerFrame);
-            ATTR("bSamFreqType", _bSamFreqType, _bSamFreqType ?
-                     tr("%1 discrete sampling frequencies") :
-                     tr("Continuous sampling frequency"));
+            UsbHtmlBuilder builder = UsbHtmlBuilder();
+            builder.start(tr("Type II Format Type Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatType", _bFormatType, strBFormatType(_bFormatType))
+                    .attr("wMaxBitRate", _wMaxBitRate, QString("%1 kb/s").arg(_wMaxBitRate))
+                    .attr("wSamplesPerFrame", _wSamplesPerFrame)
+                    .attr("bSamFreqType", _bSamFreqType, _bSamFreqType ?
+                              tr("%1 discrete sampling frequencies") :
+                              tr("Continuous sampling frequency"));
+
             if (_bSamFreqType)
             {
                 for (uint8_t i = 1; i <= _bSamFreqType; ++i)
-                    ATTRCUSTOM(QString("tSamFreq[%1]").arg(i), QString("0x") + tSamFreq(i).toHex(), "");
+                    builder.attr(QString("tSamFreq[%1]").arg(i), QString("0x") + tSamFreq(i).toHex(), "");
             }
             else
             {
-                ATTRCUSTOM("tLowerSamFreq", QString("0x") + tLowerSamFreq().toHex(), "");
-                ATTRCUSTOM("tUpperSamFreq", QString("0x") + tUpperSamFreq().toHex(), "");
+                builder.attr("tLowerSamFreq", QString("0x") + tLowerSamFreq().toHex(), "");
+                builder.attr("tUpperSamFreq", QString("0x") + tUpperSamFreq().toHex(), "");
             }
-            END;
 
-            return html;
+            return builder.end().build();
         }
 
         UsbTypeIIFormatTypeDescriptor::UsbTypeIIFormatTypeDescriptor(
@@ -560,31 +560,31 @@ namespace usb {
 
         QString UsbTypeIIIFormatTypeDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Type III Format Type Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
-            ATTR("bNrChannels", _bNrChannels, _bNrChannels);
-            ATTR("bSubframeSize", _bSubframeSize, tr("%1 byte(s)").arg(_bSubframeSize));
-            ATTR("bBitResolution", _bBitResolution, _bBitResolution);
-            ATTR("bSamFreqType", _bSamFreqType, _bSamFreqType ?
-                     tr("%1 discrete sampling frequencies") :
-                     tr("Continuous sampling frequency"));
+            UsbHtmlBuilder builder = UsbHtmlBuilder();
+            builder.start(tr("Type III Format Type Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatType", _bFormatType, strBFormatType(_bFormatType))
+                    .attr("bNrChannels", _bNrChannels)
+                    .attr("bSubframeSize", _bSubframeSize, tr("%1 byte(s)").arg(_bSubframeSize))
+                    .attr("bBitResolution", _bBitResolution)
+                    .attr("bSamFreqType", _bSamFreqType, _bSamFreqType ?
+                              tr("%1 discrete sampling frequencies") :
+                              tr("Continuous sampling frequency"));
+
             if (_bSamFreqType)
             {
                 for (uint8_t i = 1; i <= _bSamFreqType; ++i)
-                    ATTRCUSTOM(QString("tSamFreq[%1]").arg(i), QString("0x") + tSamFreq(i).toHex(), "");
+                    builder.attr(QString("tSamFreq[%1]").arg(i), QString("0x") + tSamFreq(i).toHex(), "");
             }
             else
             {
-                ATTRCUSTOM("tLowerSamFreq", QString("0x") + tLowerSamFreq().toHex(), "");
-                ATTRCUSTOM("tUpperSamFreq", QString("0x") + tUpperSamFreq().toHex(), "");
+                builder.attr("tLowerSamFreq", QString("0x") + tLowerSamFreq().toHex(), "");
+                builder.attr("tUpperSamFreq", QString("0x") + tUpperSamFreq().toHex(), "");
             }
-            END;
 
-            return html;
+            return builder.end().build();
         }
 
         UsbTypeIIIFormatTypeDescriptor::UsbTypeIIIFormatTypeDescriptor(
@@ -684,17 +684,16 @@ namespace usb {
 
         QString UsbMpegFormatSpecificDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("MPEG Format-Specific Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("wFormatTag", _wFormatTag, strWFormatTag(_wFormatTag));
-            ATTR("bmMPEGCapabilities", _bmMPEGCapabilities, __parseBmMPEGCapabilities());
-            ATTR("bmMPEGFeatures", _bmMPEGFeatures, __parseBmMPEGFeatures());
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("MPEG Format-Specific Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("wFormatTag", _wFormatTag, strWFormatTag(_wFormatTag))
+                    .attr("bmMPEGCapabilities", _bmMPEGCapabilities, __parseBmMPEGCapabilities())
+                    .attr("bmMPEGFeatures", _bmMPEGFeatures, __parseBmMPEGFeatures())
+                    .end()
+                    .build();
         }
 
         UsbMpegFormatSpecificDescriptor::UsbMpegFormatSpecificDescriptor(
@@ -740,7 +739,7 @@ namespace usb {
                 break;
             }
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbMpegFormatSpecificDescriptor::__parseBmMPEGFeatures() const
@@ -752,21 +751,21 @@ namespace usb {
             switch (CUT(_bmMPEGFeatures, 4, 5))
             {
                 case 0b01:
-                    supports.append(TAB + tr("not scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("not scalable"));
                 break;
                 case 0b10:
-                    supports.append(TAB + tr("scalable"));
-                    supports.append(TAB + tr("common boost"));
-                    supports.append(TAB + tr("cut scaling value"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("common boost"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("cut scaling value"));
                 break;
                 case 0b11:
-                    supports.append(TAB + tr("scalable"));
-                    supports.append(TAB + tr("separate boost"));
-                    supports.append(TAB + tr("cut scaling value"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("separate boost"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("cut scaling value"));
                 break;
             }
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbAc3FormatSpecificDescriptor::bLength() const
@@ -801,17 +800,16 @@ namespace usb {
 
         QString UsbAc3FormatSpecificDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("AC-3 Format-Specific Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("wFormatTag", _wFormatTag, strWFormatTag(_wFormatTag));
-            ATTR("bmBSID", _bmBSID, "");
-            ATTR("bmAC3Features", _bmAC3Features, __parseBmAC3Features());
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("AC-3 Format-Specific Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("wFormatTag", _wFormatTag, strWFormatTag(_wFormatTag))
+                    .attr("bmBSID", _bmBSID, "")
+                    .attr("bmAC3Features", _bmAC3Features, __parseBmAC3Features())
+                    .end()
+                    .build();
         }
 
         UsbAc3FormatSpecificDescriptor::UsbAc3FormatSpecificDescriptor(
@@ -845,21 +843,21 @@ namespace usb {
             switch (CUT(_bmAC3Features, 4, 5))
             {
                 case 0b01:
-                    supports.append(TAB + tr("not scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("not scalable"));
                 break;
                 case 0b10:
-                    supports.append(TAB + tr("scalable"));
-                    supports.append(TAB + tr("common boost"));
-                    supports.append(TAB + tr("cut scaling value"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("common boost"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("cut scaling value"));
                 break;
                 case 0b11:
-                    supports.append(TAB + tr("scalable"));
-                    supports.append(TAB + tr("separate boost"));
-                    supports.append(TAB + tr("cut scaling value"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("separate boost"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("cut scaling value"));
                 break;
             }
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
     } // namespace uac1
 
@@ -1114,21 +1112,20 @@ namespace usb {
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            QString html;
-            START(tr("Class-Specific AS Interface Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bTerminalLink", _bTerminalLink, _bTerminalLink);
-            ATTR("bmControls", _bmControls, __parseBmControls());
-            ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
-            ATTR("bmFormats", _bmFormats, parseBmFormats(_bFormatType, _bmFormats).join(NEWLINE));
-            ATTR("bNrChannels", _bNrChannels, _bNrChannels);
-            ATTR("bmChannelConfig", _bmChannelConfig, parseBmChannelConfig(_bmChannelConfig).join(NEWLINE));
-            ATTRSTRDESC("iChannelNames", _iChannelNames, device);
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("Class-Specific AS Interface Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bTerminalLink", _bTerminalLink)
+                    .attr("bmControls", _bmControls, __parseBmControls())
+                    .attr("bFormatType", _bFormatType, strBFormatType(_bFormatType))
+                    .attr("bmFormats", _bmFormats, parseBmFormats(_bFormatType, _bmFormats).join(UsbHtmlBuilder::NEWLINE))
+                    .attr("bNrChannels", _bNrChannels)
+                    .attr("bmChannelConfig", _bmChannelConfig, parseBmChannelConfig(_bmChannelConfig).join(UsbHtmlBuilder::NEWLINE))
+                    .strdesc("iChannelNames", _iChannelNames, device)
+                    .end()
+                    .build();
         }
 
         UsbClassSpecificASInterfaceDescriptor::UsbClassSpecificASInterfaceDescriptor(
@@ -1171,7 +1168,7 @@ namespace usb {
                 break;
             }
 
-            return controls.join(NEWLINE);
+            return controls.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbFormatTypeDescriptor::strBSideBandProtocol(uint8_t bSideBandProtocol)
@@ -1271,17 +1268,16 @@ namespace usb {
 
         QString UsbTypeIFormatTypeDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Type I Format Type Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
-            ATTR("bSubslotSize", _bSubslotSize, tr("%1 byte(s)").arg(_bSubslotSize));
-            ATTR("bBitResolution", _bBitResolution, _bBitResolution);
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("Type I Format Type Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatType", _bFormatType, strBFormatType(_bFormatType))
+                    .attr("bSubslotSize", _bSubslotSize, tr("%1 byte(s)").arg(_bSubslotSize))
+                    .attr("bBitResolution", _bBitResolution)
+                    .end()
+                    .build();
         }
 
         UsbTypeIFormatTypeDescriptor::UsbTypeIFormatTypeDescriptor(
@@ -1330,17 +1326,16 @@ namespace usb {
 
         QString UsbTypeIIFormatTypeDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Type II Format Type Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
-            ATTR("wMaxBitRate", _wMaxBitRate, QString("%1 kb/s").arg(_wMaxBitRate));
-            ATTR("wSlotsPerFrame", _wSlotsPerFrame, _wSlotsPerFrame);
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("Type II Format Type Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatType", _bFormatType, strBFormatType(_bFormatType))
+                    .attr("wMaxBitRate", _wMaxBitRate, QString("%1 kb/s").arg(_wMaxBitRate))
+                    .attr("wSlotsPerFrame", _wSlotsPerFrame)
+                    .end()
+                    .build();
         }
 
         UsbTypeIIFormatTypeDescriptor::UsbTypeIIFormatTypeDescriptor(
@@ -1389,17 +1384,16 @@ namespace usb {
 
         QString UsbTypeIIIFormatTypeDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Type III Format Type Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
-            ATTR("bSubslotSize", _bSubslotSize, tr("%1 byte(s)").arg(_bSubslotSize));
-            ATTR("bBitResolution", _bBitResolution, _bBitResolution);
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("Type III Format Type Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatType", _bFormatType, strBFormatType(_bFormatType))
+                    .attr("bSubslotSize", _bSubslotSize, tr("%1 byte(s)").arg(_bSubslotSize))
+                    .attr("bBitResolution", _bBitResolution)
+                    .end()
+                    .build();
         }
 
         UsbTypeIIIFormatTypeDescriptor::UsbTypeIIIFormatTypeDescriptor(
@@ -1438,15 +1432,14 @@ namespace usb {
 
         QString UsbTypeIVFormatTypeDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Type IV Format Type Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("Type IV Format Type Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatType", _bFormatType, strBFormatType(_bFormatType))
+                    .end()
+                    .build();
         }
 
         UsbTypeIVFormatTypeDescriptor::UsbTypeIVFormatTypeDescriptor(
@@ -1508,20 +1501,19 @@ namespace usb {
 
         QString UsbExtendedTypeIFormatTypeDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Extended Type I Format Type Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
-            ATTR("bSubslotSize", _bSubslotSize, tr("%1 byte(s)").arg(_bSubslotSize));
-            ATTR("bBitResolution", _bBitResolution, _bBitResolution);
-            ATTR("bHeaderLength", _bHeaderLength, tr("%1 byte(s)").arg(_bHeaderLength));
-            ATTR("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
-            ATTR("bSideBandProtocol", _bSideBandProtocol, strBSideBandProtocol(_bSideBandProtocol));
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("Extended Type I Format Type Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatType", _bFormatType, strBFormatType(_bFormatType))
+                    .attr("bSubslotSize", _bSubslotSize, tr("%1 byte(s)").arg(_bSubslotSize))
+                    .attr("bBitResolution", _bBitResolution)
+                    .attr("bHeaderLength", _bHeaderLength, tr("%1 byte(s)").arg(_bHeaderLength))
+                    .attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize))
+                    .attr("bSideBandProtocol", _bSideBandProtocol, strBSideBandProtocol(_bSideBandProtocol))
+                    .end()
+                    .build();
         }
 
         UsbExtendedTypeIFormatTypeDescriptor::UsbExtendedTypeIFormatTypeDescriptor(
@@ -1583,19 +1575,18 @@ namespace usb {
 
         QString UsbExtendedTypeIIFormatTypeDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Extended Type II Format Type Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
-            ATTR("wMaxBitRate", _wMaxBitRate, QString("%1 kb/s").arg(_wMaxBitRate));
-            ATTR("wSamplesPerFrame", _wSamplesPerFrame, _wSamplesPerFrame);
-            ATTR("bHeaderLength", _bHeaderLength, tr("%1 byte(s)").arg(_bHeaderLength));
-            ATTR("bSideBandProtocol", _bSideBandProtocol, strBSideBandProtocol(_bSideBandProtocol));
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("Extended Type II Format Type Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatType", _bFormatType, strBFormatType(_bFormatType))
+                    .attr("wMaxBitRate", _wMaxBitRate, QString("%1 kb/s").arg(_wMaxBitRate))
+                    .attr("wSamplesPerFrame", _wSamplesPerFrame)
+                    .attr("bHeaderLength", _bHeaderLength, tr("%1 byte(s)").arg(_bHeaderLength))
+                    .attr("bSideBandProtocol", _bSideBandProtocol, strBSideBandProtocol(_bSideBandProtocol))
+                    .end()
+                    .build();
         }
 
         UsbExtendedTypeIIFormatTypeDescriptor::UsbExtendedTypeIIFormatTypeDescriptor(
@@ -1656,19 +1647,18 @@ namespace usb {
 
         QString UsbExtendedTypeIIIFormatTypeDescriptor::infomationToHtml() const
         {
-            QString html;
-            START(tr("Extended Type III Format Type Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bFormatType", _bFormatType, strBFormatType(_bFormatType));
-            ATTR("bSubslotSize", _bSubslotSize, tr("%1 byte(s)").arg(_bSubslotSize));
-            ATTR("bBitResolution", _bBitResolution, _bBitResolution);
-            ATTR("bHeaderLength", _bHeaderLength, tr("%1 byte(s)").arg(_bHeaderLength));
-            ATTR("bSideBandProtocol", _bSideBandProtocol, strBSideBandProtocol(_bSideBandProtocol));
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("Extended Type III Format Type Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatType", _bFormatType, strBFormatType(_bFormatType))
+                    .attr("bSubslotSize", _bSubslotSize, tr("%1 byte(s)").arg(_bSubslotSize))
+                    .attr("bBitResolution", _bBitResolution)
+                    .attr("bHeaderLength", _bHeaderLength, tr("%1 byte(s)").arg(_bHeaderLength))
+                    .attr("bSideBandProtocol", _bSideBandProtocol, strBSideBandProtocol(_bSideBandProtocol))
+                    .end()
+                    .build();
         }
 
         UsbExtendedTypeIIIFormatTypeDescriptor::UsbExtendedTypeIIIFormatTypeDescriptor(
@@ -1766,26 +1756,25 @@ namespace usb {
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            QString html;
-            START(tr("Class-Specific AS Interface Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bEncoderID", _bEncoderID, _bEncoderID);
-            ATTR("bEncoder", _bEncoder, strBEncoder(_bEncoder));
-            ATTR("bmControls", _bmControls, __parseBmControls());
-            ATTRSTRDESC("iParam1", _iParam1, device);
-            ATTRSTRDESC("iParam2", _iParam2, device);
-            ATTRSTRDESC("iParam3", _iParam3, device);
-            ATTRSTRDESC("iParam4", _iParam4, device);
-            ATTRSTRDESC("iParam5", _iParam5, device);
-            ATTRSTRDESC("iParam6", _iParam6, device);
-            ATTRSTRDESC("iParam7", _iParam7, device);
-            ATTRSTRDESC("iParam8", _iParam8, device);
-            ATTRSTRDESC("iEncoder", _iEncoder, device);
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("Class-Specific AS Interface Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bEncoderID", _bEncoderID)
+                    .attr("bEncoder", _bEncoder, strBEncoder(_bEncoder))
+                    .attr("bmControls", _bmControls, __parseBmControls())
+                    .strdesc("iParam1", _iParam1, device)
+                    .strdesc("iParam2", _iParam2, device)
+                    .strdesc("iParam3", _iParam3, device)
+                    .strdesc("iParam4", _iParam4, device)
+                    .strdesc("iParam5", _iParam5, device)
+                    .strdesc("iParam6", _iParam6, device)
+                    .strdesc("iParam7", _iParam7, device)
+                    .strdesc("iParam8", _iParam8, device)
+                    .strdesc("iEncoder", _iEncoder, device)
+                    .end()
+                    .build();
         }
 
         QString UsbEncoderDescriptor::strBEncoder(uint8_t bEncoder)
@@ -1964,7 +1953,7 @@ namespace usb {
                 break;
             }
 
-            return controls.join(NEWLINE);
+            return controls.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbDecoderDescriptor::strBDecoder(uint8_t bDecoder)
@@ -2073,20 +2062,19 @@ namespace usb {
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            QString html;
-            START(tr("MPEG Decoder Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bDecoderID", _bDecoderID, _bDecoderID);
-            ATTR("bDecoder", _bDecoder, strBDecoder(_bDecoder));
-            ATTR("bmMPEGCapabilities", _bmMPEGCapabilities, __parseBmMPEGCapabilities());
-            ATTR("bmMPEGFeatures", _bmMPEGFeatures, __parseBmMPEGFeatures());
-            ATTR("bmControls", _bmControls, __parseBmControls());
-            ATTRSTRDESC("iDecoder", _iDecoder, device);
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("MPEG Decoder Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bDecoderID", _bDecoderID)
+                    .attr("bDecoder", _bDecoder, strBDecoder(_bDecoder))
+                    .attr("bmMPEGCapabilities", _bmMPEGCapabilities, __parseBmMPEGCapabilities())
+                    .attr("bmMPEGFeatures", _bmMPEGFeatures, __parseBmMPEGFeatures())
+                    .attr("bmControls", _bmControls, __parseBmControls())
+                    .strdesc("iDecoder", _iDecoder, device)
+                    .end()
+                    .build();
         }
 
         UsbMpegDecoderDescriptor::UsbMpegDecoderDescriptor(
@@ -2135,7 +2123,7 @@ namespace usb {
                 break;
             }
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbMpegDecoderDescriptor::__parseBmMPEGFeatures() const
@@ -2147,21 +2135,21 @@ namespace usb {
             switch (CUT(_bmMPEGFeatures, 4, 5))
             {
                 case 0b01:
-                    supports.append(TAB + tr("not scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("not scalable"));
                 break;
                 case 0b10:
-                    supports.append(TAB + tr("scalable"));
-                    supports.append(TAB + tr("common boost"));
-                    supports.append(TAB + tr("cut scaling value"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("common boost"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("cut scaling value"));
                 break;
                 case 0b11:
-                    supports.append(TAB + tr("scalable"));
-                    supports.append(TAB + tr("separate boost"));
-                    supports.append(TAB + tr("cut scaling value"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("separate boost"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("cut scaling value"));
                 break;
             }
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbMpegDecoderDescriptor::__parseBmControls() const
@@ -2195,7 +2183,7 @@ namespace usb {
                 break;
             }
 
-            return controls.join(NEWLINE);
+            return controls.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbAc3DecoderDescriptor::bLength() const
@@ -2247,20 +2235,19 @@ namespace usb {
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            QString html;
-            START(tr("AC-3 Decoder Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bDecoderID", _bDecoderID, _bDecoderID);
-            ATTR("bDecoder", _bDecoder, strBDecoder(_bDecoder));
-            ATTR("bmBSID", _bmBSID, "");
-            ATTR("bmAC3Features", _bmAC3Features, __parseBmAC3Features());
-            ATTR("bmControls", _bmControls, __parseBmControls());
-            ATTRSTRDESC("iDecoder", _iDecoder, device);
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("AC-3 Decoder Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bDecoderID", _bDecoderID)
+                    .attr("bDecoder", _bDecoder, strBDecoder(_bDecoder))
+                    .attr("bmBSID", _bmBSID, "")
+                    .attr("bmAC3Features", _bmAC3Features, __parseBmAC3Features())
+                    .attr("bmControls", _bmControls, __parseBmControls())
+                    .strdesc("iDecoder", _iDecoder, device)
+                    .end()
+                    .build();
         }
 
         UsbAc3DecoderDescriptor::UsbAc3DecoderDescriptor(
@@ -2297,21 +2284,21 @@ namespace usb {
             switch (CUT(_bmAC3Features, 4, 5))
             {
                 case 0b01:
-                    supports.append(TAB + tr("not scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("not scalable"));
                 break;
                 case 0b10:
-                    supports.append(TAB + tr("scalable"));
-                    supports.append(TAB + tr("common boost"));
-                    supports.append(TAB + tr("cut scaling value"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("common boost"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("cut scaling value"));
                 break;
                 case 0b11:
-                    supports.append(TAB + tr("scalable"));
-                    supports.append(TAB + tr("separate boost"));
-                    supports.append(TAB + tr("cut scaling value"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("scalable"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("separate boost"));
+                    supports.append(UsbHtmlBuilder::TAB + tr("cut scaling value"));
                 break;
             }
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbAc3DecoderDescriptor::__parseBmControls() const
@@ -2345,7 +2332,7 @@ namespace usb {
                 break;
             }
 
-            return controls.join(NEWLINE);
+            return controls.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbWmaDecoderDescriptor::bLength() const
@@ -2392,19 +2379,18 @@ namespace usb {
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            QString html;
-            START(tr("WMA Decoder Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bDecoderID", _bDecoderID, _bDecoderID);
-            ATTR("bDecoder", _bDecoder, strBDecoder(_bDecoder));
-            ATTR("bmWMAProfile", _bmWMAProfile, __parseBmWMAProfile());
-            ATTR("bmControls", _bmControls, __parseBmControls());
-            ATTRSTRDESC("iDecoder", _iDecoder, device);
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("WMA Decoder Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bDecoderID", _bDecoderID)
+                    .attr("bDecoder", _bDecoder, strBDecoder(_bDecoder))
+                    .attr("bmWMAProfile", _bmWMAProfile, __parseBmWMAProfile())
+                    .attr("bmControls", _bmControls, __parseBmControls())
+                    .strdesc("iDecoder", _iDecoder, device)
+                    .end()
+                    .build();
         }
 
         UsbWmaDecoderDescriptor::UsbWmaDecoderDescriptor(
@@ -2449,7 +2435,7 @@ namespace usb {
             if (BIT(_bmWMAProfile, 10))
                 supports.append(tr("WMA lossless decoding"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbWmaDecoderDescriptor::__parseBmControls() const
@@ -2483,7 +2469,7 @@ namespace usb {
                 break;
             }
 
-            return controls.join(NEWLINE);
+            return controls.join(UsbHtmlBuilder::NEWLINE);
         }
 
         uint8_t UsbDtsDecoderDescriptor::bLength() const
@@ -2530,19 +2516,18 @@ namespace usb {
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
-            QString html;
-            START(tr("DTS Decoder Descriptor"));
-            ATTR("bLength", _bLength, _bLength);
-            ATTR("bDescriptorType", _bDescriptorType, _bDescriptorType);
-            ATTR("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype));
-            ATTR("bDecoderID", _bDecoderID, _bDecoderID);
-            ATTR("bDecoder", _bDecoder, strBDecoder(_bDecoder));
-            ATTR("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
-            ATTR("bmControls", _bmControls, __parseBmControls());
-            ATTRSTRDESC("iDecoder", _iDecoder, device);
-            END;
-
-            return html;
+            return UsbHtmlBuilder()
+                    .start(tr("DTS Decoder Descriptor"))
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bDecoderID", _bDecoderID)
+                    .attr("bDecoder", _bDecoder, strBDecoder(_bDecoder))
+                    .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+                    .attr("bmControls", _bmControls, __parseBmControls())
+                    .strdesc("iDecoder", _iDecoder, device)
+                    .end()
+                    .build();
         }
 
         UsbDtsDecoderDescriptor::UsbDtsDecoderDescriptor(
@@ -2575,7 +2560,7 @@ namespace usb {
             if (BIT(_bmCapabilities, 4))
                 supports.append(tr("DualDecode"));
 
-            return supports.join(NEWLINE);
+            return supports.join(UsbHtmlBuilder::NEWLINE);
         }
 
         QString UsbDtsDecoderDescriptor::__parseBmControls() const
@@ -2609,7 +2594,7 @@ namespace usb {
                 break;
             }
 
-            return controls.join(NEWLINE);
+            return controls.join(UsbHtmlBuilder::NEWLINE);
         }
     } // namespace uac2
 } // namespace usb

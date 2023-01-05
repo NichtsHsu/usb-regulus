@@ -2,7 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++20
 CONFIG += file_copies
 
 # The following define makes your compiler emit warnings if you use
@@ -61,6 +61,7 @@ HEADERS += \
     src/lib/usb/usbendpointwriter.h \
     src/lib/usb/usbhiddescriptor.h \
     src/lib/usb/usbhost.h \
+    src/lib/usb/usbhtmlbuilder.h \
     src/lib/usb/usbhubdescriptor.h \
     src/lib/usb/usbinterface.h \
     src/lib/usb/usbinterfaceassociationdescriptor.h \
@@ -102,6 +103,7 @@ SOURCES += \
     src/lib/usb/usbendpointwriter.cpp \
     src/lib/usb/usbhiddescriptor.cpp \
     src/lib/usb/usbhost.cpp \
+    src/lib/usb/usbhtmlbuilder.cpp \
     src/lib/usb/usbhubdescriptor.cpp \
     src/lib/usb/usbinterface.cpp \
     src/lib/usb/usbinterfaceassociationdescriptor.cpp \
