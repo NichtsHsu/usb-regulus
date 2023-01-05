@@ -1,6 +1,6 @@
 /*! The main window of usb-regulus
 
- * Copyright (C) 2022 Nichts Hsu
+ * Copyright (C) 2022-2023 Nichts Hsu
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
