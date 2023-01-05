@@ -58,7 +58,7 @@ The [release page](https://github.com/NichtsHsu/usb-regulus/releases) provides t
 
 ## Build
 
-## Clone with submodules
+### Clone with submodules
 
 ```bash
 git clone --recurse-submodules https://github.com/NichtsHsu/usb-regulus.git
