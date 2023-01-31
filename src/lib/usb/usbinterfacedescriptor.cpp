@@ -144,7 +144,7 @@ namespace usb {
         UsbHtmlBuilder builder;
         builder.start(tr("Interface Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "INTERFACE")
                 .attr("bInterfaceNumber", _bInterfaceNumber)
                 .attr("bAlternateSetting", _bAlternateSetting)
                 .attr("bNumEndpoints", _bNumEndpoints)

@@ -106,7 +106,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("USB 2.0 Extension Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("bmAttributes", _bmAttributes, supportLPM() ?
                           tr("Link Power Management is supported"):
@@ -186,7 +186,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("USB SuperSpeed Device Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("bmAttributes", _bmAttributes, supportLTM() ?
                           tr("Latency Tolerance Messages is supported"):
@@ -222,7 +222,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("USB Container ID Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("ContainerID ", "", hexUuid(_containerID))
                 .end()
@@ -251,7 +251,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("Wireless USB Device Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
                 .attr("wPHYRates", _wPHYRates,
@@ -358,7 +358,7 @@ namespace usb {
         UsbHtmlBuilder builder;
         builder.start(tr("USB SuperSpeed Plus Device Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
                 .attr("wFunctionalitySupport", _wFunctionalitySupport, __parseFunctionalitySupport());
@@ -473,7 +473,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("USB Platform Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("PlatformCapabilityUUID", "", hexUuid(_platformCapabilityUUID))
                 .attr("CapabilityData", "", QString("0x") + _capabilityData.toHex())
@@ -517,7 +517,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("USB Power Delivery Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
                 .attr("bcdBCVersion", _bcdBCVersion, "")
@@ -617,7 +617,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("USB Battery Info Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .strdesc("iBattery", _iBattery, _bosDescriptor->device())
                 .strdesc("iSerial", _iSerial, _bosDescriptor->device())
@@ -681,7 +681,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("USB PD Consumer Port Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
                 .attr("wMinVoltage", _wMinVoltage, tr("%1 mV").arg(_wMinVoltage * 50))
@@ -745,7 +745,7 @@ namespace usb {
         UsbHtmlBuilder builder;
         builder.start(tr("USB PD Provider Port Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities());
         for (unsigned int i = 0; i <= _bNumOfPDObjects; ++i)
@@ -919,7 +919,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("Precision Time Measurement Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .end()
                 .build();
@@ -955,7 +955,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("Extended Wireless Device Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("wIdleTimeout", _wIdleTimeout, tr("%1 ms").arg(_wIdleTimeout))
                 .attr("wWakeUpLatency", _wWakeUpLatency, tr("%1 ms").arg(_wWakeUpLatency))
@@ -1019,7 +1019,7 @@ namespace usb {
         UsbHtmlBuilder builder;
         builder.start(tr("Configuration Summary Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("bcdVersion", _bcdVersion, "")
                 .attr("bClass", _bClass)
@@ -1133,7 +1133,7 @@ namespace usb {
         UsbHtmlBuilder builder;
         builder.start(tr("Billboard Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .strdesc("iAddtionalInfoURL", _iAddtionalInfoURL, _bosDescriptor->device())
                 .attr("bNumberOfAlternateOrUSB4Modes", _bNumberOfAlternateOrUSB4Modes)
@@ -1247,7 +1247,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("Billboard AUM Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("bIndex", _bIndex)
                 .attr("dwAlternateModeVdo", _dwAlternateModeVdo)
@@ -1284,7 +1284,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("Authentication Capability Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE_CAPABILITY")
                 .attr("bDevCapabilityType", _bDevCapabilityType, strType(_bDevCapabilityType))
                 .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
                 .attr("bcdProtocolVersion", _bcdProtocolVersion, "")

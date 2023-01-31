@@ -97,7 +97,7 @@ namespace usb {
         UsbHtmlBuilder builder;
         builder.start(tr("BOS Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "BOS")
                 .attr("wTotalLength", _wTotalLength)
                 .attr("bNumDeviceCaps", _bNumDeviceCaps)
                 .end();

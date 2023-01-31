@@ -57,7 +57,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("Device Firmware Upgrade Functional Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DFU_FUNCTIONAL")
                 .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
                 .attr("wDetachTimeOut", _wDetachTimeOut, QString("%1 ms").arg(_wDetachTimeOut))
                 .attr("wTransferSize", _wTransferSize)

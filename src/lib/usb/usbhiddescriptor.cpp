@@ -131,7 +131,7 @@ namespace usb {
         UsbHtmlBuilder builder;
         builder.start(tr("HID Descriptor"))
         .attr("bLength", _bLength)
-        .attr("bDescriptorType", _bDescriptorType)
+        .attr("bDescriptorType", _bDescriptorType, "HID")
         .attr("bcdHID", _bcdHID, "")
         .attr("bCountryCode", _bCountryCode, country())
         .attr("bNumDescriptors", _bNumDescriptors)

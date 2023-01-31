@@ -179,7 +179,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("Device Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "DEVICE")
                 .attr("bcdUSB", _bcdUSB, bcdUSBInfo())
                 .attr("bcdDevice", _bcdDevice, "")
                 .attr("bDeviceClass", _bDeviceClass, _deviceClass)

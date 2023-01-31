@@ -197,7 +197,7 @@ namespace usb {
             UsbHtmlBuilder builder;
             builder.start(tr("Class-Specific AC Interface Header Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bcdADC", _bcdADC, "")
                     .attr("wTotalLength", _wTotalLength)
@@ -264,7 +264,7 @@ namespace usb {
             return UsbHtmlBuilder()
                     .start(tr("Input Terminal Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bTerminalID", _bTerminalID)
                     .attr("wTerminalType", _wTerminalType, strTerminalType(_wTerminalType))
@@ -342,7 +342,7 @@ namespace usb {
             return UsbHtmlBuilder()
                     .start(tr("Output Terminal Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bTerminalID", _bTerminalID)
                     .attr("wTerminalType", _wTerminalType, strTerminalType(_wTerminalType))
@@ -405,7 +405,7 @@ namespace usb {
             UsbHtmlBuilder builder;
             builder.start(tr("Mixer Unit Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("bNrInPins", _bNrInPins);
@@ -526,7 +526,7 @@ namespace usb {
             UsbHtmlBuilder builder;
             builder.start(tr("Selector Unit Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("bNrInPins", _bNrInPins);
@@ -608,7 +608,7 @@ namespace usb {
             UsbHtmlBuilder builder;
             builder.start(tr("Feature Unit Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("bSourceID", _bSourceID)
@@ -793,7 +793,7 @@ namespace usb {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
             builder.attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("wProcessType", _wProcessType, strWProcessType(_wProcessType))
@@ -1160,7 +1160,7 @@ namespace usb {
             UsbHtmlBuilder builder;
             builder.start(tr("Extension Unit Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("wExtensionCode", _wExtensionCode)
@@ -1424,7 +1424,7 @@ namespace usb {
             return UsbHtmlBuilder()
                     .start(tr("Class-Specific AC Interface Header Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bcdADC", _bcdADC, "")
                     .attr("bCategory", _bCategory, __strBCategory())
@@ -1543,7 +1543,7 @@ namespace usb {
             return UsbHtmlBuilder()
                     .start(tr("Input Terminal Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bTerminalID", _bTerminalID)
                     .attr("wTerminalType", _wTerminalType, strTerminalType(_wTerminalType))
@@ -1697,7 +1697,7 @@ namespace usb {
             return UsbHtmlBuilder()
                     .start(tr("Output Terminal Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bTerminalID", _bTerminalID)
                     .attr("wTerminalType", _wTerminalType, strTerminalType(_wTerminalType))
@@ -1866,7 +1866,7 @@ namespace usb {
             UsbHtmlBuilder builder;
             builder.start(tr("Mixer Unit Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("bNrInPins", _bNrInPins);
@@ -1989,7 +1989,7 @@ namespace usb {
             UsbHtmlBuilder builder;
             builder.start(tr("Selector Unit Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("bNrInPins", _bNrInPins);
@@ -2086,7 +2086,7 @@ namespace usb {
             UsbHtmlBuilder builder;
             builder.start(tr("Feature Unit Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("bSourceID", _bSourceID);
@@ -2343,7 +2343,7 @@ namespace usb {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
             builder.attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("bSourceID", _bSourceID);
@@ -2872,7 +2872,7 @@ namespace usb {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
             builder.attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("wProcessType", _wProcessType, strWProcessType(_wProcessType))
@@ -3252,7 +3252,7 @@ namespace usb {
             UsbHtmlBuilder builder;
             builder.start(tr("Extension Unit Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("wExtensionCode", _wExtensionCode)
@@ -3381,7 +3381,7 @@ namespace usb {
             return UsbHtmlBuilder()
                     .start(tr("Clock Source Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bClockID", _bClockID)
                     .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
@@ -3512,7 +3512,7 @@ namespace usb {
             UsbHtmlBuilder builder;
             builder.start(tr("Clock Selector Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bClockID", _bClockID)
                     .attr("bNrInPins", _bNrInPins);
@@ -3597,7 +3597,7 @@ namespace usb {
             return UsbHtmlBuilder()
                     .start(tr("Clock Multiplier Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bClockID", _bClockID)
                     .attr("bCSourceID", _bCSourceID)
@@ -3694,7 +3694,7 @@ namespace usb {
             return UsbHtmlBuilder()
                     .start(tr("Sampling Rate Converter Unit Descriptor"))
                     .attr("bLength", _bLength)
-                    .attr("bDescriptorType", _bDescriptorType)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("bSourceID", _bSourceID)

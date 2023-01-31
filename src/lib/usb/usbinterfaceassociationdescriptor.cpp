@@ -86,7 +86,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("Interface Association Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "INTERFACE_ASSOCIATION")
                 .attr("bFirstInterface", _bFirstInterface)
                 .attr("bInterfaceCount", _bInterfaceCount)
                 .attr("bFunctionClass", _bFunctionClass, _functionClass)

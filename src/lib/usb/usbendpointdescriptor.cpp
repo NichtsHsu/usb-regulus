@@ -259,7 +259,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("Endpoint Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "ENDPOINT")
                 .attr("bEndpointAddress", _bEndpointAddress, endpointAddressInfo())
                 .attr("bmAttributes", _bmAttributes, bmAttributesInfo())
                 .attr("wMaxPacketSize", _wMaxPacketSize)

@@ -62,7 +62,7 @@ namespace usb {
         return UsbHtmlBuilder()
                 .start(tr("OTG Descriptor"))
                 .attr("bLength", _bLength)
-                .attr("bDescriptorType", _bDescriptorType)
+                .attr("bDescriptorType", _bDescriptorType, "OTG")
                 .attr("bmAttributes", _bmAttributes, __parseBmAttributes())
                 .attr("bcdOTG", _bcdOTG, "")
                 .end()
