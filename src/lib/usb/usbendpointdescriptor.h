@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB Endpoint Descriptor
+/*! C++ class wrapper of USB Endpoint Descriptor
 
  * Copyright (C) 2022-2023 Nichts Hsu
 
@@ -160,6 +160,7 @@ namespace usb {
         /**
          * @brief bInterval
          * @return interval for polling endpoint for data transfers
+         * @see realInterval()
          */
         uint8_t bInterval() const;
 
@@ -240,6 +241,18 @@ namespace usb {
          * @return string description of endpoint address
          */
         QString endpointAddressInfo() const;
+
+        /**
+         * @brief realInterval
+         * The bInterval values have different units under different USB speed and transfer types.
+         * They are:
+         *      125 µs as unit under High-Speed & SuperSpeed;
+         *      1ms as unit under Low-Speed & Full-Speed;
+         *      2^(bInterval-1)*unit if isochronous transfer under Full/High/Super Speed
+         *          and interrupt transfer under High/Super Speed.
+         * @return the real interval value in µs
+         */
+        qulonglong realInterval() const;
 
         /**
          * @brief interfaceDescriptor
@@ -332,6 +345,8 @@ namespace usb {
 
     private:
         static void LIBUSB_CALL __asyncTransferCallback(struct libusb_transfer *transfer);
+        QString __strWMaxPacketSize() const;
+        QString __strBInterval() const;
 
         uint8_t _bLength, _bDescriptorType, _bEndpointAddress, _bmAttributes, _bInterval, _bRefresh, _bSynchAddress;
         uint16_t _wMaxPacketSize;

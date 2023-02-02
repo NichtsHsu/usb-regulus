@@ -96,6 +96,21 @@ namespace usb {
         return tr("Endpoint %1 %2").arg(_bEndpointAddress & 0x0F).arg(strEndpointDirection(direction()));
     }
 
+    qulonglong UsbEndpointDescriptor::realInterval() const
+    {
+        UsbSpeed speed = interfaceDescriptor()->interface()->configurationDescriptor()->device()->speed();
+        EndpointTransferType type = transferType();
+        qulonglong unit = 1000;
+        if (speed >= UsbSpeed::HIGH)
+            unit = 125;
+
+        if ((type == EndpointTransferType::ISOCHRONOUS && speed >= UsbSpeed::FULL) ||
+            (type == EndpointTransferType::INTERRUPT && speed >= UsbSpeed::HIGH))
+            return qulonglong(pow(2, _bInterval - 1) + 0.5) * unit;
+        else
+            return _bInterval * unit;
+    }
+
     UsbInterfaceDescriptor *UsbEndpointDescriptor::interfaceDescriptor() const
     {
         return _interfaceDescriptor;
@@ -262,8 +277,8 @@ namespace usb {
                 .attr("bDescriptorType", _bDescriptorType, "ENDPOINT")
                 .attr("bEndpointAddress", _bEndpointAddress, endpointAddressInfo())
                 .attr("bmAttributes", _bmAttributes, bmAttributesInfo())
-                .attr("wMaxPacketSize", _wMaxPacketSize)
-                .attr("bInterval", _bInterval)
+                .attr("wMaxPacketSize", _wMaxPacketSize, __strWMaxPacketSize())
+                .attr("bInterval", _bInterval, __strBInterval())
                 .attr("bRefresh", _bRefresh)
                 .attr("bSynchAddress", _bSynchAddress)
                 .end()
@@ -385,6 +400,39 @@ namespace usb {
         delete[] ep->_transfer->buffer;
         libusb_free_transfer(ep->_transfer);
         ep->_transfer = nullptr;
+    }
+
+    QString UsbEndpointDescriptor::__strWMaxPacketSize() const
+    {
+        return tr("%1 byte(s), %2 transaction(s) per microframe")
+                .arg(CUT(_wMaxPacketSize, 0, 10))
+                .arg(CUT(_wMaxPacketSize, 11, 12) + 1);
+    }
+
+    QString UsbEndpointDescriptor::__strBInterval() const
+    {
+        UsbSpeed speed = interfaceDescriptor()->interface()->configurationDescriptor()->device()->speed();
+        EndpointTransferType type = transferType();
+        qulonglong us = realInterval();
+        QString interval;
+
+        if (us % 1000 == 0)
+            interval = tr("%1 ms").arg(us / 1000);
+        else
+            interval = tr("%1 µs").arg(us);
+
+        if (speed == UsbSpeed::HIGH && (type == EndpointTransferType::BULK || type == EndpointTransferType::CONTROL))
+        {
+            if (_bInterval == 0)
+                return tr("never NAKs");
+            else
+                return tr("most 1 NAK each %1").arg(interval);
+        }
+
+        if (_bInterval == 0)
+            return tr("Reserved");
+
+        return interval;
     }
 
     uint16_t UsbEndpointDescriptor::wMaxPacketSize() const

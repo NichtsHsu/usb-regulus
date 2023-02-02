@@ -1723,119 +1723,149 @@
         <translation>端点 %1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="116"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="200"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="131"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="215"/>
         <source>Control transfer should not happen here.</source>
         <translation>控制传输不应该出现在此处。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="122"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="137"/>
         <source>Isochrnous transfer does not support blocking transfer.</source>
         <translation>同步传输不支持阻塞式传输。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="171"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="186"/>
         <source>Isochronous transfer: %1 packets with packet size %2.</source>
         <translation>同步传输：%1 个 %2 大小的数据包。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="260"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="275"/>
         <source>Endpoint Descriptor</source>
         <translation>端点描述符</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="299"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="314"/>
         <source>Asynchronous transfer callback: status %1.</source>
         <translation>异步传输回调：状态 %1。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="314"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="322"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="349"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="329"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="337"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="364"/>
         <source>Isochronous transfer result: %1, %2.</source>
         <translation>同步传输结果：%1，%2。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="400"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="407"/>
+        <source>%1 byte(s), %2 transaction(s) per microframe</source>
+        <translation>%1 字节，每微帧 %2 个事务</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="420"/>
+        <source>%1 ms</source>
+        <translation>%1 毫秒</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="422"/>
+        <source>%1 µs</source>
+        <translation>%1 微秒</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="427"/>
+        <source>never NAKs</source>
+        <translation>绝不 NAKs</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="429"/>
+        <source>most 1 NAK each %1</source>
+        <translation>每 %1最多 1 次 NAK</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="433"/>
+        <source>Reserved</source>
+        <translation>保留值</translation>
+    </message>
+    <message>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="448"/>
         <source>IN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="402"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="450"/>
         <source>OUT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="404"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="422"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="440"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="456"/>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="493"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="452"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="470"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="488"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="504"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="541"/>
         <source>No such item (value: %1) in enumeration.</source>
         <translation>枚举不包含值 %1。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="414"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="462"/>
         <source>Bulk Transfer</source>
         <translation>批量传输</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="416"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="464"/>
         <source>Control Transfer</source>
         <translation>控制传输</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="418"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="466"/>
         <source>Interrupt Transfer</source>
         <translation>中断传输</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="420"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="468"/>
         <source>Isochronous Transfer</source>
         <translation>同步传输</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="432"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="480"/>
         <source>Adaptive</source>
         <translation>自适应</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="434"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="482"/>
         <source>Asynchronous</source>
         <translation>异步</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="436"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="484"/>
         <source>Synchronous</source>
         <translation>同步</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="438"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="486"/>
         <source>No Synchronization</source>
         <translation>无同步</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="450"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="498"/>
         <source>Data Usage</source>
         <translation>数据用途</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="452"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="500"/>
         <source>Feedback Usage</source>
         <translation>反馈用途</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="454"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="502"/>
         <source>Implicit Feedback Usage</source>
         <translation>隐式反馈用途</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="489"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="537"/>
         <source>Periodic Usage</source>
         <translation>定期用途</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="491"/>
+        <location filename="../../src/lib/usb/usbendpointdescriptor.cpp" line="539"/>
         <source>Notification Usage</source>
         <translation>通知用途</translation>
     </message>
@@ -5601,62 +5631,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="453"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="455"/>
         <source>Iris (Relative)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="455"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="457"/>
         <source>Zoom (Absolute)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="457"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="459"/>
         <source>Zoom (Relative)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="459"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="461"/>
         <source>PanTilt (Absolute)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="461"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="463"/>
         <source>PanTilt (Relative)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="463"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="465"/>
         <source>Roll (Absolute)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="465"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="467"/>
         <source>Roll (Relative)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="467"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="472"/>
         <source>Focus, Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="469"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="474"/>
         <source>Privacy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="471"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="476"/>
         <source>Focus, Simple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="473"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="478"/>
         <source>Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="475"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="480"/>
         <source>Region of Interest</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5720,112 +5750,112 @@
 <context>
     <name>usb::uvc::UsbEncodingUnitDescriptor</name>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="870"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="882"/>
         <source>Encoding Unit Descriptor</source>
         <translation>编码单元描述符</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="877"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="889"/>
         <source>%1 byte(s)</source>
         <translation>%1 字节</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="910"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="922"/>
         <source>Select Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="912"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="924"/>
         <source>Profile and Toolset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="914"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="926"/>
         <source>Video Resolution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="916"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="928"/>
         <source>Minimum Frame Interval</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="918"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="930"/>
         <source>Slice Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="920"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="932"/>
         <source>Rate Control Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="922"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="934"/>
         <source>Average Bit Rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="924"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="936"/>
         <source>CPB Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="926"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="938"/>
         <source>Peak Bit Rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="928"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="940"/>
         <source>Quantization Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="930"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="942"/>
         <source>Synchronization and Long-Term Reference Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="932"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="944"/>
         <source>Long-Term Buffer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="934"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="946"/>
         <source>Picture Long-Term Reference</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="936"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="948"/>
         <source>LTR Validation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="938"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="950"/>
         <source>Level IDC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="940"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="952"/>
         <source>SEI Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="942"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="954"/>
         <source>QP Range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="944"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="956"/>
         <source>Priority ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="946"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="958"/>
         <source>Start or Stop Layer/View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="948"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="960"/>
         <source>Error Resiliency</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5833,17 +5863,17 @@
 <context>
     <name>usb::uvc::UsbExtensionUnitDescriptor</name>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="752"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="764"/>
         <source>Index %1 for baSourceID out of range, must be 1~%2.</source>
         <translation>baSourceID 的索引 %1 越界，必须在 1~%2 之间。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="778"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="790"/>
         <source>Extension Unit Descriptor</source>
         <translation>扩展单元描述符</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="788"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="800"/>
         <source>%1 byte(s)</source>
         <translation>%1 字节</translation>
     </message>
@@ -6668,137 +6698,137 @@
 <context>
     <name>usb::uvc::UsbProcessingUnitDescriptor</name>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="612"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="618"/>
         <source>Processing Unit Descriptor</source>
         <translation>处理单元描述符</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="619"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="625"/>
         <source>%1 byte(s)</source>
         <translation>%1 字节</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="651"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="657"/>
         <source>Brightness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="653"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="659"/>
         <source>Contrast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="655"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="661"/>
         <source>Hue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="657"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="663"/>
         <source>Saturation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="659"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="665"/>
         <source>Sharpness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="661"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="667"/>
         <source>Gamma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="663"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="669"/>
         <source>White Balance Temperature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="665"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="671"/>
         <source>White Balance Component</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="667"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="675"/>
         <source>Backlight Compensation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="669"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="677"/>
         <source>Gain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="671"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="679"/>
         <source>Power Line Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="673"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="681"/>
         <source>Hue, Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="675"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="683"/>
         <source>White Balance Temperature, Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="677"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="685"/>
         <source>White Balance Component, Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="679"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="687"/>
         <source>Digital Multiplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="681"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="689"/>
         <source>Digital Multiplier Limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="683"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="694"/>
         <source>Analog Video Standard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="685"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="696"/>
         <source>Analog Video Lock Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="687"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="698"/>
         <source>Contrast, Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="696"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="708"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="698"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="710"/>
         <source>NTSC - 525/60</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="700"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="712"/>
         <source>PAL - 625/50</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="702"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="714"/>
         <source>SECAM - 625/50</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="704"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="716"/>
         <source>NTSC - 625/50</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="706"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="718"/>
         <source>PAL - 525/60</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6806,12 +6836,12 @@
 <context>
     <name>usb::uvc::UsbSelectorUnitDescriptor</name>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="511"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="517"/>
         <source>Index %1 for baSourceID out of range, must be 1~%2.</source>
         <translation>baSourceID 的索引 %1 越界，必须在 1~%2 之间。</translation>
     </message>
     <message>
-        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="527"/>
+        <location filename="../../src/lib/usb/usbvideocontrolinterfacedescriptor.cpp" line="533"/>
         <source>Selector Unit Descriptor</source>
         <translation>选择器单元描述符</translation>
     </message>
@@ -6994,7 +7024,7 @@
     <message>
         <location filename="../../src/lib/usb/usbvideostreaminterfacedescriptor.cpp" line="2531"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">重置</translation>
     </message>
     <message>
         <location filename="../../src/lib/usb/usbvideostreaminterfacedescriptor.cpp" line="2533"/>
