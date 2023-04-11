@@ -134,14 +134,31 @@ void MainWindow::__refreshDeviceList()
 
 void MainWindow::__insertDevice(usb::UsbDevice *device, int index)
 {
+    _insertDeviceNotReady.insert(device);
     /* Delay 1 second for loading string descriptor */
     QTimer::singleShot(1000, this, [this, index, device]() {
-        this->ui->usbDeviceTreeView->insert(index, device);
+        _deviceTreeViewMutex.lock();
+        /* Device may be unplugged before this call. */
+        if (_insertDeviceNotReady.contains(device)) {
+            this->ui->usbDeviceTreeView->insert(index, device);
+            _insertDeviceNotReady.remove(device);
+        }
+        _deviceTreeViewMutex.unlock();
     });
 }
 
 void MainWindow::__removeDevice(usb::UsbDevice *device, int index)
 {
+    _deviceTreeViewMutex.lock();
+    if (_insertDeviceNotReady.contains(device)) {
+        /* This device is not inserted yet, do nothing*/
+        _insertDeviceNotReady.remove(device);
+        _deviceTreeViewMutex.unlock();
+        return;
+    }
+    _deviceTreeViewMutex.unlock();
+
+
     ui->usbDeviceTreeView->remove(index);
     if (_currentDisplayedDeviceItem)
     {

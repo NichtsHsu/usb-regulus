@@ -131,6 +131,8 @@ private:
     QAction *_actionCopy, *_actionCopyAll, *_actionCopyAllHtml, *_actionCopyAllMarkdown;
     Option<UsbDeviceItem *> _currentDisplayedDeviceItem;
     Option<UsbInterfaceItem *> _currentDisplayedInterfaceItem;
+    QSet<usb::UsbDevice *> _insertDeviceNotReady;
+    QMutex _deviceTreeViewMutex;
     PreferenceDialog *_preferenceDialog;
 };
 #endif // MAINWINDOW_H
