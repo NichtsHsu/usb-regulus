@@ -1,7 +1,7 @@
 ﻿# usb-regulus
 
 ![platform](https://img.shields.io/badge/platform-linux-lightgrey)
-![version](https://img.shields.io/badge/version-v0.1.6-blue)
+![version](https://img.shields.io/badge/version-v0.1.7-blue)
 [![license](https://img.shields.io/badge/license-GPLv3-blue)](https://github.com/NichtsHsu/usb-regulus/blob/master/LICENSE)
 [![996.icu](https://img.shields.io/badge/link-996.icu-%23FF4D5B.svg)](https://996.icu)
 
@@ -39,6 +39,7 @@ Alternatively, simply run this application with root privileges.
     * [x] OTG Descriptor
     * [x] Security Descriptor
     * [x] Encryption Type Descriptor
+* [x] Quick Reference for fields of descriptors. Currently UAC descriptors are not covered.
 * [x] Support Endpoint data transfers
 * [x] Display or edit data in hex and ASCII, supported by [QHexEdit](https://github.com/Simsys/qhexedit2)
 * [x] Support set alternative settings of interfaces
