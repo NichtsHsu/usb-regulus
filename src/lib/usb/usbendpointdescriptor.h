@@ -22,6 +22,7 @@
 #include <libusb.h>
 #include <QObject>
 #include <QTimer>
+#include <QtMath>
 
 namespace usb {
     class UsbInterfaceDescriptor;

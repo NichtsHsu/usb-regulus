@@ -35,6 +35,21 @@ UsbHtmlBuilder &UsbHtmlBuilder::attr(const QString &name, const QString &text, c
     return *this;
 }
 
+UsbHtmlBuilder &UsbHtmlBuilder::attr(const QString &name, const char *text, const QString &text2, int index)
+{
+    return attr(name, QString(text), text2, index);
+}
+
+UsbHtmlBuilder &UsbHtmlBuilder::attr(const QString &name, const QString &text, const char *text2, int index)
+{
+    return attr(name, text, QString(text2), index);
+}
+
+UsbHtmlBuilder &UsbHtmlBuilder::attr(const QString &name, const char *text, const char *text2, int index)
+{
+    return attr(name, QString(text), QString(text2), index);
+}
+
 UsbHtmlBuilder &UsbHtmlBuilder::strdesc(const QString &name, size_t strDescIndex, usb::UsbDevice *device, int index)
 {
     if (index < 0)

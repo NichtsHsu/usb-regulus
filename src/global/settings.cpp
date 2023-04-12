@@ -70,13 +70,13 @@ const QString &Settings::theme() const
 }
 
 std::atomic<Settings *> Settings::_instance{nullptr};
-static std::mutex __mutW;
+static QMutex __mutW;
 
 Settings *Settings::instance()
 {
     if (Settings::_instance == nullptr)
     {
-        std::lock_guard<std::mutex> lock{ __mutW };
+        std::lock_guard<QMutex> lock{ __mutW };
         if (Settings::_instance == nullptr)
             Settings::_instance = new Settings;
     }

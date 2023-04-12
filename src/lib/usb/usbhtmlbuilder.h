@@ -94,7 +94,12 @@ public:
     requires std::integral<T>
 #endif
     UsbHtmlBuilder &attr(const QString &name, T value, const QString &text, int index = -1);
+
+    // Compatible with Qt5
     UsbHtmlBuilder &attr(const QString &name, const QString &text, const QString &text2, int index = -1);
+    UsbHtmlBuilder &attr(const QString &name, const char *text, const QString &text2, int index = -1);
+    UsbHtmlBuilder &attr(const QString &name, const QString &text, const char *text2, int index = -1);
+    UsbHtmlBuilder &attr(const QString &name, const char *text, const char *text2, int index = -1);
 
     /**
      * @brief strdesc

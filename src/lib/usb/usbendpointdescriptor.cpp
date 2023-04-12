@@ -242,7 +242,7 @@ namespace usb {
 
         if ((type == EndpointTransferType::ISOCHRONOUS && speed >= UsbSpeed::FULL) ||
             (type == EndpointTransferType::INTERRUPT && speed >= UsbSpeed::HIGH))
-            return qulonglong(pow(2, _bInterval - 1) + 0.5) * unit;
+            return qulonglong(qPow(2, _bInterval - 1) + 0.5) * unit;
         else
             return _bInterval * unit;
     }

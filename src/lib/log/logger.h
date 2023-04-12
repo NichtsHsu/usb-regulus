@@ -26,6 +26,7 @@
 #include <QtGlobal>
 #include <QMutex>
 #include <QMenu>
+#include <mutex>
 
 /**
   * Simplified interfaces for any QObject
@@ -134,7 +135,6 @@ private:
     explicit Logger(const Logger &) = delete;
     Logger &operator=(const Logger &) = delete;
     QString __strLogLevel();
-    friend QGlobalStatic<Logger>;
 
     /**
      * @brief record
