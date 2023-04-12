@@ -23,7 +23,6 @@
 #include <QSettings>
 #include <QWidget>
 #include <atomic>
-#include <mutex>
 
 #include "misc/option.hpp"
 #include "log/logger.h"

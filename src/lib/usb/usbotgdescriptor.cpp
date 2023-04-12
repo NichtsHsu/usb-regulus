@@ -37,6 +37,42 @@ namespace usb {
         return _bcdOTG;
     }
 
+    const QStringList &UsbOtgDescriptor::getFieldNames()
+    {
+        static const QStringList fields = {
+            "bLength",
+            "bDescriptorType",
+            "bmAttributes",
+            "bcdOTG",
+        };
+
+        return fields;
+    }
+
+    QString UsbOtgDescriptor::getFieldInformation(const QString &field)
+    {
+        static const QMap<QString, QString> fieldDescription = {
+            {"bLength", "Size of Descriptor"},
+            {"bDescriptorType", "Descriptor Type: OTG type"},
+            {"bmAttributes", "<p>Attribute Fields.</p>"
+             "<table><tr><td>D7…4:</td><td>Reserved (reset to zero)</td></tr>"
+             "<tr><td>D3:</td><td>RSP support</td></tr>"
+             "<tr><td>D2:</td><td>ADP support</td></tr>"
+             "<tr><td>D1:</td><td>HNP support</td></tr>"
+             "<tr><td>D0:</td><td>SRP support</td></tr></table>"
+            },
+            {"bcdOTG", "This field contains a BCD version "
+             "number that identifies the release of "
+             "the OTG and EH supplement with "
+             "which the device corresponds to."},
+        };
+
+        if (fieldDescription.contains(field))
+            return fieldDescription[field];
+        else
+            return QString();
+    }
+
     uint8_t UsbOtgDescriptor::bmAttributes() const
     {
         return _bmAttributes;
@@ -60,7 +96,7 @@ namespace usb {
     QString UsbOtgDescriptor::infomationToHtml() const
     {
         return UsbHtmlBuilder()
-                .start(tr("OTG Descriptor"))
+                .start(tr("OTG Descriptor"), true)
                 .attr("bLength", _bLength)
                 .attr("bDescriptorType", _bDescriptorType, "OTG")
                 .attr("bmAttributes", _bmAttributes, __parseBmAttributes())

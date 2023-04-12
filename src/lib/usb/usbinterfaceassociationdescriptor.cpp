@@ -41,6 +41,50 @@ namespace usb {
         return _iFunction;
     }
 
+    const QStringList &UsbInterfaceAssociationDescriptor::getFieldNames()
+    {
+        static const QStringList fields = {
+            "bLength",
+            "bDescriptorType",
+            "bFirstInterface",
+            "bInterfaceCount",
+            "bFunctionClass",
+            "bFunctionSubClass",
+            "bFunctionProtocol",
+            "iFunction",
+        };
+
+        return fields;
+    }
+
+    QString UsbInterfaceAssociationDescriptor::getFieldInformation(const QString &field)
+    {
+        static const QMap<QString, QString> fieldDescription = {
+            {"bLength", "Size of Descriptor"},
+            {"bDescriptorType", "Descriptor Type: INTERFACE ASSOCIATION"},
+            {"bFirstInterface", "Interface number of the first interface that is "
+             "associated with this function"},
+            {"bInterfaceCount", "Number of contiguous interfaces that are associated "
+             "with this function"},
+            {"bFunctionClass", "<p>Class code (assigned by USB-IF).</p>"
+            "<p>A value of zero is not allowed in this descriptor.</p>"
+            "<p>If this field is FFH, the function class is vendor-specific.</p>"
+            "<p>All other values are reserved for assignment by the USB-IF.</p>"},
+            {"bFunctionSubClass", "<p>Subclass code (assigned by USB-IF).</p>"
+            "<p>If the <i>bFunctionClass</i> field is not set to FFH, all "
+             "values are reserved for assignment by the USB-IF<p>"},
+            {"bFunctionProtocol", "Protocol code (assigned by USB-IF). These codes are "
+             "qualified by the values of the <i>bFunctionClass</i> and "
+             "<i>bFunctionSubClass</i> fields."},
+            {"iFunction", "Index of string descriptor describing this function"},
+        };
+
+        if (fieldDescription.contains(field))
+            return fieldDescription[field];
+        else
+            return QString();
+    }
+
     uint8_t UsbInterfaceAssociationDescriptor::bFunctionProtocol() const
     {
         return _bFunctionProtocol;
@@ -84,7 +128,7 @@ namespace usb {
     QString UsbInterfaceAssociationDescriptor::infomationToHtml() const
     {
         return UsbHtmlBuilder()
-                .start(tr("Interface Association Descriptor"))
+                .start(tr("Interface Association Descriptor"), true)
                 .attr("bLength", _bLength)
                 .attr("bDescriptorType", _bDescriptorType, "INTERFACE_ASSOCIATION")
                 .attr("bFirstInterface", _bFirstInterface)

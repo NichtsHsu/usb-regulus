@@ -67,8 +67,15 @@ public:
      * Start a attributes section in a HTML table.
      * @param title
      * Title of this section, HTML `<h2> tag.
+     * @param enableQuickReference
+     * Generate quick reference link for fields.
+     * The link format is: "help://127.0.0.1/quickref?desc=${Descriptor Name}&field=${Field Name}".
+     * These links will be handled by FieldQuickReference on usb-regulus.
+     * @param version
+     * Some descriptors (like UAC) behave differently in different version
+     * @see class FieldQuickReference
      */
-    UsbHtmlBuilder &start(const QString &title);
+    UsbHtmlBuilder &start(const QString &title, bool enableQuickReference = false, const QString &specVersion = QString());
 
     /**
      * @brief attr
@@ -81,13 +88,13 @@ public:
 #if __cplusplus >= 202002L
     requires std::integral<T>
 #endif
-    UsbHtmlBuilder &attr(const QString &name, T value);
+    UsbHtmlBuilder &attr(const QString &name, T value, int index = -1);
     template<typename T>
 #if __cplusplus >= 202002L
     requires std::integral<T>
 #endif
-    UsbHtmlBuilder &attr(const QString &name, T value, const QString &text);
-    UsbHtmlBuilder &attr(const QString &name, const QString &text, const QString &text2);
+    UsbHtmlBuilder &attr(const QString &name, T value, const QString &text, int index = -1);
+    UsbHtmlBuilder &attr(const QString &name, const QString &text, const QString &text2, int index = -1);
 
     /**
      * @brief strdesc
@@ -99,7 +106,7 @@ public:
      * @param device
      * USB device that the string descriptor belongs to.
      */
-    UsbHtmlBuilder &strdesc(const QString &name, size_t strDescIndex, usb::UsbDevice *device);
+    UsbHtmlBuilder &strdesc(const QString &name, size_t strDescIndex, usb::UsbDevice *device, int index = -1);
 
     /**
      * @brief end
@@ -130,17 +137,23 @@ public:
     const QString &build() const;
 
 private:
-    QString _html;
+    QString __genUrlInHtml(const QString &field) const;
+    QString _html, _descriptorName;
+    bool _enableQuickReference;
 };
 
 template<typename T>
 #if __cplusplus >= 202002L
 requires std::integral<T>
 #endif
-UsbHtmlBuilder &UsbHtmlBuilder::attr(const QString &name, T value)
+UsbHtmlBuilder &UsbHtmlBuilder::attr(const QString &name, T value, int index)
 {
-    _html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\">0x%2</td><td>%3</td></tr>")
-            .arg(name).arg(value, sizeof(value) * 2, 16, QChar('0')).arg(value);
+    if (index < 0)
+        _html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\">0x%2</td><td>%3</td></tr>")
+                .arg(__genUrlInHtml(name)).arg(value, sizeof(value) * 2, 16, QChar('0')).arg(value);
+    else
+        _html += QString("<tr><td width=\"30%\">%1[%4]</td><td width=\"15%\">0x%2</td><td>%3</td></tr>")
+                .arg(__genUrlInHtml(name)).arg(value, sizeof(value) * 2, 16, QChar('0')).arg(value).arg(index);
     return *this;
 }
 
@@ -148,10 +161,14 @@ template<typename T>
 #if __cplusplus >= 202002L
 requires std::integral<T>
 #endif
-UsbHtmlBuilder &UsbHtmlBuilder::attr(const QString &name, T value, const QString &text)
+UsbHtmlBuilder &UsbHtmlBuilder::attr(const QString &name, T value, const QString &text, int index)
 {
-    _html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\">0x%2</td><td>%3</td></tr>")
-            .arg(name).arg(value, sizeof(value) * 2, 16, QChar('0')).arg(text);
+    if (index < 0)
+        _html += QString("<tr><td width=\"30%\">%1</td><td width=\"15%\">0x%2</td><td>%3</td></tr>")
+                .arg(__genUrlInHtml(name)).arg(value, sizeof(value) * 2, 16, QChar('0')).arg(text);
+    else
+        _html += QString("<tr><td width=\"30%\">%1[%4]</td><td width=\"15%\">0x%2</td><td>%3</td></tr>")
+                .arg(__genUrlInHtml(name)).arg(value, sizeof(value) * 2, 16, QChar('0')).arg(text).arg(index);
     return *this;
 }
 

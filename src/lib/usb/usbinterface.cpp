@@ -88,8 +88,6 @@ namespace usb {
         return _currentAltsetting;
     }
 
-    static std::mutex __mutW;
-
     int UsbInterface::claim()
     {
         if (currentInterfaceDescriptor()->isMouse() && UsbHost::instance()->protectMouse())
@@ -112,7 +110,7 @@ namespace usb {
         }
         int ret = 0;
         UsbDevice *device = _configurationDescriptor->device();
-        std::lock_guard<std::mutex> lock{ __mutW };
+        std::lock_guard<QMutex> lock{ _claimMutex };
         if (_claimCount == 0)
         {
             ret  = libusb_claim_interface(device->handle(),  currentInterfaceDescriptor()->bInterfaceNumber());
@@ -124,7 +122,7 @@ namespace usb {
         }
 
         ++_claimCount;
-        LOGD(tr("Claim the interface \"%1\" of device \"%2\" with counts %3.")
+        LOGD(tr("Claim the interface \"%1\" of device \"%2\" with claim count %3.")
              .arg(_displayName, device->displayName()).arg(_claimCount));
         return ret;
     }
@@ -133,14 +131,17 @@ namespace usb {
     {
         int ret = 0;
         UsbDevice *device = _configurationDescriptor->device();
-        std::lock_guard<std::mutex> lock{ __mutW };
+        std::lock_guard<QMutex> lock{ _claimMutex };
         if (!_claimCount)
         {
-            LOGD(tr("unexpectedly release the interface \"%1\" of device \"%2\".")
+            LOGD(tr("Unexpectedly release the interface \"%1\" of device \"%2\" since "
+                    "the claim count of this interface is already zero.")
                  .arg(_displayName, device->displayName()));
             return;
         }
         --_claimCount;
+        LOGD(tr("Release the interface \"%1\" of device \"%2\" with claim count %3.")
+             .arg(_displayName, device->displayName()).arg(_claimCount));
         if (_claimCount == 0)
         {
             ret = libusb_release_interface(device->handle(), currentInterfaceDescriptor()->bInterfaceNumber());
@@ -160,8 +161,6 @@ namespace usb {
                      .arg(_displayName, device->displayName(), usb_error_name(ret)));
             }
         }
-        LOGD(tr("Release the interface \"%1\" of device \"%2\" with counts %3.")
-             .arg(_displayName, device->displayName()).arg(_claimCount));
     }
 
     int UsbInterface::setAltsetting(int altsetting)
@@ -192,7 +191,7 @@ namespace usb {
              .arg(displayName(), _configurationDescriptor->device()->displayName())
              .arg(altsetting));
         _currentAltsetting = altsetting;
-        if (_currentAltsetting == 0)
+        if (_currentAltsetting == 0 && _selfClaim)
         {
             release();
             _selfClaim = false;

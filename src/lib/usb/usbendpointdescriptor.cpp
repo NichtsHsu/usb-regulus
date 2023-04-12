@@ -61,6 +61,142 @@ namespace usb {
         return _extraLength;
     }
 
+    const QStringList &UsbEndpointDescriptor::getFieldNames()
+    {
+        static const QStringList fields = {
+            "bLength",
+            "bDescriptorType",
+            "bEndpointAddress",
+            "bmAttributes",
+            "wMaxPacketSize",
+            "bInterval",
+            "bRefresh",
+            "bSynchAddress"
+        };
+
+        return fields;
+    }
+
+    QString UsbEndpointDescriptor::getFieldInformation(const QString &field)
+    {
+        static const QMap<QString, QString> fieldDescription = {
+            {"bLength", "Size of this descriptor in bytes"},
+            {"bDescriptorType", "ENDPOINT Descriptor Type"},
+            {"bEndpointAddress", "<p>The address of the endpoint on the device described by this "
+             "descriptor. The address is encoded as follows:</p>"
+             "<table><tr><td>Bit 3...0:</td><td>The endpoint number</td></tr>"
+             "<tr><td>Bit 6...4:</td><td>Reserved, reset to zero</td></tr>"
+             "<tr><td>Bit 7:</td><td><div>Direction, ignored for control endpoints</div>"
+             "<div>0 = OUT endpoint</div><div>1 = IN endpoint</div></td></tr></table>"},
+            {"bmAttributes", "<p>This field describes the endpoint’s attributes when it is "
+             "configured using the <i>bConfigurationValue</i>.</p>"
+             "<table><tr><td>Bits 1..0:</td><td><div>Transfer Type</div>"
+             "<div>00 = Control</div><div>01 = Isochronous</div>"
+             "<div>10 = Bulk</div><div>11 = Interrupt</div></td></tr></table>"
+             "<p>If an interrupt endpoint, bits 5..2 are defined as follows:</p>"
+             "<table><tr><td>Bits 3..2:</td><td>Reserved</td></tr>"
+             "<tr><td>Bits 5..4:</td><td><div>Usage Type</div>"
+             "<div>00 = Periodic</div><div>01 = Notification</div>"
+             "<div>10 = Reserved</div><div>11 = Reserved</div></td></tr></table>"
+             "<p>If isochronous, they are defined as follows:</p>"
+             "<table><tr><td>Bits 3..2:</td><td><div>Synchronization Type</div>"
+             "<div>00 = No Synchronization</div><div>01 = Asynchronous</div>"
+             "<div>10 = Adaptive</div><div>11 = Synchronous</div></td></tr>"
+             "<tr><td>Bits 5..4:</td><td><div>Usage Type</div>"
+             "<div>00 = Data endpoint</div><div>01 = Feedback endpoint</div>"
+             "<div>10 = Implicit feedback Data endpoint</div><div>11 = Reserved</div></td></tr></table>"
+             "<p>If not an isochronous or interrupt endpoint, bits 5..2 are "
+             "reserved and shall be set to zero.</p>"
+             "<p>If not an isochronous or interrupt endpoint, bits 5..2 are "
+             "reserved and shall be set to zero.</p>"
+            },
+            {"wMaxPacketSize","<h3>USB 2.0</h3>"
+             "<p>Maximum packet size this endpoint is capable of "
+             "sending or receiving when this configuration is "
+             "selected.</p>"
+             "<p>For isochronous endpoints, this value is used to "
+             "reserve the bus time in the schedule, required for the "
+             "per-(micro)frame data payloads. The pipe may, on an "
+             "ongoing basis, actually use less bandwidth than that "
+             "reserved. The device reports, if necessary, the actual "
+             "bandwidth used via its normal, non-USB defined "
+             "mechanisms.</p>"
+             "<p>For all endpoints, bits 10..0 specify the maximum "
+             "packet size (in bytes).</p>"
+             "<p>For high-speed isochronous and interrupt endpoints:</p>"
+             "<p>Bits 12..11 specify the number of additional transaction "
+             "opportunities per microframe:</p>"
+             "<table><tr><td>00 = None (1 transaction per microframe)</td></tr>"
+             "<tr><td>01 = 1 additional (2 per microframe)</td></tr>"
+             "<tr><td>10 = 2 additional (3 per microframe)</td></tr>"
+             "<tr><td>11 = Reserved</td></tr></table>"
+             "<p>Bits 15..13 are reserved and must be set to zero.</p>"
+             "<p>Refer to Chapter 5 for more information.</p>"
+             "<h3>USB 3.2</h3>"
+             "<p>Maximum packet size this endpoint is capable of sending or "
+             "receiving when this configuration is selected.</p>"
+             "<p>For control endpoints this field shall be set to 512. For bulk "
+             "endpoint types this field shall be set to 1024.</p>"
+             "<p>For interrupt and isochronous endpoints this field shall be "
+             "set to 1024 if this endpoint defines a value in the bMaxBurst"
+             "field greater than zero. If the value in the bMaxBurst field is "
+             "set to zero then this field can have any value from 0 to 1024 "
+             "for an isochronous endpoint and 1 to 1024 for an interrupt "
+             "endpoint.</p>"},
+            {"bInterval", "<h3>USB 2.0</h3>"
+             "<p>Interval for polling endpoint for data transfers. "
+             "Expressed in frames or microframes depending on the "
+             "device operating speed (i.e., either 1 millisecond or "
+             "125 µs units).</p>"
+             "<p>For full-/high-speed isochronous endpoints, this value "
+             "must be in the range from 1 to 16. The <i>bInterval</i> value "
+             "is used as the exponent for a 2<sup>bInterval-1</sup> value; e.g., a "
+             "<i>bInterval</i> of 4 means a period of 8 (2<sup>4-1</sup>).</p>"
+             "<p>For full-/low-speed interrupt endpoints, the value of "
+             "this field may be from 1 to 255.</p>"
+             "<p>For high-speed interrupt endpoints, the bInterval value "
+             "is used as the exponent for a 2<sup>bInterval-1</sup> value; e.g., a "
+             "<i>bInterval</i> of 4 means a period of 8 (2<sup>4-1</sup>). This value "
+             "must be from 1 to 16.</p>"
+             "<p>For high-speed bulk/control OUT endpoints, the "
+             "<i>bInterval</i> must specify the maximum NAK rate of the "
+             "endpoint. A value of 0 indicates the endpoint never "
+             "NAKs. Other values indicate at most 1 NAK each "
+             "<i>bInterval</i> number of microframes. This value must be "
+             "in the range from 0 to 255.</p>"
+             "<p>See Chapter 5 description of periods for more detail.</p>"
+             "<h3>USB 3.2</h3>"
+             "<p>Interval for servicing the endpoint for data transfers. "
+             "Expressed in 125 µs units.</p>"
+             "<p>For Enhanced SuperSpeed isochronous and interrupt "
+             "endpoints, this value shall be in the range from 1 to 16. "
+             "However, the valid ranges are 8 to 16 for Notification type "
+             "Interrupt endpoints. The bInterval value is used as the "
+             "exponent for a 2<sup>(bInterval-1)</sup> value; e.g., a bInterval of 4 means a "
+             "period of 8 (2<sup>(4-1)</sup> → 23 → 8).</p>"
+             "<p>This field is reserved and shall not be used for Enhanced "
+             "SuperSpeed bulk or control endpoints.</p>"},
+            {"bRefresh", "<p>For AudioStream Isochronous Synch Endpoint Descriptor</p>"
+             "<p>This field indicates the rate at which an "
+             "isochronous synchronization pipe "
+             "provides new synchronization feedback "
+             "data. This rate must be a power of 2, "
+             "therefore only the power is reported back "
+             "and the range of this field is from 1 "
+             "(2 ms) to 9 (512 ms).<p>"},
+            {"bSynchAddress", "<p>For AudioStream Isochronous Audio Data Endpoint Descriptor</p>"
+             "<p>The address of the endpoint used to "
+             "communicate synchronization information "
+             "if required by this endpoint. Reset to zero "
+             "if no synchronization pipe is used.</p>"}
+        };
+
+        if (fieldDescription.contains(field))
+            return fieldDescription[field];
+        else
+            return QString();
+    }
+
     EndpointDirection UsbEndpointDescriptor::direction() const
     {
         return EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN));
@@ -271,18 +407,21 @@ namespace usb {
 
     QString UsbEndpointDescriptor::infomationToHtml() const
     {
-        return UsbHtmlBuilder()
-                .start(tr("Endpoint Descriptor"))
+        UsbHtmlBuilder builder;
+        builder.start(tr("Endpoint Descriptor"), true)
                 .attr("bLength", _bLength)
                 .attr("bDescriptorType", _bDescriptorType, "ENDPOINT")
                 .attr("bEndpointAddress", _bEndpointAddress, endpointAddressInfo())
                 .attr("bmAttributes", _bmAttributes, bmAttributesInfo())
                 .attr("wMaxPacketSize", _wMaxPacketSize, __strWMaxPacketSize())
-                .attr("bInterval", _bInterval, __strBInterval())
-                .attr("bRefresh", _bRefresh)
-                .attr("bSynchAddress", _bSynchAddress)
-                .end()
-                .build();
+                .attr("bInterval", _bInterval, __strBInterval());
+
+        // Only for AudioStream Interface
+        if (_interfaceDescriptor->bInterfaceClass() == 0x01 && _interfaceDescriptor->bInterfaceSubClass() == 0x02)
+            builder.attr("bRefresh", _bRefresh)
+                    .attr("bSynchAddress", _bSynchAddress);
+
+        return builder.end().build();
     }
 
     void UsbEndpointDescriptor::__requestExtraDescriptor()

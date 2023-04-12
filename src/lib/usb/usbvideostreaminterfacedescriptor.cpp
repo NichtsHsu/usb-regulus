@@ -224,33 +224,122 @@ namespace usb {
             }
         }
 
+        const QStringList &UsbInputHeaderDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bNumFormats",
+                "wTotalLength",
+                "bEndpointAddress",
+                "bmInfo",
+                "bTerminalLink",
+                "bStillCaptureMethod",
+                "bTriggerSupport",
+                "bTriggerUsage",
+                "bControlSize",
+                "bmaControls",
+            };
+
+            return fields;
+        }
+
+        QString UsbInputHeaderDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_INPUT_HEADER descriptor subtype"},
+                {"bNumFormats", "Number of video payload Format "
+                 "descriptors following for this interface"
+                 "(excluding video Frame descriptors)."},
+                {"wTotalLength", "Total number of bytes returned for the "
+                 "class-specific VideoStreaming interface "
+                 "descriptors including this header descriptor."},
+                {"bEndpointAddress", "<p>The address of the isochronous or bulk "
+                 "endpoint used for video data. The address "
+                 "is encoded as follows:</p>"
+                 "<table><tr><td>D7:</td><td><p>Direction</p><p>1 = IN endpoint</p></td></tr>"
+                 "<tr><td>D6..4:</td><td>Reserved, set to zero.</td></tr>"
+                 "<tr><td>D3..0:</td><td>The endpoint number, determined by the designer.</td></tr></table>"},
+                {"bmInfo", "<p>Indicates the capabilities of this VideoStreaming interface:</p>"
+                 "<table><tr><td>D0:</td><td>Dynamic Format Change supported</td></tr>"
+                 "<tr><td>D7..1:</td><td>Reserved, set to zero.</td></tr></table>"},
+                {"bTerminalLink", "The terminal ID of the Output Terminal to "
+                 "which the video endpoint of this interface is connected."},
+                {"bStillCaptureMethod", "<p>Method of still image capture supported as "
+                 "described in section 2.4.2.4, \"Still Image Capture\":</p>"
+                 "<table><tr><td>0:</td><td>None (Host software will not support any form of still image capture)</td></tr>"
+                 "<tr><td>1:</td><td>Method 1</td></tr>"
+                 "<tr><td>2:</td><td>Method 2</td></tr>"
+                 "<tr><td>3:</td><td>Method 3</td></tr></table>"},
+                {"bTriggerSupport", "<p>Specifies if hardware triggering is supported through this interface.</p>"
+                 "<table><tr><td>0:</td><td>Not supported</td></tr>"
+                 "<tr><td>1:</td><td>Supported</td></tr></table>"},
+                {"bTriggerUsage", "<p>Specifies how the host software shall "
+                 "respond to a hardware trigger interrupt "
+                 "event from this interface. This is ignored if "
+                 "the <i>bTriggerSupport</i> field is zero.</p>"
+                 "<table><tr><td>0:</td><td>Initiate still image capture</td></tr>"
+                 "<tr><td>1:</td><td>General purpose button event. Host "
+                 "driver will notify client application of "
+                 "button press and button release events</td></tr></table>"},
+                {"bControlSize", "Size of each bmaControls[x] field, in bytes."},
+                {"bmaControls", "<p>For bits D3..0, a bit set to 1 indicates that "
+                 "the named field is supported by the Video "
+                 "Probe and Commit Control when "
+                 "<i>bFormatIndex</i> is x (for bmaControls[x]):</p>"
+                 "<table><tr><td>D0:</td><td>wKeyFrameRate</td></tr>"
+                 "<tr><td>D1:</td><td>wPFrameRate</td></tr>"
+                 "<tr><td>D2:</td><td>wCompQuality</td></tr>"
+                 "<tr><td>D3:</td><td>wCompWindowSize</td></tr></table>"
+                 "<p>For bits D5..4, a bit set to 1 indicates that "
+                 "the named control is supported by the "
+                 "device when <i>bFormatIndex</i> is x (for bmaControls[x]):</p>"
+                 "<table><tr><td>D4:</td><td>Generate Key Frame</td></tr>"
+                 "<tr><td>D5:</td><td>Update Frame Segment</td></tr>"
+                 "<tr><td>D6..(n*8-1):</td><td>Reserved, set to zero</td></tr></table>"
+                 "<p><b>*Note*</b> going forward from version 1.5 the "
+                 "proper means to detect whether a field is "
+                 "supported by Probe & Commit is to issue a "
+                 "VS_PROBE_CONTROL(GET_CUR).</p>"},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbInputHeaderDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder builder;
-            builder.start(tr("Input Header Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bNumFormats", _bNumFormats)
-            .attr("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
-                 .arg(_bEndpointAddress & 0x0F)
-                 .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))))
-            .attr("bmInfo", _bmInfo, _bmInfo ?
-                     tr("Supports Dynamic Format Change"): QString())
-            .attr("bTerminalLink", _bTerminalLink)
-            .attr("bStillCaptureMethod", _bStillCaptureMethod, __parseBStillCaptureMethod())
-            .attr("bTriggerSupport", _bTriggerSupport, _bTriggerSupport ?
-                     tr("Supports hardware triggering") : QString())
-            .attr("bTriggerUsage", _bTriggerUsage, _bTriggerSupport ?
-                     (_bTriggerUsage ?
-                          tr("General purpose button event"):
-                          tr("Initiate still image capture")):
-                     QString())
-            .attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
+            builder.start(tr("Input Header Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bNumFormats", _bNumFormats)
+                    .attr("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
+                          .arg(_bEndpointAddress & 0x0F)
+                          .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))))
+                    .attr("bmInfo", _bmInfo, _bmInfo ?
+                              tr("Supports Dynamic Format Change"): QString())
+                    .attr("bTerminalLink", _bTerminalLink)
+                    .attr("bStillCaptureMethod", _bStillCaptureMethod, __parseBStillCaptureMethod())
+                    .attr("bTriggerSupport", _bTriggerSupport, _bTriggerSupport ?
+                              tr("Supports hardware triggering") : QString())
+                    .attr("bTriggerUsage", _bTriggerUsage, _bTriggerSupport ?
+                              (_bTriggerUsage ?
+                                   tr("General purpose button event"):
+                                   tr("Initiate still image capture")):
+                              QString())
+                    .attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
             for (uint8_t i = 1; i <= _bNumFormats; ++i)
-                builder.attr(QString("bmaControls(%1)").arg(i),
-                           QString("0x") + bmaControls(i).toHex(),
-                           __parseBmaControls(i));
+                builder.attr("bmaControls",
+                             QString("0x") + bmaControls(i).toHex(),
+                             __parseBmaControls(i),
+                             i);
 
             return builder.end().build();
         }
@@ -366,23 +455,84 @@ namespace usb {
             }
         }
 
+        const QStringList &UsbOutputHeaderDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bNumFormats",
+                "wTotalLength",
+                "bEndpointAddress",
+                "bTerminalLink",
+                "bControlSize",
+                "bmaControls",
+            };
+
+            return fields;
+        }
+
+        QString UsbOutputHeaderDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_OUTPUT_HEADER descriptor subtype"},
+                {"bNumFormats", "Number of video payload Format "
+                 "descriptors following for this interface"
+                 "(excluding video Frame descriptors)."},
+                {"wTotalLength", "Total number of bytes returned for the "
+                 "class-specific VideoStreaming interface "
+                 "descriptors including this header descriptor."},
+                {"bEndpointAddress", "<p>The address of the isochronous or bulk "
+                 "endpoint used for video data. The address "
+                 "is encoded as follows:</p>"
+                 "<table><tr><td>D7:</td><td><p>Direction</p><p>0 = OUT endpoint</p></td></tr>"
+                 "<tr><td>D6..4:</td><td>Reserved, set to zero.</td></tr>"
+                 "<tr><td>D3..0:</td><td>The endpoint number, determined by the designer.</td></tr></table>"},
+                {"bTerminalLink", "The terminal ID of the Input Terminal to "
+                 "which the video endpoint of this interface is connected."},
+                {"bControlSize", "Size of each bmaControls[x] field, in bytes."},
+                {"bmaControls", "<p>For bits D3..0, a bit set to 1 indicates that "
+                 "the named field is supported by the Video "
+                 "Probe and Commit Control when "
+                 "<i>bFormatIndex</i> is x (for bmaControls[x]):</p>"
+                 "<table><tr><td>D0:</td><td>wKeyFrameRate</td></tr>"
+                 "<tr><td>D1:</td><td>wPFrameRate</td></tr>"
+                 "<tr><td>D2:</td><td>wCompQuality</td></tr>"
+                 "<tr><td>D3:</td><td>wCompWindowSize</td></tr>"
+                 "<tr><td>D4..(n*8-1):</td><td>Reserved, set to zero</td></tr></table>"
+                 "<p><b>*Note*</b> D0-D3 are deprecated. Going "
+                 "forward from version 1.5, the proper "
+                 "means to detect whether a field is "
+                 "supported by Probe & Commit is to issue "
+                 "a VS_PROBE_CONTROL(GET_CUR).</p>"},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbOutputHeaderDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder builder;
-            builder.start(tr("Output Header Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bNumFormats", _bNumFormats)
-            .attr("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
-                 .arg(_bEndpointAddress & 0x0F)
-                 .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))))
-            .attr("bTerminalLink", _bTerminalLink)
-            .attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
+            builder.start(tr("Output Header Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bNumFormats", _bNumFormats)
+                    .attr("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
+                          .arg(_bEndpointAddress & 0x0F)
+                          .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))))
+                    .attr("bTerminalLink", _bTerminalLink)
+                    .attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize));
             for (uint8_t i = 1; i <= _bNumFormats; ++i)
-                builder.attr(QString("bmaControls(%1)").arg(i),
-                           QString("0x") + bmaControls(i).toHex(),
-                           __parseBmaControls(i));
+                builder.attr("bmaControls",
+                             QString("0x") + bmaControls(i).toHex(),
+                             __parseBmaControls(i),
+                             i);
 
             return builder.end().build();
         }
@@ -489,25 +639,65 @@ namespace usb {
             }
         }
 
+        const QStringList &UsbStillImageFrameDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bEndpointAddress",
+                "bNumImageSizePatterns",
+                "wWidth",
+                "wHeight",
+                "bNumCompressionPattern",
+                "bCompression",
+            };
+
+            return fields;
+        }
+
+        QString UsbStillImageFrameDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_STILL_IMAGE_FRAME descriptor subtype"},
+                {"bEndpointAddress", "<p>If method 3 of still image capture is used, "
+                 "this contains the address of the bulk endpoint used for still image capture. The "
+                 "address is encoded as follows:</p>"
+                 "<table><tr><td>D7:</td><td>Direction (set to 1 = IN endpoint)</td></tr>"
+                 "<tr><td>D6..4:</td><td>Reserved, set to zero.</td></tr>"
+                 "<tr><td>D3..0:</td><td>The endpoint number, determined by the designer.</td></tr></table>"},
+                {"bNumImageSizePatterns", "Number of Image Size patterns of this format"},
+                {"wWidth", "Width of the still image in nth pattern"},
+                {"wHeight", "Height of the still image in nth pattern"},
+                {"bNumCompressionPattern", "Number of Compression pattern of this format"},
+                {"bCompression", "Compression of the still image in nth pattern"},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbStillImageFrameDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder builder;
-            builder.start(tr("Still Image Frame Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
-                 .arg(_bEndpointAddress & 0x0F)
-                 .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))))
-            .attr("bNumImageSizePatterns", _bNumImageSizePatterns);
+            builder.start(tr("Still Image Frame Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bEndpointAddress", _bEndpointAddress, tr("Endpoint %1 %2")
+                          .arg(_bEndpointAddress & 0x0F)
+                          .arg(strEndpointDirection(EndpointDirection(_bEndpointAddress & int(EndpointDirection::IN)))))
+                    .attr("bNumImageSizePatterns", _bNumImageSizePatterns);
             for (uint8_t i = 1; i <= _bNumImageSizePatterns; ++i)
-            {
-                builder.attr(QString("wWidth(%1)").arg(i), wWidth(i))
-                .attr(QString("wHeight(%1)").arg(i), wHeight(i));
-            }
+                builder.attr("wWidth", wWidth(i), i)
+                        .attr("wHeight", wHeight(i), i);
             builder.attr("bNumCompressionPattern", _bNumCompressionPattern);
             for (uint8_t i = 1; i <= _bNumCompressionPattern; ++i)
-                builder.attr(QString("bCompression(%1)").arg(i), bCompression(i));
+                builder.attr("bCompression", bCompression(i), i);
 
             return builder.end().build();
         }
@@ -596,24 +786,88 @@ namespace usb {
             return _bCopyProtect;
         }
 
+        const QStringList &UsbUncompressedVideoFormatDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFormatIndex",
+                "bNumFrameDescriptors",
+                "guidFormat",
+                "bBitsPerPixel",
+                "bDefaultFrameIndex",
+                "bAspectRatioX",
+                "bAspectRatioY",
+                "bmInterlaceFlags",
+                "bCopyProtect",
+            };
+
+            return fields;
+        }
+
+        QString UsbUncompressedVideoFormatDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FORMAT_UNCOMPRESSED descriptor subtype"},
+                {"bFormatIndex", "Index of this format descriptor"},
+                {"bNumFrameDescriptors", "Number of frame descriptors following "
+                 "that correspond to this format"},
+                {"guidFormat", "Globally Unique Identifier used to "
+                 "identify stream-encoding format"},
+                {"bBitsPerPixel", "Number of bits per pixel used to "
+                 "specify color in the decoded video frame"},
+                {"bDefaultFrameIndex", "Optimum Frame Index (used to select "
+                 "resolution) for this stream"},
+                {"bAspectRatioX", "The X dimension of the picture aspect ratio"},
+                {"bAspectRatioY", "The Y dimension of the picture aspect ratio"},
+                {"bmInterlaceFlags", "<p>Specifies interlace information. If the "
+                 "scanning mode control in the Camera "
+                 "Terminal is supported for this stream, "
+                 "this field shall reflect the field format "
+                 "used in interlaced mode."
+                 "(Top field in PAL is field 1, top field in "
+                 "NTSC is field 2.):</p>"
+                 "<table><tr><td>D0:</td><td><p>Interlaced stream or variable.</p><p>1 = Yes</p></td></tr>"
+                 "<tr><td>D1:</td><td><p>Fields per frame.</p><p>0 = 2 fields</p><p>1 = 1 field</p></td></tr>"
+                 "<tr><td>D2:</td><td><p>Field 1 first.</p><p>1 = Yes</p></td></tr>"
+                 "<tr><td>D3:</td><td>Reserved</td></tr>"
+                 "<tr><td>D5..4:</td><td><p>Field pattern</p><p>00 = Field 1 only</p><p>01 = Field 2 only</p>"
+                 "<p>10 = Regular pattern of fields 1 and 2</p>"
+                 "<p>11 = Random pattern of fields 1 and 2</p></td></tr>"
+                 "<tr><td>D7..6:</td><td>Reserved. Do not use.</td></tr></table>"},
+                {"bCopyProtect", "<p>Specifies whether duplication of the "
+                 "video stream is restricted:</p>"
+                 "<table><tr><td>0:</td><td>No restrictions</td></tr>"
+                 "<tr><td>1:</td><td>Restrict duplication</td></tr></table>"},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbUncompressedVideoFormatDescriptor::infomationToHtml() const
         {
             return UsbHtmlBuilder()
-            .start(tr("Uncompressed Video Format Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFormatIndex", _bFormatIndex)
-            .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
-            .attr("guidFormat", "", hexUuid(_guidFormat))
-            .attr("bBitsPerPixel", _bBitsPerPixel, tr("%1 bit(s) per pixel").arg(_bBitsPerPixel))
-            .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
-            .attr("bAspectRatioX", _bAspectRatioX)
-            .attr("bAspectRatioY", _bAspectRatioY)
-            .attr("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags())
-            .attr("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "")
-            .end()
-            .build();
+                    .start(tr("Uncompressed Video Format Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatIndex", _bFormatIndex)
+                    .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
+                    .attr("guidFormat", "", hexUuid(_guidFormat))
+                    .attr("bBitsPerPixel", _bBitsPerPixel, tr("%1 bit(s) per pixel").arg(_bBitsPerPixel))
+                    .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
+                    .attr("bAspectRatioX", _bAspectRatioX)
+                    .attr("bAspectRatioY", _bAspectRatioY)
+                    .attr("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags())
+                    .attr("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "")
+                    .end()
+                    .build();
         }
 
         UsbUncompressedVideoFormatDescriptor::UsbUncompressedVideoFormatDescriptor(
@@ -778,6 +1032,93 @@ namespace usb {
             }
         }
 
+        const QStringList &UsbUncompressedVideoFrameDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFrameIndex",
+                "bmCapabilities",
+                "wWidth",
+                "wHeight",
+                "dwMinBitRate",
+                "dwMaxBitRate",
+                "dwMaxVideoFrameBufferSize",
+                "dwDefaultFrameInterval",
+                "bFrameIntervalType",
+                "dwMinFrameInterval",
+                "dwMaxFrameInterval",
+                "dwFrameIntervalStep",
+                "dwFrameInterval",
+            };
+
+            return fields;
+        }
+
+        QString UsbUncompressedVideoFrameDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FRAME_UNCOMPRESSED descriptor subtype"},
+                {"bFrameIndex", "Index of this frame descriptor"},
+                {"bmCapabilities", "<p>D0: Still image supported</p>"
+                 "<p>Specifies whether still images are "
+                 "supported at this frame setting. This is "
+                 "only applicable for VS interfaces with "
+                 "an IN video endpoint using Still "
+                 "Image Capture Method 1, and should "
+                 "be set to 0 in all other cases.</p>"
+                 "<p>D1: Fixed frame-rate</p>"
+                 "<p>Specifies whether the device provides "
+                 "a fixed frame rate on a stream "
+                 "associated with this frame descriptor. "
+                 "Set to 1 if fixed rate is enabled; "
+                 "otherwise, set to 0.</p>"
+                 "<p>D7..2: Reserved, set to 0.</p>"},
+                {"wWidth", "Width of decoded bitmap frame in pixels"},
+                {"wHeight", "Height of decoded bitmap frame in pixels"},
+                {"dwMinBitRate", "Specifies the minimum bit rate at the "
+                 "longest frame interval in units of bps "
+                 "at which the data can be transmitted."},
+                {"dwMaxBitRate", "Specifies the maximum bit rate at the "
+                 "shortest frame interval in units of bps "
+                 "at which the data can be transmitted."},
+                {"dwMaxVideoFrameBufferSize", "<p>Use of this field has been deprecated.</p>"
+                 "<p>Specifies the maximum number of "
+                 "bytes that the compressor will produce "
+                 "for a video frame or still image.</p>"
+                 "<p>The <i>dwMaxVideoFrameSize</i> field of "
+                 "the Video Probe and Commit control "
+                 "replaces this descriptor field. A value "
+                 "for this field shall be chosen for "
+                 "compatibility with host software that "
+                 "implements an earlier version of this "
+                 "specification.</p>"},
+                {"dwDefaultFrameInterval", "<p>Specifies the frame interval the device "
+                 "would like to indicate for use as a "
+                 "default. This must be a valid frame "
+                 "interval described in the fields below.</p>"},
+                {"bFrameIntervalType", "Indicates how the frame interval can be programmed:"
+                 "<table><tr><td>0:</td><td>Continuous frame interval</td></tr>"
+                 "<tr><td>1..255:</td><td>The number of discrete frame intervals supported</td></tr></table>"},
+                {"dwMinFrameInterval", "Shortest frame interval supported (at "
+                 "highest frame rate), in 100 ns units."},
+                {"dwMaxFrameInterval", "Longest frame interval supported (at "
+                 "lowest frame rate), in 100 ns units."},
+                {"dwFrameIntervalStep", "Indicates granularity of frame interval "
+                 "range, in 100 ns units."},
+                {"dwFrameInterval", "Nth shortest frame interval supported (at "
+                 "nth highest frame rate), in 100 ns units."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbUncompressedVideoFrameDescriptor::__parseBmCapabilities() const
         {
             QStringList supports;
@@ -792,38 +1133,36 @@ namespace usb {
         QString UsbUncompressedVideoFrameDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder builder;
-            builder.start(tr("Uncompressed Video Frame Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFrameIndex", _bFrameIndex)
-            .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
-            .attr("wWidth", _wWidth)
-            .attr("wHeight", _wHeight)
-            .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
-            .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
-            .attr("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
-                 tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize))
-            .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
-                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
-            .attr("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
-                     tr("%1 discrete frame intervals").arg(_bFrameIntervalType) :
-                     tr("Continuous frame interval"));
+            builder.start(tr("Uncompressed Video Frame Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFrameIndex", _bFrameIndex)
+                    .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+                    .attr("wWidth", _wWidth)
+                    .attr("wHeight", _wHeight)
+                    .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
+                    .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
+                    .attr("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
+                          tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize))
+                    .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
+                          tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
+                    .attr("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
+                              tr("%1 discrete frame intervals").arg(_bFrameIntervalType) :
+                              tr("Continuous frame interval"));
             if (_bFrameIntervalType)
-            {
                 for (uint8_t i = 1; i <= _bFrameIntervalType; ++i)
-                    builder.attr(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
-                         tr("%1 * 100 ns").arg(dwFrameInterval(i)));
-            }
+                    builder.attr("dwFrameInterval",
+                                 dwFrameInterval(i),
+                                 tr("%1 * 100 ns").arg(dwFrameInterval(i)),
+                                 i);
             else
-            {
                 builder.attr("dwMinFrameInterval", dwMinFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMinFrameInterval()))
-                .attr("dwMaxFrameInterval", dwMaxFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMaxFrameInterval()))
-                .attr("dwFrameIntervalStep", _dwFrameIntervalStep,
-                     tr("%1 * 100 ns").arg(_dwFrameIntervalStep));
-            }
+                             tr("%1 * 100 ns").arg(dwMinFrameInterval()))
+                        .attr("dwMaxFrameInterval", dwMaxFrameInterval(),
+                              tr("%1 * 100 ns").arg(dwMaxFrameInterval()))
+                        .attr("dwFrameIntervalStep", _dwFrameIntervalStep,
+                              tr("%1 * 100 ns").arg(_dwFrameIntervalStep));
 
             return builder.end().build();
         }
@@ -916,23 +1255,86 @@ namespace usb {
             return _bCopyProtect;
         }
 
+        const QStringList &UsbMotionJpegVideoFormatDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFormatIndex",
+                "bNumFrameDescriptors",
+                "bmFlags",
+                "bDefaultFrameIndex",
+                "bAspectRatioX",
+                "bAspectRatioY",
+                "bmInterlaceFlags",
+                "bCopyProtect",
+            };
+
+            return fields;
+        }
+
+        QString UsbMotionJpegVideoFormatDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FORMAT_MJPEG descriptor subtype"},
+                {"bFormatIndex", "Index of this format descriptor"},
+                {"bNumFrameDescriptors", "Number of frame descriptors following "
+                 "that correspond to this format"},
+                {"bmFlags", "<p>Specifies characteristics of this format:</p>"
+                 "<p>D0: FixedSizeSamples. 1 = Yes</p>"
+                 "<p>All other bits are reserved for future "
+                 "use and shall be reset to zero.</p>"},
+                {"bDefaultFrameIndex", "Optimum Frame Index (used to select "
+                 "resolution) for this stream"},
+                {"bAspectRatioX", "The X dimension of the picture aspect ratio"},
+                {"bAspectRatioY", "The Y dimension of the picture aspect ratio"},
+                {"bmInterlaceFlags", "<p>Specifies interlace information. If the "
+                 "scanning mode control in the Camera "
+                 "Terminal is supported for this stream, "
+                 "this field shall reflect the field format "
+                 "used in interlaced mode."
+                 "(Top field in PAL is field 1, top field in "
+                 "NTSC is field 2.):</p>"
+                 "<table><tr><td>D0:</td><td><p>Interlaced stream or variable.</p><p>1 = Yes</p></td></tr>"
+                 "<tr><td>D1:</td><td><p>Fields per frame.</p><p>0 = 2 fields</p><p>1 = 1 field</p></td></tr>"
+                 "<tr><td>D2:</td><td><p>Field 1 first.</p><p>1 = Yes</p></td></tr>"
+                 "<tr><td>D3:</td><td>Reserved</td></tr>"
+                 "<tr><td>D5..4:</td><td><p>Field pattern</p><p>00 = Field 1 only</p><p>01 = Field 2 only</p>"
+                 "<p>10 = Regular pattern of fields 1 and 2</p>"
+                 "<p>11 = Random pattern of fields 1 and 2</p></td></tr>"
+                 "<tr><td>D7..6:</td><td>Reserved. Do not use.</td></tr></table>"},
+                {"bCopyProtect", "<p>Specifies whether duplication of the "
+                 "video stream is restricted:</p>"
+                 "<table><tr><td>0:</td><td>No restrictions</td></tr>"
+                 "<tr><td>1:</td><td>Restrict duplication</td></tr></table>"},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbMotionJpegVideoFormatDescriptor::infomationToHtml() const
         {
             return UsbHtmlBuilder()
-            .start(tr("Motion-JPEG Video Format Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFormatIndex", _bFormatIndex)
-            .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
-            .attr("bmFlags", _bmFlags, BIT(_bmFlags, 0) ? tr("Fixed Size Samples"): "")
-            .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
-            .attr("bAspectRatioX", _bAspectRatioX)
-            .attr("bAspectRatioY", _bAspectRatioY)
-            .attr("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags())
-            .attr("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "")
-            .end()
-            .build();
+                    .start(tr("Motion-JPEG Video Format Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatIndex", _bFormatIndex)
+                    .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
+                    .attr("bmFlags", _bmFlags, BIT(_bmFlags, 0) ? tr("Fixed Size Samples"): "")
+                    .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
+                    .attr("bAspectRatioX", _bAspectRatioX)
+                    .attr("bAspectRatioY", _bAspectRatioY)
+                    .attr("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags())
+                    .attr("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "")
+                    .end()
+                    .build();
         }
 
         UsbMotionJpegVideoFormatDescriptor::UsbMotionJpegVideoFormatDescriptor(
@@ -1094,6 +1496,93 @@ namespace usb {
             }
         }
 
+        const QStringList &UsbMotionJpegVideoFrameDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFrameIndex",
+                "bmCapabilities",
+                "wWidth",
+                "wHeight",
+                "dwMinBitRate",
+                "dwMaxBitRate",
+                "dwMaxVideoFrameBufferSize",
+                "dwDefaultFrameInterval",
+                "bFrameIntervalType",
+                "dwMinFrameInterval",
+                "dwMaxFrameInterval",
+                "dwFrameIntervalStep",
+                "dwFrameInterval",
+            };
+
+            return fields;
+        }
+
+        QString UsbMotionJpegVideoFrameDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FRAME_MJPEG descriptor subtype"},
+                {"bFrameIndex", "Index of this frame descriptor"},
+                {"bmCapabilities", "<p>D0: Still image supported</p>"
+                 "<p>Specifies whether still images are "
+                 "supported at this frame setting. This is "
+                 "only applicable for VS interfaces with "
+                 "an IN video endpoint using Still "
+                 "Image Capture Method 1, and should "
+                 "be set to 0 in all other cases.</p>"
+                 "<p>D1: Fixed frame-rate</p>"
+                 "<p>Specifies whether the device provides "
+                 "a fixed frame rate on a stream "
+                 "associated with this frame descriptor. "
+                 "Set to 1 if fixed rate is enabled; "
+                 "otherwise, set to 0.</p>"
+                 "<p>D7..2: Reserved, set to 0.</p>"},
+                {"wWidth", "Width of decoded bitmap frame in pixels"},
+                {"wHeight", "Height of decoded bitmap frame in pixels"},
+                {"dwMinBitRate", "Specifies the minimum bit rate at the "
+                 "longest frame interval in units of bps "
+                 "at which the data can be transmitted."},
+                {"dwMaxBitRate", "Specifies the maximum bit rate at the "
+                 "shortest frame interval in units of bps "
+                 "at which the data can be transmitted."},
+                {"dwMaxVideoFrameBufferSize", "<p>Use of this field has been deprecated.</p>"
+                 "<p>Specifies the maximum number of "
+                 "bytes that the compressor will produce "
+                 "for a video frame or still image.</p>"
+                 "<p>The <i>dwMaxVideoFrameSize</i> field of "
+                 "the Video Probe and Commit control "
+                 "replaces this descriptor field. A value "
+                 "for this field shall be chosen for "
+                 "compatibility with host software that "
+                 "implements an earlier version of this "
+                 "specification.</p>"},
+                {"dwDefaultFrameInterval", "<p>Specifies the frame interval the device "
+                 "would like to indicate for use as a "
+                 "default. This must be a valid frame "
+                 "interval described in the fields below.</p>"},
+                {"bFrameIntervalType", "Indicates how the frame interval can be programmed:"
+                 "<table><tr><td>0:</td><td>Continuous frame interval</td></tr>"
+                 "<tr><td>1..255:</td><td>The number of discrete frame intervals supported</td></tr></table>"},
+                {"dwMinFrameInterval", "Shortest frame interval supported (at "
+                 "highest frame rate), in 100 ns units."},
+                {"dwMaxFrameInterval", "Longest frame interval supported (at "
+                 "lowest frame rate), in 100 ns units."},
+                {"dwFrameIntervalStep", "Indicates granularity of frame interval "
+                 "range, in 100 ns units."},
+                {"dwFrameInterval", "Nth shortest frame interval supported (at "
+                 "nth highest frame rate), in 100 ns units."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbMotionJpegVideoFrameDescriptor::__parseBmCapabilities() const
         {
             QStringList supports;
@@ -1108,38 +1597,36 @@ namespace usb {
         QString UsbMotionJpegVideoFrameDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder builder;
-            builder.start(tr("Motion-JPEG Video Frame Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFrameIndex", _bFrameIndex)
-            .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
-            .attr("wWidth", _wWidth)
-            .attr("wHeight", _wHeight)
-            .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
-            .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
-            .attr("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
-                 tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize))
-            .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
-                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
-            .attr("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
-                     tr("%1 discrete frame intervals").arg(_bFrameIntervalType) :
-                     tr("Continuous frame interval"));
+            builder.start(tr("Motion-JPEG Video Frame Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFrameIndex", _bFrameIndex)
+                    .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+                    .attr("wWidth", _wWidth)
+                    .attr("wHeight", _wHeight)
+                    .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
+                    .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
+                    .attr("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
+                          tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize))
+                    .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
+                          tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
+                    .attr("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
+                              tr("%1 discrete frame intervals").arg(_bFrameIntervalType) :
+                              tr("Continuous frame interval"));
             if (_bFrameIntervalType)
-            {
                 for (uint8_t i = 1; i <= _bFrameIntervalType; ++i)
-                    builder.attr(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
-                         tr("%1 * 100 ns").arg(dwFrameInterval(i)));
-            }
+                    builder.attr("dwFrameInterval",
+                                 dwFrameInterval(i),
+                                 tr("%1 * 100 ns").arg(dwFrameInterval(i)),
+                                 i);
             else
-            {
                 builder.attr("dwMinFrameInterval", dwMinFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMinFrameInterval()))
-                .attr("dwMaxFrameInterval", dwMaxFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMaxFrameInterval()))
-                .attr("dwFrameIntervalStep", _dwFrameIntervalStep,
-                     tr("%1 * 100 ns").arg(_dwFrameIntervalStep));
-            }
+                             tr("%1 * 100 ns").arg(dwMinFrameInterval()))
+                        .attr("dwMaxFrameInterval", dwMaxFrameInterval(),
+                              tr("%1 * 100 ns").arg(dwMaxFrameInterval()))
+                        .attr("dwFrameIntervalStep", _dwFrameIntervalStep,
+                              tr("%1 * 100 ns").arg(_dwFrameIntervalStep));
 
             return builder.end().build();
         }
@@ -1217,20 +1704,60 @@ namespace usb {
             return _guidStrideFormat;
         }
 
+        const QStringList &UsbMpeg2TsFormatDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFormatIndex",
+                "bDataOffset",
+                "bPacketLength",
+                "bStrideLength",
+                "guidStrideFormat",
+            };
+
+            return fields;
+        }
+
+        QString UsbMpeg2TsFormatDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FORMAT_MPEG2TS descriptor subtype"},
+                {"bFormatIndex", "Index of this format descriptor"},
+                {"bDataOffset", "Offset to TSP packet within MPEG-2 "
+                 "TS transport stride, in bytes."},
+                {"bPacketLength", "Length of TSP packet, in bytes (typically 188)."},
+                {"bStrideLength", "Length of MPEG-2 TS transport stride."},
+                {"guidStrideFormat", "A Globally Unique Identifier "
+                 "indicating the format of the stride data "
+                 "(if any). Set to zeros if there is no "
+                 "Stride Data, or if the Stride Data is to "
+                 "be ignored by the application."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbMpeg2TsFormatDescriptor::infomationToHtml() const
         {
             return UsbHtmlBuilder()
-            .start(tr("MPEG-2 TS Format Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFormatIndex", _bFormatIndex)
-            .attr("bDataOffset", _bDataOffset)
-            .attr("bPacketLength", _bPacketLength)
-            .attr("bStrideLength", _bStrideLength)
-            .attr("guidStrideFormat", "", hexUuid(_guidStrideFormat))
-            .end()
-            .build();
+                    .start(tr("MPEG-2 TS Format Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatIndex", _bFormatIndex)
+                    .attr("bDataOffset", _bDataOffset)
+                    .attr("bPacketLength", _bPacketLength)
+                    .attr("bStrideLength", _bStrideLength)
+                    .attr("guidStrideFormat", "", hexUuid(_guidStrideFormat))
+                    .end()
+                    .build();
         }
 
         UsbMpeg2TsFormatDescriptor::UsbMpeg2TsFormatDescriptor(
@@ -1281,19 +1808,61 @@ namespace usb {
             return _bFormatType;
         }
 
+        const QStringList &UsbDvFormatDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFormatIndex",
+                "dwMaxVideoFrameBufferSize",
+                "bFormatType",
+            };
+
+            return fields;
+        }
+
+        QString UsbDvFormatDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FORMAT_DV descriptor subtype"},
+                {"bFormatIndex", "Index of this format descriptor"},
+                {"dwMaxVideoFrameBufferSize", "<p>Use of this field has been deprecated.</p>"
+                 "<p>Specifies the maximum size of a single DV frame, in bytes. This "
+                 "will vary according to the format (SD/SDL/HD) and standard (NTSC/PAL).</p>"
+                 "<p>The <i>dwMaxVideoFrameSize</i> field of "
+                 "the Video Probe and Commit control "
+                 "replaces this descriptor field. A value "
+                 "for this field shall be chosen for "
+                 "compatibility with host software that "
+                 "implements an earlier version of this "
+                 "specification.</p>"},
+                {"bFormatType", "<table><tr><td>D7:</td><td><p>0 = 50 Hz</p><p>1 = 60 Hz</p></td></tr>"
+                 "<tr><td>D6..0:</td><td><p>0: SD-DV</p><p>1: SDL-DV</p><p>2: HD-DV</p></td></tr></table>"
+                 "<p>All other values are reserved.</p>"},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbDvFormatDescriptor::infomationToHtml() const
         {
             return UsbHtmlBuilder()
-            .start(tr("DV Format Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFormatIndex", _bFormatIndex)
-            .attr("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
-                 tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize))
-            .attr("bFormatType", _bFormatType, __parseBFormatType())
-            .end()
-            .build();
+                    .start(tr("DV Format Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatIndex", _bFormatIndex)
+                    .attr("dwMaxVideoFrameBufferSize", _dwMaxVideoFrameBufferSize,
+                          tr("%1 byte(s)").arg(_dwMaxVideoFrameBufferSize))
+                    .attr("bFormatType", _bFormatType, __parseBFormatType())
+                    .end()
+                    .build();
         }
 
         UsbDvFormatDescriptor::UsbDvFormatDescriptor(
@@ -1363,18 +1932,74 @@ namespace usb {
             return _bMatrixCoefficients;
         }
 
+        const QStringList &UsbColorMatchingDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bColorPrimaries",
+                "bTransferCharacteristics",
+                "bMatrixCoefficients",
+            };
+
+            return fields;
+        }
+
+        QString UsbColorMatchingDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_COLORFORMAT descriptor subtype"},
+                {"bColorPrimaries", "<p>This defines the color primaries and the reference white.</p>"
+                 "<table><tr><td>0:</td><td>Unspecified (Image characteristics unknown)</td></tr>"
+                 "<tr><td>1:</td><td>BT.709, sRGB (default)</td></tr>"
+                 "<tr><td>2:</td><td>BT.470-2 (M)</td></tr>"
+                 "<tr><td>3:</td><td>BT.470-2 (B, G)</td></tr>"
+                 "<tr><td>4:</td><td>SMPTE 170M</td></tr>"
+                 "<tr><td>5:</td><td>SMPTE 240M</td></tr>"
+                 "<tr><td>6-255:</td><td>Reserved</td></tr></table>"},
+                {"bTransferCharacteristics", "<p>This field defines the optoelectronic transfer characteristic of "
+                 "the source picture also called the gamma function.</p>"
+                 "<table><tr><td>0:</td><td>Unspecified (Image characteristics unknown)</td></tr>"
+                 "<tr><td>1:</td><td>BT.709 (default)</td></tr>"
+                 "<tr><td>2:</td><td>BT.470-2 M</td></tr>"
+                 "<tr><td>3:</td><td>BT.470-2 B, G</td></tr>"
+                 "<tr><td>4:</td><td>SMPTE 170M</td></tr>"
+                 "<tr><td>5:</td><td>SMPTE 240M</td></tr>"
+                 "<tr><td>6:</td><td>Linear (V = Lc)</td></tr>"
+                 "<tr><td>7:</td><td>sRGB (very similar to BT.709)</td></tr>"
+                 "<tr><td>8-255:</td><td>Reserved</td></tr></table>"},
+                {"bMatrixCoefficients", "<p>Matrix used to compute luma and "
+                 "chroma values from the color primaries.</p>"
+                 "<table><tr><td>0:</td><td>Unspecified (Image characteristics unknown)</td></tr>"
+                 "<tr><td>1:</td><td>BT. 709</td></tr>"
+                 "<tr><td>2:</td><td>FCC</td></tr>"
+                 "<tr><td>3:</td><td>BT.470-2 B, G</td></tr>"
+                 "<tr><td>4:</td><td>SMPTE 170M (BT.601, default)</td></tr>"
+                 "<tr><td>5:</td><td>SMPTE 240M</td></tr>"
+                 "<tr><td>6-255:</td><td>Reserved</td></tr></table>"},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbColorMatchingDescriptor::infomationToHtml() const
         {
             return UsbHtmlBuilder()
-            .start(tr("Color Matching Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bColorPrimaries", _bColorPrimaries, __strBColorPrimaries())
-            .attr("bTransferCharacteristics", _bTransferCharacteristics, __strBTransferCharacteristics())
-            .attr("bMatrixCoefficients", _bMatrixCoefficients, __strBMatrixCoefficients())
-            .end()
-            .build();
+                    .start(tr("Color Matching Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bColorPrimaries", _bColorPrimaries, __strBColorPrimaries())
+                    .attr("bTransferCharacteristics", _bTransferCharacteristics, __strBTransferCharacteristics())
+                    .attr("bMatrixCoefficients", _bMatrixCoefficients, __strBMatrixCoefficients())
+                    .end()
+                    .build();
         }
 
         UsbColorMatchingDescriptor::UsbColorMatchingDescriptor(
@@ -1523,25 +2148,91 @@ namespace usb {
             return _bVariableSize;
         }
 
+        const QStringList &UsbFrameBasedPayloadVideoFormatDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFormatIndex",
+                "bNumFrameDescriptors",
+                "guidFormat",
+                "bBitsPerPixel",
+                "bDefaultFrameIndex",
+                "bAspectRatioX",
+                "bAspectRatioY",
+                "bmInterlaceFlags",
+                "bCopyProtect",
+                "bVariableSize",
+            };
+
+            return fields;
+        }
+
+        QString UsbFrameBasedPayloadVideoFormatDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FORMAT_FRAME_BASED descriptor subtype"},
+                {"bFormatIndex", "Index of this format descriptor"},
+                {"bNumFrameDescriptors", "Number of frame descriptors following "
+                 "that correspond to this format"},
+                {"guidFormat", "Globally Unique Identifier used to "
+                 "identify stream-encoding format"},
+                {"bBitsPerPixel", "Number of bits per pixel used to "
+                 "specify color in the decoded video frame"},
+                {"bDefaultFrameIndex", "Optimum Frame Index (used to select "
+                 "resolution) for this stream"},
+                {"bAspectRatioX", "The X dimension of the picture aspect ratio"},
+                {"bAspectRatioY", "The Y dimension of the picture aspect ratio"},
+                {"bmInterlaceFlags", "<p>Specifies interlace information. If the "
+                 "scanning mode control in the Camera "
+                 "Terminal is supported for this stream, "
+                 "this field shall reflect the field format "
+                 "used in interlaced mode."
+                 "(Top field in PAL is field 1, top field in "
+                 "NTSC is field 2.):</p>"
+                 "<table><tr><td>D0:</td><td><p>Interlaced stream or variable.</p><p>1 = Yes</p></td></tr>"
+                 "<tr><td>D1:</td><td><p>Fields per frame.</p><p>0 = 2 fields</p><p>1 = 1 field</p></td></tr>"
+                 "<tr><td>D2:</td><td><p>Field 1 first.</p><p>1 = Yes</p></td></tr>"
+                 "<tr><td>D3:</td><td>Reserved</td></tr>"
+                 "<tr><td>D5..4:</td><td><p>Field pattern</p><p>00 = Field 1 only</p><p>01 = Field 2 only</p>"
+                 "<p>10 = Regular pattern of fields 1 and 2</p>"
+                 "<p>11 = Random pattern of fields 1 and 2</p></td></tr>"
+                 "<tr><td>D7..6:</td><td>Reserved. Do not use.</td></tr></table>"},
+                {"bCopyProtect", "<p>Specifies whether duplication of the "
+                 "video stream is restricted:</p>"
+                 "<table><tr><td>FALSE (0):</td><td>No restrictions</td></tr>"
+                 "<tr><td>TRUE (1):</td><td>Restrict duplication</td></tr></table>"},
+                {"bVariableSize", ""}
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbFrameBasedPayloadVideoFormatDescriptor::infomationToHtml() const
         {
             return UsbHtmlBuilder()
-            .start(tr("Frame Based Payload Video Format Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFormatIndex", _bFormatIndex)
-            .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
-            .attr("guidFormat", "", hexUuid(_guidFormat))
-            .attr("bBitsPerPixel", _bBitsPerPixel, tr("%1 bit(s) per pixel").arg(_bBitsPerPixel))
-            .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
-            .attr("bAspectRatioX", _bAspectRatioX)
-            .attr("bAspectRatioY", _bAspectRatioY)
-            .attr("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags())
-            .attr("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "")
-            .attr("bVariableSize", _bVariableSize, _bVariableSize ? tr("Variable Size") : tr("Fixed Size"))
-            .end()
-            .build();
+                    .start(tr("Frame Based Payload Video Format Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatIndex", _bFormatIndex)
+                    .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
+                    .attr("guidFormat", "", hexUuid(_guidFormat))
+                    .attr("bBitsPerPixel", _bBitsPerPixel, tr("%1 bit(s) per pixel").arg(_bBitsPerPixel))
+                    .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
+                    .attr("bAspectRatioX", _bAspectRatioX)
+                    .attr("bAspectRatioY", _bAspectRatioY)
+                    .attr("bmInterlaceFlags", _bmInterlaceFlags, __parseBmInterlaceFlags())
+                    .attr("bCopyProtect", _bCopyProtect, _bCopyProtect ? tr("Restrict duplication") : "")
+                    .attr("bVariableSize", _bVariableSize, _bVariableSize ? tr("Variable Size") : tr("Fixed Size"))
+                    .end()
+                    .build();
         }
 
         UsbFrameBasedPayloadVideoFormatDescriptor::UsbFrameBasedPayloadVideoFormatDescriptor(
@@ -1707,6 +2398,90 @@ namespace usb {
             }
         }
 
+        const QStringList &UsbFrameBasedPayloadVideoFrameDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFrameIndex",
+                "bmCapabilities",
+                "wWidth",
+                "wHeight",
+                "dwMinBitRate",
+                "dwMaxBitRate",
+                "dwDefaultFrameInterval",
+                "bFrameIntervalType",
+                "dwBytesPerLine",
+                "dwMinFrameInterval",
+                "dwMaxFrameInterval",
+                "dwFrameIntervalStep",
+                "dwFrameInterval",
+            };
+
+            return fields;
+        }
+
+        QString UsbFrameBasedPayloadVideoFrameDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FRAME_FRAME_BASED descriptor subtype"},
+                {"bFrameIndex", "Index of this frame descriptor"},
+                {"bmCapabilities", "<p>D0: Still image supported</p>"
+                 "<p>Specifies whether still images are "
+                 "supported at this frame setting. This is "
+                 "only applicable for VS interfaces with "
+                 "an IN video endpoint using Still "
+                 "Image Capture Method 1, and should "
+                 "be set to 0 in all other cases.</p>"
+                 "<p>D1: Fixed frame-rate</p>"
+                 "<p>Specifies whether the device provides "
+                 "a fixed frame rate on a stream "
+                 "associated with this frame descriptor. "
+                 "Set to 1 if fixed rate is enabled; "
+                 "otherwise, set to 0.</p>"
+                 "<p>D7..2: Reserved, set to 0.</p>"},
+                {"wWidth", "Width of decoded bitmap frame in pixels"},
+                {"wHeight", "Height of decoded bitmap frame in pixels"},
+                {"dwMinBitRate", "Specifies the minimum bit rate at the "
+                 "longest frame interval in units of bps "
+                 "at which the data can be transmitted."},
+                {"dwMaxBitRate", "Specifies the maximum bit rate at the "
+                 "shortest frame interval in units of bps "
+                 "at which the data can be transmitted."},
+                {"dwDefaultFrameInterval", "<p>Specifies the frame interval the device "
+                 "would like to indicate for use as a "
+                 "default. This must be a valid frame "
+                 "interval described in the fields below.</p>"},
+                {"bFrameIntervalType", "Indicates how the frame interval can be programmed:"
+                 "<table><tr><td>0:</td><td>Continuous frame interval</td></tr>"
+                 "<tr><td>1..255:</td><td>The number of discrete frame intervals supported</td></tr></table>"},
+                {"dwBytesPerLine", "<p>Specifies the number of bytes per line "
+                 "of video for packed fixed frame size "
+                 "formats, allowing the receiver to "
+                 "perform stride alignment of the video.</p>"
+                 "<p>If the bVariableSize value (above) is "
+                 "TRUE (1), or if the format does not "
+                 "permit such alignment, this value shall "
+                 "be set to zero (0).</p>"},
+                {"dwMinFrameInterval", "Shortest frame interval supported (at "
+                 "highest frame rate), in 100 ns units."},
+                {"dwMaxFrameInterval", "Longest frame interval supported (at "
+                 "lowest frame rate), in 100 ns units."},
+                {"dwFrameIntervalStep", "Indicates granularity of frame interval "
+                 "range, in 100 ns units."},
+                {"dwFrameInterval", "Nth shortest frame interval supported (at "
+                 "nth highest frame rate), in 100 ns units."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbFrameBasedPayloadVideoFrameDescriptor::__parseBmCapabilities() const
         {
             QStringList supports;
@@ -1721,37 +2496,35 @@ namespace usb {
         QString UsbFrameBasedPayloadVideoFrameDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder builder;
-            builder.start(tr("Frame Based Payload Video Frame Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFrameIndex", _bFrameIndex)
-            .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
-            .attr("wWidth", _wWidth)
-            .attr("wHeight", _wHeight)
-            .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
-            .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
-            .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
-                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
-            .attr("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
-                     tr("%1 discrete frame intervals").arg(_bFrameIntervalType) :
-                     tr("Continuous frame interval"))
-            .attr("dwBytesPerLine", _dwBytesPerLine, tr("%1 byte(s)").arg(_dwBytesPerLine));
+            builder.start(tr("Frame Based Payload Video Frame Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFrameIndex", _bFrameIndex)
+                    .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+                    .attr("wWidth", _wWidth)
+                    .attr("wHeight", _wHeight)
+                    .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
+                    .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
+                    .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
+                          tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
+                    .attr("bFrameIntervalType", _bFrameIntervalType, _bFrameIntervalType ?
+                              tr("%1 discrete frame intervals").arg(_bFrameIntervalType) :
+                              tr("Continuous frame interval"))
+                    .attr("dwBytesPerLine", _dwBytesPerLine, tr("%1 byte(s)").arg(_dwBytesPerLine));
             if (_bFrameIntervalType)
-            {
                 for (uint8_t i = 1; i <= _bFrameIntervalType; ++i)
-                    builder.attr(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
-                         tr("%1 * 100 ns").arg(dwFrameInterval(i)));
-            }
+                    builder.attr("dwFrameInterval",
+                                 dwFrameInterval(i),
+                                 tr("%1 * 100 ns").arg(dwFrameInterval(i)),
+                                 i);
             else
-            {
                 builder.attr("dwMinFrameInterval", dwMinFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMinFrameInterval()))
-                .attr("dwMaxFrameInterval", dwMaxFrameInterval(),
-                     tr("%1 * 100 ns").arg(dwMaxFrameInterval()))
-                .attr("dwFrameIntervalStep", _dwFrameIntervalStep,
-                     tr("%1 * 100 ns").arg(_dwFrameIntervalStep));
-            }
+                             tr("%1 * 100 ns").arg(dwMinFrameInterval()))
+                        .attr("dwMaxFrameInterval", dwMaxFrameInterval(),
+                              tr("%1 * 100 ns").arg(dwMaxFrameInterval()))
+                        .attr("dwFrameIntervalStep", _dwFrameIntervalStep,
+                              tr("%1 * 100 ns").arg(_dwFrameIntervalStep));
 
             return builder.end().build();
         }
@@ -1819,18 +2592,54 @@ namespace usb {
             return _dwPacketLength;
         }
 
+        const QStringList &UsbStreamBasedFormatDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFormatIndex",
+                "guidFormat",
+                "dwPacketLength",
+            };
+
+            return fields;
+        }
+
+        QString UsbStreamBasedFormatDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FORMAT_STREAM_BASED descriptor subtype"},
+                {"bFormatIndex", "Index of this format descriptor"},
+                {"guidFormat", "Globally Unique Identifier used to "
+                 "identify stream-encoding format"},
+                {"dwPacketLength", "If non-zero, indicates a format-specific "
+                 "packet size in a Packet-Oriented stream. If zero, indicates that the "
+                 "format-specific data is either Byte-Oriented, or consists of variable size "
+                 "format-specific packets. See section 2.2, \"Payload Data\" of the "
+                 "specification for more details."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbStreamBasedFormatDescriptor::infomationToHtml() const
         {
             return UsbHtmlBuilder()
-            .start(tr("Stream Based Format Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFormatIndex", _bFormatIndex)
-            .attr("guidFormat", "", hexUuid(_guidFormat))
-            .attr("dwPacketLength", _dwPacketLength)
-            .end()
-            .build();
+                    .start(tr("Stream Based Format Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatIndex", _bFormatIndex)
+                    .attr("guidFormat", "", hexUuid(_guidFormat))
+                    .attr("dwPacketLength", _dwPacketLength)
+                    .end()
+                    .build();
         }
 
         UsbStreamBasedFormatDescriptor::UsbStreamBasedFormatDescriptor(
@@ -1964,6 +2773,187 @@ namespace usb {
             }
         }
 
+        const QStringList &UsbH264PayloadVideoFormatDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFormatIndex",
+                "bNumFrameDescriptors",
+                "bDefaultFrameIndex",
+                "bMaxCodecConfigDelay",
+                "bmSupportedSliceModes",
+                "bmSupportedSyncFrameTypes",
+                "bResolutionScaling",
+                "bmSupportedRateControlModes",
+                "wMaxMBperSecOneResolutionNoScalability",
+                "wMaxMBperSecTwoResolutionsNoScalability",
+                "wMaxMBperSecThreeResolutionsNoScalability",
+                "wMaxMBperSecFourResolutionsNoScalability",
+                "wMaxMBperSecOneResolutionTemporalScalability",
+                "wMaxMBperSecTwoResolutionTemporalScalability",
+                "wMaxMBperSecThreeResolutionTemporalScalability",
+                "wMaxMBperSecFourResolutionTemporalScalability",
+                "wMaxMBperSecOneResolutionTemporalQualityScalability",
+                "wMaxMBperSecTwoResolutionTemporalQualityScalability",
+                "wMaxMBperSecThreeResolutionTemporalQualityScalability",
+                "wMaxMBperSecFourResolutionTemporalQualityScalability",
+                "wMaxMBperSecOneResolutionsTemporalSpatialScalability",
+                "wMaxMBperSecTwoResolutionsTemporalSpatialScalability",
+                "wMaxMBperSecThreeResolutionsTemporalSpatialScalability",
+                "wMaxMBperSecFourResolutionsTemporalSpatialScalability",
+                "wMaxMBperSecOneResolutionFullScalability",
+                "wMaxMBperSecTwoResolutionFullScalability",
+                "wMaxMBperSecThreeResolutionFullScalability",
+                "wMaxMBperSecFourResolutionFullScalability",
+            };
+
+            return fields;
+        }
+
+        QString UsbH264PayloadVideoFormatDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "<p>VS_FORMAT_H264 or VS_FORMAT_H264_SIMULCAST "
+                 "descriptor subtype (defined as 0x13 or 0x15).</p>"
+                 "<p>For devices that support simulcast transport, the device should create a "
+                 "video format descriptor with this field set to VS_FORMAT_H264_SIMULCAST. "
+                 "All the video frame descriptors that support simulcast shall be under this format.</p>"
+                 "<p>Video frame descriptors that do not support simulcast transport must be "
+                 "under a video format descriptor with this field set to VS_FORMAT_H264.</p>"},
+                {"bFormatIndex", "Index of this format descriptor. The "
+                 "index must be unique from other "
+                 "format descriptors in the same video interface."},
+                {"bNumFrameDescriptors", "Number of Frame Descriptors "
+                 "following that correspond to this format"},
+                {"bDefaultFrameIndex", "Default frame index."},
+                {"bMaxCodecConfigDelay", "Maximum number of frames the "
+                 "encoder takes to respond to a command."},
+                {"bmSupportedSliceModes", "<p>Slice mode:</p>"
+                 "<table><tr><td>D0:</td><td>Maximum number of MBs per slice mode</td></tr>"
+                 "<tr><td>D1:</td><td>Target compressed size per slice mode</td></tr>"
+                 "<tr><td>D2:</td><td>Number of slices per frame mode</td></tr>"
+                 "<tr><td>D3:</td><td>Number of Macroblock rows per slice mode</td></tr>"
+                 "<tr><td>D7-4:</td><td>Reserved, set to 0</td></tr></table>"
+                 "<p>Set everything to 0 if only one slice per frame is supported.</p>"},
+                {"bmSupportedSyncFrameTypes", "<table><tr><td>D0:</td><td>Reset</td></tr>"
+                 "<tr><td>D1:</td><td>IDR frame with SPS and PPS headers.</td></tr>"
+                 "<tr><td>D2:</td><td>IDR frame (with SPS and PPS "
+                 "headers) that is a long term reference frame.</td></tr>"
+                 "<tr><td>D3:</td><td>Non-IDR random-access I frame (with SPS and PPS headers).</td></tr>"
+                 "<tr><td>D4:</td><td>Generate a random-access I frame (with SPS and PPS headers) that is not "
+                 "an IDR frame and it is a long-term reference frame.</td></tr>"
+                 "<tr><td>D5:</td><td>P frame that is a long term reference frame.</td></tr>"
+                 "<tr><td>D6:</td><td>Gradual Decoder Refresh frames</td></tr>"
+                 "<tr><td>D7:</td><td>Reserved, set to 0</td></tr></table>"},
+                {"bResolutionScaling", "<p>Specifies the support for resolution downsizing.</p>"
+                 "<table><tr><td>0:</td><td>Not supported.</td></tr>"
+                 "<tr><td>1:</td><td>Limited to 1.5 or 2.0 scaling in both "
+                 "directions, while maintaining the aspect ratio.</td></tr>"
+                 "<tr><td>2:</td><td>Limited to 1.0, 1.5 or 2.0 scaling in either direction.</td></tr>"
+                 "<tr><td>3:</td><td>Limited to resolutions reported by "
+                 "the associated Frame Descriptors</td></tr>"
+                 "<tr><td>4:</td><td>Arbitrary scaling.</td></tr>"
+                 "<tr><td>5 to 255:</td><td>Reserved</td></tr></table>"
+                 "<p>Resolution scaling is implemented using the Video Resolution Encoding "
+                 "Unit, and cannot set the resolution above that specified in the currently "
+                 "selected frame descriptor</p>"},
+                {"bmSupportedRateControlModes", "<p>Supported rate-control modes.</p>"
+                 "<table><tr><td>D0:</td><td>Variable bit rate (VBR) with "
+                 "underflow allowed (H.264 low_delay_hrd_flag = 1)</td></tr>"
+                 "<tr><td>D1:</td><td>Constant bit rate (CBR) (H.264 low_delay_hrd_flag = 0)</td></tr>"
+                 "<tr><td>D2:</td><td>Constant QP</td></tr>"
+                 "<tr><td>D3:</td><td>Global VBR with underflow allowed (H.264 low_delay_hrd_flag = 1)</td></tr>"
+                 "<tr><td>D4:</td><td>VBR without underflow (H.264 low_delay_hrd_flag = 0)</td></tr>"
+                 "<tr><td>D5:</td><td>Global VBR without underflow (H.264 low_delay_hrd_flag = 0)</td></tr>"
+                 "<tr><td>D7-6:</td><td>Reserved, set to 0</td></tr></table>"},
+                {"wMaxMBperSecOneResolutionNoScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for a single AVC stream. See Section "
+                 "3.3 for details."},
+                {"wMaxMBperSecTwoResolutionsNoScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for two AVC stream. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecThreeResolutionsNoScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for three AVC stream. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecFourResolutionsNoScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for four AVC stream. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecOneResolutionTemporalScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal scalable SVC, summing "
+                 "up across all layers when all layers have the same resolution. See Section "
+                 "3.3 for details."},
+                {"wMaxMBperSecTwoResolutionTemporalScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal scalable SVC, summing "
+                 "up across all layers when all layers consist of two different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecThreeResolutionTemporalScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal scalable SVC, summing "
+                 "up across all layers when all layers consist of three different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecFourResolutionTemporalScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal scalable SVC, summing "
+                 "up across all layers when all layers consist of four different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecOneResolutionTemporalQualityScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal and quality scalable SVC streams, summing "
+                 "up across all layers when all layers have the same resolution. See Section "
+                 "3.3 for details."},
+                {"wMaxMBperSecTwoResolutionTemporalQualityScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal and quality scalable SVC streams, summing "
+                 "up across all layers when all layers consist of two different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecThreeResolutionTemporalQualityScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal and quality scalable SVC streams, summing "
+                 "up across all layers when all layers consist of three different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecFourResolutionTemporalQualityScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal and quality scalable SVC streams, summing "
+                 "up across all layers when all layers consist of four different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecOneResolutionsTemporalSpatialScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal and spatial scalable SVC streams, summing "
+                 "up across all layers when all layers have the same resolution. See Section "
+                 "3.3 for details."},
+                {"wMaxMBperSecTwoResolutionsTemporalSpatialScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal and spatial scalable SVC streams, summing "
+                 "up across all layers when all layers consist of two different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecThreeResolutionsTemporalSpatialScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal and spatial scalable SVC streams, summing "
+                 "up across all layers when all layers consist of three different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecFourResolutionsTemporalSpatialScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for temporal and spatial scalable SVC streams, summing "
+                 "up across all layers when all layers consist of four different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecOneResolutionFullScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for fully scalable streams, summing "
+                 "up across all layers when all layers have the same resolution. See Section "
+                 "3.3 for details."},
+                {"wMaxMBperSecTwoResolutionFullScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for fully scalable streams, summing "
+                 "up across all layers when all layers consist of two different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecThreeResolutionFullScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for fully scalable streams, summing "
+                 "up across all layers when all layers consist of three different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+                {"wMaxMBperSecFourResolutionFullScalability", "Maximum macroblock processing "
+                 "rate, in units of 1000 MB/s, allowed for fully scalable streams, summing "
+                 "up across all layers when all layers consist of four different resolution. See Section "
+                 "3.3 for details. Zero for devices that do not support simulcast."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbH264PayloadVideoFormatDescriptor::infomationToHtml() const
         {
             static constexpr const char *const order[] = {
@@ -1971,37 +2961,37 @@ namespace usb {
             };
 
             UsbHtmlBuilder builder;
-            builder.start(tr("H.264 Payload Video Format Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFormatIndex", _bFormatIndex)
-            .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
-            .attr("bMaxCodecConfigDelay", _bMaxCodecConfigDelay, tr("%1 frame(s)").arg(_bMaxCodecConfigDelay))
-            .attr("bmSupportedSliceModes", _bmSupportedSliceModes, __parseBmSupportedSliceModes())
-            .attr("bmSupportedSyncFrameTypes", _bmSupportedSyncFrameTypes, __parseBmSupportedSyncFrameTypes())
-            .attr("bResolutionScaling", _bResolutionScaling, __strBResolutionScaling())
-            .attr("bmSupportedRateControlModes", _bmSupportedRateControlModes, __parseBmSupportedRateControlModes());
+            builder.start(tr("H.264 Payload Video Format Descriptor"), true, "UVC1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatIndex", _bFormatIndex)
+                    .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
+                    .attr("bMaxCodecConfigDelay", _bMaxCodecConfigDelay, tr("%1 frame(s)").arg(_bMaxCodecConfigDelay))
+                    .attr("bmSupportedSliceModes", _bmSupportedSliceModes, __parseBmSupportedSliceModes())
+                    .attr("bmSupportedSyncFrameTypes", _bmSupportedSyncFrameTypes, __parseBmSupportedSyncFrameTypes())
+                    .attr("bResolutionScaling", _bResolutionScaling, __strBResolutionScaling())
+                    .attr("bmSupportedRateControlModes", _bmSupportedRateControlModes, __parseBmSupportedRateControlModes());
             for (uint8_t i = 0; i < 4; ++i)
                 builder.attr(QString("wMaxMBperSec%1ResolutionNoScalability").arg(order[i]),
-                     _wMaxMBperSecResolutionNoScalability[i],
-                     tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionNoScalability[i]));
+                             _wMaxMBperSecResolutionNoScalability[i],
+                             tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionNoScalability[i]));
             for (uint8_t i = 0; i < 4; ++i)
                 builder.attr(QString("wMaxMBperSec%1ResolutionTemporalScalability").arg(order[i]),
-                     _wMaxMBperSecResolutionTemporalScalability[i],
-                     tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionTemporalScalability[i]));
+                             _wMaxMBperSecResolutionTemporalScalability[i],
+                             tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionTemporalScalability[i]));
             for (uint8_t i = 0; i < 4; ++i)
                 builder.attr(QString("wMaxMBperSec%1ResolutionTemporalQualityScalability").arg(order[i]),
-                     _wMaxMBperSecResolutionTemporalQualityScalability[i],
-                     tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionTemporalQualityScalability[i]));
+                             _wMaxMBperSecResolutionTemporalQualityScalability[i],
+                             tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionTemporalQualityScalability[i]));
             for (uint8_t i = 0; i < 4; ++i)
                 builder.attr(QString("wMaxMBperSec%1ResolutionsTemporalSpatialScalability").arg(order[i]),
-                     _wMaxMBperSecResolutionsTemporalSpatialScalability[i],
-                     tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionsTemporalSpatialScalability[i]));
+                             _wMaxMBperSecResolutionsTemporalSpatialScalability[i],
+                             tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionsTemporalSpatialScalability[i]));
             for (uint8_t i = 0; i < 4; ++i)
                 builder.attr(QString("wMaxMBperSec%1ResolutionFullScalability").arg(order[i]),
-                     _wMaxMBperSecResolutionFullScalability[i],
-                     tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionFullScalability[i]));
+                             _wMaxMBperSecResolutionFullScalability[i],
+                             tr("%1 * 1000 MB/s").arg(_wMaxMBperSecResolutionFullScalability[i]));
 
             return builder.end().build();
         }
@@ -2222,33 +3212,164 @@ namespace usb {
             }
         }
 
+        const QStringList &UsbH264PayloadVideoFrameDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFrameIndex",
+                "wWidth",
+                "wHeight",
+                "wSARwidth",
+                "wSARheight",
+                "wProfile",
+                "bLevelIDC",
+                "wConstrainedToolset",
+                "bmSupportedUsages",
+                "bmCapabilities",
+                "bmSVCCapabilities",
+                "bmMVCCapabilities",
+                "dwMinBitRate",
+                "dwMaxBitRate",
+                "dwDefaultFrameInterval",
+                "bNumFrameIntervals",
+                "dwFrameInterval",
+            };
+
+            return fields;
+        }
+
+        QString UsbH264PayloadVideoFrameDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FRAME_H264 descriptor subtype"},
+                {"bFrameIndex", "Index of this Frame descriptor"},
+                {"wWidth", "The width, in pixels, of pictures "
+                 "output from the decoding process. Must be a multiple of 2. Does not "
+                 "need to be an integer multiple of 16, and can be specified using a "
+                 "frame cropping rectangle in the active SPS."},
+                {"wHeight", "The height, in pixels, of pictures "
+                 "output from the decoding process. Must be a multiple of 2. When "
+                 "field coding or frame/field adaptive coding is used, shall be a "
+                 "multiple of 4. Does not need to be an integer multiple of 16, and can "
+                 "be specified using a frame cropping rectangle in the active SPS."},
+                {"wSARwidth", "Sample aspect ratio width (as "
+                 "defined in H.264 Annex E); shall be relatively prime with respect to "
+                 "<i>bSARheight</i>."},
+                {"wSARheight", "Sample aspect ratio height (as "
+                 "defined in H.264 Annex E); shall be relatively prime with respect to "
+                 "<i>bSARwidth</i>."},
+                {"wProfile", "<p>The first two bytes of the sequence parameter set, specified "
+                 "by profile_idc and constraint flags in the H.264 specification, to "
+                 "indicate the profile and applicable constraints to be used. For example:</p>"
+                 "<table><tr><td>0x4240:</td><td>Constrained Baseline Profile</td></tr>"
+                 "<tr><td>0x4200:</td><td>Baseline Profile</td></tr>"
+                 "<tr><td>0x4D00:</td><td>Main Profile</td></tr>"
+                 "<tr><td>0x640C:</td><td>Constrained High Profile</td></tr>"
+                 "<tr><td>0x6400:</td><td>High Profile</td></tr>"
+                 "<tr><td>0x5304:</td><td>Scalable Constrained Baseline Profile</td></tr>"
+                 "<tr><td>0x5300:</td><td>Scalable Baseline Profile</td></tr>"
+                 "<tr><td>0x5604:</td><td>Scalable Constrained High Profile</td></tr>"
+                 "<tr><td>0x5600:</td><td>Scalable High Profile</td></tr>"
+                 "<tr><td>0x7600:</td><td>Multiview High Profile</td></tr>"
+                 "<tr><td>0x8000:</td><td>Stereo High Profile</td></tr></table>"},
+                {"bLevelIDC", "The level, as specified by the "
+                 "level_idc flag (9, 10, 11, 12, 13, 20, 21, 22, 30, 31, 32, 40, 41, 42, "
+                 "etc). For example:"
+                 "<table><tr><td>0x1F:</td><td>Level 3.1.</td></tr>"
+                 "<tr><td>0x28:</td><td>Level 4.0.</td></tr></table>"},
+                {"wConstrainedToolset", "Reserved, set to zero"},
+                {"bmSupportedUsages", "<table><tr><td>D0:</td><td>Real-time/UCConfig mode 0.</td></tr>"
+                 "<tr><td>D1:</td><td>Real-time/UCConfig mode 1.</td></tr>"
+                 "<tr><td>D2:</td><td>Real-time/UCConfig mode 2Q.</td></tr>"
+                 "<tr><td>D3:</td><td>Real-time/UCConfig mode 2S.</td></tr>"
+                 "<tr><td>D4:</td><td>Real-time/UCConfig mode 3.</td></tr>"
+                 "<tr><td>D7-5:</td><td>Reserved; set to 0.</td></tr>"
+                 "<tr><td>D15-8:</td><td>Broadcast modes.</td></tr>"
+                 "<tr><td>D16:</td><td>File Storage mode with I slices (e.g. IPPP). Must be set to 1.</td></tr>"
+                 "<tr><td>D17:</td><td>File Storage mode with I, P, and B slices (e.g. IB...BP).</td></tr>"
+                 "<tr><td>D18:</td><td>File storage all-I-frame mode.</td></tr>"
+                 "<tr><td>D23-19:</td><td>Reserved; set to 0.</td></tr>"
+                 "<tr><td>D24:</td><td>MVC Stereo High Mode.</td></tr>"
+                 "<tr><td>D25:</td><td>MVC Multiview Mode</td></tr>"
+                 "<tr><td>D31-D26:</td><td>Reserved; set to 0.</td></tr></table>"
+                 "<p>Devices must support bmSupportedUsages(D16) \"File Storage I, P, P\"</p>"},
+                {"bmCapabilities", "<table><tr><td>D0:</td><td>CAVLC only.</td></tr>"
+                 "<tr><td>D1:</td><td>CABAC only.</td></tr>"
+                 "<tr><td>D2:</td><td>Constant frame rate.</td></tr>"
+                 "<tr><td>D3:</td><td>Separate QP for luma/chroma.</td></tr>"
+                 "<tr><td>D4:</td><td>Separate QP for Cb/Cr.</td></tr>"
+                 "<tr><td>D5:</td><td>No picture reordering.</td></tr>"
+                 "<tr><td>D6:</td><td>Long Term Reference frame.</td></tr>"
+                 "<tr><td>D15-D7:</td><td>Reserved; set to 0.</td></tr></table>"
+                 "<p>Note when D4 is 1, then D3 must be 1.</p>"},
+                {"bmSVCCapabilities", "<table><tr><td>D2-0:</td><td>Maximum number of "
+                 "temporal layers minus 1.</td></tr>"
+                 "<tr><td>D3:</td><td>Rewrite support.</td></tr>"
+                 "<tr><td>D6-4:</td><td>Maximum number of CGS layers minus 1.</td></tr>"
+                 "<tr><td>D9-7:</td><td>Maximum number of MGS sublayers.</td></tr>"
+                 "<tr><td>D10:</td><td>Additional SNR scalability "
+                 "support in spatial enhancement layers.</td></tr>"
+                 "<tr><td>D13-11:</td><td>Maximum number of spatial layers minus 1.</td></tr>"
+                 "<tr><td>D31-14:</td><td>Reserved. Set to zero.</td></tr></table>"
+                 "<p>See Section 3.3.2 for details.</p>"},
+                {"bmMVCCapabilities", "<table><tr><td>D2-0:</td><td>Maximum number of "
+                 "temporal layers minus 1.</td></tr>"
+                 "<tr><td>D10-3:</td><td>Maximum number of view components minus 1.</td></tr>"
+                 "<tr><td>D31-11:</td><td>Reserved. Set to zero.</td></tr></table>"
+                 "<p>See Section 3.4 for details.</p>"},
+                {"dwMinBitRate", "Specifies the minimum bit rate, at "
+                 "maximum compression and longest frame interval, in units of "
+                 "bps, at which the data can be transmitted."},
+                {"dwMaxBitRate", "Specifies the maximum bit rate, at "
+                 "minimum compression and shortest frame interval, in units of "
+                 "bps, at which the data can be transmitted."},
+                {"dwDefaultFrameInterval", "Specifies the frame interval the "
+                 "device indicates for use as a default, in 100-ns units."},
+                {"bNumFrameIntervals", "Specifies the number of frame "
+                 "intervals supported."},
+                {"dwFrameInterval", "Nth shortest frame interval supported "
+                 "(at the nth highest frame rate), in 100-ns units."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbH264PayloadVideoFrameDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder builder;
-            builder.start(tr("H.264 Payload Video Frame Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFrameIndex", _bFrameIndex)
-            .attr("wWidth", _wWidth)
-            .attr("wHeight", _wHeight)
-            .attr("wSARwidth", _wSARwidth)
-            .attr("wSARheight", _wSARheight)
-            .attr("wProfile", _wProfile, __strWProfile())
-            .attr("bLevelIDC", _bLevelIDC, __strBLevelIDC())
-            .attr("wConstrainedToolset", _wConstrainedToolset)
-            .attr("bmSupportedUsages", _bmSupportedUsages, __parseBmSupportedUsages())
-            .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
-            .attr("bmSVCCapabilities", _bmSVCCapabilities, __parseBmSVCCapabilities())
-            .attr("bmMVCCapabilities", _bmMVCCapabilities, __parseBmMVCCapabilities())
-            .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
-            .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
-            .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
-                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
-            .attr("bNumFrameIntervals", _bNumFrameIntervals);
+            builder.start(tr("H.264 Payload Video Frame Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFrameIndex", _bFrameIndex)
+                    .attr("wWidth", _wWidth)
+                    .attr("wHeight", _wHeight)
+                    .attr("wSARwidth", _wSARwidth)
+                    .attr("wSARheight", _wSARheight)
+                    .attr("wProfile", _wProfile, __strWProfile())
+                    .attr("bLevelIDC", _bLevelIDC, __strBLevelIDC())
+                    .attr("wConstrainedToolset", _wConstrainedToolset)
+                    .attr("bmSupportedUsages", _bmSupportedUsages, __parseBmSupportedUsages())
+                    .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+                    .attr("bmSVCCapabilities", _bmSVCCapabilities, __parseBmSVCCapabilities())
+                    .attr("bmMVCCapabilities", _bmMVCCapabilities, __parseBmMVCCapabilities())
+                    .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
+                    .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
+                    .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
+                          tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
+                    .attr("bNumFrameIntervals", _bNumFrameIntervals);
             for (uint8_t i = 1; i <= _bNumFrameIntervals; ++i)
-                builder.attr(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
-                     tr("%1 * 100 ns").arg(dwFrameInterval(i)));
+                builder.attr("dwFrameInterval",
+                             dwFrameInterval(i),
+                             tr("%1 * 100 ns").arg(dwFrameInterval(i)),
+                             i);
 
             return builder.end().build();
         }
@@ -2306,6 +3427,13 @@ namespace usb {
                         return tr("Baseline profile");
                 case 77:
                 return tr("Main profile");
+                case 83:
+                    if (constraint_set_flag[5])
+                        return tr("Scalable Constrained Baseline profile");
+                    else
+                        return tr("Scalable Baseline profile");
+                case 86:
+                return tr("Scalable High profile");
                 case 88:
                 return tr("Extended profile");
                 case 100:
@@ -2322,11 +3450,23 @@ namespace usb {
                         return tr("High 10 Intra profile");
                     else
                         return tr("High 10 profile");
+                case 118:
+                return tr("Multiview High profile");
                 case 122:
                     if (constraint_set_flag[3])
                         return tr("High 4:2:2 Intra profile");
                     else
                         return tr("High 4:2:2 profile");
+                case 128:
+                return tr("Stereo High profile");
+                case 134:
+                return tr("MFC High profile");
+                case 135:
+                return tr("MFC Depth High profile");
+                case 138:
+                return tr("Multiview Depth High profile");
+                case 139:
+                return tr("Enhanced Multiview Depth High profile");
                 case 244:
                     if (constraint_set_flag[3])
                         return tr("High 4:4:4 Intra profile");
@@ -2484,24 +3624,92 @@ namespace usb {
             return _wMaxMBperSec;
         }
 
+        const QStringList &UsbVp8PayloadVideoFormatDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFormatIndex",
+                "bNumFrameDescriptors",
+                "bDefaultFrameIndex",
+                "bMaxCodecConfigDelay",
+                "bSupportedPartitionCount",
+                "bmSupportedSyncFrameTypes",
+                "bResolutionScaling",
+                "bmSupportedRateControlModes",
+                "wMaxMBperSec",
+            };
+
+            return fields;
+        }
+
+        QString UsbVp8PayloadVideoFormatDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FORMAT_VP8 or VS_FORMAT_VP8_SIMULCAST descriptor subtype"},
+                {"bFormatIndex", "Index of this format descriptor"},
+                {"bNumFrameDescriptors", "Number of Frame Descriptors "
+                 "following that correspond to this format."},
+                {"bDefaultFrameIndex", "Default frame index."},
+                {"bMaxCodecConfigDelay", "Maximum number of frames the "
+                 "encoder takes to respond to a command."},
+                {"bSupportedPartitionCount", "Maximum number of supported "
+                 "partitions per frame. Number must be equal to some power of 2."},
+                {"bmSupportedSyncFrameTypes", "<table><tr><td>D0:</td><td>Reset</td></tr>"
+                 "<tr><td>D1:</td><td>Intra frame</td></tr>"
+                 "<tr><td>D2:</td><td>Golden frame</td></tr>"
+                 "<tr><td>D3:</td><td>Alternate reference frame</td></tr>"
+                 "<tr><td>D4:</td><td>Gradual Decoder Refresh frames</td></tr>"
+                 "<tr><td>D7-D5:</td><td>Reserved, set to 0</td></tr></table>"},
+                {"bResolutionScaling", "<p>Specifies the support for resolution downsizing.</p>"
+                 "<table><tr><td>0:</td><td>Not supported.</td></tr>"
+                 "<tr><td>1:</td><td>Limited to 1.5 or 2.0 scaling in "
+                 "both directions, while maintaining the aspect ratio.</td></tr>"
+                 "<tr><td>2:</td><td>Limited to 1.0, 1.5 or 2.0 scaling in either direction.</td></tr>"
+                 "<tr><td>3:</td><td>Limited to resolutions reported "
+                 "by the associated Frame.</td></tr>"
+                 "<tr><td>4:</td><td>Arbitrary scaling.</td></tr>"
+                 "<tr><td>5 to 255:</td><td>Reserved</td></tr></table>"
+                 "<p>Resolution scaling is implemented using the Video "
+                 "Resolution Encoding Unit, and cannot set the resolution above "
+                 "that specified in the currently selected frame descriptor</p>"},
+                {"bmSupportedRateControlModes", "<p>Supported rate-control modes.</p>"
+                 "<table><tr><td>D0:</td><td>Variable bit rate (VBR)</td></tr>"
+                 "<tr><td>D1:</td><td>Constant bit rate (CBR)</td></tr>"
+                 "<tr><td>D2:</td><td>Constant QP</td></tr>"
+                 "<tr><td>D3:</td><td>Global VBR</td></tr>"
+                 "<tr><td>D7-D4:</td><td>Reserved, set to 0</td></tr></table>"},
+                {"wMaxMBperSec", "Maximum macroblock processing "
+                 "rate, in units of MB/s, allowed for all VP8 streams by the device."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbVp8PayloadVideoFormatDescriptor::infomationToHtml() const
         {
             return UsbHtmlBuilder()
-            .start(tr("VP8 Payload Video Format Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFormatIndex", _bFormatIndex)
-            .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
-            .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
-            .attr("bMaxCodecConfigDelay", _bMaxCodecConfigDelay)
-            .attr("bSupportedPartitionCount", _bSupportedPartitionCount)
-            .attr("bmSupportedSyncFrameTypes", _bmSupportedSyncFrameTypes, __parseBmSupportedSyncFrameTypes())
-            .attr("bResolutionScaling", _bResolutionScaling, __strBResolutionScaling())
-            .attr("bmSupportedRateControlModes", _bmSupportedRateControlModes, __parseBmSupportedRateControlModes())
-            .attr("wMaxMBperSec", _wMaxMBperSec, tr("%1 MB/s").arg(_wMaxMBperSec))
-            .end()
-            .build();
+                    .start(tr("VP8 Payload Video Format Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFormatIndex", _bFormatIndex)
+                    .attr("bNumFrameDescriptors", _bNumFrameDescriptors)
+                    .attr("bDefaultFrameIndex", _bDefaultFrameIndex)
+                    .attr("bMaxCodecConfigDelay", _bMaxCodecConfigDelay)
+                    .attr("bSupportedPartitionCount", _bSupportedPartitionCount)
+                    .attr("bmSupportedSyncFrameTypes", _bmSupportedSyncFrameTypes, __parseBmSupportedSyncFrameTypes())
+                    .attr("bResolutionScaling", _bResolutionScaling, __strBResolutionScaling())
+                    .attr("bmSupportedRateControlModes", _bmSupportedRateControlModes, __parseBmSupportedRateControlModes())
+                    .attr("wMaxMBperSec", _wMaxMBperSec, tr("%1 MB/s").arg(_wMaxMBperSec))
+                    .end()
+                    .build();
         }
 
         UsbVp8PayloadVideoFormatDescriptor::UsbVp8PayloadVideoFormatDescriptor(
@@ -2652,27 +3860,102 @@ namespace usb {
             }
         }
 
+        const QStringList &UsbVp8PayloadVideoFrameDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bFrameIndex",
+                "wWidth",
+                "wHeight",
+                "bmSupportedUsages",
+                "bmCapabilities",
+                "bmScalabilityCapabilities",
+                "dwMinBitRate",
+                "dwMaxBitRate",
+                "dwDefaultFrameInterval",
+                "bNumFrameIntervals",
+                "dwFrameInterval",
+            };
+
+            return fields;
+        }
+
+        QString UsbVp8PayloadVideoFrameDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VS_FRAME_VP8 descriptor subtype"},
+                {"bFrameIndex", "Index of this frame descriptor"},
+                {"wWidth", "The width, in pixels, of valid "
+                 "picture area from the decoding process. Must be a multiple of 2. "
+                 "Regardless of <i>wWidth</i> setting coded width is always the next multiple of 16."},
+                {"wHeight", "The height, in pixels, of valid "
+                 "picture area from the decoding process. Must be a multiple of 2. "
+                 "Regardless of <i>wHeight</i> setting coded height is always the next multiple of 16."},
+                {"bmSupportedUsages", "<table><tr><td>D0:</td><td>Reserved; set to 0</td></tr>"
+                 "<tr><td>D1:</td><td>Real-time.</td></tr>"
+                 "<tr><td>D2:</td><td>Real-time with temporal "
+                 "layering structure as specified in <i>bmLayoutPerStream</i> field.</td></tr>"
+                 "<tr><td>D15-3:</td><td>Reserved; set to 0.</td></tr>"
+                 "<tr><td>D16:</td><td>File Storage mode with I and P frames (e.g. IPPP).</td></tr>"
+                 "<tr><td>D17:</td><td>Reserved; set to 0.</td></tr>"
+                 "<tr><td>D18:</td><td>File storage all-I-frame mode.</td></tr>"
+                 "<tr><td>D31-D19:</td><td>Reserved; set to 0.</td></tr></table>"},
+                {"bmCapabilities", "<table><tr><td>D1-0:</td><td>Reserved; set to 0</td></tr>"
+                 "<tr><td>D2:</td><td>Constant frame rate.</td></tr>"
+                 "<tr><td>D3:</td><td>Separate QP for luma/chroma.</td></tr>"
+                 "<tr><td>D5-4:</td><td>Reserved; set to 0.</td></tr>"
+                 "<tr><td>D6:</td><td>Golden frame.</td></tr>"
+                 "<tr><td>D7:</td><td>Alternate reference frame.</td></tr>"
+                 "<tr><td>D15-D8:</td><td>Reserved; set to 0.</td></tr></table>"},
+                {"bmScalabilityCapabilities", "<table><tr><td>D2-0:</td><td>Maximum number of "
+                 "temporal enhancement layers minus 1.</td></tr>"
+                 "<tr><td>D31-D3:</td><td>Reserved.</td></tr></table>"},
+                {"dwMinBitRate", "Specifies the minimum bit rate, "
+                 "at maximum compression and longest frame interval, in units of "
+                 "bps, at which the data can be transmitted."},
+                {"dwMaxBitRate", "Specifies the maximum bit rate, "
+                 "at minimum compression and shortest frame interval, in units "
+                 "of bps, at which the data can be transmitted."},
+                {"dwDefaultFrameInterval", "Specifies the frame interval the "
+                 "device indicates for use as a default, in 100-ns units."},
+                {"bNumFrameIntervals", "Specifies the number of frame intervals supported."},
+                {"dwFrameInterval", "Nth shortest frame interval supported (at "
+                 "nth highest frame rate), in 100 ns units."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbVp8PayloadVideoFrameDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder bulider;
-            bulider.start(tr("VP8 Payload Video Frame Descriptor"))
-            .attr("bLength", _bLength)
-            .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
-            .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
-            .attr("bFrameIndex", _bFrameIndex)
-            .attr("wWidth", _wWidth)
-            .attr("wHeight", _wHeight)
-            .attr("bmSupportedUsages", _bmSupportedUsages, __parseBmSupportedUsages())
-            .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
-            .attr("bmScalabilityCapabilities", _bmScalabilityCapabilities, __parseBmScalabilityCapabilities())
-            .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
-            .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
-            .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
-                 tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
-            .attr("bNumFrameIntervals", _bNumFrameIntervals);
+            bulider.start(tr("VP8 Payload Video Frame Descriptor"), true, "UVC 1.5")
+                    .attr("bLength", _bLength)
+                    .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
+                    .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
+                    .attr("bFrameIndex", _bFrameIndex)
+                    .attr("wWidth", _wWidth)
+                    .attr("wHeight", _wHeight)
+                    .attr("bmSupportedUsages", _bmSupportedUsages, __parseBmSupportedUsages())
+                    .attr("bmCapabilities", _bmCapabilities, __parseBmCapabilities())
+                    .attr("bmScalabilityCapabilities", _bmScalabilityCapabilities, __parseBmScalabilityCapabilities())
+                    .attr("dwMinBitRate", _dwMinBitRate, tr("%1 bps").arg(_dwMinBitRate))
+                    .attr("dwMaxBitRate", _dwMaxBitRate, tr("%1 bps").arg(_dwMaxBitRate))
+                    .attr("dwDefaultFrameInterval", _dwDefaultFrameInterval,
+                          tr("%1 * 100 ns").arg(_dwDefaultFrameInterval))
+                    .attr("bNumFrameIntervals", _bNumFrameIntervals);
             for (uint8_t i = 1; i <= _bNumFrameIntervals; ++i)
-                bulider.attr(QString("dwFrameInterval(%1)").arg(i), dwFrameInterval(i),
-                     tr("%1 * 100 ns").arg(dwFrameInterval(i)));
+                bulider.attr("dwFrameInterval",
+                             dwFrameInterval(i),
+                             tr("%1 * 100 ns").arg(dwFrameInterval(i)),
+                             i);
 
             return bulider.end().build();
         }

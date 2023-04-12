@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of extra descriptors belongs to USB Configuration Descriptor
+/*! C++ class wrapper of extra descriptors belongs to USB Configuration Descriptor
 
  * Copyright (C) 2022-2023 Nichts Hsu
 
@@ -154,6 +154,20 @@ namespace usb {
         uint8_t bNumEncryptionTypes() const;
 
         /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
+
+        /**
          * @brief infomationToHtml
          * @return HTML form informations
          */
@@ -214,6 +228,20 @@ namespace usb {
          * @return the value specifies the Key Index to use for authentication
          */
         uint8_t bAuthKeyIndex() const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml

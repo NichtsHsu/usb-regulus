@@ -1,4 +1,4 @@
-﻿#ifndef TOOLS_H
+#ifndef TOOLS_H
 #define TOOLS_H
 
 #include <QString>
@@ -11,6 +11,14 @@ class Tools: public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * @brief version
+     * @return usb-regulus program version
+     */
+    static inline const char *version() {
+        return "0.1.7";
+    }
+
     /**
      * @brief getValidThemes
      * @return string list includes all themes

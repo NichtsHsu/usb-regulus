@@ -99,6 +99,74 @@ namespace usb {
         return _extraLength;
     }
 
+    const QStringList &UsbInterfaceDescriptor::getFieldNames()
+    {
+        static const QStringList fields = {
+            "bLength",
+            "bDescriptorType",
+            "bInterfaceNumber",
+            "bAlternateSetting",
+            "bNumEndpoints",
+            "bInterfaceClass",
+            "bInterfaceSubClass",
+            "bInterfaceProtocol",
+            "iInterface",
+        };
+
+        return fields;
+    }
+
+    QString UsbInterfaceDescriptor::getFieldInformation(const QString &field)
+    {
+        static const QMap<QString, QString> fieldDescription = {
+            {"bLength", "Size of this descriptor in bytes"},
+            {"bDescriptorType", "INTERFACE Descriptor Type"},
+            {"bInterfaceNumber", "Number of this interface. Zero-based value "
+             "identifying the index in the array of "
+             "concurrent interfaces supported by this "
+             "configuration."},
+            {"bAlternateSetting", "Value used to select this alternate setting "
+             "for the interface identified in the prior field"},
+            {"bNumEndpoints", "Number of endpoints used by this interface "
+             "(excluding the Default Control Pipe). If this "
+             "value is zero, this interface only uses the "
+             "Default Control Pipe."},
+            {"bInterfaceClass", "<p>Class code (assigned by the USB-IF).</p>"
+             "<p>A value of zero is reserved for future "
+             "standardization.</p>"
+             "<p>If this field is set to FFH, the interface class "
+             "is vendor-specific.</p>"
+             "<p>All other values are reserved for assignment "
+             "by the USB-IF.</p>"},
+            {"bInterfaceSubClass", "<p>Subclass code (assigned by the USB-IF). "
+             "These codes are qualified by the value of the "
+             "<i>bInterfaceClass</i> field.</p>"
+             "<p>If the <i>bInterfaceClass</i> field is reset to zero, "
+             "this field shall also be reset to zero.</p>"
+             "<p>If the <i>bInterfaceClass</i> field is not set to FFH, "
+             "all values are reserved for assignment by "
+             "the USB-IF.</p>"},
+            {"bInterfaceProtocol", "<p>Protocol code (assigned by the USB). These "
+             "codes are qualified by the value of the "
+             "<i>bInterfaceClass</i> and the <i>bInterfaceSubClass</i>"
+             "fields. If an interface supports class-specific "
+             "requests, this code identifies the protocols "
+             "that the device uses as defined by the "
+             "specification of the device class.</p>"
+             "<p>If this field is reset to zero, the device does "
+             "not use a class-specific protocol on this "
+             "interface.</p>"
+             "<p>If this field is set to FFH, the device uses a "
+             "vendor-specific protocol for this interface.</p>"},
+            {"iInterface", "Index of string descriptor describing this interface"},
+        };
+
+        if (fieldDescription.contains(field))
+            return fieldDescription[field];
+        else
+            return QString();
+    }
+
     UsbEndpointDescriptor *UsbInterfaceDescriptor::endpoint(int index) const
     {
         if (index < 0)
@@ -142,7 +210,7 @@ namespace usb {
     QString UsbInterfaceDescriptor::infomationToHtml() const
     {
         UsbHtmlBuilder builder;
-        builder.start(tr("Interface Descriptor"))
+        builder.start(tr("Interface Descriptor"), true)
                 .attr("bLength", _bLength)
                 .attr("bDescriptorType", _bDescriptorType, "INTERFACE")
                 .attr("bInterfaceNumber", _bInterfaceNumber)

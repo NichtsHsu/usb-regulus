@@ -66,6 +66,12 @@ namespace usb {
             static QString strWTerminalType(uint16_t wTerminalType);
 
             /**
+             * @brief terminalTypesInformation
+             * @return HTML form terminal types information.
+             */
+            static QString terminalTypesInformation();
+
+            /**
              * @brief get
              * Get the VideoControl Interface Descriptor
              * @param interfaceDescriptor
@@ -144,6 +150,20 @@ namespace usb {
             uint8_t baInterfaceNr(uint8_t index) const;
 
             /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
+
+            /**
              * @brief infomationToHtml
              * @return HTML form informations
              */
@@ -212,6 +232,20 @@ namespace usb {
              * @return string descriptor describing the Input Terminal
              */
             uint8_t iTerminal() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -303,6 +337,20 @@ namespace usb {
              * @return string descriptor describing the Input Terminal
              */
             uint8_t iTerminal() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -402,6 +450,20 @@ namespace usb {
             QByteArray bmControls() const;
 
             /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
+
+            /**
              * @brief infomationToHtml
              * @return HTML form informations
              */
@@ -473,6 +535,20 @@ namespace usb {
              * @return string descriptor describing the Selector Unit
              */
             uint8_t iSelector() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -590,6 +666,20 @@ namespace usb {
             uint8_t bmVideoStandards() const;
 
             /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
+
+            /**
              * @brief infomationToHtml
              * @return HTML form informations
              */
@@ -690,6 +780,20 @@ namespace usb {
              * @return string descriptor that describing this extension unit
              */
             uint8_t iExtension() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -816,6 +920,20 @@ namespace usb {
              * D20..23  Reserved
              */
             QByteArray bmControlsRuntime() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml

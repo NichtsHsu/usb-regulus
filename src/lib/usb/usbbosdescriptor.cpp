@@ -95,7 +95,7 @@ namespace usb {
     QString UsbBosDescriptor::infomationToHtml() const
     {
         UsbHtmlBuilder builder;
-        builder.start(tr("BOS Descriptor"))
+        builder.start(tr("BOS Descriptor"), true)
                 .attr("bLength", _bLength)
                 .attr("bDescriptorType", _bDescriptorType, "BOS")
                 .attr("wTotalLength", _wTotalLength)
@@ -130,5 +130,32 @@ namespace usb {
     uint8_t UsbBosDescriptor::bNumDeviceCaps() const
     {
         return _bNumDeviceCaps;
+    }
+
+    const QStringList &UsbBosDescriptor::getFieldNames()
+    {
+        static const QStringList fields = {
+            "bLength",
+            "bDescriptorType",
+            "wTotalLength",
+            "bNumDeviceCaps",
+        };
+
+        return fields;
+    }
+
+    QString UsbBosDescriptor::getFieldInformation(const QString &field)
+    {
+        static const QMap<QString, QString> fieldDescription = {
+            {"bLength", "Size of descriptor"},
+            {"bDescriptorType", "BOS Descriptor type"},
+            {"wTotalLength", "Length of this descriptor and all of its sub descriptors"},
+            {"bNumDeviceCaps", "The number of separate device capability descriptors in the BOS"},
+        };
+
+        if (fieldDescription.contains(field))
+            return fieldDescription[field];
+        else
+            return QString();
     }
 }

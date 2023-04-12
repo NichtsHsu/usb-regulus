@@ -6,7 +6,8 @@
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    _translator(nullptr)
+    _translator(nullptr),
+    _aboutDialog(nullptr)
 {
     settings().loadFromIni(Tools::getConfigFilePath());
 
@@ -24,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent):
     ui->splitterMain->setStretchFactor(1, 3);
 
     ui_mainBrowser->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui_mainBrowser->setOpenLinks(false);
+    ui_mainBrowser->document()->setDefaultStyleSheet("a { color: inherit; }");
 
     _mainBrowserMenu = new QMenu(ui_mainBrowser);
     _actionCopy = new QAction(tr("Copy"));
@@ -36,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent):
     _mainBrowserMenu->addAction(_actionCopyAllMarkdown);
 
     _preferenceDialog = new PreferenceDialog;
+    _quickReference = new FieldQuickReference;
 
     QStringList themes = Tools::getValidThemes();
     foreach (const QString &theme, themes)
@@ -77,6 +81,10 @@ MainWindow::MainWindow(QWidget *parent):
             usb::UsbHost::instance(), &usb::UsbHost::setProtectKeyboard);
     connect(ui->actionPreferences, &QAction::triggered,
             this, &MainWindow::__openPreferenceDialog);
+    connect(ui->actionFiledQuickReference, &QAction::triggered,
+            this, &MainWindow::__openFieldQuickReference);
+    connect(ui->actionAbout, &QAction::triggered,
+            this, &MainWindow::__openAboutDialog);
     connect(ui->actionDebug, &QAction::triggered, this, [this] () {
         __setLoggerLevel(Logger::Level::Debug);
     });
@@ -115,9 +123,12 @@ MainWindow::MainWindow(QWidget *parent):
     });
     connect(ui_mainBrowser, &QTextBrowser::customContextMenuRequested,
             this, &MainWindow::__mainBrowserMenuShow);
+    connect(ui_mainBrowser, &QTextBrowser::anchorClicked,
+            _quickReference, &FieldQuickReference::showInformationByUrl);
     connect(_preferenceDialog, &PreferenceDialog::OkOrApplyClicked,
             this, &MainWindow::__preferenceDialogApply);
 
+    LOGD(tr("Init done, ready to scan USB devices"));
     usb::UsbHost::instance()->rescan();
 }
 
@@ -125,6 +136,9 @@ MainWindow::~MainWindow()
 {
     delete ui;
     _preferenceDialog->deleteLater();
+    _quickReference->deleteLater();
+    if (_aboutDialog)
+        _aboutDialog->deleteLater();
 }
 
 void MainWindow::__refreshDeviceList()
@@ -137,13 +151,12 @@ void MainWindow::__insertDevice(usb::UsbDevice *device, int index)
     _insertDeviceNotReady.insert(device);
     /* Delay 1 second for loading string descriptor */
     QTimer::singleShot(1000, this, [this, index, device]() {
-        _deviceTreeViewMutex.lock();
+        std::lock_guard<QMutex> lock{_deviceTreeViewMutex};
         /* Device may be unplugged before this call. */
         if (_insertDeviceNotReady.contains(device)) {
             this->ui->usbDeviceTreeView->insert(index, device);
             _insertDeviceNotReady.remove(device);
         }
-        _deviceTreeViewMutex.unlock();
     });
 }
 
@@ -157,7 +170,6 @@ void MainWindow::__removeDevice(usb::UsbDevice *device, int index)
         return;
     }
     _deviceTreeViewMutex.unlock();
-
 
     ui->usbDeviceTreeView->remove(index);
     if (_currentDisplayedDeviceItem)
@@ -232,6 +244,18 @@ void MainWindow::__preferenceDialogApply()
     __updateWithSettings();
 }
 
+void MainWindow::__openFieldQuickReference()
+{
+    _quickReference->show();
+}
+
+void MainWindow::__openAboutDialog()
+{
+    if (!_aboutDialog)
+        _aboutDialog = new AboutDialog;
+    _aboutDialog->show();
+}
+
 void MainWindow::changeEvent(QEvent *event)
 {
     switch (event->type())
@@ -267,8 +291,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
                      QString("/usb-regulus_") + dateTime.toString("yyyyMMdd_hhmmss") + QString(".txt"));
     }
     usb::UsbHost::instance()->deleteLater();
-    qApp->quit();
     QMainWindow::closeEvent(event);
+    qApp->quit();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -322,6 +346,7 @@ void MainWindow::__initWithSettings()
     }
     if (settings().startWithRandomTheme())
     {
+        LOGD("Start with random theme.");
         QStringList themeList = Tools::getValidThemes();
         srand(time(nullptr));
         int randomThemeIndex = rand() % themeList.length();
@@ -337,7 +362,7 @@ void MainWindow::__initWithSettings()
 
     /* Font */
     /* Qt prohibits mixing `setStyleSheet` and `setFont`, */
-    /* therefore fonts will be handled in `__FontToCss` */
+    /* therefore fonts will be handled in `__extraQss()` */
 }
 
 void MainWindow::__updateWithSettings()
@@ -352,7 +377,7 @@ void MainWindow::__updateWithSettings()
 
     /* Font */
     /* Qt prohibits mixing `setStyleSheet` and `setFont`, */
-    /* therefore fonts will be handled in `__FontToCss` */
+    /* therefore fonts will be handled in `__extraQss()` */
 }
 
 void MainWindow::__setLoggerLevel(Logger::Level level)
@@ -368,7 +393,9 @@ void MainWindow::__setLoggerLevel(Logger::Level level)
 
 void MainWindow::__setTheme(const QString &theme)
 {
-    QString qss = Tools::getThemeStyleSheet(theme) + __FontToCss();
+    QString fontCss = __extraQss();
+    LOGD(tr("Generated extra QSS is: \"%1\"").arg(fontCss));
+    QString qss = Tools::getThemeStyleSheet(theme) + fontCss;
     settings().theme() = theme;
     qApp->setStyleSheet(qss);
     LOGI(tr("Set theme to %1.").arg(theme));
@@ -399,7 +426,7 @@ void MainWindow::__loadTranslation(const QString &lang)
     }
 }
 
-QString MainWindow::__FontToCss()
+QString MainWindow::__extraQss()
 {
     QString fontCss =
             "* {"
@@ -413,6 +440,9 @@ QString MainWindow::__FontToCss()
             "   font-size: %6pt;"
             "   font-style: %7;"
             "   font-weight: %8;"
+            "}"
+            "QComboBox {"
+            "    combobox-popup: 0;"
             "}";
     return fontCss
             .arg(settings().uiFont().family())

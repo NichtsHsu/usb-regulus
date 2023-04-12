@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB Hub Descriptors
+/*! C++ class wrapper of USB Hub Descriptors
 
  * Copyright (C) 2022-2023 Nichts Hsu
 
@@ -21,7 +21,6 @@
 
 #include <QObject>
 #include <QByteArray>
-#include "log/logger.h"
 
 namespace usb {
     class UsbDeviceDescriptor;
@@ -137,6 +136,20 @@ namespace usb {
         const QByteArray &PortPwrCtrlMask() const;
 
         /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
+
+        /**
          * @brief infomationToHtml
          * @return HTML form informations
          */
@@ -225,6 +238,20 @@ namespace usb {
          * Limit to 15 bit.
          */
         uint16_t DeviceRemovable() const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml

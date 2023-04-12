@@ -4,10 +4,10 @@
 
 namespace usb {
     using namespace __private;
-    static std::mutex __mutW;
+    Q_GLOBAL_STATIC(QMutex, __mutW);
 
     UsbHost::UsbHost(QObject *parent):
-        QObject{parent}, _context(nullptr), _protectMouse(true), _protectKeyboard(true)
+        QObject{parent}, _context(nullptr), _protectMouse(true), _protectKeyboard(true), _rescanTimer(nullptr)
     {
         __init();
     }
@@ -19,8 +19,18 @@ namespace usb {
             _libusbEventHandler->stop();
             _libusbEventThread->exit();
 
+            if (_rescanTimer)
+            {
+                _rescanTimer->stop();
+                _rescanTimer->deleteLater();
+            }
             _rescaner->disconnect(this);
             _rescanThread->exit();
+
+            _libusbEventHandler->deleteLater();
+            _libusbEventThread->deleteLater();
+            _rescaner->deleteLater();
+            _rescanThread->deleteLater();
 
             if (_hasHotplug)
                 libusb_hotplug_deregister_callback(_context, _hotplugCbHandle);
@@ -46,6 +56,7 @@ namespace usb {
             _hasHotplug = false;
             return;
         }
+        LOGD(tr("Libusb initialized."));
 
         _libusbEventHandler = new UsbEventHandler;
         _libusbEventThread = new QThread;
@@ -102,9 +113,9 @@ namespace usb {
                     "so usb-regulus will start a timer every 100ms to poll the devices list "
                     "and check if any device was plugged or unplugged"));
             _rescaner->setUpdateMode(true);
-            QTimer *timer = new QTimer(this);
-            connect(timer, &QTimer::timeout, _rescaner, &UsbDeviceRescanWorker::run);
-            timer->start(100);
+            _rescanTimer = new QTimer(this);
+            connect(_rescanTimer, &QTimer::timeout, _rescaner, &UsbDeviceRescanWorker::run);
+            _rescanTimer->start(100);
         }
 
 #ifdef Q_OS_UNIX
@@ -112,6 +123,7 @@ namespace usb {
             LOGW(tr("Unable to initialize USB name database, you may get UNKNOWN as the device name."));
 #endif
 
+        LOGD(tr("Initialization finished."));
         _initialized = true;
     }
 
@@ -143,17 +155,18 @@ namespace usb {
     int UsbHost::__hotplug_callback(libusb_context *ctx, libusb_device *dev, libusb_hotplug_event event, void *user_data)
     {
         Q_UNUSED(ctx);
+        log().d("usb::UsbHost", UsbHost::tr("Hotplug callback: event code is %1.").arg(event));
         UsbHost *usbHost = reinterpret_cast<UsbHost*>(user_data);
         if (event == LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED)
             /** Cannot create children for a parent that is in a different thread in Qt.
-             * We use QTimer::singleShot to let the slot function run in main thread.
+             * We use QTimer::singleShot to let the slot function run in the main thread.
              */
             QTimer::singleShot(0, usbHost, [usbHost, dev] () {
                 usbHost->__addDevice(dev);
             });
         else if (event == LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT)
             /** Cannot create children for a parent that is in a different thread in Qt.
-             * We use QTimer::singleShot to let the slot function run in main thread.
+             * We use QTimer::singleShot to let the slot function run in the main thread.
              */
             QTimer::singleShot(0, usbHost, [usbHost, dev] () {
                 usbHost->__removeDevice(dev);
@@ -186,8 +199,7 @@ namespace usb {
                         int ret = hidDescriptor->tryGetHidReportDescriptor();
                         if (ret < LIBUSB_SUCCESS)
                             LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\".")
-                                 .arg(interfaceDesc->interface()->displayName())
-                                 .arg(device->displayName()));
+                                 .arg(interfaceDesc->interface()->displayName(), device->displayName()));
                     }
                 }
             }
@@ -217,8 +229,7 @@ namespace usb {
                         int ret = hidDescriptor->tryGetHidReportDescriptor();
                         if (ret < LIBUSB_SUCCESS)
                             LOGE(tr("Failed to update HID Report Descriptor for interface \"%1\" of device \"%2\".")
-                                 .arg(interfaceDesc->interface()->displayName())
-                                 .arg(device->displayName()));
+                                 .arg(interfaceDesc->interface()->displayName(), device->displayName()));
                     }
                 }
             }
@@ -238,7 +249,7 @@ namespace usb {
 
     void UsbHost::__addDevice(libusb_device *device)
     {
-        std::lock_guard<std::mutex> lock{ __mutW };
+        std::lock_guard<QMutex> lock{ *__mutW };
         LOGD(tr("Hotplug event: attached."));
         UsbDevice *usbDevice = new UsbDevice(device, this);
 
@@ -257,7 +268,7 @@ namespace usb {
 
     void UsbHost::__removeDevice(libusb_device *device)
     {
-        std::lock_guard<std::mutex> lock{ __mutW };
+        std::lock_guard<QMutex> lock{ *__mutW };
         LOGD(tr("Hotplug event: detached."));
         int index = __indexOfDevice(device);
         if (index == -1)
@@ -279,7 +290,7 @@ namespace usb {
 
     void UsbHost::__removeDevice(const UsbDevice &device)
     {
-        std::lock_guard<std::mutex> lock{ __mutW };
+        std::lock_guard<QMutex> lock{ *__mutW };
         LOGD(tr("Hotplug event: detached."));
         int index = __indexOfDevice(device);
         if (index == -1)
@@ -310,7 +321,7 @@ namespace usb {
     {
         if (UsbHost::_instance == nullptr)
         {
-            std::lock_guard<std::mutex> lock{ __mutW };
+            std::lock_guard<QMutex> lock{ *__mutW };
             if (UsbHost::_instance == nullptr)
                 UsbHost::_instance = new UsbHost;
         }
@@ -356,9 +367,8 @@ namespace usb {
 
     void __private::UsbEventHandler::stop()
     {
-        _stopFlagMutex.lock();
+        std::lock_guard<QMutex> lock{_stopFlagMutex};
         _stopFlag = true;
-        _stopFlagMutex.unlock();
     }
 
 
@@ -424,7 +434,7 @@ namespace usb {
         }
         else
         {
-            std::lock_guard<std::mutex> lock{ __mutW };
+            std::lock_guard<QMutex> lock{ *__mutW };
             foreach(UsbDevice * const oldDevice, host->_usbDevices)
                 delete oldDevice;
             host->_usbDevices.clear();
@@ -446,5 +456,4 @@ namespace usb {
 
         libusb_free_device_list(dev_list, false);
     }
-
 }

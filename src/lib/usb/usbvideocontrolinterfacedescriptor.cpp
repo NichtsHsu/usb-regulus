@@ -51,6 +51,58 @@ namespace usb {
             return TERMINAL_TYPES.value(wTerminalType, "");
         }
 
+        QString UsbVideoControlInterfaceDescriptor::terminalTypesInformation()
+        {
+            return "<p>Constant that characterizes the type of Terminal.</p>"
+                   "<h4>1. USB Terminal Types</h4>"
+                   "<p>These Terminal types describe Terminals that handle signals carried over the USB, through "
+                   "isochronous or bulk pipes. These Terminal types are valid for both Input and Output Terminals.</p>"
+                   "<table><tr><th>Terminal Type</th><th>Code</th><th>I/O</th><th>Description</th></tr>"
+                   "<tr><td>TT_VENDOR_SPECIFIC</td><td>0x0100</td><td>I/O</td><td>A Terminal dealing with a "
+                   "signal carried over a vendor-specific interface. "
+                   "The vendor-specific interface descriptor must "
+                   "contain a field that references the Terminal.</td></tr>"
+                   "<tr><td>TT_STREAMING</td><td>0x0101</td><td>I/O</td><td>A Terminal dealing with a "
+                   "signal carried over an endpoint in a VideoStreaming interface. "
+                   "The VideoStreaming interface descriptor points to "
+                   "the associated Terminal through the <i>bTerminalLink</i> field.</td></tr></table>"
+                   "<h4>2. Input Terminal Types</h4>"
+                   "<p>These Terminal Types describe Terminals that are designed to capture video. They either are "
+                   "physically part of the video function or can be assumed to be connected to it in normal operation. "
+                   "These Terminal Types are valid only for Input Terminals.</p>"
+                   "<table><tr><th>Terminal Type</th><th>Code</th><th>I/O</th><th>Description</th></tr>"
+                   "<tr><td>ITT_VENDOR_SPECIFIC</td><td>0x0200</td><td>I</td>"
+                   "<td>Vendor-Specific Input Terminal.</td></tr>"
+                   "<tr><td>ITT_CAMERA</td><td>0x0201</td><td>I</td><td>Camera sensor. To be used "
+                   "only in Camera Terminal descriptors</td></tr>"
+                   "<tr><td>ITT_MEDIA_TRANSPORT_INPUT</td><td>0x0202</td><td>I</td><td>Sequential media. To be "
+                   "used only in Media Transport Terminal Descriptors.</td></tr></table>"
+                   "<h4>3. Output Terminal Types</h4>"
+                   "<p>These Terminal types describe Terminals that are designed to render video. They are either "
+                   "physically part of the video function or can be assumed to be connected to it in normal operation. "
+                   "These Terminal types are only valid for Output Terminals.</p>"
+                   "<table><tr><th>Terminal Type</th><th>Code</th><th>I/O</th><th>Description</th></tr>"
+                   "<tr><td>OTT_VENDOR_SPECIFIC</td><td>0x0300</td><td>O</td>"
+                   "<td>Vendor-Specific Output Terminal.</td></tr>"
+                   "<tr><td>OTT_DISPLAY</td><td>0x0301</td><td>O</td>"
+                   "<td>Generic display (LCD, CRT, etc.).</td></tr>"
+                   "<tr><td>OTT_MEDIA_TRANSPORT_OUTPUT</td><td>0x0302</td><td>O</td><td>Sequential media. To be "
+                   "used only in Media Transport Terminal Descriptors.</td></tr></table>"
+                   "<h4>4. External Terminal Types</h4>"
+                   "<p>These Terminal types describe external resources and connections that do not fit under the "
+                   "categories of Input or Output Terminals because they do not necessarily translate video signals to "
+                   "or from the user of the computer. Most of them may be either Input or Output Terminals.</p>"
+                   "<table><tr><th>Terminal Type</th><th>Code</th><th>I/O</th><th>Description</th></tr>"
+                   "<tr><td>EXTERNAL_VENDOR_SPECIFIC</td><td>0x0400</td><td>I/O</td>"
+                   "<td>Vendor-Specific External Terminal.</td></tr>"
+                   "<tr><td>COMPOSITE_CONNECTOR</td><td>0x0401</td><td>I/O</td>"
+                   "<td>Composite video connector.</td></tr>"
+                   "<tr><td>SVIDEO_CONNECTOR</td><td>0x0402</td><td>I/O</td>"
+                   "<td>S-video connector.</td></tr>"
+                   "<tr><td>COMPONENT_CONNECTOR</td><td>0x0403</td><td>I/O</td>"
+                   "<td>Component video connector.</td></tr></table>";
+        };
+
         UsbVideoControlInterfaceDescriptor *UsbVideoControlInterfaceDescriptor::get(UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
@@ -150,10 +202,66 @@ namespace usb {
             }
         }
 
+        const QStringList &UsbClassSpecificVCInterfaceHeaderDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bcdUVC",
+                "wTotalLength",
+                "dwClockFrequency",
+                "bInCollection",
+                "baInterfaceNr",
+            };
+
+            return fields;
+        }
+
+        QString UsbClassSpecificVCInterfaceHeaderDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VC_HEADER descriptor subtype"},
+                {"bcdUVC", "Video Device Class Specification release "
+                 "number in binary-coded decimal. (i.e. 2.10 "
+                 "is 210H and 1.50 is 150H)"},
+                {"wTotalLength", "Total number of bytes returned for the "
+                 "class-specific VideoControl interface "
+                 "descriptor. Includes the combined length "
+                 "of this descriptor header and all Unit and "
+                 "Terminal descriptors."},
+                {"dwClockFrequency", "<p>Use of this field has been deprecated.</p>"
+                 "<p>The device clock frequency in Hz. This "
+                 "will specify the units used for the time "
+                 "information fields in the Video Payload "
+                 "Headers of the primary data stream and "
+                 "format.</p>"
+                 "<p>The <i>dwClockFrequency</i> field of the "
+                 "Video Probe and Commit control replaces "
+                 "this descriptor field. A value for this field "
+                 "shall be chosen such that the primary or "
+                 "default function of the device will be "
+                 "available to host software that implements "
+                 "Version 1.0 of this specification.</p>"},
+                {"bInCollection", "The number of VideoStreaming interfaces "
+                 "in the Video Interface Collection to which "
+                 "this VideoControl interface belongs."},
+                {"baInterfaceNr", "Interface number of the nth "
+                 "VideoStreaming interface in the Collection."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbClassSpecificVCInterfaceHeaderDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder builder;
-            builder.start(tr("Class-Specific VC Interface Header Descriptor"))
+            builder.start(tr("Class-Specific VC Interface Header Descriptor"), true, "UVC 1.5")
                     .attr("bLength", _bLength)
                     .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
@@ -162,7 +270,7 @@ namespace usb {
                     .attr("dwClockFrequency", _dwClockFrequency, tr("%1 Hz").arg(_dwClockFrequency))
                     .attr("bInCollection", _bInCollection);
             for (uint8_t i = 1; i <= _bInCollection; ++i)
-                builder.attr(QString("baInterfaceNr(%1)").arg(i), baInterfaceNr(i));
+                builder.attr("baInterfaceNr", baInterfaceNr(i), i);
             return builder.end().build();
         }
 
@@ -219,10 +327,48 @@ namespace usb {
             return _iTerminal;
         }
 
+        const QStringList &UsbInputTerminalDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bTerminalID",
+                "wTerminalType",
+                "bAssocTerminal",
+                "iTerminal",
+            };
+
+            return fields;
+        }
+
+        QString UsbInputTerminalDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VC_INPUT_TERMINAL descriptor subtype"},
+                {"bTerminalID", "A non-zero constant that uniquely identifies "
+                 "the Terminal within the video function. This "
+                 "value is used in all requests to address this "
+                 "Terminal."},
+                {"wTerminalType", terminalTypesInformation()},
+                {"bAssocTerminal", "ID of the Output Terminal to which this Input "
+                 "Terminal is associated, or zero (0) if no such "
+                 "association exists."},
+                {"iTerminal", "Index of a string descriptor, describing the Input Terminal."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbInputTerminalDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder builder;
-            builder.start(tr("Input Terminal Descriptor"));
+            builder.start(tr("Input Terminal Descriptor"), true, "UVC 1.5");
             __parseBase(builder);
             return builder.end().build();
         }
@@ -319,10 +465,51 @@ namespace usb {
             return _iTerminal;
         }
 
+        const QStringList &UsbOutputTerminalDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bTerminalID",
+                "wTerminalType",
+                "bAssocTerminal",
+                "bSourceID",
+                "iTerminal",
+            };
+
+            return fields;
+        }
+
+        QString UsbOutputTerminalDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VC_OUTPUT_TERMINAL descriptor subtype"},
+                {"bTerminalID", "A non-zero constant that uniquely identifies "
+                 "the Terminal within the video function. This "
+                 "value is used in all requests to address this "
+                 "Terminal."},
+                {"wTerminalType", terminalTypesInformation()},
+                {"bAssocTerminal", "Constant, identifying the Input Terminal to "
+                 "which this Output Terminal is associated, or "
+                 "zero (0) if no such association exists."},
+                {"bSourceID", "ID of the Unit or Terminal to which this "
+                 "Terminal is connected."},
+                {"iTerminal", "Index of a string descriptor, describing the Output Terminal."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbOutputTerminalDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder builder;
-            builder.start(tr("Output Terminal Descriptor"));
+            builder.start(tr("Output Terminal Descriptor"), true, "UVC 1.5");
             __parseBase(builder);
             return builder.end().build();
         }
@@ -401,10 +588,66 @@ namespace usb {
             return _bmControls;
         }
 
+        const QStringList &UsbCameraTerminalDescriptor::getFieldNames()
+        {
+            static const QStringList fields =
+                    QStringList(UsbInputTerminalDescriptor::getFieldNames())
+                    << "wObjectiveFocalLengthMin"
+                    << "wObjectiveFocalLengthMax"
+                    << "wOcularFocalLength"
+                    << "bControlSize"
+                    << "bmControls";
+
+            return fields;
+        }
+
+        QString UsbCameraTerminalDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"wObjectiveFocalLengthMin", "The value of L<sub>min</sub> If Optical Zoom "
+                 "is not supported; this field shall be set to 0."},
+                {"wObjectiveFocalLengthMax", "The value of L<sub>max</sub> If Optical Zoom "
+                 "is not supported; this field shall be set to 0."},
+                {"wOcularFocalLength", "The value of L<sub>ocular</sub> If Optical "
+                 "Zoom is not supported; this field shall be set to 0."},
+                {"bControlSize", "Size in bytes of the <i>bmControls</i> field."},
+                {"bmControls", "<p>A bit set to 1 indicates that the "
+                 "mentioned Control is supported for the video stream.</p>"
+                "<table><tr><td>D0:</td><td>Scanning Mode</td></th>"
+                "<tr><td>D1:</td><td>Auto-Exposure Mode</td></th>"
+                "<tr><td>D2:</td><td>Auto-Exposure Priority</td></th>"
+                "<tr><td>D3:</td><td>Exposure Time (Absolute)</td></th>"
+                "<tr><td>D4:</td><td>Exposure Time (Relative)</td></th>"
+                "<tr><td>D5:</td><td>Focus (Absolute)</td></th>"
+                "<tr><td>D6:</td><td>Focus (Relative)</td></th>"
+                "<tr><td>D7:</td><td>Iris (Absolute)</td></th>"
+                "<tr><td>D8:</td><td>Iris (Relative)</td></th>"
+                "<tr><td>D9:</td><td>Zoom (Absolute)</td></th>"
+                "<tr><td>D10:</td><td>Zoom (Relative)</td></th>"
+                "<tr><td>D11:</td><td>PanTilt (Absolute)</td></th>"
+                "<tr><td>D12:</td><td>PanTilt (Relative)</td></th>"
+                "<tr><td>D13:</td><td>Roll (Absolute)</td></th>"
+                "<tr><td>D14:</td><td>Roll (Relative)</td></th>"
+                "<tr><td>D15:</td><td>Reserved</td></th>"
+                "<tr><td>D16:</td><td>Reserved</td></th>"
+                "<tr><td>D17:</td><td>Focus, Auto</td></th>"
+                "<tr><td>D18:</td><td>Privacy</td></th>"
+                "<tr><td>D19:</td><td>Focus, Simple</td></th>"
+                "<tr><td>D20:</td><td>Window</td></th>"
+                "<tr><td>D21:</td><td>Region of Interest</td></th>"
+                "<tr><td>D22-D23:</td><td>Reserved, set to zero</td></th></table>"},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return UsbInputTerminalDescriptor::getFieldInformation(field);
+        }
+
         QString UsbCameraTerminalDescriptor::infomationToHtml() const
         {
             UsbHtmlBuilder builder;
-            builder.start(tr("Camera Terminal Descriptor"));
+            builder.start(tr("Camera Terminal Descriptor"), true, "UVC 1.5");
             __parseBase(builder);
             return builder.attr("wObjectiveFocalLengthMin", _wObjectiveFocalLengthMin)
                     .attr("wObjectiveFocalLengthMax", _wObjectiveFocalLengthMax)
@@ -525,19 +768,57 @@ namespace usb {
             return _iSelector;
         }
 
+        const QStringList &UsbSelectorUnitDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bUnitID",
+                "bNrInPins",
+                "baSourceID",
+                "iSelector",
+            };
+
+            return fields;
+        }
+
+        QString UsbSelectorUnitDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VC_SELECTOR_UNIT descriptor subtype"},
+                {"bUnitID", "A non-zero constant that uniquely identifies "
+                 "the Unit within the video function. This "
+                 "value is used in all requests to address this "
+                 "Unit."},
+                {"bNrInPins", "Number of Input Pins of this Unit."},
+                {"baSourceID", "ID of the Unit or Terminal to which the nth "
+                 "Input Pin of this Selector Unit is connected."},
+                {"iSelector", "Index of a string descriptor, describing the "
+                 "Selector Unit."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbSelectorUnitDescriptor::infomationToHtml() const
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
             UsbHtmlBuilder builder;
-            builder.start(tr("Selector Unit Descriptor"))
+            builder.start(tr("Selector Unit Descriptor"), true, "UVC 1.5")
                     .attr("bLength", _bLength)
                     .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
                     .attr("bUnitID", _bUnitID)
                     .attr("bNrInPins", _bNrInPins);
             for (uint8_t i = 1; i <= _bNrInPins; ++i)
-                builder.attr(QString("baSourceID(%1)").arg(i), baSourceID(i));
+                builder.attr("baSourceID", baSourceID(i), i);
             return builder.strdesc("iSelector", _iSelector, device)
                     .end()
                     .build();
@@ -610,12 +891,90 @@ namespace usb {
             return _bmVideoStandards;
         }
 
+        const QStringList &UsbProcessingUnitDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bUnitID",
+                "bSourceID",
+                "wMaxMultiplier",
+                "bControlSize",
+                "bmControls",
+                "iProcessing",
+                "bmVideoStandards",
+            };
+
+            return fields;
+        }
+
+        QString UsbProcessingUnitDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VC_PROCESSING_UNIT descriptor subtype"},
+                {"bUnitID", "A non-zero constant that uniquely identifies "
+                 "the Unit within the video function. This "
+                 "value is used in all requests to address this "
+                 "Unit."},
+                {"bSourceID", "ID of the Unit or Terminal to which this Unit is connected."},
+                {"wMaxMultiplier", "If the Digital Multiplier control is supported, "
+                 "this field indicates the maximum digital magnification, multiplied by 100. "
+                 "For example, for a device that supports 1-4.5X digital zoom (a multiplier of 4.5), "
+                 "this field would be set to 450. If the Digital Multiplier control is not supported, "
+                 "this field shall be set to 0."},
+                {"bControlSize", "Size of the bmControls field, in bytes."},
+                {"bmControls", "<p>A bit set to 1 indicates that the mentioned "
+                 "Control is supported for the video stream.</p>"
+                 "<table><tr><td>D0:</td><td>Brightness</td></th>"
+                 "<tr><td>D1:</td><td>Contrast</td></th>"
+                 "<tr><td>D2:</td><td>Hue</td></th>"
+                 "<tr><td>D3:</td><td>Saturation</td></th>"
+                 "<tr><td>D4:</td><td>Sharpness</td></th>"
+                 "<tr><td>D5:</td><td>Gamma</td></th>"
+                 "<tr><td>D6:</td><td>White Balance Temperature</td></th>"
+                 "<tr><td>D7:</td><td>White Balance Component</td></th>"
+                 "<tr><td>D8:</td><td>Backlight Compensation</td></th>"
+                 "<tr><td>D9:</td><td>Gain</td></th>"
+                 "<tr><td>D10:</td><td>Power Line Frequency</td></th>"
+                 "<tr><td>D11:</td><td>Hue, Auto</td></th>"
+                 "<tr><td>D12:</td><td>White Balance Temperature, Auto</td></th>"
+                 "<tr><td>D13:</td><td>White Balance Component, Auto</td></th>"
+                 "<tr><td>D14:</td><td>Digital Multiplier</td></th>"
+                 "<tr><td>D15:</td><td>Digital Multiplier Limit</td></th>"
+                 "<tr><td>D16:</td><td>Analog Video Standard</td></th>"
+                 "<tr><td>D17:</td><td>Analog Video Lock Status</td></th>"
+                 "<tr><td>D18:</td><td>Contrast, Auto</td></th>"
+                 "<tr><td>D19-D23:</td><td>Reserved, set to zero</td></th></table>"},
+                {"iProcessing", "Index of a string descriptor that describes this "
+                 "processing unit."},
+                {"bmVideoStandards", "<p>A bitmap of all analog video standards "
+                 "supported by the Processing Unit.</p>"
+                "<p>A value of zero indicates that this bitmap "
+                 "should be ignored.</p>"
+                 "<table><tr><td>D0:</td><td>None</td></th>"
+                 "<tr><td>D1:</td><td>NTSC – 525/60</td></th>"
+                 "<tr><td>D2:</td><td>PAL – 625/50</td></th>"
+                 "<tr><td>D3:</td><td>SECAM – 625/50</td></th>"
+                 "<tr><td>D4:</td><td>NTSC – 625/50</td></th>"
+                 "<tr><td>D5:</td><td>PAL – 525/60</td></th>"
+                 "<tr><td>D6-D7:</td><td>Reserved, set to zero</td></th></table>"},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbProcessingUnitDescriptor::infomationToHtml() const
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
             return UsbHtmlBuilder()
-                    .start(tr("Processing Unit Descriptor"))
+                    .start(tr("Processing Unit Descriptor"), true, "UVC 1.5")
                     .attr("bLength", _bLength)
                     .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
@@ -782,12 +1141,61 @@ namespace usb {
             return _iExtension;
         }
 
+        const QStringList &UsbExtensionUnitDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bUnitID",
+                "guidExtensionCode",
+                "bNumControls",
+                "bNrInPins",
+                "baSourceID",
+                "bControlSize",
+                "bmControls",
+                "iExtension",
+            };
+
+            return fields;
+        }
+
+        QString UsbExtensionUnitDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VC_EXTENSION_UNIT descriptor subtype"},
+                {"bUnitID", "A non-zero constant that uniquely identifies "
+                 "the Unit within the video function. This "
+                 "value is used in all requests to address this "
+                 "Unit."},
+                {"guidExtensionCode", "Vendor-specific code identifying the Extension Unit"},
+                {"bNumControls", "Number of controls in this extension unit"},
+                {"bNrInPins", "Number of Input Pins of this Unit."},
+                {"baSourceID", "ID of the Unit or Terminal to which the "
+                 "nth Input Pin of this Extension Unit is "
+                 "connected."},
+                {"bControlSize", "Size of the bmControls field, in bytes."},
+                {"bmControls", "<p>A bit set to 1 indicates that the mentioned "
+                 "Control is supported:</p>"
+                 "<p>D(n*8-1)..0: Vendor-specific</p>"},
+                {"iExtension", "Index of a string descriptor that describes "
+                 "this extension unit."},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbExtensionUnitDescriptor::infomationToHtml() const
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
             UsbHtmlBuilder builder;
-            builder.start(tr("Extension Unit Descriptor"))
+            builder.start(tr("Extension Unit Descriptor"), true, "UVC 1.5")
                     .attr("bLength", _bLength)
                     .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))
@@ -796,7 +1204,7 @@ namespace usb {
                     .attr("bNumControls", _bNumControls)
                     .attr("bNrInPins", _bNrInPins);
             for (uint8_t i = 1; i <= _bNrInPins; ++i)
-                builder.attr(QString("baSourceID(%1)").arg(i), baSourceID(i));
+                builder.attr("baSourceID", baSourceID(i), i);
             return builder.attr("bControlSize", _bControlSize, tr("%1 byte(s)").arg(_bControlSize))
                     .attr("bmControls", QString("0x") + _bmControls.toHex(), "")
                     .strdesc("iExtension", _iExtension, device)
@@ -874,12 +1282,100 @@ namespace usb {
             return _bmControlsRuntime;
         }
 
+        const QStringList &UsbEncodingUnitDescriptor::getFieldNames()
+        {
+            static const QStringList fields = {
+                "bLength",
+                "bDescriptorType",
+                "bDescriptorSubtype",
+                "bUnitID",
+                "bSourceID",
+                "iEncoding",
+                "bControlSize",
+                "bmControls",
+                "bmControlsRuntime",
+            };
+
+            return fields;
+        }
+
+        QString UsbEncodingUnitDescriptor::getFieldInformation(const QString &field)
+        {
+            static const QMap<QString, QString> fieldDescription = {
+                {"bLength", "Size of this descriptor, in bytes"},
+                {"bDescriptorType", "CS_INTERFACE descriptor type"},
+                {"bDescriptorSubtype", "VC_ENCODING_UNIT descriptor subtype"},
+                {"bUnitID", "A non-zero constant that uniquely identifies "
+                 "the Unit within the video function. This "
+                 "value is used in all requests to address this "
+                 "Unit."},
+                {"bSourceID", "ID of the Unit or Terminal to which this "
+                 "Unit is connected."},
+                {"iEncoding", "Index of a string descriptor that describes "
+                 "this encoding unit."},
+                {"bControlSize", "Size, in bytes, of the bmControls and "
+                 "bmControlsRuntime fields: The value "
+                 "must be 3."},
+                {"bmControls", "<p>A bit set to 1 indicates that the specified "
+                 "control is supported for initialization:</p>"
+                 "<table><tr><td>D0:</td><td>Select Layer</td></th>"
+                 "<tr><td>D1:</td><td>Profile and Toolset</td></th>"
+                 "<tr><td>D2:</td><td>Video Resolution</td></th>"
+                 "<tr><td>D3:</td><td>Minimum Frame Interval</td></th>"
+                 "<tr><td>D4:</td><td>Slice Mode</td></th>"
+                 "<tr><td>D5:</td><td>Rate Control Mode</td></th>"
+                 "<tr><td>D6:</td><td>Average Bit Rate</td></th>"
+                 "<tr><td>D7:</td><td>CPB Size</td></th>"
+                 "<tr><td>D8:</td><td>Peak Bit Rate</td></th>"
+                 "<tr><td>D9:</td><td>Quantization Parameter</td></th>"
+                 "<tr><td>D10:</td><td>Synchronization and Long-Term Reference Frame</td></th>"
+                 "<tr><td>D11:</td><td>Long-Term Buffer</td></th>"
+                 "<tr><td>D12:</td><td>Picture Long-Term Reference</td></th>"
+                 "<tr><td>D13:</td><td>LTR Validation</td></th>"
+                 "<tr><td>D14:</td><td>Level IDC</td></th>"
+                 "<tr><td>D15:</td><td>SEI Message</td></th>"
+                 "<tr><td>D16:</td><td>QP Range</td></th>"
+                 "<tr><td>D17:</td><td>Priority ID</td></th>"
+                 "<tr><td>D18:</td><td>Start or Stop Layer/View</td></th>"
+                 "<tr><td>D19:</td><td>Error Resiliency</td></th>"
+                 "<tr><td>D20-D23:</td><td>Reserved; set to zero</td></th></table>"},
+                {"bmControlsRuntime", "<p>A bit set to 1 indicates that the mentioned "
+                 "control is supported during runtime:</p>"
+                 "<table><tr><td>D0:</td><td>Select Layer</td></th>"
+                 "<tr><td>D1:</td><td>Profile and Toolset</td></th>"
+                 "<tr><td>D2:</td><td>Video Resolution</td></th>"
+                 "<tr><td>D3:</td><td>Minimum Frame Interval</td></th>"
+                 "<tr><td>D4:</td><td>Slice Mode</td></th>"
+                 "<tr><td>D5:</td><td>Rate Control Mode</td></th>"
+                 "<tr><td>D6:</td><td>Average Bit Rate</td></th>"
+                 "<tr><td>D7:</td><td>CPB Size</td></th>"
+                 "<tr><td>D8:</td><td>Peak Bit Rate</td></th>"
+                 "<tr><td>D9:</td><td>Quantization Parameter</td></th>"
+                 "<tr><td>D10:</td><td>Synchronization and Long-Term Reference Frame</td></th>"
+                 "<tr><td>D11:</td><td>Long-Term Buffer</td></th>"
+                 "<tr><td>D12:</td><td>Picture Long-Term Reference</td></th>"
+                 "<tr><td>D13:</td><td>LTR Validation</td></th>"
+                 "<tr><td>D14:</td><td>Level IDC</td></th>"
+                 "<tr><td>D15:</td><td>SEI Message</td></th>"
+                 "<tr><td>D16:</td><td>QP Range</td></th>"
+                 "<tr><td>D17:</td><td>Priority ID</td></th>"
+                 "<tr><td>D18:</td><td>Start or Stop Layer/View</td></th>"
+                 "<tr><td>D19:</td><td>Error Resiliency</td></th>"
+                 "<tr><td>D20-D23:</td><td>Reserved; set to zero</td></th></table>"},
+            };
+
+            if (fieldDescription.contains(field))
+                return fieldDescription[field];
+            else
+                return QString();
+        }
+
         QString UsbEncodingUnitDescriptor::infomationToHtml() const
         {
             UsbDevice *const device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
 
             return UsbHtmlBuilder()
-                    .start(tr("Encoding Unit Descriptor"))
+                    .start(tr("Encoding Unit Descriptor"), true, "UVC 1.5")
                     .attr("bLength", _bLength)
                     .attr("bDescriptorType", _bDescriptorType, "CS_INTERFACE")
                     .attr("bDescriptorSubtype", _bDescriptorSubtype, strSubtype(_bDescriptorSubtype))

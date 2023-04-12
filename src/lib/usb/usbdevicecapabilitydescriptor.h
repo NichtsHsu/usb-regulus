@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB Device Capability Descriptors
+/*! C++ class wrapper of USB Device Capability Descriptors
 
  * Copyright (C) 2022-2023 Nichts Hsu
 
@@ -175,6 +175,20 @@ namespace usb {
         uint16_t bmBandGroup() const;
 
         /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
+
+        /**
          * @brief infomationToHtml
          * @return HTML form descriptor informations
          */
@@ -224,6 +238,20 @@ namespace usb {
          * @return if LPM(Link Power Management) is supported
          */
         bool supportLPM() const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml
@@ -293,6 +321,20 @@ namespace usb {
         uint16_t bU2DevExitLat() const;
 
         /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
+
+        /**
          * @brief supportLTM
          * Equivalent to `UsbSuperSpeedDeviceCapabilityDescriptor::bmAttributes() & LIBUSB_BM_LTM_SUPPORT`
          * @return if LTM(Latency Tolerance Messages) is supported
@@ -313,7 +355,7 @@ namespace usb {
 
     private:
         uint8_t _bLength, _bmAttributes, _bFunctionalitySupport, _bU1DevExitLat;
-        uint16_t _wSpeedSupported, _bU2DevExitLat;
+        uint16_t _wSpeedsSupported, _bU2DevExitLat;
     };
 
     /**
@@ -341,6 +383,20 @@ namespace usb {
          * @return 128 bit UUID
          */
         const QByteArray &containerID() const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml
@@ -381,6 +437,21 @@ namespace usb {
          * This field may be zero bytes in length.
          */
         const QByteArray &capabilityData() const;
+
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml
@@ -454,6 +525,20 @@ namespace usb {
          * USB Type-C Specification in the bmAttributes field.
          */
         uint16_t bcdUSBTypeCVersion() const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml
@@ -531,6 +616,20 @@ namespace usb {
         uint32_t dwBatteryLastFullchargeCapacity() const;
 
         /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
+
+        /**
          * @brief infomationToHtml
          * @return HTML form descriptor informations
          */
@@ -601,6 +700,20 @@ namespace usb {
         uint32_t dwMaxPeakPowerTime() const;
 
         /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
+
+        /**
          * @brief infomationToHtml
          * @return HTML form descriptor informations
          */
@@ -650,6 +763,20 @@ namespace usb {
          * @return the index-th Power Data Object supported by this Provider Port
          */
         uint32_t wPowerDataObject(size_t index) const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml
@@ -723,6 +850,21 @@ namespace usb {
          */
         uint32_t sublinkSpeedAttr(size_t index) const;
 
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
+
         /**
          * @brief infomationToHtml
          * @return HTML form descriptor informations
@@ -752,6 +894,20 @@ namespace usb {
         explicit UsbPrecisionTimeMeasurementCapabilityDescriptor(
                 const libusb_bos_dev_capability_descriptor *base,
                 UsbBosDescriptor *parent);
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml
@@ -798,6 +954,20 @@ namespace usb {
          * D7..1    Reserved
          */
         uint8_t bmControl() const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml
@@ -860,7 +1030,7 @@ namespace usb {
          * combination of wSVID[i] and bAlternateOrUSB4Mode[i].
          * @note
          * D0..1                First AUM defined
-         * D(n-1)*2..(n-1)*2+1  N-th AUM defined
+         * D(n-1)*2..(n-1)*2+1  Nth AUM defined
          * Value:
          * 00b:     Unspecified Error
          * 01b:     AUM configuration not attempted or exited
@@ -908,6 +1078,20 @@ namespace usb {
         uint8_t iAlternateOrUSB4ModeString(uint8_t index) const;
 
         /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
+
+        /**
          * @brief infomationToHtml
          * @return HTML form descriptor informations
          */
@@ -930,6 +1114,12 @@ namespace usb {
         QVector<uint8_t> _bAlternateOrUSB4Mode, _iAlternateOrUSB4ModeString;
     };
 
+    /**
+     * @brief The UsbAuthenticationCapabilityDescriptor class
+     * Libusb does not support Authentication Capability Descriptor.
+     * Therefore we parse raw data from libusb_bos_dev_capability_descriptor.
+     * @see DeviceCapabilityType::AUTHENTICATION
+     */
     class UsbAuthenticationCapabilityDescriptor : public UsbDeviceCapabilityDescriptor
     {
         Q_OBJECT
@@ -959,6 +1149,20 @@ namespace usb {
          * @return same value as Param1 in a DIGESTS Authentication Response
          */
         uint8_t bcdCapability() const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml
@@ -995,6 +1199,20 @@ namespace usb {
          * @return contents of the Mode VDO
          */
         uint32_t dwAlternateModeVdo() const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml
@@ -1058,6 +1276,20 @@ namespace usb {
          * a configuration containing this class/subclass/protocol
          */
         uint8_t bConfigurationIndex(size_t index) const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml

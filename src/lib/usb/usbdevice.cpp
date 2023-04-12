@@ -15,7 +15,7 @@ namespace usb {
             _open = false;
             return;
         }
-        LOGD(tr("New USB device opened."));
+        LOGD(tr("Open USB device successfully."));
         _open = true;
 
         /* Auto attach/detach the kernel driver */
@@ -54,6 +54,12 @@ namespace usb {
                 .arg(qulonglong(_deviceDescriptor->idVendor()), 4, 16, QChar('0'))
                 .arg(qulonglong(_deviceDescriptor->idProduct()), 4, 16, QChar('0'))
                 .arg(_deviceDescriptor->description());
+
+        LOGD(tr("New USB device - bus: %1, port: %2, address: %3, speed: %4, display name: %5.")
+             .arg(_bus)
+             .arg(_port)
+             .arg(_address)
+             .arg(usbSpeedToString(_speed), _displayName));
 
         libusb_bos_descriptor *rawBosDesc;
         ret = libusb_get_bos_descriptor(_handle, &rawBosDesc);

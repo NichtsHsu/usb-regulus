@@ -103,6 +103,37 @@ namespace usb {
         return _bNumDescriptors;
     }
 
+    const QStringList &UsbHidDescriptor::getFieldNames()
+    {
+        static const QStringList fields = {
+            "bLength",
+            "bDescriptorType",
+            "bcdHID",
+            "bCountryCode",
+            "bNumDescriptors",
+        };
+
+        return fields;
+    }
+
+    QString UsbHidDescriptor::getFieldInformation(const QString &field)
+    {
+        static const QMap<QString, QString> fieldDescription = {
+            {"bLength", "Numeric expression that is the total size of the HID descriptor."},
+            {"bDescriptorType", "Constant name specifying type of HID descriptor."},
+            {"bcdHID", "Numeric expression identifying the HIDClass Specification release."},
+            {"bCountryCode", "Numeric expression identifying country code of the localized hardware."},
+            {"bNumDescriptors", "Numeric expression specifying the number of "
+             "class descriptors (always at least one i.e. Report "
+             "descriptor.)"},
+        };
+
+        if (fieldDescription.contains(field))
+            return fieldDescription[field];
+        else
+            return QString();
+    }
+
     QString UsbHidDescriptor::country() const
     {
         return tr(_countryCodeMap[_bCountryCode]);
@@ -129,7 +160,7 @@ namespace usb {
     QString UsbHidDescriptor::infomationToHtml() const
     {
         UsbHtmlBuilder builder;
-        builder.start(tr("HID Descriptor"))
+        builder.start(tr("HID Descriptor"), true)
         .attr("bLength", _bLength)
         .attr("bDescriptorType", _bDescriptorType, "HID")
         .attr("bcdHID", _bcdHID, "")
@@ -164,6 +195,7 @@ namespace usb {
 
         UsbDevice *device = interfaceDescriptor()->interface()->configurationDescriptor()->device();
         QByteArray buffer(_hidReportDescriptor->_wDescriptorLength, '\0');
+        LOGD("Request HID report descriptor via control transfer.");
         ret = device->controlTransfer(0x81,
                                       LIBUSB_REQUEST_GET_DESCRIPTOR,
                                       LIBUSB_DT_REPORT << 8,

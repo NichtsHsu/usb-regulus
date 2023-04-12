@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB Interface Association Descriptors
+/*! C++ class wrapper of USB Interface Association Descriptors
 
  * Copyright (C) 2022-2023 Nichts Hsu
 
@@ -91,6 +91,20 @@ namespace usb {
          * @return index of string descriptor describing this function
          */
         uint8_t iFunction() const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
     private:
         explicit UsbInterfaceAssociationDescriptor(UsbConfigurationDescriptor *configDesc);

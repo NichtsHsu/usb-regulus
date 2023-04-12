@@ -5,7 +5,6 @@
 #include <QGuiApplication>
 #include <QTextStream>
 #include <QClipboard>
-#include <mutex>
 
 Logger::Logger(QWidget *parent):
     QTextBrowser(parent), _logLevel(Level::Info)
@@ -60,7 +59,7 @@ QString Logger::__strLogLevel()
 
 void Logger::__record(Level type, const QString &module, const QString &message)
 {
-    _writeMutex.lock();
+    std::lock_guard<QMutex> lock{ _writeMutex };
     QString time = QTime::currentTime().toString();
 
     if (_logLevel <= type) {
@@ -92,17 +91,16 @@ void Logger::__record(Level type, const QString &module, const QString &message)
     }
 
     _backup.append(Logger::BackupBlock{type, module, message, time});
-    _writeMutex.unlock();
 }
 
 std::atomic<Logger *> Logger::_instance{nullptr};
-static std::mutex __mutW;
+Q_GLOBAL_STATIC(QMutex, __mutW);
 
 Logger *Logger::instance()
 {
     if (Logger::_instance == nullptr)
     {
-        std::lock_guard<std::mutex> lock{ __mutW };
+        std::lock_guard<QMutex> lock{ *__mutW };
         if (Logger::_instance == nullptr)
             Logger::_instance = new Logger;
     }
@@ -165,7 +163,7 @@ void Logger::setLogLevel(Logger::Level logLevel)
 
 void Logger::toFile(const QString &filePath, Logger::Level logLevel)
 {
-    _writeMutex.lock();
+    std::lock_guard<QMutex> lock{_writeMutex};
     QFile file(filePath);
     if(!file.open(QIODevice::Text | QIODevice::WriteOnly | QIODevice::Truncate))
         record(Level::Error, "Logger", tr("Failed to export log because cannot open file \"%1\" to write.").arg(filePath));
@@ -200,7 +198,6 @@ void Logger::toFile(const QString &filePath, Logger::Level logLevel)
     file.close();
 
     record(Level::Info, "Logger", tr("Log exported to file \"%1\".").arg(filePath));
-    _writeMutex.unlock();
 }
 
 void Logger::clear()

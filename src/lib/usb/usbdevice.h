@@ -23,8 +23,6 @@
 #include <QObject>
 #include <QString>
 
-#include "log/logger.h"
-
 namespace usb {
     class UsbDeviceDescriptor;
     class UsbConfigurationDescriptor;

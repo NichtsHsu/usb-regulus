@@ -134,6 +134,7 @@ private:
     explicit Logger(const Logger &) = delete;
     Logger &operator=(const Logger &) = delete;
     QString __strLogLevel();
+    friend QGlobalStatic<Logger>;
 
     /**
      * @brief record

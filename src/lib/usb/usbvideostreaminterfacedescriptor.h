@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB VideoStream Interface Descriptors
+/*! C++ class wrapper of USB VideoStream Interface Descriptors
 
  * Copyright (C) 2022-2023 Nichts Hsu
 
@@ -177,6 +177,20 @@ namespace usb {
             QByteArray bmaControls(uint8_t index) const;
 
             /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
+
+            /**
              * @brief infomationToHtml
              * @return HTML form informations
              */
@@ -274,6 +288,20 @@ namespace usb {
             QByteArray bmaControls(uint8_t index) const;
 
             /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
+
+            /**
              * @brief infomationToHtml
              * @return HTML form informations
              */
@@ -366,6 +394,20 @@ namespace usb {
              * @return compression of the still image in index-th pattern
              */
             uint8_t bCompression(uint8_t index) const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -475,6 +517,20 @@ namespace usb {
              * @return whether duplication of the video stream is restricted
              */
             uint8_t bCopyProtect() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -622,6 +678,20 @@ namespace usb {
             uint32_t dwFrameInterval(uint8_t index) const;
 
             /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
+
+            /**
              * @brief infomationToHtml
              * @return HTML form informations
              */
@@ -729,6 +799,20 @@ namespace usb {
              * @return whether duplication of the video stream is restricted
              */
             uint8_t bCopyProtect() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -875,6 +959,20 @@ namespace usb {
             uint32_t dwFrameInterval(uint8_t index) const;
 
             /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
+
+            /**
              * @brief infomationToHtml
              * @return HTML form informations
              */
@@ -952,6 +1050,20 @@ namespace usb {
             QByteArray guidStrideFormat() const;
 
             /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
+
+            /**
              * @brief infomationToHtml
              * @return HTML form informations
              */
@@ -1016,6 +1128,20 @@ namespace usb {
              * D7       0: 50 Hz, 1: 60 Hz
              */
             uint8_t bFormatType() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -1100,6 +1226,20 @@ namespace usb {
              * 6-255:   Reserved
              */
             uint8_t bMatrixCoefficients() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -1216,6 +1356,20 @@ namespace usb {
              * @return whether the data within the frame is of variable length from frame to frame
              */
             uint8_t bVariableSize() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -1361,6 +1515,20 @@ namespace usb {
             uint32_t dwFrameInterval(uint8_t index) const;
 
             /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
+
+            /**
              * @brief infomationToHtml
              * @return HTML form informations
              */
@@ -1424,6 +1592,20 @@ namespace usb {
              * @return format-specific packet size in a Packet-Oriented stream
              */
             uint16_t dwPacketLength() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -1591,6 +1773,20 @@ namespace usb {
              * @return maximum macroblock processing rate, in units of 1000 MB/s
              */
             uint16_t wMaxMBperSecResolutionFullScalability(uint8_t index) const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -1791,6 +1987,20 @@ namespace usb {
             uint32_t dwFrameInterval(uint8_t index) const;
 
             /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
+
+            /**
              * @brief infomationToHtml
              * @return HTML form informations
              */
@@ -1917,6 +2127,20 @@ namespace usb {
              * @return maximum macroblock processing rate, in units of MB/s
              */
             uint16_t wMaxMBperSec() const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml
@@ -2057,6 +2281,20 @@ namespace usb {
              * in 100 ns units.
              */
             uint32_t dwFrameInterval(uint8_t index) const;
+
+            /**
+             * @brief getFieldNames
+             * @return all field names in a string list
+             */
+            static const QStringList &getFieldNames();
+
+            /**
+             * @brief getFieldInformation
+             * Get field information
+             * @param field name
+             * @return field information almost from USB specs
+             */
+            static QString getFieldInformation(const QString &field);
 
             /**
              * @brief infomationToHtml

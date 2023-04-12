@@ -22,6 +22,8 @@ INCLUDEPATH += \
     $$PWD/reference/ \
 
 FORMS += \
+    ui/mainwindow/aboutdialog.ui \
+    ui/mainwindow/fieldquickreference.ui \
     ui/mainwindow/preferencedialog.ui \
     ui/lib/log/savelogdialog.ui \
     ui/datatransferwindow/controltransferwidget.ui \
@@ -70,6 +72,8 @@ HEADERS += \
     src/lib/usb/usbotgdescriptor.h \
     src/lib/usb/usbvideocontrolinterfacedescriptor.h \
     src/lib/usb/usbvideostreaminterfacedescriptor.h \
+    src/mainwindow/aboutdialog.h \
+    src/mainwindow/fieldquickreference.h \
     src/mainwindow/mainwindow.h \
     src/mainwindow/preferencedialog.h \
     src/mainwindow/usbdevicetreeview.h
@@ -113,6 +117,8 @@ SOURCES += \
     src/lib/usb/usbvideocontrolinterfacedescriptor.cpp \
     src/lib/usb/usbvideostreaminterfacedescriptor.cpp \
     src/main.cpp \
+    src/mainwindow/aboutdialog.cpp \
+    src/mainwindow/fieldquickreference.cpp \
     src/mainwindow/mainwindow.cpp \
     src/mainwindow/preferencedialog.cpp \
     src/mainwindow/usbdevicetreeview.cpp

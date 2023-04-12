@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -35,6 +34,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QClipboard>
+#include <QMutex>
 
 #include <log/logger.h>
 #include <usb/usbhost.h>
@@ -44,6 +44,8 @@
 
 #include "usbdevicetreeview.h"
 #include "preferencedialog.h"
+#include "aboutdialog.h"
+#include "fieldquickreference.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -113,13 +115,25 @@ private slots:
      */
     void __preferenceDialogApply();
 
+    /**
+     * @brief __openFieldQuickReference
+     * Open Field Quick Reference Dialog.
+     */
+    void __openFieldQuickReference();
+
+    /**
+     * @brief __openAboutDialog
+     * Open about dialog.
+     */
+    void __openAboutDialog();
+
 private:
     void __initWithSettings();
     void __updateWithSettings();
     void __setLoggerLevel(Logger::Level level);
     void __setTheme(const QString &theme = "(none)");
     void __loadTranslation(const QString &lang);
-    static QString __FontToCss();
+    static QString __extraQss();
 
     Ui::MainWindow *ui;
 
@@ -134,5 +148,7 @@ private:
     QSet<usb::UsbDevice *> _insertDeviceNotReady;
     QMutex _deviceTreeViewMutex;
     PreferenceDialog *_preferenceDialog;
+    AboutDialog *_aboutDialog;
+    FieldQuickReference *_quickReference;
 };
 #endif // MAINWINDOW_H

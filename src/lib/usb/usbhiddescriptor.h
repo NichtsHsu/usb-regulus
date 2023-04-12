@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB Human Interface Device Descriptor
+/*! C++ class wrapper of USB Human Interface Device Descriptor
 
  * Copyright (C) 2022-2023 Nichts Hsu
 
@@ -84,6 +84,21 @@ namespace usb {
          * @see UsbHidDescriptor::hidReportDescriptor()
          */
         uint8_t bNumDescriptors() const;
+
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief country

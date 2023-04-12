@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB Device Firmware Upgrade Descriptor
+/*! C++ class wrapper of USB Device Firmware Upgrade Descriptor
 
  * Copyright (C) 2022-2023 Nichts Hsu
 
@@ -80,6 +80,20 @@ namespace usb {
          * @return numeric expression identifying the version of the DFU Specification release
          */
         uint16_t bcdDFUVersion() const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief infomationToHtml

@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB Interface
+/*! C++ class wrapper of USB Interface
 
  * Copyright (C) 2022-2023 Nichts Hsu
 
@@ -21,7 +21,7 @@
 
 #include <libusb.h>
 #include <atomic>
-#include <mutex>
+#include <QMutex>
 #include <QObject>
 #include <QVector>
 
@@ -129,6 +129,7 @@ namespace usb {
         int _currentAltsetting;
         QString _displayName;
         std::atomic<size_t> _claimCount;
+        QMutex _claimMutex;
         bool _selfClaim;
     };
 }

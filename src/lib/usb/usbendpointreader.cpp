@@ -1,4 +1,4 @@
-﻿#include "usbendpointreader.h"
+#include "usbendpointreader.h"
 #include "__usbmacro.h"
 
 namespace usb {
@@ -47,17 +47,15 @@ namespace usb {
     void UsbEndpointReader::readOnce()
     {
         __startTransfer();
-        _keepReadMutex.lock();
+        std::lock_guard<QMutex> lock{_keepReadMutex};
         _keepRead = false;
-        _keepReadMutex.unlock();
     }
 
     void UsbEndpointReader::keepRead()
     {
         __startTransfer();
-        _keepReadMutex.lock();
+        std::lock_guard<QMutex> lock{_keepReadMutex};
         _keepRead = true;
-        _keepReadMutex.unlock();
     }
 
     void UsbEndpointReader::stopRead()
@@ -76,29 +74,26 @@ namespace usb {
         _data = data;
         emit dataRead();
 
-        _keepReadMutex.lock();
+        std::lock_guard<QMutex> lock{_keepReadMutex};
         if (_keepRead)
             __startTransfer();
         else
             emit safelyStopped();
-        _keepReadMutex.unlock();
     }
 
     void UsbEndpointReader::transferFailed(int code)
     {
         emit readFailed(code);
         emit safelyStopped();
-        _keepReadMutex.lock();
+        std::lock_guard<QMutex> lock{_keepReadMutex};
         _keepRead = false;
-        _keepReadMutex.unlock();
     }
 
     void UsbEndpointReader::transferCancelled()
     {
         emit safelyStopped();
-        _keepReadMutex.lock();
+        std::lock_guard<QMutex> lock{_keepReadMutex};
         _keepRead = false;
-        _keepReadMutex.unlock();
     }
 
     void UsbEndpointReader::__startTransfer()

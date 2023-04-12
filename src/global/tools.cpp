@@ -60,8 +60,7 @@ QString Tools::getConfigFolder()
         if (!configDir.mkpath("."))
         {
             log().w("Tools", QObject::tr("Failed to create config directory \"%1\", fallback to \"%2\".")
-                    .arg(QString(homedir) + "/.config/usb-regulus")
-                    .arg(qApp->applicationDirPath()));
+                    .arg(QString(homedir) + "/.config/usb-regulus", qApp->applicationDirPath()));
             return qApp->applicationDirPath();
         }
 
@@ -85,9 +84,8 @@ QString Tools::getConfigFilePath()
         if (!configDir.mkpath("."))
         {
             log().w("Tools", QObject::tr("Failed to create config directory \"%1\", fallback to \"%2\".")
-                    .arg(QString(homedir) + "/.config/usb-regulus")
-                    .arg(QString(qApp->applicationDirPath() + QString("/config.ini"))));
-            return QString(qApp->applicationDirPath() + QString("/config.ini"));
+                    .arg(QString(homedir) + "/.config/usb-regulus", qApp->applicationDirPath() + "/config.ini"));
+                    return QString(qApp->applicationDirPath() + QString("/config.ini"));
         }
 
     return QString(homedir) + "/.config/usb-regulus/config.ini";

@@ -1,5 +1,4 @@
 #include "usbconfigurationextradescriptor.h"
-#include "__usbmacro.h"
 #include "usbhtmlbuilder.h"
 
 namespace usb {
@@ -141,10 +140,37 @@ namespace usb {
         return _bNumEncryptionTypes;
     }
 
+    const QStringList &UsbWirelessSecurityDescriptor::getFieldNames()
+    {
+        static const QStringList fields = {
+            "bLength",
+            "bDescriptorType",
+            "wTotalLength",
+            "bNumEncryptionTypes",
+        };
+
+        return fields;
+    }
+
+    QString UsbWirelessSecurityDescriptor::getFieldInformation(const QString &field)
+    {
+        static const QMap<QString, QString> fieldDescription = {
+            {"bLength", "Number of bytes in this descriptor, including this byte"},
+            {"bDescriptorType", "Descriptor Type: SECURITY Descriptor"},
+            {"wTotalLength", "Length of this descriptor and all sub-descriptors returned"},
+            {"bNumEncryptionTypes", "Number of supported encryption types"},
+        };
+
+        if (fieldDescription.contains(field))
+            return fieldDescription[field];
+        else
+            return QString();
+    }
+
     QString UsbWirelessSecurityDescriptor::infomationToHtml() const
     {
         return UsbHtmlBuilder()
-                .start(tr("Security Descriptor"))
+                .start(tr("Security Descriptor"), true)
                 .attr("bLength", _bLength)
                 .attr("bDescriptorType", _bDescriptorType, "SECURITY")
                 .attr("wTotalLength", _wTotalLength)
@@ -183,10 +209,49 @@ namespace usb {
         return _bAuthKeyIndex;
     }
 
+    const QStringList &UsbWirelessEncryptionTypeDescriptor::getFieldNames()
+    {
+        static const QStringList fields = {
+            "bLength",
+            "bDescriptorType",
+            "bEncryptionType",
+            "bEncryptionValue",
+            "bAuthKeyIndex",
+        };
+
+        return fields;
+    }
+
+    QString UsbWirelessEncryptionTypeDescriptor::getFieldInformation(const QString &field)
+    {
+        static const QMap<QString, QString> fieldDescription = {
+            {"bLength", "Number of bytes in this descriptor, including this byte"},
+            {"bDescriptorType", "Descriptor Type: ENCRYPTION TYPE Descriptor"},
+            {"bEncryptionType", "<p>Type of encryption.</p>"
+             "<table><tr><th>Encryption Types</th><th>Value</th><th>Description</th></tr>"
+             "<tr><td></td><td>0</td><td>Reserved</td></tr>"
+             "<tr><td>WIRED</td><td>1</td><td>Virtual encryption provided by the wire</td></tr>"
+             "<tr><td>CCM_1</td><td>2</td><td>AES-128 in CCM mode</td></tr>"
+             "<tr><td>Reserved</td><td>3</td><td>Reserved and shouldn’t be used in future revisions</td></tr>"
+             "<tr><td>Reserved</td><td>4-255</td><td>Reserved for future use</td></tr></table>"
+            },
+            {"bEncryptionValue", "Value to use with Set Encryption"},
+            {"bAuthKeyIndex", "Non-zero if this encryption type can be used for "
+             "New connection authentication. In this case the "
+             "value specifies the Key Index to use for "
+             "authentication."},
+        };
+
+        if (fieldDescription.contains(field))
+            return fieldDescription[field];
+        else
+            return QString();
+    }
+
     QString UsbWirelessEncryptionTypeDescriptor::infomationToHtml() const
     {
         return UsbHtmlBuilder()
-                .start(tr("Encryption Type Descriptor"))
+                .start(tr("Encryption Type Descriptor"), true)
                 .attr("bLength", _bLength)
                 .attr("bDescriptorType", _bDescriptorType, "ENCRYPTION_TYPE")
                 .attr("bEncryptionType", _bEncryptionType, __parseEncryptionType())

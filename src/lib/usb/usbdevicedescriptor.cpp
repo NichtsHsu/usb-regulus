@@ -134,6 +134,89 @@ namespace usb {
         return _bNumConfigurations;
     }
 
+    const QStringList &UsbDeviceDescriptor::getFieldNames()
+    {
+        static const QStringList fields = {
+            "bLength",
+            "bDescriptorType",
+            "bcdUSB",
+            "bDeviceClass",
+            "bDeviceSubClass",
+            "bDeviceProtocol",
+            "bMaxPacketSize0",
+            "idVendor",
+            "idProduct",
+            "bcdDevice",
+            "iManufacturer",
+            "iProduct",
+            "iSerialNumber",
+            "bNumConfigurations",
+        };
+
+        return fields;
+    }
+
+    QString UsbDeviceDescriptor::getFieldInformation(const QString &field)
+    {
+        static const QMap<QString, QString> fieldDescription = {
+            {"bLength", "Size of this descriptor in bytes"},
+            {"bDescriptorType", "DEVICE Descriptor Type"},
+            {"bcdUSB", "USB Specification Release Number in Binary-Coded "
+             "Decimal (i.e., 2.10 is 210H). This field identifies "
+             "the release of the USB Specification with which the "
+             "device and its descriptors are compliant."},
+            {"bDeviceClass", "<p>Class code (assigned by the USB-IF).</p>"
+             "</p>If this field is reset to zero, each interface within a "
+             "configuration specifies its own class information "
+             "and the various interfaces operate independently.</p>"
+             "<p>If this field is set to a value between 1 and FEH, "
+             "the device supports different class specifications "
+             "on different interfaces and the interfaces may not "
+             "operate independently. This value identifies the "
+             "class definition used for the aggregate interfaces.</p>"
+             "<p>If this field is set to FFH, the device class is "
+             "vendor-specific.</p>"},
+            {"bDeviceSubClass", "<p>Subclass code (assigned by the USB-IF).</p>"
+             "<p>These codes are qualified by the value of the "
+             "<i>bDeviceClass</i> field.</p>"
+             "<p>If the <i>bDeviceClass</i> field is reset to zero, this field "
+             "shall also be reset to zero.</p>"
+             "<p>If the <i>bDeviceClass</i> field is not set to FFH, all values "
+             "are reserved for assignment by the USB-IF.</p>"},
+            {"bDeviceProtocol", "<p>Protocol code (assigned by the USB-IF). These "
+             "codes are qualified by the value of the "
+             "<i>bDeviceClass</i> and the <i>bDeviceSubClass</i> fields. If a "
+             "device supports class-specific protocols on a "
+             "device basis as opposed to an interface basis, this "
+             "code identifies the protocols that the device uses "
+             "as defined by the specification of the device class.</p>"
+             "<p>If this field is reset to zero, the device does not use "
+             "class-specific protocols on a device basis. "
+             "However, it may use class-specific protocols on an "
+             "interface basis.</p>"
+             "<p>If this field is set to FFH, the device uses a vendor-"
+             "specific protocol on a device basis.</p>"},
+            {"bMaxPacketSize0", "Maximum packet size for endpoint zero. The "
+             "bMaxPacketSize0 value is used as the exponent for "
+             "a 2<sup>bMaxPacketSize0</sup> value; e.g., a bMaxPacketSize0 of 4 "
+             "means a Max Packet size of 16 (2<sup>4</sup> → 16)."
+             "09H is the only valid value in this field when "
+             "operating at Gen X speed."},
+            {"idVendor", "Vendor ID (assigned by the USB-IF)"},
+            {"idProduct", "Product ID (assigned by the manufacturer)"},
+            {"bcdDevice", "Device release number in binary-coded decimal"},
+            {"iManufacturer", "Index of string descriptor describing manufacturer"},
+            {"iProduct", "Index of string descriptor describing product"},
+            {"iSerialNumber", "Index of string descriptor describing the device’s serial number"},
+            {"bNumConfigurations", "Number of possible configurations"},
+        };
+
+        if (fieldDescription.contains(field))
+            return fieldDescription[field];
+        else
+            return QString();
+    }
+
     UsbDevice *UsbDeviceDescriptor::device() const
     {
         return _device;
@@ -177,7 +260,7 @@ namespace usb {
     QString UsbDeviceDescriptor::infomationToHtml() const
     {
         return UsbHtmlBuilder()
-                .start(tr("Device Descriptor"))
+                .start(tr("Device Descriptor"), true)
                 .attr("bLength", _bLength)
                 .attr("bDescriptorType", _bDescriptorType, "DEVICE")
                 .attr("bcdUSB", _bcdUSB, bcdUSBInfo())

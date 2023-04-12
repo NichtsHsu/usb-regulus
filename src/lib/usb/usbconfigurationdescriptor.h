@@ -1,4 +1,4 @@
-﻿/*! C++ class wrapper of USB Configuration Descriptor
+/*! C++ class wrapper of USB Configuration Descriptor
 
  * Copyright (C) 2022-2023 Nichts Hsu
 
@@ -115,6 +115,20 @@ namespace usb {
          * @return length of the extra descriptors, in bytes
          */
         int extra_length() const;
+
+        /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
 
         /**
          * @brief interface

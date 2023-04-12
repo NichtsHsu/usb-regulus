@@ -112,6 +112,20 @@ namespace usb {
         int extraLength() const;
 
         /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
+
+        /**
          * @brief endpoint
          * @param index
          * the index of endpoint which want to get, must less than bNumEndpoints

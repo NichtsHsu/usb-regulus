@@ -1,4 +1,4 @@
-﻿#include "usbcontroltransferhandler.h"
+#include "usbcontroltransferhandler.h"
 #include "__usbmacro.h"
 
 namespace usb {
@@ -100,9 +100,8 @@ namespace usb {
 
     void UsbControlTransferHandler::stopTransfer()
     {
-        _stopFlagMutex.lock();
+        std::lock_guard<QMutex> lock{_stopFlagMutex};
         _stopFlag = true;
-        _stopFlagMutex.unlock();
     }
 
     uint16_t UsbControlTransferHandler::wValue() const

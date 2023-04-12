@@ -197,6 +197,20 @@ namespace usb {
         int extra_length() const;
 
         /**
+         * @brief getFieldNames
+         * @return all field names in a string list
+         */
+        static const QStringList &getFieldNames();
+
+        /**
+         * @brief getFieldInformation
+         * Get field information
+         * @param field name
+         * @return field information almost from USB specs
+         */
+        static QString getFieldInformation(const QString &field);
+
+        /**
          * @brief direction
          * @return the endpoint direction IN (device to host) or OUT (host to device)
          */

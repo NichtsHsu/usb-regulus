@@ -26,7 +26,6 @@
 #include <QTimer>
 #include <QThread>
 #include <atomic>
-#include <mutex>
 
 #ifdef Q_OS_UNIX
 #include <usbutils/names.h>
@@ -37,10 +36,16 @@
 #include "usbdevice.h"
 
 namespace usb {
-    /** Qt Does not support mark Q_OBJECT for nested class,
+    /** Qt Does not support mark Q_OBJECT for nested classes,
+     * nor classes in a unnamed namespace,
      * we have to place these classes under the __private namespace.
      */
-    namespace __private{
+    namespace __private {
+        /**
+         * @brief The UsbEventHandler class
+         * The event handle functions will block current thread,
+         * we have to create a new thread for event handling.
+         */
         class UsbEventHandler : public QObject
         {
             Q_OBJECT
@@ -56,11 +61,21 @@ namespace usb {
             QMutex _stopFlagMutex;
         };
 
+        /**
+         * @brief The UsbDeviceRescanWorker class
+         * Create a new thread to rescan USB devices.
+         */
         class UsbDeviceRescanWorker : public QObject
         {
             Q_OBJECT
         public:
             UsbDeviceRescanWorker(QObject *parent = nullptr);
+            /**
+             * @brief setUpdateMode
+             * The update mode is an alternative solution when the hotplug
+             * callback function cannot be registered.
+             * We use a rescan-compare-update process to simulate the hotplug.
+             */
             void setUpdateMode(bool updateMode);
         signals:
             void finished();

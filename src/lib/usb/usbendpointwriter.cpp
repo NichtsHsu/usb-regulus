@@ -1,4 +1,4 @@
-﻿#include "usbendpointwriter.h"
+#include "usbendpointwriter.h"
 #include "__usbmacro.h"
 
 namespace usb{
@@ -35,17 +35,15 @@ namespace usb{
     void UsbEndpointWriter::writeOnce()
     {
         __startTransfer();
-        _keepWriteMutex.lock();
+        std::lock_guard<QMutex> lock{_keepWriteMutex};
         _keepWrite = false;
-        _keepWriteMutex.unlock();
     }
 
     void UsbEndpointWriter::keepWrite()
     {
         __startTransfer();
-        _keepWriteMutex.lock();
+        std::lock_guard<QMutex> lock{_keepWriteMutex};
         _keepWrite = true;
-        _keepWriteMutex.unlock();
     }
 
     void UsbEndpointWriter::stopWrite()
@@ -61,9 +59,8 @@ namespace usb{
 
     void UsbEndpointWriter::clearWroteTimes()
     {
-        _wroteTimesMutex.lock();
+        std::lock_guard<QMutex> lock{_wroteTimesMutex};
         _wroteTimes = 0;
-        _wroteTimesMutex.unlock();
     }
 
     void UsbEndpointWriter::transferCompleted()
@@ -73,29 +70,26 @@ namespace usb{
         _wroteTimesMutex.unlock();
         emit writeSucceed(_wroteTimes);
 
-        _keepWriteMutex.lock();
+        std::lock_guard<QMutex> lock{_keepWriteMutex};
         if (_keepWrite)
             __startTransfer();
         else
             emit safelyStopped();
-        _keepWriteMutex.unlock();
     }
 
     void UsbEndpointWriter::transferFailed(int code)
     {
         emit writeFailed(code);
         emit safelyStopped();
-        _keepWriteMutex.lock();
+        std::lock_guard<QMutex> lock{_keepWriteMutex};
         _keepWrite = false;
-        _keepWriteMutex.unlock();
     }
 
     void UsbEndpointWriter::transferCancelled()
     {
         emit safelyStopped();
-        _keepWriteMutex.lock();
+        std::lock_guard<QMutex> lock{_keepWriteMutex};
         _keepWrite = false;
-        _keepWriteMutex.unlock();
     }
 
     void UsbEndpointWriter::__startTransfer()
