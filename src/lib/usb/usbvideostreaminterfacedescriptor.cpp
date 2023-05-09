@@ -46,7 +46,7 @@ namespace usb {
         }
 
         UsbVideoStreamInterfaceDescriptor *UsbVideoStreamInterfaceDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24)
@@ -345,7 +345,7 @@ namespace usb {
         }
 
         UsbInputHeaderDescriptor::UsbInputHeaderDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -538,7 +538,7 @@ namespace usb {
         }
 
         UsbOutputHeaderDescriptor::UsbOutputHeaderDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -703,7 +703,7 @@ namespace usb {
         }
 
         UsbStillImageFrameDescriptor::UsbStillImageFrameDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -871,7 +871,7 @@ namespace usb {
         }
 
         UsbUncompressedVideoFormatDescriptor::UsbUncompressedVideoFormatDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1168,7 +1168,7 @@ namespace usb {
         }
 
         UsbUncompressedVideoFrameDescriptor::UsbUncompressedVideoFrameDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1338,7 +1338,7 @@ namespace usb {
         }
 
         UsbMotionJpegVideoFormatDescriptor::UsbMotionJpegVideoFormatDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1632,7 +1632,7 @@ namespace usb {
         }
 
         UsbMotionJpegVideoFrameDescriptor::UsbMotionJpegVideoFrameDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1761,7 +1761,7 @@ namespace usb {
         }
 
         UsbMpeg2TsFormatDescriptor::UsbMpeg2TsFormatDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1866,7 +1866,7 @@ namespace usb {
         }
 
         UsbDvFormatDescriptor::UsbDvFormatDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2003,7 +2003,7 @@ namespace usb {
         }
 
         UsbColorMatchingDescriptor::UsbColorMatchingDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2236,7 +2236,7 @@ namespace usb {
         }
 
         UsbFrameBasedPayloadVideoFormatDescriptor::UsbFrameBasedPayloadVideoFormatDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2530,7 +2530,7 @@ namespace usb {
         }
 
         UsbFrameBasedPayloadVideoFrameDescriptor::UsbFrameBasedPayloadVideoFrameDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2643,7 +2643,7 @@ namespace usb {
         }
 
         UsbStreamBasedFormatDescriptor::UsbStreamBasedFormatDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2997,7 +2997,7 @@ namespace usb {
         }
 
         UsbH264PayloadVideoFormatDescriptor::UsbH264PayloadVideoFormatDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -3375,7 +3375,7 @@ namespace usb {
         }
 
         UsbH264PayloadVideoFrameDescriptor::UsbH264PayloadVideoFrameDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -3713,7 +3713,7 @@ namespace usb {
         }
 
         UsbVp8PayloadVideoFormatDescriptor::UsbVp8PayloadVideoFormatDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -3961,7 +3961,7 @@ namespace usb {
         }
 
         UsbVp8PayloadVideoFrameDescriptor::UsbVp8PayloadVideoFrameDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;

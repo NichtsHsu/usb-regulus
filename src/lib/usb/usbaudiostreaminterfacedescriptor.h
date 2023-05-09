@@ -102,7 +102,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbAudioStreamInterfaceDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                          uint8_t descPos);
+                                                          uint32_t descPos);
         };
 
         /**
@@ -159,7 +159,7 @@ namespace usb {
 
         private:
             UsbClassSpecificASInterfaceDescriptor(UsbInterfaceDescriptor *parent,
-                                                  uint8_t descPos);
+                                                  uint32_t descPos);
             friend UsbAudioStreamInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bTerminalLink, _bDelay;
@@ -205,7 +205,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbFormatTypeDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
         };
 
         /**
@@ -301,7 +301,7 @@ namespace usb {
 
         private:
             UsbTypeIFormatTypeDescriptor(UsbInterfaceDescriptor *parent,
-                                         uint8_t descPos);
+                                         uint32_t descPos);
             friend UsbFormatTypeDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatType,
@@ -396,7 +396,7 @@ namespace usb {
 
         private:
             UsbTypeIIFormatTypeDescriptor(UsbInterfaceDescriptor *parent,
-                                          uint8_t descPos);
+                                          uint32_t descPos);
             friend UsbFormatTypeDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatType, _bSamFreqType;
@@ -497,7 +497,7 @@ namespace usb {
 
         private:
             UsbTypeIIIFormatTypeDescriptor(UsbInterfaceDescriptor *parent,
-                                           uint8_t descPos);
+                                           uint32_t descPos);
             friend UsbFormatTypeDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatType,
@@ -537,7 +537,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbFormatSpecificDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                    uint8_t descPos);
+                                                    uint32_t descPos);
         };
 
         /**
@@ -607,7 +607,7 @@ namespace usb {
 
         private:
             UsbMpegFormatSpecificDescriptor(UsbInterfaceDescriptor *parent,
-                                            uint8_t descPos);
+                                            uint32_t descPos);
             friend UsbFormatSpecificDescriptor;
             inline QString __parseBmMPEGCapabilities() const;
             inline QString __parseBmMPEGFeatures() const;
@@ -673,7 +673,7 @@ namespace usb {
 
         private:
             UsbAc3FormatSpecificDescriptor(UsbInterfaceDescriptor *parent,
-                                           uint8_t descPos);
+                                           uint32_t descPos);
             friend UsbFormatSpecificDescriptor;
             inline QString __parseBmAC3Features() const;
 
@@ -750,7 +750,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbAudioStreamInterfaceDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                          uint8_t descPos);
+                                                          uint32_t descPos);
         };
 
         /**
@@ -838,7 +838,7 @@ namespace usb {
 
         private:
             UsbClassSpecificASInterfaceDescriptor(UsbInterfaceDescriptor *parent,
-                                                  uint8_t descPos);
+                                                  uint32_t descPos);
             friend UsbAudioStreamInterfaceDescriptor;
             inline QString __parseBmControls() const;
 
@@ -887,7 +887,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbFormatTypeDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
         };
 
         /**
@@ -943,7 +943,7 @@ namespace usb {
 
         private:
             UsbTypeIFormatTypeDescriptor(UsbInterfaceDescriptor *parent,
-                                         uint8_t descPos);
+                                         uint32_t descPos);
             friend UsbFormatTypeDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatType,
@@ -1003,7 +1003,7 @@ namespace usb {
 
         private:
             UsbTypeIIFormatTypeDescriptor(UsbInterfaceDescriptor *parent,
-                                          uint8_t descPos);
+                                          uint32_t descPos);
             friend UsbFormatTypeDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatType;
@@ -1063,7 +1063,7 @@ namespace usb {
 
         private:
             UsbTypeIIIFormatTypeDescriptor(UsbInterfaceDescriptor *parent,
-                                           uint8_t descPos);
+                                           uint32_t descPos);
             friend UsbFormatTypeDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatType,
@@ -1111,7 +1111,7 @@ namespace usb {
 
         private:
             UsbTypeIVFormatTypeDescriptor(UsbInterfaceDescriptor *parent,
-                                          uint8_t descPos);
+                                          uint32_t descPos);
             friend UsbFormatTypeDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatType;
@@ -1190,7 +1190,7 @@ namespace usb {
 
         private:
             UsbExtendedTypeIFormatTypeDescriptor(UsbInterfaceDescriptor *parent,
-                                                 uint8_t descPos);
+                                                 uint32_t descPos);
             friend UsbFormatTypeDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatType,
@@ -1262,7 +1262,7 @@ namespace usb {
 
         private:
             UsbExtendedTypeIIFormatTypeDescriptor(UsbInterfaceDescriptor *parent,
-                                                  uint8_t descPos);
+                                                  uint32_t descPos);
             friend UsbFormatTypeDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatType,
@@ -1335,7 +1335,7 @@ namespace usb {
 
         private:
             UsbExtendedTypeIIIFormatTypeDescriptor(UsbInterfaceDescriptor *parent,
-                                                   uint8_t descPos);
+                                                   uint32_t descPos);
             friend UsbFormatTypeDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatType,
@@ -1471,7 +1471,7 @@ namespace usb {
 
         private:
             UsbEncoderDescriptor(UsbInterfaceDescriptor *parent,
-                                 uint8_t descPos);
+                                 uint32_t descPos);
             friend UsbAudioStreamInterfaceDescriptor;
             inline QString __parseBmControls() const;
 
@@ -1525,7 +1525,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbDecoderDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                             uint8_t descPos);
+                                             uint32_t descPos);
         };
 
         /**
@@ -1619,7 +1619,7 @@ namespace usb {
 
         private:
             UsbMpegDecoderDescriptor(UsbInterfaceDescriptor *parent,
-                                     uint8_t descPos);
+                                     uint32_t descPos);
             friend UsbDecoderDescriptor;
             inline QString __parseBmMPEGCapabilities() const;
             inline QString __parseBmMPEGFeatures() const;
@@ -1715,7 +1715,7 @@ namespace usb {
 
         private:
             UsbAc3DecoderDescriptor(UsbInterfaceDescriptor *parent,
-                                    uint8_t descPos);
+                                    uint32_t descPos);
             friend UsbDecoderDescriptor;
             inline QString __parseBmAC3Features() const;
             inline QString __parseBmControls() const;
@@ -1810,7 +1810,7 @@ namespace usb {
 
         private:
             UsbWmaDecoderDescriptor(UsbInterfaceDescriptor *parent,
-                                    uint8_t descPos);
+                                    uint32_t descPos);
             friend UsbDecoderDescriptor;
             inline QString __parseBmWMAProfile() const;
             inline QString __parseBmControls() const;
@@ -1895,7 +1895,7 @@ namespace usb {
 
         private:
             UsbDtsDecoderDescriptor(UsbInterfaceDescriptor *parent,
-                                    uint8_t descPos);
+                                    uint32_t descPos);
             friend UsbDecoderDescriptor;
             inline QString __parseBmCapabilities() const;
             inline QString __parseBmControls() const;

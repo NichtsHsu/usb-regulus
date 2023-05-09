@@ -76,7 +76,7 @@ namespace usb {
         }
 
         UsbAudioControlInterfaceDescriptor *UsbAudioControlInterfaceDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24)
@@ -134,7 +134,7 @@ namespace usb {
         }
 
         UsbClassSpecificACInterfaceHeaderDescriptor::UsbClassSpecificACInterfaceHeaderDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -278,7 +278,7 @@ namespace usb {
         }
 
         UsbInputTerminalDescriptor::UsbInputTerminalDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -354,7 +354,7 @@ namespace usb {
         }
 
         UsbOutputTerminalDescriptor::UsbOutputTerminalDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -370,7 +370,7 @@ namespace usb {
         }
 
         UsbMixerUnitDescriptor::UsbMixerUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -538,7 +538,7 @@ namespace usb {
         }
 
         UsbSelectorUnitDescriptor::UsbSelectorUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -623,7 +623,7 @@ namespace usb {
         }
 
         UsbFeatureUnitDescriptor::UsbFeatureUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -764,7 +764,7 @@ namespace usb {
         }
 
         UsbProcessingUnitDescriptor::UsbProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -812,7 +812,7 @@ namespace usb {
         }
 
         UsbProcessingUnitDescriptor *UsbProcessingUnitDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24 || extra[2] != 0x07)
@@ -889,7 +889,7 @@ namespace usb {
         }
 
         UsbUpDownMixProcessingUnitDescriptor::UsbUpDownMixProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbProcessingUnitDescriptor(parent, descPos)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -941,7 +941,7 @@ namespace usb {
         }
 
         UsbDolbyPrologicProcessingUnitDescriptor::UsbDolbyPrologicProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbProcessingUnitDescriptor(parent, descPos)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -972,7 +972,7 @@ namespace usb {
         }
 
         Usb3DStereoExtenderProcessingUnitDescriptor::Usb3DStereoExtenderProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbProcessingUnitDescriptor(parent, descPos)
         {
 
@@ -997,7 +997,7 @@ namespace usb {
         }
 
         UsbReverberationProcessingUnitDescriptor::UsbReverberationProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbProcessingUnitDescriptor(parent, descPos)
         {
 
@@ -1028,7 +1028,7 @@ namespace usb {
         }
 
         UsbChorusProcessingUnitDescriptor::UsbChorusProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbProcessingUnitDescriptor(parent, descPos)
         {
 
@@ -1057,7 +1057,7 @@ namespace usb {
         }
 
         UsbDynamicRangeCompressorProcessingUnitDescriptor::UsbDynamicRangeCompressorProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbProcessingUnitDescriptor(parent, descPos)
         {
 
@@ -1179,7 +1179,7 @@ namespace usb {
         }
 
         UsbExtensionUnitDescriptor::UsbExtensionUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1302,7 +1302,7 @@ namespace usb {
         }
 
         UsbAudioControlInterfaceDescriptor *UsbAudioControlInterfaceDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24)
@@ -1435,7 +1435,7 @@ namespace usb {
         }
 
         UsbClassSpecificACInterfaceHeaderDescriptor::UsbClassSpecificACInterfaceHeaderDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1560,7 +1560,7 @@ namespace usb {
         }
 
         UsbInputTerminalDescriptor::UsbInputTerminalDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1711,7 +1711,7 @@ namespace usb {
         }
 
         UsbOutputTerminalDescriptor::UsbOutputTerminalDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1791,7 +1791,7 @@ namespace usb {
         }
 
         UsbMixerUnitDescriptor::UsbMixerUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2002,7 +2002,7 @@ namespace usb {
         }
 
         UsbSelectorUnitDescriptor::UsbSelectorUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2098,7 +2098,7 @@ namespace usb {
         }
 
         UsbFeatureUnitDescriptor::UsbFeatureUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2320,7 +2320,7 @@ namespace usb {
         }
 
         UsbEffectUnitDescriptor::UsbEffectUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2353,7 +2353,7 @@ namespace usb {
         }
 
         UsbEffectUnitDescriptor *UsbEffectUnitDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24 || extra[2] != 0x07)
@@ -2399,7 +2399,7 @@ namespace usb {
         }
 
         UsbParametricEqualizerSectionEffectUnitDescriptor::UsbParametricEqualizerSectionEffectUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbEffectUnitDescriptor(parent, descPos)
         {
 
@@ -2475,7 +2475,7 @@ namespace usb {
         }
 
         UsbReverberationEffectUnitDescriptor::UsbReverberationEffectUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbEffectUnitDescriptor(parent, descPos)
         {
 
@@ -2587,7 +2587,7 @@ namespace usb {
         }
 
         UsbModulationDelayEffectUnitDescriptor::UsbModulationDelayEffectUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbEffectUnitDescriptor(parent, descPos)
         {
 
@@ -2681,7 +2681,7 @@ namespace usb {
         }
 
         UsbDynamicRangeCompressorEffectUnitDescriptor::UsbDynamicRangeCompressorEffectUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbEffectUnitDescriptor(parent, descPos)
         {
 
@@ -2846,7 +2846,7 @@ namespace usb {
         }
 
         UsbProcessingUnitDescriptor::UsbProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2891,7 +2891,7 @@ namespace usb {
         }
 
         UsbProcessingUnitDescriptor *UsbProcessingUnitDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24 || extra[2] != 0x07)
@@ -2953,7 +2953,7 @@ namespace usb {
         }
 
         UsbUpDownMixProcessingUnitDescriptor::UsbUpDownMixProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbProcessingUnitDescriptor(parent, descPos)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -3047,7 +3047,7 @@ namespace usb {
         }
 
         UsbDolbyPrologicProcessingUnitDescriptor::UsbDolbyPrologicProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbProcessingUnitDescriptor(parent, descPos)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -3120,7 +3120,7 @@ namespace usb {
         }
 
         StereoExtenderProcessingUnitDescriptor::StereoExtenderProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbProcessingUnitDescriptor(parent, descPos)
         {
 
@@ -3271,7 +3271,7 @@ namespace usb {
         }
 
         UsbExtensionUnitDescriptor::UsbExtensionUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -3393,7 +3393,7 @@ namespace usb {
         }
 
         UsbClockSourceDescriptor::UsbClockSourceDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -3525,7 +3525,7 @@ namespace usb {
         }
 
         UsbClockSelectorDescriptor::UsbClockSelectorDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -3608,7 +3608,7 @@ namespace usb {
         }
 
         UsbClockMultiplierDescriptor::UsbClockMultiplierDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -3706,7 +3706,7 @@ namespace usb {
         }
 
         UsbSamplingRateConverterUnitDescriptor::UsbSamplingRateConverterUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;

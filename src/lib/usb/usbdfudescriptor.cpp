@@ -4,7 +4,7 @@
 
 namespace usb {
 
-    UsbDfuDescriptor::UsbDfuDescriptor(UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos):
+    UsbDfuDescriptor::UsbDfuDescriptor(UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos):
         UsbInterfaceExtraDescriptor(interfaceDescriptor)
     {
         const unsigned char *extra = interfaceDescriptor->extra() + descPos;

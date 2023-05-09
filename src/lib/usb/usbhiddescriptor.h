@@ -39,7 +39,7 @@ namespace usb {
         Q_OBJECT
     public:
         explicit UsbHidDescriptor(UsbInterfaceDescriptor *interfaceDescriptor,
-                                  uint8_t descPos);
+                                  uint32_t descPos);
 
         /**
          * @brief bLength

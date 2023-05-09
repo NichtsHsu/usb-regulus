@@ -67,7 +67,7 @@ namespace usb {
         }
 
         UsbAudioStreamInterfaceDescriptor *UsbAudioStreamInterfaceDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24)
@@ -143,7 +143,7 @@ namespace usb {
         }
 
         UsbClassSpecificASInterfaceDescriptor::UsbClassSpecificASInterfaceDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -177,7 +177,7 @@ namespace usb {
         }
 
         UsbFormatTypeDescriptor *UsbFormatTypeDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24 || extra[2] != 0x02)
@@ -317,7 +317,7 @@ namespace usb {
         }
 
         UsbTypeIFormatTypeDescriptor::UsbTypeIFormatTypeDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatTypeDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -450,7 +450,7 @@ namespace usb {
         }
 
         UsbTypeIIFormatTypeDescriptor::UsbTypeIIFormatTypeDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatTypeDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -588,7 +588,7 @@ namespace usb {
         }
 
         UsbTypeIIIFormatTypeDescriptor::UsbTypeIIIFormatTypeDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatTypeDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -626,7 +626,7 @@ namespace usb {
         }
 
         UsbFormatSpecificDescriptor *UsbFormatSpecificDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24 || extra[2] != 0x02)
@@ -697,7 +697,7 @@ namespace usb {
         }
 
         UsbMpegFormatSpecificDescriptor::UsbMpegFormatSpecificDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatSpecificDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -813,7 +813,7 @@ namespace usb {
         }
 
         UsbAc3FormatSpecificDescriptor::UsbAc3FormatSpecificDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatSpecificDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1022,7 +1022,7 @@ namespace usb {
         }
 
         UsbAudioStreamInterfaceDescriptor *UsbAudioStreamInterfaceDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24)
@@ -1129,7 +1129,7 @@ namespace usb {
         }
 
         UsbClassSpecificASInterfaceDescriptor::UsbClassSpecificASInterfaceDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1185,7 +1185,7 @@ namespace usb {
         }
 
         UsbFormatTypeDescriptor *UsbFormatTypeDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24 || extra[2] != 0x02)
@@ -1281,7 +1281,7 @@ namespace usb {
         }
 
         UsbTypeIFormatTypeDescriptor::UsbTypeIFormatTypeDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatTypeDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1339,7 +1339,7 @@ namespace usb {
         }
 
         UsbTypeIIFormatTypeDescriptor::UsbTypeIIFormatTypeDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatTypeDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1397,7 +1397,7 @@ namespace usb {
         }
 
         UsbTypeIIIFormatTypeDescriptor::UsbTypeIIIFormatTypeDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatTypeDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1443,7 +1443,7 @@ namespace usb {
         }
 
         UsbTypeIVFormatTypeDescriptor::UsbTypeIVFormatTypeDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatTypeDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1517,7 +1517,7 @@ namespace usb {
         }
 
         UsbExtendedTypeIFormatTypeDescriptor::UsbExtendedTypeIFormatTypeDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatTypeDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1590,7 +1590,7 @@ namespace usb {
         }
 
         UsbExtendedTypeIIFormatTypeDescriptor::UsbExtendedTypeIIFormatTypeDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatTypeDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1662,7 +1662,7 @@ namespace usb {
         }
 
         UsbExtendedTypeIIIFormatTypeDescriptor::UsbExtendedTypeIIIFormatTypeDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbFormatTypeDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1792,7 +1792,7 @@ namespace usb {
         }
 
         UsbEncoderDescriptor::UsbEncoderDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbAudioStreamInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1977,7 +1977,7 @@ namespace usb {
         }
 
         UsbDecoderDescriptor *UsbDecoderDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24 || extra[2] != 0x02)
@@ -2078,7 +2078,7 @@ namespace usb {
         }
 
         UsbMpegDecoderDescriptor::UsbMpegDecoderDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbDecoderDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2251,7 +2251,7 @@ namespace usb {
         }
 
         UsbAc3DecoderDescriptor::UsbAc3DecoderDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbDecoderDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2394,7 +2394,7 @@ namespace usb {
         }
 
         UsbWmaDecoderDescriptor::UsbWmaDecoderDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbDecoderDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -2531,7 +2531,7 @@ namespace usb {
         }
 
         UsbDtsDecoderDescriptor::UsbDtsDecoderDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbDecoderDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;

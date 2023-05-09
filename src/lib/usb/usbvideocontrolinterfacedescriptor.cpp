@@ -103,7 +103,7 @@ namespace usb {
                    "<td>Component video connector.</td></tr></table>";
         };
 
-        UsbVideoControlInterfaceDescriptor *UsbVideoControlInterfaceDescriptor::get(UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+        UsbVideoControlInterfaceDescriptor *UsbVideoControlInterfaceDescriptor::get(UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24)
@@ -275,7 +275,7 @@ namespace usb {
         }
 
         UsbClassSpecificVCInterfaceHeaderDescriptor::UsbClassSpecificVCInterfaceHeaderDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -374,7 +374,7 @@ namespace usb {
         }
 
         UsbInputTerminalDescriptor::UsbInputTerminalDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -402,7 +402,7 @@ namespace usb {
         }
 
         UsbInputTerminalDescriptor *UsbInputTerminalDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24 || extra[2] != 0x2)
@@ -515,7 +515,7 @@ namespace usb {
         }
 
         UsbOutputTerminalDescriptor::UsbOutputTerminalDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -545,7 +545,7 @@ namespace usb {
         }
 
         UsbOutputTerminalDescriptor *UsbOutputTerminalDescriptor::get(
-                UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos)
+                UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos)
         {
             const unsigned char *extra = interfaceDescriptor->extra() + descPos;
             if (extra[1] != 0x24 || extra[2] != 0x3)
@@ -659,7 +659,7 @@ namespace usb {
         }
 
         UsbCameraTerminalDescriptor::UsbCameraTerminalDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbInputTerminalDescriptor(parent, descPos)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -825,7 +825,7 @@ namespace usb {
         }
 
         UsbSelectorUnitDescriptor::UsbSelectorUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -990,7 +990,7 @@ namespace usb {
         }
 
         UsbProcessingUnitDescriptor::UsbProcessingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1213,7 +1213,7 @@ namespace usb {
         }
 
         UsbExtensionUnitDescriptor::UsbExtensionUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;
@@ -1391,7 +1391,7 @@ namespace usb {
         }
 
         UsbEncodingUnitDescriptor::UsbEncodingUnitDescriptor(
-                UsbInterfaceDescriptor *parent, uint8_t descPos):
+                UsbInterfaceDescriptor *parent, uint32_t descPos):
             UsbVideoControlInterfaceDescriptor(parent)
         {
             const unsigned char *extra = parent->extra() + descPos;

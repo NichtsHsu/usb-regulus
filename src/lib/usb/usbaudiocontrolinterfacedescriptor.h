@@ -117,7 +117,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbAudioControlInterfaceDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                           uint8_t descPos);
+                                                           uint32_t descPos);
         };
 
         /**
@@ -186,7 +186,7 @@ namespace usb {
 
         private:
             explicit UsbClassSpecificACInterfaceHeaderDescriptor(UsbInterfaceDescriptor *parent,
-                                                                 uint8_t descPos);
+                                                                 uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bInCollection;
@@ -274,7 +274,7 @@ namespace usb {
 
         private:
             explicit UsbInputTerminalDescriptor(UsbInterfaceDescriptor *parent,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bTerminalID,
@@ -348,7 +348,7 @@ namespace usb {
 
         private:
             explicit UsbOutputTerminalDescriptor(UsbInterfaceDescriptor *parent,
-                                                 uint8_t descPos);
+                                                 uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bTerminalID,
@@ -445,7 +445,7 @@ namespace usb {
 
         private:
             explicit UsbMixerUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                            uint8_t descPos);
+                                            uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bUnitID,
@@ -519,7 +519,7 @@ namespace usb {
 
         private:
             explicit UsbSelectorUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                               uint8_t descPos);
+                                               uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bUnitID,
@@ -606,7 +606,7 @@ namespace usb {
 
         private:
             explicit UsbFeatureUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                              uint8_t descPos);
+                                              uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
             inline QString __parseBmaControls(uint8_t index) const;
 
@@ -723,7 +723,7 @@ namespace usb {
 
         protected:
             explicit UsbProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                 uint8_t descPos);
+                                                 uint32_t descPos);
             inline void __parseBase(UsbHtmlBuilder &builder) const;
 
             /**
@@ -750,7 +750,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbProcessingUnitDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                    uint8_t descPos);
+                                                    uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
         };
 
@@ -789,7 +789,7 @@ namespace usb {
 
         private:
             explicit UsbUpDownMixProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                          uint8_t descPos);
+                                                          uint32_t descPos);
             friend UsbProcessingUnitDescriptor;
 
             /**
@@ -841,7 +841,7 @@ namespace usb {
 
         private:
             explicit UsbDolbyPrologicProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                              uint8_t descPos);
+                                                              uint32_t descPos);
             friend UsbProcessingUnitDescriptor;
 
             /**
@@ -874,7 +874,7 @@ namespace usb {
 
         private:
             explicit Usb3DStereoExtenderProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                                 uint8_t descPos);
+                                                                 uint32_t descPos);
             friend UsbProcessingUnitDescriptor;
 
             /**
@@ -904,7 +904,7 @@ namespace usb {
 
         private:
             explicit UsbReverberationProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                              uint8_t descPos);
+                                                              uint32_t descPos);
             friend UsbProcessingUnitDescriptor;
 
             /**
@@ -933,7 +933,7 @@ namespace usb {
 
         private:
             explicit UsbChorusProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                       uint8_t descPos);
+                                                       uint32_t descPos);
             friend UsbProcessingUnitDescriptor;
 
             /**
@@ -965,7 +965,7 @@ namespace usb {
 
         private:
             explicit UsbDynamicRangeCompressorProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                                       uint8_t descPos);
+                                                                       uint32_t descPos);
             friend UsbProcessingUnitDescriptor;
 
             /**
@@ -1089,7 +1089,7 @@ namespace usb {
 
         private:
             explicit UsbExtensionUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bUnitID,
@@ -1180,7 +1180,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbAudioControlInterfaceDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                           uint8_t descPos);
+                                                           uint32_t descPos);
         };
 
         /**
@@ -1249,7 +1249,7 @@ namespace usb {
 
         private:
             explicit UsbClassSpecificACInterfaceHeaderDescriptor(UsbInterfaceDescriptor *parent,
-                                                                 uint8_t descPos);
+                                                                 uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
             inline QString __strBCategory() const;
             inline QString __parseBmControls() const;
@@ -1357,7 +1357,7 @@ namespace usb {
 
         private:
             explicit UsbInputTerminalDescriptor(UsbInterfaceDescriptor *parent,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
             inline QString __parseBmControls() const;
 
@@ -1452,7 +1452,7 @@ namespace usb {
 
         private:
             explicit UsbOutputTerminalDescriptor(UsbInterfaceDescriptor *parent,
-                                                 uint8_t descPos);
+                                                 uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
             inline QString __parseBmControls() const;
 
@@ -1562,7 +1562,7 @@ namespace usb {
 
         private:
             explicit UsbMixerUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                            uint8_t descPos);
+                                            uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
             inline QString __parseBmControls() const;
 
@@ -1647,7 +1647,7 @@ namespace usb {
 
         private:
             explicit UsbSelectorUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                               uint8_t descPos);
+                                               uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
             inline QString __parseBmControls() const;
 
@@ -1734,7 +1734,7 @@ namespace usb {
 
         private:
             explicit UsbFeatureUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                              uint8_t descPos);
+                                              uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
             inline QString __parseBmaControls(uint8_t index) const;
 
@@ -1817,7 +1817,7 @@ namespace usb {
 
         protected:
             explicit UsbEffectUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                             uint8_t descPos);
+                                             uint32_t descPos);
             inline void __parseBase(UsbHtmlBuilder &builder) const;
 
             /**
@@ -1843,7 +1843,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbEffectUnitDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
 
             uint8_t _CHANNEL;
@@ -1865,7 +1865,7 @@ namespace usb {
 
         private:
             explicit UsbParametricEqualizerSectionEffectUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                                       uint8_t descPos);
+                                                                       uint32_t descPos);
             friend UsbEffectUnitDescriptor;
 
             /**
@@ -1899,7 +1899,7 @@ namespace usb {
 
         private:
             explicit UsbReverberationEffectUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                          uint8_t descPos);
+                                                          uint32_t descPos);
             friend UsbEffectUnitDescriptor;
 
             /**
@@ -1937,7 +1937,7 @@ namespace usb {
 
         private:
             explicit UsbModulationDelayEffectUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                            uint8_t descPos);
+                                                            uint32_t descPos);
             friend UsbEffectUnitDescriptor;
 
             /**
@@ -1973,7 +1973,7 @@ namespace usb {
 
         private:
             explicit UsbDynamicRangeCompressorEffectUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                                   uint8_t descPos);
+                                                                   uint32_t descPos);
             friend UsbEffectUnitDescriptor;
 
             /**
@@ -2095,7 +2095,7 @@ namespace usb {
 
         protected:
             explicit UsbProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                 uint8_t descPos);
+                                                 uint32_t descPos);
             inline void __parseBase(UsbHtmlBuilder &builder) const;
 
             /**
@@ -2122,7 +2122,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbProcessingUnitDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                    uint8_t descPos);
+                                                    uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
         };
 
@@ -2161,7 +2161,7 @@ namespace usb {
 
         private:
             explicit UsbUpDownMixProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                          uint8_t descPos);
+                                                          uint32_t descPos);
             friend UsbProcessingUnitDescriptor;
 
             /**
@@ -2216,7 +2216,7 @@ namespace usb {
 
         private:
             explicit UsbDolbyPrologicProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                              uint8_t descPos);
+                                                              uint32_t descPos);
             friend UsbProcessingUnitDescriptor;
 
 
@@ -2253,7 +2253,7 @@ namespace usb {
 
         private:
             explicit StereoExtenderProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                            uint8_t descPos);
+                                                            uint32_t descPos);
             friend UsbProcessingUnitDescriptor;
 
 
@@ -2374,7 +2374,7 @@ namespace usb {
 
         private:
             explicit UsbExtensionUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
             inline QString __parseBmControls() const;
 
@@ -2460,7 +2460,7 @@ namespace usb {
 
         private:
             explicit UsbClockSourceDescriptor(UsbInterfaceDescriptor *parent,
-                                              uint8_t descPos);
+                                              uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
             inline QString __parseBmAttributes() const;
             inline QString __parseBmControls() const;
@@ -2544,7 +2544,7 @@ namespace usb {
 
         private:
             explicit UsbClockSelectorDescriptor(UsbInterfaceDescriptor *parent,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
             inline QString __parseBmControls() const;
 
@@ -2619,7 +2619,7 @@ namespace usb {
 
         private:
             explicit UsbClockMultiplierDescriptor(UsbInterfaceDescriptor *parent,
-                                                  uint8_t descPos);
+                                                  uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
             inline QString __parseBmControls() const;
 
@@ -2692,7 +2692,7 @@ namespace usb {
 
         private:
             explicit UsbSamplingRateConverterUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                            uint8_t descPos);
+                                                            uint32_t descPos);
             friend UsbAudioControlInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bUnitID,

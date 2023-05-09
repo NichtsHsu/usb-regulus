@@ -31,7 +31,7 @@ namespace usb {
         Q_OBJECT
     public:
         UsbDfuDescriptor(UsbInterfaceDescriptor *interfaceDescriptor,
-                         uint8_t descPos);
+                         uint32_t descPos);
 
         /**
          * @brief bLength

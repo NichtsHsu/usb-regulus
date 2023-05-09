@@ -236,8 +236,8 @@ namespace usb {
         static const uint8_t IP_VERSION_02_00 = 0x20;
         static const uint8_t IP_VERSION_03_00 = 0x30;
 
-        int len = _extraLength;
-        int pos = 0;
+        uint32_t len = _extraLength;
+        uint32_t pos = 0;
         while (len > 1)
         {
             if (_extra[pos] > len)

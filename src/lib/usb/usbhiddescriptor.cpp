@@ -44,7 +44,7 @@ namespace usb {
         "Turkish-F"                         // 35
     };
 
-    UsbHidDescriptor::UsbHidDescriptor(UsbInterfaceDescriptor *interfaceDescriptor, uint8_t descPos):
+    UsbHidDescriptor::UsbHidDescriptor(UsbInterfaceDescriptor *interfaceDescriptor, uint32_t descPos):
         UsbInterfaceExtraDescriptor(interfaceDescriptor)
     {
         const unsigned char *extra = interfaceDescriptor->extra() + descPos;

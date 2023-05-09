@@ -82,7 +82,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbVideoControlInterfaceDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                           uint8_t descPos);
+                                                           uint32_t descPos);
         };
 
         /**
@@ -171,7 +171,7 @@ namespace usb {
 
         private:
             explicit UsbClassSpecificVCInterfaceHeaderDescriptor(UsbInterfaceDescriptor *parent,
-                                                                 uint8_t descPos);
+                                                                 uint32_t descPos);
             friend UsbVideoControlInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bInCollection;
@@ -255,7 +255,7 @@ namespace usb {
 
         protected:
             explicit UsbInputTerminalDescriptor(UsbInterfaceDescriptor *parent,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
             inline void __parseBase(UsbHtmlBuilder &builder) const;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bTerminalID,
@@ -276,7 +276,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbInputTerminalDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                   uint8_t descPos);
+                                                   uint32_t descPos);
         };
 
         /**
@@ -360,7 +360,7 @@ namespace usb {
 
         protected:
             explicit UsbOutputTerminalDescriptor(UsbInterfaceDescriptor *parent,
-                                                 uint8_t descPos);
+                                                 uint32_t descPos);
             inline void __parseBase(UsbHtmlBuilder &builder) const;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bTerminalID,
@@ -381,7 +381,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbOutputTerminalDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                    uint8_t descPos);
+                                                    uint32_t descPos);
         };
 
         /**
@@ -471,7 +471,7 @@ namespace usb {
 
         private:
             explicit UsbCameraTerminalDescriptor(UsbInterfaceDescriptor *parent,
-                                                 uint8_t descPos);
+                                                 uint32_t descPos);
             friend UsbInputTerminalDescriptor;
             inline QString __parseBmControls() const;
 
@@ -558,7 +558,7 @@ namespace usb {
 
         private:
             explicit UsbSelectorUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                               uint8_t descPos);
+                                               uint32_t descPos);
             friend UsbVideoControlInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bUnitID,
@@ -687,7 +687,7 @@ namespace usb {
 
         private:
             explicit UsbProcessingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                 uint8_t descPos);
+                                                 uint32_t descPos);
             friend UsbVideoControlInterfaceDescriptor;
             inline QString __parseBmControls() const;
             inline QString __parseBmVideoStandards() const;
@@ -803,7 +803,7 @@ namespace usb {
 
         private:
             explicit UsbExtensionUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
             friend UsbVideoControlInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bUnitID,
@@ -943,7 +943,7 @@ namespace usb {
 
         private:
             explicit UsbEncodingUnitDescriptor(UsbInterfaceDescriptor *parent,
-                                               uint8_t descPos);
+                                               uint32_t descPos);
             friend UsbVideoControlInterfaceDescriptor;
             inline QString __parseBmControls(const QByteArray &bmControls) const;
 

@@ -55,7 +55,7 @@ namespace usb {
          * nullptr if parse failed.
          */
         static UsbConfigurationExtraDescriptor *get(
-                UsbConfigurationDescriptor *configDesc, uint8_t descPos);
+                UsbConfigurationDescriptor *configDesc, uint32_t descPos);
 
         /**
          * @brief fromInterfaceExtra
@@ -68,7 +68,7 @@ namespace usb {
          * nullptr if parse failed.
          */
         static UsbConfigurationExtraDescriptor *fromInterfaceExtra(
-                UsbInterfaceDescriptor *interfaceDesc, uint8_t descPos);
+                UsbInterfaceDescriptor *interfaceDesc, uint32_t descPos);
 
         /**
          * @brief fromEndpointExtra
@@ -81,7 +81,7 @@ namespace usb {
          * nullptr if parse failed.
          */
         static UsbConfigurationExtraDescriptor *fromEndpointExtra(
-                UsbEndpointDescriptor *endpointDesc, uint8_t descPos);
+                UsbEndpointDescriptor *endpointDesc, uint32_t descPos);
 
         /**
          * @brief bLength

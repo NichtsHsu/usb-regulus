@@ -65,7 +65,7 @@ namespace usb {
              * nullptr if parse failed.
              */
             static UsbVideoStreamInterfaceDescriptor *get(UsbInterfaceDescriptor *interfaceDescriptor,
-                                                          uint8_t descPos);
+                                                          uint32_t descPos);
         };
 
         /**
@@ -198,7 +198,7 @@ namespace usb {
 
         private:
             explicit UsbInputHeaderDescriptor(UsbInterfaceDescriptor *parent,
-                                              uint8_t descPos);
+                                              uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBStillCaptureMethod() const;
             inline QString __parseBmaControls(uint8_t index) const;
@@ -309,7 +309,7 @@ namespace usb {
 
         private:
             explicit UsbOutputHeaderDescriptor(UsbInterfaceDescriptor *parent,
-                                               uint8_t descPos);
+                                               uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBmaControls(uint8_t index) const;
 
@@ -417,7 +417,7 @@ namespace usb {
 
         private:
             explicit UsbStillImageFrameDescriptor(UsbInterfaceDescriptor *parent,
-                                                  uint8_t descPos);
+                                                  uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bEndpointAddress,
@@ -540,7 +540,7 @@ namespace usb {
 
         private:
             explicit UsbUncompressedVideoFormatDescriptor(UsbInterfaceDescriptor *parent,
-                                                          uint8_t descPos);
+                                                          uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBmInterlaceFlags() const;
 
@@ -699,7 +699,7 @@ namespace usb {
 
         private:
             explicit UsbUncompressedVideoFrameDescriptor(UsbInterfaceDescriptor *parent,
-                                                         uint8_t descPos);
+                                                         uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBmCapabilities() const;
 
@@ -822,7 +822,7 @@ namespace usb {
 
         private:
             explicit UsbMotionJpegVideoFormatDescriptor(UsbInterfaceDescriptor *parent,
-                                                        uint8_t descPos);
+                                                        uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBmInterlaceFlags() const;
 
@@ -980,7 +980,7 @@ namespace usb {
 
         private:
             explicit UsbMotionJpegVideoFrameDescriptor(UsbInterfaceDescriptor *parent,
-                                                       uint8_t descPos);
+                                                       uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBmCapabilities() const;
 
@@ -1071,7 +1071,7 @@ namespace usb {
 
         private:
             explicit UsbMpeg2TsFormatDescriptor(UsbInterfaceDescriptor *parent,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatIndex,
@@ -1151,7 +1151,7 @@ namespace usb {
 
         private:
             explicit UsbDvFormatDescriptor(UsbInterfaceDescriptor *parent,
-                                           uint8_t descPos);
+                                           uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBFormatType() const;
 
@@ -1249,7 +1249,7 @@ namespace usb {
 
         private:
             explicit UsbColorMatchingDescriptor(UsbInterfaceDescriptor *parent,
-                                                uint8_t descPos);
+                                                uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __strBColorPrimaries() const;
             inline QString __strBTransferCharacteristics() const;
@@ -1379,7 +1379,7 @@ namespace usb {
 
         private:
             explicit UsbFrameBasedPayloadVideoFormatDescriptor(UsbInterfaceDescriptor *parent,
-                                                               uint8_t descPos);
+                                                               uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBmInterlaceFlags() const;
 
@@ -1536,7 +1536,7 @@ namespace usb {
 
         private:
             explicit UsbFrameBasedPayloadVideoFrameDescriptor(UsbInterfaceDescriptor *parent,
-                                                              uint8_t descPos);
+                                                              uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBmCapabilities() const;
 
@@ -1615,7 +1615,7 @@ namespace usb {
 
         private:
             explicit UsbStreamBasedFormatDescriptor(UsbInterfaceDescriptor *parent,
-                                                    uint8_t descPos);
+                                                    uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
 
             uint8_t _bLength, _bDescriptorType, _bDescriptorSubtype, _bFormatIndex;
@@ -1796,7 +1796,7 @@ namespace usb {
 
         private:
             explicit UsbH264PayloadVideoFormatDescriptor(UsbInterfaceDescriptor *parent,
-                                                         uint8_t descPos);
+                                                         uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBmSupportedSliceModes() const;
             inline QString __parseBmSupportedSyncFrameTypes() const;
@@ -2008,7 +2008,7 @@ namespace usb {
 
         private:
             explicit UsbH264PayloadVideoFrameDescriptor(UsbInterfaceDescriptor *parent,
-                                                        uint8_t descPos);
+                                                        uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __strWProfile() const;
             inline QString __strBLevelIDC() const;
@@ -2150,7 +2150,7 @@ namespace usb {
 
         private:
             explicit UsbVp8PayloadVideoFormatDescriptor(UsbInterfaceDescriptor *parent,
-                                                        uint8_t descPos);
+                                                        uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBmSupportedSyncFrameTypes() const;
             inline QString __strBResolutionScaling() const;
@@ -2304,7 +2304,7 @@ namespace usb {
 
         private:
             explicit UsbVp8PayloadVideoFrameDescriptor(UsbInterfaceDescriptor *parent,
-                                                       uint8_t descPos);
+                                                       uint32_t descPos);
             friend UsbVideoStreamInterfaceDescriptor;
             inline QString __parseBmSupportedUsages() const;
             inline QString __parseBmCapabilities() const;

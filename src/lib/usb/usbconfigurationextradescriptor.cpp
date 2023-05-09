@@ -9,7 +9,7 @@ namespace usb {
     }
 
     UsbConfigurationExtraDescriptor *UsbConfigurationExtraDescriptor::get(
-            UsbConfigurationDescriptor *configDesc, uint8_t descPos)
+            UsbConfigurationDescriptor *configDesc, uint32_t descPos)
     {
         ConfigurationExtraDescriptorType descriptorType =
                 ConfigurationExtraDescriptorType(configDesc->extra()[descPos + 1]);
@@ -44,7 +44,7 @@ namespace usb {
     }
 
     UsbConfigurationExtraDescriptor *UsbConfigurationExtraDescriptor::fromInterfaceExtra(
-            UsbInterfaceDescriptor *interfaceDesc, uint8_t descPos)
+            UsbInterfaceDescriptor *interfaceDesc, uint32_t descPos)
     {
         ConfigurationExtraDescriptorType descriptorType =
                 ConfigurationExtraDescriptorType(interfaceDesc->extra()[descPos + 1]);
@@ -73,7 +73,7 @@ namespace usb {
     }
 
     UsbConfigurationExtraDescriptor *UsbConfigurationExtraDescriptor::fromEndpointExtra(
-            UsbEndpointDescriptor *endpointDesc, uint8_t descPos)
+            UsbEndpointDescriptor *endpointDesc, uint32_t descPos)
     {
         ConfigurationExtraDescriptorType descriptorType =
                 ConfigurationExtraDescriptorType(endpointDesc->extra()[descPos + 1]);
